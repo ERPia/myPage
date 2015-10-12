@@ -5,13 +5,13 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'starter.services'])
 
-.constant('ERPiaAPI',{
-	url:'http://localhost:8100/include'
-})
-// 실제 사용시
 // .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
+// 	url:'http://localhost:8100/include'
 // })
+// 실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+})
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 
