@@ -18,7 +18,6 @@ var g_playlists = [{
 	id : 6
 }];
 
-//var ERPiaAPI = 'http://localhost:8100/include';
 angular.module('starter.controllers', ['starter.services'])
 // .constant('ERPiaAPI', {
 // 	url:'https://www.erpia.net/include'
@@ -108,7 +107,6 @@ angular.module('starter.controllers', ['starter.services'])
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
 		$scope.modal.hide();
-		console.log("closeLogin " + $rootScope.loginState);
 		if($rootScope.loginState == "S"){
 			location.href="#/app/scmhome";
 		}else if($rootScope.loginState == "E"){
@@ -161,6 +159,7 @@ angular.module('starter.controllers', ['starter.services'])
 						$scope.Admin_Code = comInfo.data.list[0].Admin_Code;
 						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
 						$scope.G_id = comInfo.data.list[0].G_ID;
+						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
 
@@ -492,89 +491,91 @@ angular.module('starter.controllers', ['starter.services'])
 		};
 	}])
 
-.controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){
-	console.log($rootScope.loginState); 
-
-	$scope.comData = {};
-
-	// Perform the login action when the user submits the login form
+.controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, scmInfoService){
 	$scope.ScmBaseData = function() {
-		 
-		// $scope.Kind = "scm_login";
-		// $scope.Admin_Code = $scope.loginData.Admin_Code;
-		// $scope.G_id = $scope.loginData.UserId;
-		// $scope.G_Pass = $scope.loginData.Pwd;
-		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-		// $scope.Auto_Login = $scope.loginData.Auto_Login
-
 		if($rootScope.loginState == "S") {
-			var url = ERPiaAPI + '/JSon_Proc_Multi_Lhk.asp';
-			var data = "kind=ScmMain&BaljuMode=Balju&Value_Kind=list&Admin_Code=" + $scope.Admin_Code + "&GerCode=" + "01016" + "&FDate=" + "2015-05-01" + "&TDate=2015-10-01";
-			//발주조회
-			$http({
-				method: 'POST',
-				url: url,
-				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'} //헤더
-			}).success(function (response) {
-				console.log(response);
-				$scope.B_NewBalju = response.list[0].Cnt
-				$scope.B_BalJuConfirm = response.list[1].Cnt
-				$scope.B_ChulgoConfirm = response.list[2].Cnt
-				$scope.B_MeaipComplete = response.list[3].Cnt
+			// 날짜
+			var d= new Date();
+			var month = d.getMonth() + 1;
+			var day = d.getDate();
+			var nowTime = (d.getHours() < 10 ? '0':'') + d.getHours() + ":"
+				nowTime += (d.getMinutes() < 10 ? '0':'') + d.getMinutes() + ":";
+				nowTime += (d.getSeconds() < 10 ? '0':'') + d.getSeconds();
+			//일주일전
+			var w = new Date(Date.parse(d) -7 * 1000 * 60 * 60 * 24)
+			var wMonth = w.getMonth() + 1;
+			var wDay = w.getDate();
 
-				$scope.B_TOT = $scope.B_NewBalju + $scope.B_BalJuConfirm + $scope.B_ChulgoConfirm + $scope.B_MeaipComplete;
+			var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
+			var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
+
+			$scope.nowTime = '최근 조회 시간 :' + nowday + ' ' + nowTime;
+			
+			scmInfoService.scmInfo('ScmMain', 'Balju', $scope.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
+			.then(function(scmInfo){
+				var B_TOT = 0;
+				for(var i=0; i<scmInfo.data.list.length; i++){
+					switch(scmInfo.data.list[i].CntStts){
+						case '0': 
+							$scope.B_NewBalju = scmInfo.data.list[i].Cnt + ''; 
+							B_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '1': $scope.B_BalJuConfirm = scmInfo.data.list[i].Cnt + ''; 
+							B_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case 'b': $scope.B_ChulgoConfirm = scmInfo.data.list[i].Cnt + ''; 
+							B_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '2': $scope.B_MeaipComplete = scmInfo.data.list[i].Cnt + ''; 
+							B_TOT += scmInfo.data.list[i].Cnt;
+							break;
+					}
+				}
+				$scope.B_TOT = B_TOT + '';	
 				
-			}).error(function(data, status, headers, config){
-				console.log("Fail");
-			})
-			//직배송조회
-			data = "kind=ScmMain&BaljuMode=Direct&Value_Kind=list&Admin_Code=" + $scope.Admin_Code + "&GerCode=" + "01016" + "&FDate=" + "2015-05-01" + "&TDate=2015-10-01";
-			$http({
-				method: 'POST',
-				url: url,
-				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'} //헤더
-			})
-			  .success(function (response) {
-				console.log("Success");
-				$scope.J_NewBalju = response.list[0].Cnt;
-				$scope.J_BalJuConfirm = response.list[1].Cnt;
-				$scope.J_ChulgoConfirm = response.list[2].Cnt;
-				$scope.J_MeaipComplete = response.list[3].Cnt;
-
-				$scope.J_TOT = $scope.J_NewBalju + $scope.J_BalJuConfirm + $scope.J_ChulgoConfirm + $scope.J_MeaipComplete;
-				
-			})
-			  .error(function(data, status, headers, config){
-				console.log("Fail");
-			})
-			//CRM 조회
-			data = "kind=CrmMenu&Value_Kind=list&Admin_Code=" + $scope.Admin_Code + "&GerCode=" + "01016" + "&FDate=" + "2015-05-01" + "&TDate=2015-10-01";
-			$http({
-				method: 'POST',
-				url: url,
-				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'} //헤더
-			})
-			  .success(function (response) {
-				console.log("Success");
-				$scope.C_CancelCnt = response.list[0].Cnt
-				$scope.C_ReturnCnt = response.list[1].Cnt
-				$scope.C_ExchangeCnt = response.list[2].Cnt
-				$scope.C_TOT = $scope.C_CancelCnt + $scope.C_ReturnCnt + $scope.C_ExchangeCnt
-			})
-			  .error(function(data, status, headers, config){
-				console.log("Fail");
-			})
-		}else{
-			// alert(response.list[0].ResultMsg);
-		};
-	};
-
+			});
+			scmInfoService.scmInfo('ScmMain', 'Direct', $scope.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
+			.then(function(scmInfo){
+				var J_TOT = 0;
+				for(var i=0; i<scmInfo.data.list.length; i++){
+					switch(scmInfo.data.list[i].CntStts){
+						case '0': $scope.J_NewBalju = scmInfo.data.list[i].Cnt + ''; 
+							J_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '1': $scope.J_BalJuConfirm = scmInfo.data.list[i].Cnt + ''; 
+							J_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case 'b': $scope.J_ChulgoConfirm = scmInfo.data.list[i].Cnt + ''; 
+							J_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '2': $scope.J_MeaipComplete = scmInfo.data.list[i].Cnt + ''; 
+							J_TOT += scmInfo.data.list[i].Cnt;
+							break;
+					}
+				}
+				$scope.J_TOT = J_TOT + '';
+			});
+			scmInfoService.scmInfo('CrmMenu', '', $scope.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
+			.then(function(scmInfo){
+				var C_TOT = 0;
+				for(var i=0; i<scmInfo.data.list.length; i++){
+					switch(scmInfo.data.list[i].CntStts){
+						case '1': $scope.C_CancelCnt = scmInfo.data.list[i].Cnt + ''; 
+							C_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '2': $scope.C_ReturnCnt = scmInfo.data.list[i].Cnt + ''; 
+							C_TOT += scmInfo.data.list[i].Cnt;
+							break;
+						case '3': $scope.C_ExchangeCnt = scmInfo.data.list[i].Cnt + ''; 
+							C_TOT += scmInfo.data.list[i].Cnt;
+							break;
+					}
+				}
+				$scope.C_TOT = C_TOT + '';
+			});
+		}
+	}
 	$scope.ScmBaseData();
-	// $filter('date')(date, format, timezone)
-  	// $scope.loginHTML = " 로그인 ";
 })
 
 .controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){

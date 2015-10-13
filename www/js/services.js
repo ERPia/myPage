@@ -1,18 +1,5 @@
 angular.module('starter.services', [])
 
-// .factory('Api', function($http, $q, ERPiaAPI){
-// 	console.log('ERPiaAPI', ERPiaAPI);
-// 	var getApiData = function() {
-// 	    return $http.get(ERPiaAPI.url)
-// 	      .then(function(data) {
-// 	        console.log('Got some data: ', data);
-// 	        return data;
-// 	    });
-// 	};
-// 	return {
-// 		getApiData: getApiData;
-// 	}
-// })
 .factory('loginService', function($http, ERPiaAPI){
 	var comInfo = function(kind, Admin_Code, G_id, G_Pass){
 		if(kind == 'scm_login'){
@@ -30,6 +17,17 @@ angular.module('starter.services', [])
 	}
 })
 
+.factory('scmInfoService', function($http, ERPiaAPI){
+	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
+		var url = ERPiaAPI.url + '/JSon_Proc_Multi_Lhk.asp';
+		var data = 'Value_Kind=list&kind=' + kind + '&BaljuMode=' + BaljuMode + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
+		data += '&FDate=' + FDate + '&TDate=' + TDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		scmInfo: scmInfo
+	}
+})
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 
