@@ -10,13 +10,16 @@ angular.module('starter.services', [])
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&uid=' + G_id + '&pwd=' + G_Pass;
 			return $http.get(url + '?' + data);
+		}else if(kind =='erpia_ComInfo'){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code;
+			return $http.get(url + '?' + data);
 		}
 	}
 	return{
 		comInfo: comInfo
 	}
 })
-
 .factory('scmInfoService', function($http, ERPiaAPI){
 	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
 		var url = ERPiaAPI.url + '/JSon_Proc_Multi_Lhk.asp';
@@ -26,6 +29,59 @@ angular.module('starter.services', [])
 	}
 	return{
 		scmInfo: scmInfo
+	}
+})
+.factory('IndexService', function($http, ERPiaAPI){
+	var dashBoard = function(kind, Admin_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		dashBoard: dashBoard
+	}
+})
+.factory('CertifyService', function($http, ERPiaAPI){
+	var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+	var certify = function(Admin_Code, loginType, ID, sms_id, sms_pwd, sendNum, rec_num){
+		var rndNum = Math.floor(Math.random() *1000000) + 1;
+		if (rndNum < 100000) rndNum = '0' + rndNum;
+		console.log(rndNum);
+		var data = 'Kind=mobile_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
+		data += '&Certify_Code=' + rndNum + '&loginType=' + loginType;
+		$http.get(url + '?' + data)
+		.success(function(response){
+			console.log(response);
+			if (response.list[0].Result == '1'){
+				var url = ERPiaAPI.url + '/SCP.asp';
+				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
+				data += '&rndNum=' + rndNum + '&SendType=mobile_Certification';
+				return $http.get(url + '?' + data);
+				location.href="#/app/certification";
+			}else{
+				console.log('전송실패');
+			}
+		})
+	}
+	var check = function(Admin_Code, loginType, ID, Input_Code){
+		var data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
+		data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
+		$http.get(url + '?' + data)
+		.success(function(response){
+			if (response.list[0].Result == '1'){
+				if(loginType == "S"){
+					location.href="#/app/scmhome";
+				}else if(loginType == "E"){
+					 location.replace("#/app/slidingtab")
+				};
+			}else{
+				alert(response.list[0].Comment);
+			}
+		})
+	}
+	return{
+		certify: certify,
+		check: check
 	}
 })
 .factory('Chats', function() {

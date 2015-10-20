@@ -23,8 +23,7 @@
 				</div>
 
 				<div style="width:100%; text-align:right; margin-top:20px">
-					<span style="display:inline-blank; margin-top:-10px;">최근 조회 시간 :2015-08-04 18:00:00</span>
-					
+					<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='nowTime'></span>
 					<span>
 						<button class="refresh" ng-click="ScmBaseData()"><img src="./img/icon_toggle.png" width="30px"></button>
 					</span>
@@ -38,7 +37,7 @@
 								<table>
 									<tr>
 										<td colspan="4" class="psm_tdov">
-											<a class="hand">발주 조회&nbsp;<font id="totBalju" ng-bind-html="B_TOT"></font>건</a>
+											<a class="hand">발주 조회&nbsp;<font id="totBalju" ng-bind-html="B_TOT">0</font>건</a>
 											<!-- <span><button class="refresh" ng-click="ScmBaseData()">새로고침 </button></span> -->
 											 
 										</td>
@@ -46,10 +45,10 @@
 									<tr>
 										<!-- <span class="hand">업체코드</span>  -->
 										<!-- <span class="baljuNew" ng-bind-html="Admin_Code"></span> -->
-										<td><a class="hand">신규발주<br /><font id="baljuNew" ng-bind-html="B_NewBalju"></font>건</a></td>
-										<td><a class="hand">발주확인<br /><font id="baljuConfirm" ng-bind-html="B_BalJuConfirm"></font>건</a></td>
-										<td><a class="hand">출고확인<br /><font id="baljuChulgo" ng-bind-html="B_ChulgoConfirm"></font>건</a></td>
-										<td><a class="hand">매입확정<br /><font id="baljuMeaip" ng-bind-html="B_MeaipComplete"></font>건</a></td>
+										<td><a class="hand">신규발주<br /><font id="baljuNew" ng-bind-html="B_NewBalju">0</font>건</a></td>
+										<td><a class="hand">발주확인<br /><font id="baljuConfirm" ng-bind-html="B_BalJuConfirm">0</font>건</a></td>
+										<td><a class="hand">출고확인<br /><font id="baljuChulgo" ng-bind-html="B_ChulgoConfirm">0</font>건</a></td>
+										<td><a class="hand">매입확정<br /><font id="baljuMeaip" ng-bind-html="B_MeaipComplete">0</font>건</a></td>
 									</tr>
 								</table>
 							</td>
@@ -60,13 +59,13 @@
 							<td class="psm_02">
 								<table>
 									<tr>
-										<td colspan="4" class="psm_tdov"><a class="hand">직배송 조회&nbsp;<font id="totDirect" ng-bind-html="J_TOT"></font>건</a></td>
+										<td colspan="4" class="psm_tdov"><a class="hand">직배송 조회&nbsp;<font id="totDirect" ng-bind-html="J_TOT">0</font>건</a></td>
 									</tr>
 									<tr>
-										<td><a class="hand">신규발주<br /><font id="directNew" ng-bind-html="J_NewBalju"></font>건</a></td>
-										<td><a class="hand">발주확인<br /><font id="directConfirm" ng-bind-html="J_BalJuConfirm"></font>건</a></td>
-										<td><a class="hand">출고확인<br /><font id="directChulgo" ng-bind-html="J_ChulgoConfirm"></font>건</a></td>
-										<td><a class="hand">매입확정<br /><font id="directMeaip" ng-bind-html="J_MeaipComplete"></font>건</a></td>
+										<td><a class="hand">신규발주<br /><font id="directNew" ng-bind-html="J_NewBalju">0</font>건</a></td>
+										<td><a class="hand">발주확인<br /><font id="directConfirm" ng-bind-html="J_BalJuConfirm">0</font>건</a></td>
+										<td><a class="hand">출고확인<br /><font id="directChulgo" ng-bind-html="J_ChulgoConfirm">0</font>건</a></td>
+										<td><a class="hand">매입확정<br /><font id="directMeaip" ng-bind-html="J_MeaipComplete">0</font>건</a></td>
 									</tr>
 								</table>
 							</td>  
@@ -77,12 +76,12 @@
 							<td class="psm_03">
 								<table>
 									<tr>
-										<td colspan="3" class="psm_tdov"><a class="hand">취소/반품/교환 현황&nbsp;<font id="totCRM" ng-bind-html="C_TOT"></font>건</a></td>
+										<td colspan="3" class="psm_tdov"><a class="hand">취소/반품/교환 현황&nbsp;<font id="totCRM" ng-bind-html="C_TOT">0</font>건</a></td>
 									</tr>
 									<tr>
-										<td><a class="hand">취소관리<br /><font id="crmCancel" ng-bind-html="C_CancelCnt"></font>건</a></td>
-										<td><a class="hand">반품관리<br /><font id="crmTrade" ng-bind-html="C_ReturnCnt"></font>건</a></td>
-										<td><a class="hand">교환관리<br /><font id="crmReturn" ng-bind-html="C_ExchangeCnt"></font>0건</a></td>
+										<td><a class="hand">취소관리<br /><font id="crmCancel" ng-bind-html="C_CancelCnt">0</font>건</a></td>
+										<td><a class="hand">반품관리<br /><font id="crmTrade" ng-bind-html="C_ReturnCnt">0</font>건</a></td>
+										<td><a class="hand">교환관리<br /><font id="crmReturn" ng-bind-html="C_ExchangeCnt">0</font>건</a></td>
 									</tr>
 								</table>
 							</td>
