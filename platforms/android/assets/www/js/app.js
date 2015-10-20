@@ -82,6 +82,26 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
+	.state('app.agreement', {
+		url : '/agreement',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/agreement.html',
+				controller : 'agreementCtrl'
+			}
+		}
+	})
+
+	.state('app.mobile_certification', {
+		url : '/certification',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/certification.html',
+				controller : 'certificationCtrl'
+			}
+		}
+	})
+
 	.state('app.erpia_board', {
 			url : '/boardSelect',
 			views : {
