@@ -33,6 +33,14 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/de.appplant.cordova.plugin.printer/www/printer.js",
+        "id": "de.appplant.cordova.plugin.printer.Printer",
+        "clobbers": [
+            "plugin.printer",
+            "cordova.plugins.printer"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -42,7 +50,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.0.0",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.inappbrowser": "0.6.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "de.appplant.cordova.plugin.printer": "0.7.1"
 }
 // BOTTOM OF METADATA
 });

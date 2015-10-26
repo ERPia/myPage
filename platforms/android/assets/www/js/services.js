@@ -1,5 +1,25 @@
 angular.module('starter.services', [])
 
+//InnerHtml을 사용하기 위한 compiler
+.directive('compileData', function ( $compile ) {
+	return {
+		scope: true,
+		link: function ( scope, element, attrs ) {
+			var elmnt;
+			attrs.$observe( 'template', function ( myTemplate ) {
+				if ( angular.isDefined( myTemplate ) ) {
+					// compile the provided template against the current scope
+					elmnt = $compile( myTemplate )( scope );
+
+					element.html(""); // dummy "clear"
+
+					element.append( elmnt );
+				}
+			});
+		}
+	};
+})
+
 .factory('loginService', function($http, ERPiaAPI){
 	var comInfo = function(kind, Admin_Code, G_id, G_Pass){
 		if(kind == 'scm_login'){
@@ -44,12 +64,12 @@ angular.module('starter.services', [])
 .factory('CertifyService', function($http, ERPiaAPI){
 	var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 	var certify = function(Admin_Code, loginType, ID, sms_id, sms_pwd, sendNum, rec_num){
-		var rndNum = Math.floor(Math.random() *1000000) + 1;
+		var rndNum = Math.floor(Math.random() * 1000000) + 1;
 		if (rndNum < 100000) rndNum = '0' + rndNum;
 		console.log(rndNum);
 		var data = 'Kind=mobile_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
 		data += '&Certify_Code=' + rndNum + '&loginType=' + loginType;
-		$http.get(url + '?' + data)
+		return $http.get(url + '?' + data)
 		.success(function(response){
 			console.log(response);
 			if (response.list[0].Result == '1'){
@@ -57,7 +77,7 @@ angular.module('starter.services', [])
 				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
 				data += '&rndNum=' + rndNum + '&SendType=mobile_Certification';
 				return $http.get(url + '?' + data);
-				location.href="#/app/certification";
+				//location.href="#/app/certification";
 			}else{
 				console.log('전송실패');
 			}
@@ -66,7 +86,7 @@ angular.module('starter.services', [])
 	var check = function(Admin_Code, loginType, ID, Input_Code){
 		var data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
 		data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
-		$http.get(url + '?' + data)
+		return $http.get(url + '?' + data)
 		.success(function(response){
 			if (response.list[0].Result == '1'){
 				if(loginType == "S"){
@@ -83,6 +103,26 @@ angular.module('starter.services', [])
 		certify: certify,
 		check: check
 	}
+})
+.factory('tradeDetailService', function () {
+	var innerHtml = "";
+	var listCnt = 10;
+	if(listCnt > 0){
+		for(var i=1; i<listCnt; i++){
+			innerHtml += '<div class="row">';
+			innerHtml += '<div class="col">' + i + '</div>';
+			innerHtml += '<div class="col col-25">2015-02-05</div>';
+			innerHtml += '<div class="col col-20">onz</div>';
+			innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + i + ')">강아지 외 ' + i + '</a></div>';
+			innerHtml += '<div class="col col-20">X</div>';
+			innerHtml += '</div>';
+		}	
+	}else{
+		innerHtml += '<div class="row">';
+		innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
+		innerHtml += '</div>';
+	}
+	return innerHtml;
 })
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array

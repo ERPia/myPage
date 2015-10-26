@@ -87,7 +87,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'side/agreement.html',
-				controller : 'agreementCtrl'
+				controller : 'AppCtrl'
 			}
 		}
 	})
@@ -97,11 +97,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'side/certification.html',
-				controller : 'certificationCtrl'
+				controller : 'AppCtrl'
 			}
 		}
 	})
 
+	.state('app.trade_Detail', {
+		url : '/trade_Detail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.erpia_board', {
 			url : '/boardSelect',
 			views : {

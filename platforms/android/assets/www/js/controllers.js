@@ -18,7 +18,7 @@ var g_playlists = [{
 	id : 6
 }];
 
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 // .constant('ERPiaAPI', {
 // 	url:'https://www.erpia.net/include'
 // })
@@ -68,7 +68,7 @@ angular.module('starter.controllers', ['starter.services'])
 // 	};
 // })
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
@@ -104,15 +104,31 @@ angular.module('starter.controllers', ['starter.services'])
 		$scope.modal = modal;
 	});
 
+	$ionicModal.fromTemplateUrl('side/agreement.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.agreeModal = modal;
+	});
+
+	$ionicModal.fromTemplateUrl('side/certification.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.certificationModal = modal;
+	});
+
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
 		$scope.modal.hide();
-		location.href="#/app/agreement";
-		// if($rootScope.loginState == "S"){
-		// 	location.href="#/app/scmhome";
-		// }else if($rootScope.loginState == "E"){
-		// 	 location.replace("#/app/slidingtab")
-		// };
+		if($rootScope.mobile_Certify_YN == 'Y'){
+			if($rootScope.loginState == "S"){
+				location.href="#/app/scmhome";
+			}else if($rootScope.loginState == "E"){
+				location.replace("#/app/slidingtab")
+			};
+		}
+		else if($rootScope.loginState != "R") {
+			$scope.agreeModal.show(); //location.href="#/app/agreement";
+		}
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
@@ -127,6 +143,7 @@ angular.module('starter.controllers', ['starter.services'])
 	}
 	// Open the login modal
 	$scope.login = function() {
+		console.log('loginState', $rootScope.loginState);
 		$rootScope.loginMenu = 'selectUser';
 		if($rootScope.loginState == "R"){
 			$scope.modal.show();
@@ -173,6 +190,7 @@ angular.module('starter.controllers', ['starter.services'])
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
 						$timeout(function() {
 							$scope.closeLogin();
@@ -337,18 +355,17 @@ angular.module('starter.controllers', ['starter.services'])
 	};
 
   	$scope.loginHTML = "로그인";
-})
 
-.controller('agreementCtrl', function($scope){
-	$scope.click_agreement = function(agrees){
+  	$scope.click_agreement = function(agrees){
 		if(agrees.agree_1 && agrees.agree_2){
-			location.href="#/app/certification";
+			//location.href="#/app/certification";
+			$scope.agreeModal.hide();
+			$scope.certificationModal.show();
 		}else{
 			alert('약관에 동의해!!');
 		}
 	}
-})
-.controller('certificationCtrl', function($scope, $rootScope, CertifyService){
+
 	$rootScope.CertificationSwitch = 'firstPage';
 	$scope.click_Certification = function(){
 		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $scope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
@@ -356,8 +373,35 @@ angular.module('starter.controllers', ['starter.services'])
 	}
 	$scope.click_responseText = function(){
 		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $scope.G_id, $scope.SMSData.rspnText)
+		.then(function(response){
+			// if(response.data.list[0].Result == '1') {
+				$scope.certificationModal.hide();
+			// }
+		})
 	}
 })
+
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, tradeDetailService){
+	$scope.tradeDetailList = tradeDetailService;
+	$scope.readTradeDetail = function(idx){
+		$ionicSlideBoxDelegate.next();
+		console.log('idx', idx);
+	}
+	$scope.backToList = function(){
+		$ionicSlideBoxDelegate.previous();
+	}
+	$scope.print = function(){
+		var page = location.href;
+
+		console.log('cordovaPrinter',$cordovaPrinter);
+		if($cordovaPrinter.isAvailable()){
+			$cordovaPrinter.print(page);
+		}else{
+			alert('Printing is not available on device');
+		}
+	}
+})
+
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService) {
 		$scope.myStyle = {

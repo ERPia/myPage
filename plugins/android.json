@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Printer\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.printer.Printer\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -95,6 +99,9 @@
             "PACKAGE_NAME": "com.ionicframework.myappframe188486"
         },
         "org.apache.cordova.vibration": {
+            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+        },
+        "de.appplant.cordova.plugin.printer": {
             "PACKAGE_NAME": "com.ionicframework.myappframe188486"
         }
     },
