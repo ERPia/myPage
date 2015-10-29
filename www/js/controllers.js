@@ -68,7 +68,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 // 	};
 // })
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast, loginService, CertifyService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
@@ -184,11 +184,13 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			if ($scope.userType == 'SCM') {
 				loginService.comInfo('scm_login', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
+					if (comInfo.data.list[0].ResultCk == '1'){
 						$scope.Admin_Code = comInfo.data.list[0].Admin_Code;
 						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
 						$scope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
+						$scope.G_Sano = comInfo.data.list[0].Sano;
+
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
 						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
@@ -196,7 +198,10 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 						$timeout(function() {
 							$scope.closeLogin();
 						}, 100);
-					}
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
+						else alert(comInfo.data.list[0].ResultMsg);
+					}	
 				},
 				function(){
 					alert('login error');
@@ -205,11 +210,13 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 				//ERPia 로그인
 				loginService.comInfo('ERPiaLogin', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
+					console.log('comInfo', comInfo);
+					if(comInfo.data.list[0].Result=='1'){
 						$scope.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
 						$scope.UserId = comInfo.data.list[0].user_id;
 						$scope.loginHTML = "로그아웃<br>(" + comInfo.data.list[0].Com_Code + ")";
 						$scope.package = comInfo.data.list[0].Pack_Name;
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 						// $scope.cnt_site = cominfo.list[0].CNT_Site + " 개";
 
 						loginService.comInfo('erpia_ComInfo', $scope.Admin_Code)
@@ -303,12 +310,17 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 							}, 100);
 						},
 						function(){
-							alert('comTax error');
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
+							else alert('comTax error');
 						})
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
+						else alert(comInfo.data.list[0].Comment);
 					}
 				},
 				function(){
-					alert('comInfo error');
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
+					else alert('comInfo error');
 				});
 				
 
@@ -363,48 +375,94 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
 			alert('약관에 동의해!!');
 		}
 	}
 
-	$rootScope.CertificationSwitch = 'firstPage';
+	// $rootScope.CertificationSwitch = 'firstPage';
 	$scope.click_Certification = function(){
 		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $scope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
-		$rootScope.CertificationSwitch = 'secondPage';
 	}
 	$scope.click_responseText = function(){
 		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $scope.G_id, $scope.SMSData.rspnText)
 		.then(function(response){
-			// if(response.data.list[0].Result == '1') {
-				$scope.certificationModal.hide();
-			// }
+			$scope.certificationModal.hide();
 		})
 	}
 })
 
-.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, tradeDetailService){
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
 	$scope.tradeDetailList = tradeDetailService;
+	$scope.check = {};
 	$scope.readTradeDetail = function(idx){
 		$ionicSlideBoxDelegate.next();
-		console.log('idx', idx);
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
 	}
 	$scope.print = function(){
 		var page = location.href;
-
-		console.log('page', page.replace('trade_Detail','trade_Detail_Print'));
 		if($cordovaPrinter.isAvailable()){
-			$cordovaPrinter.print(page.replace('trade_Detail.html','trade_Detail_Print.html'));
+			// $cordovaPrinter.print(page.replace('trade_Detail','trade_Detail_Print'));
+			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
 		}else{
-			alert('Printing is not available on device');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
+			else alert('Printing is not available on device');
+		}
+	}
+	$scope.check_Sano = function(){
+		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
+		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.Sano){
+			location.href="#/app/trade_Detail";
+		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');
+			else alert('사업자 번호와 일치하지 않습니다.');
 		}
 	}
 })
 
+.controller('configCtrl', function($scope) {
+
+})
+
+.controller('configCtrl_Info', function($scope, NoticeService) {
+	$scope.toggle = false;
+	NoticeService.getList()
+		.then(function(data){
+			var innerHtml = '';
+			for(var i=0; i<data.list.length; i++){
+				innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
+				innerHtml += '<li class="item">';
+				innerHtml += '<font>';
+				innerHtml += data.list[i].inDate;
+				innerHtml += '</font><br/>';
+				innerHtml += data.list[i].subject;
+				innerHtml += '</li>';
+				innerHtml += '</ui>';
+				innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
+				innerHtml += data.list[i].content;
+				innerHtml += '</div>';
+			}
+			$scope.noticeList = innerHtml;
+		})
+})
+.controller('configCtrl_statistics', function($scope, statisticService){
+	$scope.items = statisticService.all();
+	$scope.moveItem = function(item, fromIndex, toIndex) {
+		$scope.items.splice(fromIndex, 1);
+		$scope.items.splice(toIndex, 0, item);
+	};
+
+	$scope.onItemDelete = function(item) {
+		$scope.items.splice($scope.items.indexOf(item), 1);
+	};
+	// $scope.shouldShowDelete = false;
+	// $scope.shouldShowReorder = false;
+	// $scope.listCanSwipe = true;
+})
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, ERPiaAPI) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"

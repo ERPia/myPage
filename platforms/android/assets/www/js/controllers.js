@@ -68,7 +68,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 // 	};
 // })
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast, loginService, CertifyService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
@@ -115,6 +115,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 	}).then(function(modal){
 		$scope.certificationModal = modal;
 	});
+
 
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
@@ -183,19 +184,22 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			if ($scope.userType == 'SCM') {
 				loginService.comInfo('scm_login', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
+					if (comInfo.data.list[0].ResultCk == '1'){
 						$scope.Admin_Code = comInfo.data.list[0].Admin_Code;
 						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
 						$scope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
-						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_Certify_YN; 
 
 						$timeout(function() {
 							$scope.closeLogin();
 						}, 100);
-					}
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
+						else alert(comInfo.data.list[0].ResultMsg);
+					}	
 				},
 				function(){
 					alert('login error');
@@ -204,11 +208,13 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 				//ERPia 로그인
 				loginService.comInfo('ERPiaLogin', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
+					console.log('comInfo', comInfo);
+					if(comInfo.data.list[0].Result=='1'){
 						$scope.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
 						$scope.UserId = comInfo.data.list[0].user_id;
 						$scope.loginHTML = "로그아웃<br>(" + comInfo.data.list[0].Com_Code + ")";
 						$scope.package = comInfo.data.list[0].Pack_Name;
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 						// $scope.cnt_site = cominfo.list[0].CNT_Site + " 개";
 
 						loginService.comInfo('erpia_ComInfo', $scope.Admin_Code)
@@ -302,12 +308,17 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 							}, 100);
 						},
 						function(){
-							alert('comTax error');
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
+							else alert('comTax error');
 						})
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
+						else alert(comInfo.data.list[0].Comment);
 					}
 				},
 				function(){
-					alert('comInfo error');
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
+					else alert('comInfo error');
 				});
 				
 
@@ -362,6 +373,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
 			alert('약관에 동의해!!');
 		}
 	}
@@ -369,41 +381,37 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 	$rootScope.CertificationSwitch = 'firstPage';
 	$scope.click_Certification = function(){
 		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $scope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
-		$rootScope.CertificationSwitch = 'secondPage';
 	}
 	$scope.click_responseText = function(){
 		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $scope.G_id, $scope.SMSData.rspnText)
 		.then(function(response){
-			// if(response.data.list[0].Result == '1') {
-				$scope.certificationModal.hide();
-			// }
+			$scope.certificationModal.hide();
 		})
 	}
 })
 
-.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, tradeDetailService){
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
 	$scope.tradeDetailList = tradeDetailService;
 	$scope.readTradeDetail = function(idx){
 		$ionicSlideBoxDelegate.next();
-		console.log('idx', idx);
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
 	}
 	$scope.print = function(){
 		var page = location.href;
-
-		console.log('cordovaPrinter',$cordovaPrinter);
 		if($cordovaPrinter.isAvailable()){
-			$cordovaPrinter.print(page);
+			// $cordovaPrinter.print(page.replace('trade_Detail','trade_Detail_Print'));
+			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
 		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
 			alert('Printing is not available on device');
 		}
 	}
 })
 
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, ERPiaAPI) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"

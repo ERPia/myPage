@@ -61,7 +61,7 @@ angular.module('starter.services', [])
 		dashBoard: dashBoard
 	}
 })
-.factory('CertifyService', function($http, ERPiaAPI){
+.factory('CertifyService', function($http, $cordovaToast, ERPiaAPI){
 	var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 	var certify = function(Admin_Code, loginType, ID, sms_id, sms_pwd, sendNum, rec_num){
 		var rndNum = Math.floor(Math.random() * 1000000) + 1;
@@ -71,7 +71,8 @@ angular.module('starter.services', [])
 		data += '&Certify_Code=' + rndNum + '&loginType=' + loginType;
 		return $http.get(url + '?' + data)
 		.success(function(response){
-			console.log(response);
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증코드를 전송했습니다.', 'long', 'center');
+
 			if (response.list[0].Result == '1'){
 				var url = ERPiaAPI.url + '/SCP.asp';
 				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
@@ -79,13 +80,20 @@ angular.module('starter.services', [])
 				return $http.get(url + '?' + data);
 				//location.href="#/app/certification";
 			}else{
-				console.log('전송실패');
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('전송실패', 'long', 'center');
+				else console.log('전송실패');
 			}
 		})
 	}
 	var check = function(Admin_Code, loginType, ID, Input_Code){
-		var data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
-		data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
+		var data ='';
+		if(loginType=='S'){
+			data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
+			data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
+		}else if(loginType=='E'){
+			url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			data = 'Kind=ERPiaCertify' + '&Admin_Code=' + Admin_Code + '&uid=' + ID;
+		}
 		return $http.get(url + '?' + data)
 		.success(function(response){
 			if (response.list[0].Result == '1'){
@@ -95,7 +103,8 @@ angular.module('starter.services', [])
 					 location.replace("#/app/slidingtab")
 				};
 			}else{
-				alert(response.list[0].Comment);
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show(response.list[0].Comment, 'long', 'center');
+				else alert(response.list[0].Comment);
 			}
 		})
 	}

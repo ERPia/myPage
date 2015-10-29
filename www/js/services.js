@@ -61,7 +61,7 @@ angular.module('starter.services', [])
 		dashBoard: dashBoard
 	}
 })
-.factory('CertifyService', function($http, ERPiaAPI){
+.factory('CertifyService', function($http, $cordovaToast, ERPiaAPI){
 	var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 	var certify = function(Admin_Code, loginType, ID, sms_id, sms_pwd, sendNum, rec_num){
 		var rndNum = Math.floor(Math.random() * 1000000) + 1;
@@ -71,7 +71,8 @@ angular.module('starter.services', [])
 		data += '&Certify_Code=' + rndNum + '&loginType=' + loginType;
 		return $http.get(url + '?' + data)
 		.success(function(response){
-			console.log(response);
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증코드를 전송했습니다.', 'long', 'center');
+
 			if (response.list[0].Result == '1'){
 				var url = ERPiaAPI.url + '/SCP.asp';
 				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
@@ -79,23 +80,31 @@ angular.module('starter.services', [])
 				return $http.get(url + '?' + data);
 				//location.href="#/app/certification";
 			}else{
-				console.log('전송실패');
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('전송실패', 'long', 'center');
+				else console.log('전송실패');
 			}
 		})
 	}
 	var check = function(Admin_Code, loginType, ID, Input_Code){
-		var data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
-		data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
+		var data ='';
+		if(loginType=='S'){
+			data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
+			data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
+		}else if(loginType=='E'){
+			url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			data = 'Kind=ERPiaCertify' + '&Admin_Code=' + Admin_Code + '&uid=' + ID;
+		}
 		return $http.get(url + '?' + data)
 		.success(function(response){
 			if (response.list[0].Result == '1'){
 				if(loginType == "S"){
-					location.href="#/app/scmhome";
+					location.href = "#/app/scmhome";
 				}else if(loginType == "E"){
-					 location.replace("#/app/slidingtab")
+					location.href = "#/app/slidingtab";
 				};
 			}else{
-				alert(response.list[0].Comment);
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show(response.list[0].Comment, 'long', 'center');
+				else alert(response.list[0].Comment);
 			}
 		})
 	}
@@ -123,6 +132,85 @@ angular.module('starter.services', [])
 		innerHtml += '</div>';
 	}
 	return innerHtml;
+})
+.factory('NoticeService', function($http, $q, ERPiaAPI){
+	return{
+		getList: function(){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log(response.data);
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}
+	};
+})
+.factory('statisticService', function($http, $q, ERPiaAPI) {
+	var items = [{
+		Idx : 0,
+		title : "홈"
+	}, {
+		Idx : 1,
+		title : "매출 실적 추이"
+	}, {
+		Idx : 2,
+		title : "사이트별 매출 점유율"
+	}, {
+		Idx : 3,
+		title : "매출이익증감율"
+	}, { 
+		Idx : 4,
+		title : "상품별 매출 TOP5"
+	}, {
+		Idx : 5,
+		title : "브랜드별 매출 TOP5"
+	}, {
+		Idx : 6,
+		title : "온오프라인 비교 매출"
+	}, {
+		Idx : 7,
+		title : "매출반품현황"
+	}, {
+		Idx : 8,
+		title : "상품별 매출 반품 건수/반품액 TOP5"
+	}, {
+		Idx : 9,
+		title : "CS 컴플레인 현황"
+	}, {
+		Idx : 10,
+		title : "매입 현황"
+	}, {
+		Idx : 11,
+		title : "거래처별 매입 점유율 TOP 10"
+	}, {
+		Idx : 12,
+		title : "상품별 매입건수/매입액 TOP5"
+	}, { 
+		Idx : 13,
+		title : "최근배송현황"
+	}, {
+		Idx : 14,
+		title : "배송현황"
+	}, {
+		Idx : 15,
+		title : "택배사별 구분 건수 통계"
+	}, {
+		Idx : 16,
+		title : "재고 회전율 TOP5"
+	}];
+	
+	return {
+		all : function() {
+			return items;
+		}
+	};
 })
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array

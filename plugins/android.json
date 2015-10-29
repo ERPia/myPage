@@ -31,6 +31,10 @@
                         {
                             "xml": "<feature name=\"Printer\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.printer.Printer\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Toast\"><param name=\"android-package\" value=\"nl.xservices.plugins.Toast\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -102,6 +106,9 @@
             "PACKAGE_NAME": "com.ionicframework.myappframe188486"
         },
         "de.appplant.cordova.plugin.printer": {
+            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+        },
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.ionicframework.myappframe188486"
         }
     },

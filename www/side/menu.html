@@ -112,7 +112,7 @@
 						ERPia 거래명세표
 					</div>
 
-					<a class="item item-icon-left navi-item" menu-close href="#/app/trade_Detail"> 
+					<a class="item item-icon-left navi-item" menu-close href="#/app/check_Sano"> 
 						<i class="icon"> <img src="./img/icon_deal.png" class="psm_left_icon"> 
 							<span class="navi-item-leftText">거래명세표<br> 미수신건</span> 
 							<span class="navi-item-rightText" style="color:#ff0000;">10 건</span>
@@ -269,27 +269,23 @@
 						</i> 
 					</a>
 				</div>
-			</div>
-
-			<div class="button-bar">
-				<a class="button button-light" menu-close ng-click="login()"> <img src="./img/icon-onoff.png" class="psm_left_img2">
-					<div class="psm_left_mediv" ng-bind-html="loginHTML">
-						
-					</div> 
-				</a>
-				<a class="button button-light" href="http://erpia.net" target="blank"> <img src="./img/icon_home.png" class="psm_left_img2">
-					<div class="psm_left_mediv">
-						홈페이지
-					</div> 
-				</a>
-
-				<!-- <a href="http://erpia.net" target="blank">
-					<img src="./img/erpia_blog.jpg" width="100%">
-				</a> 	 -->
-
-
+				<div class="button-bar">
+					<a class="button button-light" menu-close ng-click="login()"> <img src="./img/icon-onoff.png" class="psm_left_img2">
+						<div class="psm_left_mediv" ng-bind-html="loginHTML">
+							
+						</div> 
+					</a>
+					<a class="button button-light" href="http://erpia.net" target="blank"> <img src="./img/icon_home.png" class="psm_left_img2">
+						<div class="psm_left_mediv">
+							홈페이지
+						</div> 
+					</a>
+					<a class="button button-light" menu-close href='#app/config'>
+						<img src="./img/icon_home.png" class="psm_left_img2">
+						<div class="psm_left_mediv">설정</div> 
+					</a>
+				</div>
 			</div>
 		</ion-content>
 	</ion-side-menu>
-</ion-side-menus>
- 
+</ion-side-menus> 
