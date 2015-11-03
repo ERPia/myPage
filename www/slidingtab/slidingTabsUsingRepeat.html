@@ -77,6 +77,13 @@
 								<ol class="breadcrumb"></ol>
 							</section>
 
+							<div style="width:100%; text-align:right; margin-top:20px">
+								<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='nowTime'></span>
+								<span>
+									<button class="refresh" ng-click="ERPiaBaseData()"><img src="./img/icon_toggle.png" width="30px"></button>
+								</span>
+							</div>
+
 							<!-- 컨텐츠 상단 (미처리 조회)-->
 							<div class="row" style="letter-spacing:-1px;">
 
@@ -153,8 +160,13 @@
 				<ion-slide>
 					<ion-content overflow-scroll="true">
 					<p ng-bind-html="login_alert"></p>
+<<<<<<< HEAD
 						<!-- <div style="height: 100%;"> -->
 							<iframe ng-src="{{chart_url1}}" ng-style="myStyle"></iframe>
+=======
+						<div style="height: 100%;">
+							<iframe ng-src="{{url}}" ng-style="myStyle"></iframe>
+>>>>>>> refs/remotes/origin/yyk
 
 							<!-- <div class="video-container">
                     			<iframe src="https://www.youtube.com/embed/wyVM1evRxNw" frameborder="0" width="560" height="315"></iframe>
@@ -163,7 +175,7 @@
                 			<!-- <object data="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7" type="text/html"></object>  -->
 
 							<!-- <iframe ng-src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7" style="width: 100%; height: 100%"></iframe> -->
-						<!-- </div> -->
+						</div>
 					</ion-content>
 				</ion-slide>
 				
@@ -171,8 +183,13 @@
 					<ion-content overflow-scroll="true">
 					<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
+<<<<<<< HEAD
 							<iframe ng-src="{{chart_url2}}" ng-style="myStyle"></iframe>
 
+=======
+							<!-- <iframe src="{{url}}" ng-style="myStyle"></iframe> -->
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+>>>>>>> refs/remotes/origin/yyk
 							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart2"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
@@ -182,8 +199,13 @@
 					<ion-content overflow-scroll="true">
 					<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
+<<<<<<< HEAD
 							<iframe ng-src="{{chart_url3}}" ng-style="myStyle"></iframe>
 
+=======
+							<!-- <iframe src="{{url}}" ng-style="myStyle"></iframe> -->
+							
+>>>>>>> refs/remotes/origin/yyk
 							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart6"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>

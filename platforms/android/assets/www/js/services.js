@@ -1,5 +1,6 @@
 angular.module('starter.services', [])
 
+<<<<<<< HEAD
 //InnerHtml을 사용하기 위한 compiler
 .directive('compileData', function ( $compile ) {
 	return {
@@ -20,6 +21,8 @@ angular.module('starter.services', [])
 	};
 })
 
+=======
+>>>>>>> refs/remotes/origin/yyk
 .factory('loginService', function($http, ERPiaAPI){
 	var comInfo = function(kind, Admin_Code, G_id, G_Pass){
 		if(kind == 'scm_login'){
@@ -73,6 +76,7 @@ angular.module('starter.services', [])
 		.success(function(response){
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증코드를 전송했습니다.', 'long', 'center');
 
+<<<<<<< HEAD
 			if (response.list[0].Result == '1'){
 				var url = ERPiaAPI.url + '/SCP.asp';
 				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
@@ -133,6 +137,44 @@ angular.module('starter.services', [])
 	}
 	return innerHtml;
 })
+=======
+.factory('ERPiaInfoService', function($http, ERPiaAPI){
+	var ERPiaInfo = function(kind, Admin_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		ERPiaInfo: ERPiaInfo
+	}
+})
+
+.factory('scmInfoService', function($http, ERPiaAPI){
+	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
+		var url = ERPiaAPI.url + '/JSon_Proc_Multi_Lhk.asp';
+		var data = 'Value_Kind=list&kind=' + kind + '&BaljuMode=' + BaljuMode + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
+		data += '&FDate=' + FDate + '&TDate=' + TDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		scmInfo: scmInfo
+	}
+})
+
+.factory('pushInfoService', function($http, ERPiaAPI){
+	var pushInfo = function(Admin_Code, UserId, kind, Mode, UserKey, Token, ChkAdmin, DeviceOS, sDate, eDate){
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&UserKey=' + UserKey + '&Token=' + Token 
+		data += '&ChkAdmin=' + ChkAdmin + '&DeviceOS=' + DeviceOS + '&sDate=' + sDate + '&eDate=' + eDate;
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		pushInfo: pushInfo
+	}
+})
+
+>>>>>>> refs/remotes/origin/yyk
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 

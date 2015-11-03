@@ -40,6 +40,17 @@ angular.module('starter.services', [])
 		comInfo: comInfo
 	}
 })
+.factory('ERPiaInfoService', function($http, ERPiaAPI){
+	var ERPiaInfo = function(kind, Admin_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		ERPiaInfo: ERPiaInfo
+	}
+})
+
 .factory('scmInfoService', function($http, ERPiaAPI){
 	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
 		var url = ERPiaAPI.url + '/JSon_Proc_Multi_Lhk.asp';
@@ -217,6 +228,18 @@ angular.module('starter.services', [])
 					}
 			})
 		}
+	}
+})
+.factory('pushInfoService', function($http, ERPiaAPI){
+	var pushInfo = function(Admin_Code, UserId, kind, Mode, UserKey, Token, ChkAdmin, DeviceOS, sDate, eDate){
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&UserKey=' + UserKey + '&Token=' + Token 
+		data += '&ChkAdmin=' + ChkAdmin + '&DeviceOS=' + DeviceOS + '&sDate=' + sDate + '&eDate=' + eDate;
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		pushInfo: pushInfo
 	}
 })
 .factory('Chats', function() {

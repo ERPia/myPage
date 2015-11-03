@@ -1,24 +1,71 @@
-<ion-view view-title="상담하기">
-	<ion-content class="padding2">
-		<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
+<!-- <html ng-app="ionicApp">
+		<head>
+		    <meta charset="utf-8">
+		    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		    
+		    <title>Checkboxes</title>
+
+		    <link href="http://code.ionicframework.com/1.0.0/css/ionic.min.css" rel="stylesheet">
+		    <script src="http://code.ionicframework.com/1.0.0/js/ionic.bundle.min.js"></script>
+		</head>
 
 		<div class="list list-inset">
-			<label class="item item-input">
-				<input type="text" placeholder="제목">
-			</label>			
-		
-			<label class="item item-input">
-				<textarea placeholder="내용" style="height:250px; width:100%"></textarea>
-			</label>
-	
-			<label class="item item-input">
-				<input type="text" placeholder="연락처">
-			</label>
+			<button class="button button-block button-dark" style="margin-top:50px" ng-click="dialNumber(' 07070123071')">
+				전화 걸기
+			</button> 
 
-			<button class="button button-block button-calm" type="submit" style="margin-top:50px">
+
+
+			
+				<ul class="list">
+			        <li class="item">
+			          <select-box ng-Selected-Value="selectedValue" 
+			                ng-Selected-Id="selectedId" 
+			                ng-Item-Name="name" 
+			                ng-Item-Id="id" 
+			                ng-title="Select something!" 
+			                ng-data="{{devList}}" 
+			                ng-placeholder="nothing selected"></select-box>
+			        </li>
+			         <li class="item">
+			          <select-box ng-Selected-Value="selectedValue2" 
+			                ng-Selected-Id="selectedId2" 
+			                ng-Item-Name="key" 
+			                ng-Item-Id="someId" 
+			                ng-title="Select something 2!" 
+			                ng-data="{{devList2}}" 
+			                ng-placeholder="nothing selected2"></select-box>
+			        </li>
+			        <li>
+			          {{selectedId}} - {{selectedValue}}
+			        </li>
+			        <li>
+			          {{selectedId2}} - {{selectedValue2}}          
+			        </li>
+			    </ul>
+			      
+			<!-- <label class="item item-input">
+				<input type="text" placeholder="연락처">
+			</label> 
+
+			<button class="button button-block button-dark" style="margin-top:50px">
 				등록
 			</button> 
-		</div>
+		</ion-content> 
+	</body>
+</html>
+ -->
 
-	</ion-content> 
-</ion-view> 
+  <div ng-app="ionicTeste" ng-controller="testeController">
+<div>
+    <ion-select label="Placa do Veículo" label-field="nmPlaca" provider="veiculos"  ng-model="veiculo"/>
+  
+</div>
+
+<button class="button button-block button-outline button-assertive" ng-click="testa()" ng-show="veiculo">
+  					Teste
+</button>
+     <div>
+
+     </div>
+</div>

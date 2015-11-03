@@ -18,85 +18,17 @@ var g_playlists = [{
 	id : 6
 }];
 
-angular.module('starter.controllers', ['starter.services', 'ngCordova'])
-// .constant('ERPiaAPI', {
-// 	url:'https://www.erpia.net/include'
-// })
+angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push'])
 
-// .controller('PushCtrl', function($scope, $rootScope, $ionicUser, $ionicPush) {
-// 	$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-// 		// alert("Successfully registered token " + data.token);
-// 		console.log('Ionic Push: Got token ', data.token, data.platform);
-// 		$scope.token = data.token;
-// 	});
-
-// 	$scope.identifyUser = function() {
-// 		var user = $ionicUser.get();
-// 		if(!user.user_id) {
-// 			// Set your user_id here, or generate a random one.
-// 			user.user_id = $ionicUser.generateGUID();
-// 		};
-
-// 		// Metadata
-// 		angular.extend(user, {
-// 			name: 'Simon',
-// 			bio: 'Author of Devdactic'
-// 		});
-
-// 		// Identify your user with the Ionic User Service
-// 		$ionicUser.identify(user).then(function(){
-// 		$scope.identified = true;
-// 			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-// 		});
-// 	};
-
-// 	// Registers a device for push notifications
-// 	$scope.pushRegister = function() {
-// 		console.log('Ionic Push: Registering user');
-
-// 		// Register with the Ionic Push service.  All parameters are optional.
-// 		$ionicPush.register({
-// 			canShowAlert: true, //Can pushes show an alert on your screen?
-// 			canSetBadge: true, //Can pushes update app icon badges?
-// 			canPlaySound: true, //Can notifications play a sound?
-// 			canRunActionsOnWake: true, //Can run actions outside the app,
-// 			onNotification: function(notification) {
-// 				// Handle new push notifications here
-// 				return true;
-// 			}
-// 		});
-// 	};
-// })
-
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast
-	, loginService, CertifyService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
+	// console.log($rootScope.loginState);
 
-	// $scope.ScmHome = function(){
-	// 	console.log("scmhome");
-	// 	location.href="#/app/scmhome";
-	// };
-	// $scope.ERPiaHome = function(){
-	// 	console.log("Home");
-	// 	location.href="#/app/erpiahome";
-	// };
-	// $scope.SlidingTab = function(){
-	// 	console.log("slidingTab");
-	// 	location.href="#/app/slidingtab";
-	// };
-	// $scope.BasicTab = function(){
-	// 	console.log("dash");
-	// 	location.href="#/app/tab/dash";
-	// };
-	// $scope.Search = function(){
-	// 	console.log("Search");
-	// 	location.href="#/app/search";
-	// };
-	
-	// Form data for the login modal
 	$scope.loginData = {};
 	$scope.SMSData = {};
+
+	console.log('AppCtrl'); 
 
 	// Create the login modal that we will use later
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
@@ -116,21 +48,96 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 	}).then(function(modal){
 		$scope.certificationModal = modal;
 	});
-
-
+	
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
 		$scope.modal.hide();
 		if($rootScope.mobile_Certify_YN == 'Y'){
 			if($rootScope.loginState == "S"){
-				location.href="#/app/scmhome";
+				$ionicHistory.nextViewOptions({
+	            	disableBack: true
+		        });
+		        $state.go("app.erpia_scmhome");
 			}else if($rootScope.loginState == "E"){
-				location.replace("#/app/slidingtab")
+				$ionicHistory.nextViewOptions({
+	            	disableBack: true
+		        });
+		        $state.go("app.slidingtab");
 			};
 		}
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
+		if($rootScope.loginState != 'R'){
+			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+				// alert("Successfully registered token " + data.token);
+				console.log('Ionic Push: Got token ', data.token, data.platform);
+				$scope.token = data.token;
+				$scope.pushUserRegist();
+			
+			});
+
+		$scope.identifyUser = function() {
+			var user = $ionicUser.get();
+			if(!user.user_id) {
+				// Set your user_id here, or generate a random one.
+				user.user_id = $ionicUser.generateGUID();
+			};
+
+			// Metadata
+			angular.extend(user, {
+				name: $scope.Admin_Code,
+				bio: $rootScope.loginState + '_USER'
+			});
+
+			// Identify your user with the Ionic User Service
+			$ionicUser.identify(user).then(function(){
+			$scope.identified = true;
+				console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+				$scope.UserKey = user.user_id
+			});
+		};
+
+		// Registers a device for push notifications
+		$scope.pushRegister = function() {
+			console.log('Ionic Push: Registering user');
+
+			// Register with the Ionic Push service.  All parameters are optional.
+			$ionicPush.register({
+				canShowAlert: true, //Can pushes show an alert on your screen?
+				canSetBadge: true, //Can pushes update app icon badges?
+				canPlaySound: true, //Can notifications play a sound?
+				canRunActionsOnWake: true, //Can run actions outside the app,
+				
+				onNotification: function(notification) {
+					// Handle new push notifications here
+					if(notification.payload.payload.$state === "app.slidingtab"){
+						alert("app.slidingtab");
+					}
+					if(notification.payload.payload.$state === "tab.A"){
+						alert("tab.A");
+						//$state.go("경로") //해당 값으로 화면 이동
+					}
+					if(notification.payload.payload.$state === "tab.B"){
+						alert("tab.B");
+					}
+					return true;
+				}
+			});
+		};
+
+		$scope.pushUserRegist = function() {
+			pushInfoService.pushInfo($scope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $scope.UserKey, $scope.token, $rootScope.loginState, 'A', '', '')
+		    .then(function(pushInfo){
+		    	console.log('테이블 저장 성공' + $scope.UserKey + '키저장좀되셈');
+		    },function(){
+				alert('저장 실패')	
+			});
+		};
+
+	    $scope.identifyUser();
+	    $scope.pushRegister();
+		};
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
@@ -168,12 +175,16 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			$rootScope.loginState = "R";
 			alert("로그아웃 되었습니다.");
 
-			location.href="#/app/menu";
+			$ionicHistory.nextViewOptions({
+            	disableBack: true
+	        });
+			$state.go("app.erpia_main");
 		};
 	};
+
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
-		$scope.Kind = "scm_login";
+		// $scope.Kind = "scm_login";
 		$scope.Admin_Code = $scope.loginData.Admin_Code;
 		$scope.G_id = $scope.loginData.UserId;
 		$scope.G_Pass = $scope.loginData.Pwd;
@@ -323,30 +334,6 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
 					else alert('comInfo error');
 				});
-				
-
-				// $rootScope.urlData = [
-				// {
-				// 	"url" : "#/chart/candleStick.html"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart2"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart6"
-				// },{
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart4"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart3"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart11"
-				// },{
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart12"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart13"
-				// }, {
-				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart14"
-				// }];
 
 				$rootScope.urlData2 = [
 				{
@@ -366,6 +353,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 
 		// Simulate a login delay. Remove this and replace with your login
 		// code if using a login system
+		
 	};
 
   	$scope.loginHTML = "로그인";
@@ -522,7 +510,6 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			function(){
 				alert('ProcessInfo Error');
 			});
-
 			$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
 			$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
 			$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
@@ -532,42 +519,6 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 				console.log('data', data);
 				$scope.tabs = data;
 			})
-
-			// $scope.tabs = [{
-			// 	"text" : "홈"
-			// }, {
-			// 	"text" : "매출 실적 추이"
-			// }, {
-			// 	"text" : "사이트별 매출 점유율"
-			// }, {
-			// 	"text" : "매출이익증감율"
-			// }, { 
-			// 	"text" : "상품별 매출 TOP5"
-			// }, {
-			// 	"text" : "브랜드별 매출 TOP5"
-			// }, {
-			// 	"text" : "온오프라인 비교 매출"
-			// }, {
-			// 	"text" : "매출반품현황"
-			// }, {
-			// 	"text" : "상품별 매출 반품 건수/반품액 TOP5"
-			// }, {
-			// 	"text" : "CS 컴플레인 현황"
-			// }, {
-			// 	"text" : "매입 현황"
-			// }, {
-			// 	"text" : "거래처별 매입 점유율 TOP 10"
-			// }, {
-			// 	"text" : "상품별 매입건수/매입액 TOP5"
-			// }, { 
-			// 	"text" : "최근배송현황"
-			// }, {
-			// 	"text" : "배송현황"
-			// }, {
-			// 	"text" : "택배사별 구분 건수 통계"
-			// }, {
-			// 	"text" : "재고 회전율 TOP5"
-			// }];
 
 			// $scope.url = "";
 			$scope.onSlideMove = function(data) {
@@ -743,54 +694,8 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 	// $scope.ERPiaBaseData();
 })
 
-.controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $ionicUser, $ionicPush){
+.controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){
 	console.log("MainCtrl");
-
-	$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-		// alert("Successfully registered token " + data.token);
-		console.log('Ionic Push: Got token ', data.token, data.platform);
-		$scope.token = data.token;
-	});
-
-	$scope.identifyUser = function() {
-		var user = $ionicUser.get();
-		if(!user.user_id) {
-			// Set your user_id here, or generate a random one.
-			user.user_id = $ionicUser.generateGUID();
-		};
-
-		// Metadata
-		angular.extend(user, {
-			name: 'Admin',
-			bio: 'test'
-		});
-
-		// Identify your user with the Ionic User Service
-		$ionicUser.identify(user).then(function(){
-		$scope.identified = true;
-			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-		});
-	};
-
-	// Registers a device for push notifications
-	$scope.pushRegister = function() {
-		console.log('Ionic Push: Registering user');
-
-		// Register with the Ionic Push service.  All parameters are optional.
-		$ionicPush.register({
-			canShowAlert: true, //Can pushes show an alert on your screen?
-			canSetBadge: true, //Can pushes update app icon badges?
-			canPlaySound: true, //Can notifications play a sound?
-			canRunActionsOnWake: true, //Can run actions outside the app,
-			
-			onNotification: function(notification) {
-				// Handle new push notifications here
-				return true;
-			}
-		});
-	};
-
-
     $scope.ERPiaCafe_Link = function() {
         window.open('http://cafe.naver.com/erpia10');
     }
@@ -798,41 +703,51 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
     $scope.ERPiaBlog_Link = function() {
         window.open('http://blog.naver.com/zzata');
     }
-
-    $scope.identifyUser();
-    $scope.pushRegister();
 })
 
 .controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){
 	console.log("CsCtrl");
 
-	// $scope.data = {
- //            phoneNumber : "070-7012-3071"
- //        };
+    $scope.dialNumber = function(number) {
+        window.open('tel:' + number, '_system');
+    }
 
-        $scope.dialNumber = function(number) {
-            window.open('tel:' + number, '_system');
-        }
+    $scope.sectorslist = [
+	    { id: 1, value: "제조업" },
+	    { id: 2, value: "유통업" },
+	    { id: 3, value: "프랜차이즈" },
+	    { id: 4, value: "서비스" },
+	    { id: 5, value: "비영리" },
+	    { id: 6, value: "건설업" },
+	    { id: 7, value: "기타" }
+  	];
 
-	// $scope.csData = {};
+  	$scope.interestTopiclist = [
+	    { id: 1, value: "재고관리" },
+	    { id: 2, value: "물류관리" },
+	    { id: 3, value: "온라인관리" },
+	    { id: 4, value: "매장관리" },
+	    { id: 5, value: "회계&장부관리" },
+	    { id: 6, value: "판매관리" },
+	    { id: 7, value: "해외판매" },
+	    { id: 8, value: "정산관리" },
+	    { id: 9, value: "미수관리" },
+	    { id: 10, value: "발주관리" },
+	    { id: 11, value: "그룹사관리" }
+  	];
 
-	// // Perform the login action when the user submits the login form
-	// $scope.csRegist = function() {
-		 
-	// 	// $scope.xx = "xx";
+  	$scope.inflowRoutelist = [
+	    { id: 1, value: "검색엔진" },
+	    { id: 2, value: "인터넷창고" },
+	    { id: 3, value: "블로그&카페" },
+	    { id: 4, value: "지인소개" },
+	    { id: 5, value: "신문&잡지광고" },
+	    { id: 6, value: "신문기사" },
+	    { id: 7, value: "기타" }
+  	];
+ 	
 
-	// 	$http({
-	// 		method: 'POST',
-	// 		url: 'https://www.erpia.net/...',
-	// 		data: 	"xx=" + $scope.xx... ,		
-	// 		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'}
-	// 	})
-	// 		.success(function (response) {
-	// 			console.log(response);
-	// 	})
-	// 	  .error(function(data, status, headers, config){
-	// 		console.log("Fail");
-	// 	})
+
 })
 
 .controller('BoardSelectCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){
@@ -980,3 +895,14 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 .controller('LoginCtrl', function($scope){
 
 })
+
+// var teste = angular.module('ionicTeste',['ionic','ionicSelect']);
+
+// teste.controller('CsCtrl',function($scope){
+   
+//     var data = [{id:1,nmPlaca:'IKC-1394'},{id:2,nmPlaca:'IKY-5437'},{id:3,nmPlaca:'IKC-1393'},{id:4,nmPlaca:'IKI-5437'},{id:5,nmPlaca:'IOC-8749'},{id:6,nmPlaca:'IMG-6509'}];
+//     $scope.veiculos = data;
+//     $scope.testa = function(){
+//       alert($scope.veiculo.nmPlaca);
+//     }
+// })
