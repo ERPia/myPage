@@ -43,8 +43,8 @@
       Ionic Framework Team
     </author>
     <content src="index.html" />
-    <access launch-external="yes" origin="tel:*" />
     <access origin="http://www.erpia.net" />
+    <access launch-external="yes" origin="tel:*" />
     <allow-intent href="tel:*" />
     <allow-intent href="*://*www.erpia.net/*" />
     <allow-navigation href="http://*/*" />

@@ -39,7 +39,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "com.phonegap.plugins.PushPlugin": "2.5.0",
-    "cordova-plugin-whitelist": "1.0.0",
+    "cordova-plugin-whitelist": "1.1.1-dev",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.inappbrowser": "0.6.0",
     "org.apache.cordova.vibration": "0.3.13"
