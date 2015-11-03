@@ -1,0 +1,26 @@
+<ion-modal-view class="psm_login_body">
+	<ion-view view-title="모바일 보안인증">
+		<ion-content class="padding2">
+			<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
+			<div class="list list-inset">			
+				<label class="item item-input">모바일 보안인증</label>
+				<textarea style="height:140px; width:100%; overflow-y:scroll;">
+안녕하세요!
+ERPia 모바일에 오신 것을 환영합니다.
+
+ERPia 애플리케이션은 고객분들의 소중한 정보 유출을
+방지하기 위해 인증된 휴대폰에서만 이용이 가능합니다.
+				</textarea>
+				<input type="text" ng-model='SMSData.recUserTel' placeholder='전화번호 입력'/>
+				<button class="button button-block button-calm" type="submit" style="margin-top:50px" ng-click='click_Certification(this)'>
+					인증번호발송
+				</button> 
+				<input type="text" ng-model='SMSData.rspnText' placeholder='인증번호 입력'/>
+				<button class="button button-block button-calm" type="submit" style="margin-top:50px" ng-click='click_responseText(this)'>
+					인증코드 전송
+				</button> 
+			</div>
+
+		</ion-content> 
+	</ion-view>
+</ion-modal-view>

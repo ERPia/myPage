@@ -7,10 +7,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 // .constant('ERPiaAPI',{
 // 	url:'http://localhost:8100/include'
+// 	, toast:'N'
 // })
 // 실제 사용시
 .constant('ERPiaAPI',{
 	url:'http://www.erpia.net/include'
+	, toast:'Y'
 })
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
@@ -130,6 +132,44 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
+	.state('app.agreement', {
+		url : '/agreement',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/agreement.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+
+	.state('app.mobile_certification', {
+		url : '/certification',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/certification.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+
+	.state('app.trade_Detail', {
+		url : '/trade_Detail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
+	.state('app.trade_Detail_Print', {
+		url : '/trade_Detail_Print',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail_Print.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.erpia_board', {
 			url : '/boardSelect',
 			views : {

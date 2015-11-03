@@ -7,10 +7,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 .constant('ERPiaAPI',{
 	url:'http://localhost:8100/include'
+	, toast:'N'
 })
 // 실제 사용시
 // .constant('ERPiaAPI',{
 // 	url:'http://www.erpia.net/include'
+// 	, toast:'Y'
 // })
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
@@ -85,7 +87,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 }])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
-	$stateProvider.state('app', {
+	$stateProvider
+	
+	.state('app', {
 		url : '/app',
 		abstract : true,
 		templateUrl : 'side/menu.html',
@@ -130,6 +134,52 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
+	.state('app.agreement', {
+		url : '/agreement',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/agreement.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+
+	.state('app.mobile_certification', {
+		url : '/certification',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/certification.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+	.state('app.check_Sano', {
+		url : '/check_Sano',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/check_Sano.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
+	.state('app.trade_Detail', {
+		url : '/trade_Detail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
+	.state('app.trade_Detail_Print', {
+		url : '/trade_Detail_Print',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail_Print.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.erpia_board', {
 			url : '/boardSelect',
 			views : {
@@ -198,16 +248,79 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	// 		}
 	// 	}
 	// })
-
+	////////////////////////////////////config///////////////////////////////////
+	.state('app.config', {
+		url : '/config',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/home.html',
+				controller : 'configCtrl'
+			}
+		}
+	})
+	.state('app.config-Info', {
+		url : '/config/Info',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/Info.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-notice', {
+		url : '/config/notice',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/notice.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-custom', {
+		url : '/config/custom',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/custom.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-alarm', {
+		url : '/config/alarm',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/alarm.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-statistics', {
+		url : '/config/statistics',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/statistics.html',
+				controller : 'configCtrl_statistics'
+			}
+		}
+	})
+	.state('app.config-loginConfig', {
+		url : '/config/loginConfig',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/loginConfig.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
 	/////////////////////////////////////tab////////////////////////////////////
-	// .state('app.tab', {
-	// 		url : '/tab',
-	// 		views : {
-	// 			'menuContent' : {
-	// 				templateUrl : 'tab/tabs.html'				 
-	// 		}
-	// 	}
-	// })
+	.state('app.tab', {
+		url : '/tab',
+		views : {
+			'menuContent' : {
+				templateUrl : 'tab/tabs.html'				 
+			}
+		}
+	})
 
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',

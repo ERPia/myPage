@@ -18,14 +18,71 @@ var g_playlists = [{
 	id : 6
 }];
 
+<<<<<<< HEAD
+angular.module('starter.controllers', ['starter.services', 'ngCordova'])
+// .constant('ERPiaAPI', {
+// 	url:'https://www.erpia.net/include'
+// })
+
+// .controller('PushCtrl', function($scope, $rootScope, $ionicUser, $ionicPush) {
+// 	$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+// 		// alert("Successfully registered token " + data.token);
+// 		console.log('Ionic Push: Got token ', data.token, data.platform);
+// 		$scope.token = data.token;
+// 	});
+
+// 	$scope.identifyUser = function() {
+// 		var user = $ionicUser.get();
+// 		if(!user.user_id) {
+// 			// Set your user_id here, or generate a random one.
+// 			user.user_id = $ionicUser.generateGUID();
+// 		};
+
+// 		// Metadata
+// 		angular.extend(user, {
+// 			name: 'Simon',
+// 			bio: 'Author of Devdactic'
+// 		});
+
+// 		// Identify your user with the Ionic User Service
+// 		$ionicUser.identify(user).then(function(){
+// 		$scope.identified = true;
+// 			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+// 		});
+// 	};
+
+// 	// Registers a device for push notifications
+// 	$scope.pushRegister = function() {
+// 		console.log('Ionic Push: Registering user');
+
+// 		// Register with the Ionic Push service.  All parameters are optional.
+// 		$ionicPush.register({
+// 			canShowAlert: true, //Can pushes show an alert on your screen?
+// 			canSetBadge: true, //Can pushes update app icon badges?
+// 			canPlaySound: true, //Can notifications play a sound?
+// 			canRunActionsOnWake: true, //Can run actions outside the app,
+// 			onNotification: function(notification) {
+// 				// Handle new push notifications here
+// 				return true;
+// 			}
+// 		});
+// 	};
+// })
+
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast, loginService, CertifyService, ERPiaAPI){
+	$rootScope.urlData = [];
+	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
+=======
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push'])
 
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
+>>>>>>> refs/remotes/origin/yyk
 
 	$scope.loginData = {};
+	$scope.SMSData = {};
 
 	console.log('AppCtrl'); 
 
@@ -35,6 +92,35 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal) {
 		$scope.modal = modal;
 	});
+<<<<<<< HEAD
+
+	$ionicModal.fromTemplateUrl('side/agreement.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.agreeModal = modal;
+	});
+
+	$ionicModal.fromTemplateUrl('side/certification.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.certificationModal = modal;
+	});
+
+
+	// Triggered in the login modal to close it
+	$scope.closeLogin = function() {
+		$scope.modal.hide();
+		if($rootScope.mobile_Certify_YN == 'Y'){
+			if($rootScope.loginState == "S"){
+				location.href="#/app/scmhome";
+			}else if($rootScope.loginState == "E"){
+				location.replace("#/app/slidingtab")
+			};
+		}
+		else if($rootScope.loginState != "R") {
+			$scope.agreeModal.show(); //location.href="#/app/agreement";
+		}
+=======
  
 	$scope.closeLogin = function() {
 		$scope.modal.hide();
@@ -120,11 +206,23 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    $scope.identifyUser();
 		    $scope.pushRegister();
 			};
+>>>>>>> refs/remotes/origin/yyk
 	};
 
+	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
+	$scope.selectType = function(userType){
+		console.log('userType', userType);
+		switch(userType){
+			case 'ERPia': $rootScope.loginMenu = 'User'; $scope.userType='ERPia'; break;
+			case 'SCM': $rootScope.loginMenu = 'User'; $scope.userType='SCM'; break;
+			case 'Normal': $rootScope.loginMenu = 'User'; $scope.userType='Normal'; break;
+			case 'Guest': $rootScope.loginMenu = 'User'; $scope.userType='Guest'; $scope.closeLogin(); break;
+		}
+	}
 	// Open the login modal
 	$scope.login = function() {
-		console.log($rootScope.loginState);
+		console.log('loginState', $rootScope.loginState);
+		$rootScope.loginMenu = 'selectUser';
 		if($rootScope.loginState == "R"){
 			$scope.modal.show();
 		}else{
@@ -159,25 +257,32 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.Admin_Code = $scope.loginData.Admin_Code;
 		$scope.G_id = $scope.loginData.UserId;
 		$scope.G_Pass = $scope.loginData.Pwd;
-		$scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-		$scope.Auto_Login = $scope.loginData.Auto_Login
+		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN;
+		$scope.Auto_Login = $scope.loginData.Auto_Login;
 
 		if ($scope.Auto_Login != true) {
 			//SCM 로그인
-			if ($scope.SCM_Use_YN == true) {
+			if ($scope.userType == 'SCM') {
 				loginService.comInfo('scm_login', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
+					if (comInfo.data.list[0].ResultCk == '1'){
 						$scope.Admin_Code = comInfo.data.list[0].Admin_Code;
 						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
 						$scope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_Certify_YN; 
 
 						$timeout(function() {
 							$scope.closeLogin();
 						}, 100);
+<<<<<<< HEAD
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
+						else alert(comInfo.data.list[0].ResultMsg);
+					}	
+=======
 
 						// $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
 						// 	alert("Successfully registered token " + data.token);
@@ -236,21 +341,123 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					 //    $scope.pushRegister();
 						// $scope.pushUserRegist();
 					}
+>>>>>>> refs/remotes/origin/yyk
 				},
 				function(){
-					alert('로그인실패')
+					alert('login error');
 				});
-			}else{
+			}else if ($scope.userType == 'ERPia'){
 				//ERPia 로그인
 				loginService.comInfo('ERPiaLogin', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
-					if (comInfo.data.list.length > 0){
-						console.log('comInfo', comInfo);
+					console.log('comInfo', comInfo);
+					if(comInfo.data.list[0].Result=='1'){
 						$scope.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
 						$scope.UserId = comInfo.data.list[0].user_id;
-						$scope.package = comInfo.data.list[0].Pack_Name;
-						$scope.cnt_site = comInfo.data.list[0].CNT_Site + " 개";
 						$scope.loginHTML = "로그아웃<br>(" + comInfo.data.list[0].Com_Code + ")";
+<<<<<<< HEAD
+						$scope.package = comInfo.data.list[0].Pack_Name;
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
+						// $scope.cnt_site = cominfo.list[0].CNT_Site + " 개";
+
+						loginService.comInfo('erpia_ComInfo', $scope.Admin_Code)
+						.then(function(comTax){
+							var d= new Date();
+							var month = d.getMonth() + 1;
+							var day = d.getDate();
+							var data = comTax.data;
+
+							CNT_Tax_No_Read = data.list[0].CNT_Tax_No_Read;	//계산서 미수신건
+							Pay_Method = data.list[0].Pay_Method;
+							Pay_State = data.list[0].Pay_State;
+							Max_Pay_YM = data.list[0].Max_Pay_YM;
+							Pay_Ex_Days = data.list[0].Pay_Ex_Days;
+							Pay_Day = data.list[0].Pay_Day;
+							Pay_Ex_Date = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
+
+							$scope.CNT_Tax_No_Read = CNT_Tax_No_Read + " 건";
+							
+							if (Pay_Method != 'P')
+							{
+								if (Pay_State == 'Y')	//당월결재존재
+								{
+									if (Max_Pay_YM != '')
+									{
+										if (Pay_Ex_Days >= 0)
+										{
+											//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("M", 1, Max_Pay_YM & "-01")) + CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1
+											Max_Pay_Y = Max_Pay_YM.split('-')[0];
+											Max_Pay_M = Max_Pay_YM.split('-')[1];
+											var d1 = new Date(Max_Pay_Y, Max_Pay_M, Pay_Day);
+											var diffD = d1 - d;
+											G_Expire_Date = d1.format("yyyy.MM.dd");
+											G_Expire_Days = Math.ceil(diffD/(24*3600*1000));
+										}else{
+											G_Expire_Days = '?';
+											G_Expire_Date = '?';
+										}
+									}
+								}else{
+									if (Pay_Ex_Days < 0)		//당월결재미존재, 초과허용무제한
+									{
+										G_Expire_Days = '?';
+										G_Expire_Date = '?';
+									}else{
+										if (Last_Pay_YM == '')	//당월결재미존재, 이전결재내역미존재
+										{
+											G_Expire_Days = "0";
+											G_Expire_Date = "기간만료";
+										}else{					//당월결재미존재, 이전결재내역존재
+											Max_Pay_Y = Max_Pay_YM.split('-')[0];
+											Max_Pay_M = Max_Pay_YM.split('-')[1];
+											if (new Date(Max_Pay_Y, Max_Pay_M, Pay_Day) < d)
+											{
+												G_Expire_Days = "0"
+												G_Expire_Date = "기간만료"
+											}else{
+												//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01")))
+												//G_Expire_Date = DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01"))
+											}
+										}
+									}
+								}
+							}else{
+								G_Expire_Days = "?"
+								if (CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt) <= 0)
+								{
+									G_Expire_Date = "포인트부족"
+								}else{
+									G_Expire_Date = CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt)
+								}
+							}
+
+							$scope.management_day = G_Expire_Date; //"2015년<br>8월20일";
+							$scope.management_bill = "330,000원	<br><small>(VAT 포함)</small>";
+							$scope.sms = "15000 개<br><small>(건당 19원)</small>";
+							$scope.tax = "150 개<br><small>(건당 165원)</small>";
+							$scope.e_money = "30,000원<br><small>(자동이체 사용중)</small>";
+							$scope.every = "10,000 P";
+							$scope.cnt_user = "5 명";
+							$scope.cnt_account = "20 개";
+
+							$rootScope.loginState = "E";
+							$rootScope.ComInfo = {
+									"G_Expire_Date":G_Expire_Date
+									, "G_Expire_Days":G_Expire_Days
+									, "CNT_Tax_No_Read":CNT_Tax_No_Read
+								};
+							$timeout(function() {
+								$scope.closeLogin();
+							}, 100);
+						},
+						function(){
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
+							else alert('comTax error');
+						})
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
+						else alert(comInfo.data.list[0].Comment);
+=======
 						$rootScope.loginState = "E";
 
 						$timeout(function() {
@@ -265,11 +472,39 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						// });
 					 //    $scope.identifyUser();
 					 //    $scope.pushRegister();
+>>>>>>> refs/remotes/origin/yyk
 					}
 				},
 				function(){
-					alert('로그인실패')
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
+					else alert('comInfo error');
 				});
+<<<<<<< HEAD
+				
+
+				// $rootScope.urlData = [
+				// {
+				// 	"url" : "#/chart/candleStick.html"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart2"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart6"
+				// },{
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart4"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart3"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart11"
+				// },{
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart12"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart13"
+				// }, {
+				// 	"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart14"
+				// }];
+=======
 
 				$rootScope.urlData = [
 				{
@@ -305,6 +540,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				}, {
 					"url" : "http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart10"
 				}];
+>>>>>>> refs/remotes/origin/yyk
 
 				$rootScope.urlData2 = [
 				{
@@ -327,16 +563,156 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		
 	};
 
+<<<<<<< HEAD
+  	$scope.loginHTML = "로그인";
+
+  	$scope.click_agreement = function(agrees){
+		if(agrees.agree_1 && agrees.agree_2){
+			//location.href="#/app/certification";
+			$scope.agreeModal.hide();
+			$scope.certificationModal.show();
+		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
+			alert('약관에 동의해!!');
+		}
+	}
+
+	$rootScope.CertificationSwitch = 'firstPage';
+	$scope.click_Certification = function(){
+		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $scope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
+	}
+	$scope.click_responseText = function(){
+		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $scope.G_id, $scope.SMSData.rspnText)
+		.then(function(response){
+			$scope.certificationModal.hide();
+		})
+	}
+})
+
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
+	$scope.tradeDetailList = tradeDetailService;
+	$scope.readTradeDetail = function(idx){
+		$ionicSlideBoxDelegate.next();
+	}
+	$scope.backToList = function(){
+		$ionicSlideBoxDelegate.previous();
+	}
+	$scope.print = function(){
+		var page = location.href;
+		if($cordovaPrinter.isAvailable()){
+			// $cordovaPrinter.print(page.replace('trade_Detail','trade_Detail_Print'));
+			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
+		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
+			alert('Printing is not available on device');
+		}
+	}
+})
+
+// .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, ERPiaAPI) {
+=======
   	$scope.loginHTML = "로그인";	
 })
 
 .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce', 'ERPiaInfoService',
 	function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, $http, $sce, ERPiaInfoService) {
 		console.log("IndexCtrl");
+>>>>>>> refs/remotes/origin/yyk
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
 		};
+<<<<<<< HEAD
+		// 날짜
+		var d= new Date();
+		var month = d.getMonth() + 1;
+		var day = d.getDate();
+		//일주일전
+		var w = new Date(Date.parse(d) -7 * 1000 * 60 * 60 * 24)
+		var wMonth = w.getMonth() + 1;
+		var wDay = w.getDate();
+
+		var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
+		var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
+
+		if($rootScope.loginState == "E") {
+			IndexService.dashBoard('erpia_dashBoard', $scope.Admin_Code, aWeekAgo, nowday)
+			.then(function(processInfo){
+				$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
+				$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
+				$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
+				$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
+				$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
+			},
+			function(){
+				alert('ProcessInfo Error');
+			});
+			$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
+			$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
+			$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
+
+			$scope.tabs = [{
+				"text" : "홈"
+			}, {
+				"text" : "매출 실적 추이"
+			}, {
+				"text" : "사이트별 매출 점유율"
+			}, {
+				"text" : "매출이익증감율"
+			}, { 
+				"text" : "상품별 매출 TOP5"
+			}, {
+				"text" : "브랜드별 매출 TOP5"
+			}, {
+				"text" : "온오프라인 비교 매출"
+			}, {
+				"text" : "매출반품현황"
+			}, {
+				"text" : "상품별 매출 반품 건수/반품액 TOP5"
+			}, {
+				"text" : "CS 컴플레인 현황"
+			}, {
+				"text" : "매입 현황"
+			}, {
+				"text" : "거래처별 매입 점유율 TOP 10"
+			}, {
+				"text" : "상품별 매입건수/매입액 TOP5"
+			}, { 
+				"text" : "최근배송현황"
+			}, {
+				"text" : "배송현황"
+			}, {
+				"text" : "택배사별 구분 건수 통계"
+			}, {
+				"text" : "재고 회전율 TOP5"
+			}];
+
+			$scope.url = "";
+			$scope.onSlideMove = function(data) {
+				$scope.chart_url = $sce.trustAsResourceUrl("http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7");
+
+				console.log($scope.chart_url);
+
+				// try{
+				// 	$scope.url = $rootScope.urlData[data.index].url;
+				// // 	$scope.login_alert = "";
+
+				// 	console.log("define:" + $scope.url);
+				// }catch (err){
+				// // 	// $scope.login_alert = "로그인하세요";
+				// 	console.log("undefine");
+				// }
+				
+				$scope.myStyle = {
+				    "width" : "100%",
+				    "height" : "100%"
+				};
+				//alert("You have selected " + $scope.tabs[data.index].text + " tab");
+			};
+		}else if($rootScope.loginState == "S") {
+
+=======
 
 		$scope.ERPiaBaseData = function() {
 			console.log("IndexCtrl::" + $rootScope.loginState);
@@ -437,8 +813,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			    "height" : "100%"
 			};
 			//alert("You have selected " + $scope.tabs[data.index].text + " tab");
+>>>>>>> refs/remotes/origin/yyk
 		};
-	}])
+	})
 
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, scmInfoService){
 	$scope.ScmBaseData = function() {

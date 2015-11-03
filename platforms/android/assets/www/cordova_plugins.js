@@ -33,6 +33,25 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/de.appplant.cordova.plugin.printer/www/printer.js",
+        "id": "de.appplant.cordova.plugin.printer.Printer",
+        "clobbers": [
+            "plugin.printer",
+            "cordova.plugins.printer"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+        "id": "cordova-plugin-x-toast.Toast",
+        "clobbers": [
+            "window.plugins.toast"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+        "id": "cordova-plugin-x-toast.tests"
     }
 ];
 module.exports.metadata = 
@@ -42,7 +61,9 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.1.1-dev",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.inappbrowser": "0.6.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "de.appplant.cordova.plugin.printer": "0.7.1",
+    "cordova-plugin-x-toast": "2.2.1"
 }
 // BOTTOM OF METADATA
 });
