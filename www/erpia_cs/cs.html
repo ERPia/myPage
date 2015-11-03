@@ -3,19 +3,107 @@
 		<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
 
 		<div class="list list-inset">
+			<button class="button button-block button-dark" style="margin-top:50px" ng-click="dialNumber(' 07070123071')">
+				전화 걸기
+			</button> 
+
 			<label class="item item-input">
-				<input type="text" placeholder="제목">
-			</label>			
-		
-			<label class="item item-input">
-				<textarea placeholder="내용" style="height:250px; width:100%"></textarea>
+				<span class="input-label">*회사명 : </span>
+				<input type="text" placeholder="회사명"><br>
 			</label>
-	
 			<label class="item item-input">
-				<input type="text" placeholder="연락처">
+				<span class="input-label">*작성자 : </span>
+				<input type="text" placeholder="작성자"><br>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*제목 : </span>
+				<input type="text" placeholder="제목"><br>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*연락처 : </span>
+				<input type="tel" placeholder="-제외 입력하세요"><br>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*업종 : </span>
+				<select ng-model="testa" style="width:200px">
+					<option value="volvo">제조업</option>
+					<option value="volvo">유통업</option>
+					<option value="volvo">프랜차이즈</option>
+					<option value="volvo">서비스</option>
+					<option value="volvo">비영리</option>
+					<option value="volvo">건설업</option>
+					<option value="volvo">기타</option>
+				</select>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*관심항목 : </span>
+				<select ng-model="myJob" style="width:200px">
+					<option value="volvo">재고관리</option>
+					<option value="volvo">물류관리</option>
+					<option value="volvo">온라인관리</option>
+					<option value="volvo">매장관리</option>
+					<option value="volvo">회계/장부관리</option>
+					<option value="volvo">판매관리</option>
+					<option value="volvo">해외판매</option>
+					<option value="volvo">정산관리</option>
+					<option value="volvo">미수관리</option>
+					<option value="volvo">발주관리</option>
+					<option value="volvo">그룹사관리</option>
+				</select>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*유입경로 : </span>
+				<select ng-model="myJob" style="width:200px">
+					<option value="volvo">검색엔진</option>
+					<option value="volvo">인터넷광고</option>
+					<option value="volvo">블로그, 카페</option>
+					<option value="volvo">지인의 권유</option>
+					<option value="volvo">신문,잡지광고</option>
+					<option value="volvo">신문기사</option>
+					<option value="volvo">기타</option>
+				</select>
+			</label>
+			<label class="item item-input">
+				<span class="input-label">*문의사항 : </span>
+				<textarea placeholder="내용을 입력하세요" style="height:250px; width:100%"></textarea>
 			</label>
 
-			<button class="button button-block button-calm" type="submit" style="margin-top:50px">
+			   <!-- <ion-content>
+      
+			      <ul class="list">
+			        <li class="item">
+			          <select-box ng-Selected-Value="selectedValue" 
+			                ng-Selected-Id="selectedId" 
+			                ng-Item-Name="name" 
+			                ng-Item-Id="id" 
+			                ng-title="Select something!" 
+			                ng-data="{{devList}}" 
+			                ng-placeholder="nothing selected"></select-box>
+			        </li>
+			         <li class="item">
+			          <select-box ng-Selected-Value="selectedValue2" 
+			                ng-Selected-Id="selectedId2" 
+			                ng-Item-Name="key" 
+			                ng-Item-Id="someId" 
+			                ng-title="Select something 2!" 
+			                ng-data="{{devList2}}" 
+			                ng-placeholder="nothing selected2"></select-box>
+			        </li>
+			        <li>
+			          {{selectedId}} - {{selectedValue}}
+			        </li>
+			        <li>
+			          {{selectedId2}} - {{selectedValue2}}          
+			        </li>
+			      </ul>
+			      
+			    </ion-content> -->
+	
+			<!-- <label class="item item-input">
+				<input type="text" placeholder="연락처">
+			</label> -->
+
+			<button class="button button-block button-dark" style="margin-top:50px">
 				등록
 			</button> 
 		</div>
