@@ -803,53 +803,53 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			//alert("You have selected " + $scope.tabs[data.index].text + " tab");
 		};
 
-	$scope.BoardBaseData = function() {
+	// $scope.BoardBaseData = function() {
 		 
-		// $scope.Kind = "scm_login";
-		// $scope.Admin_Code = $scope.loginData.Admin_Code;
-		// $scope.G_id = $scope.loginData.UserId;
-		// $scope.G_Pass = $scope.loginData.Pwd;
-		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-		// $scope.Auto_Login = $scope.loginData.Auto_Login
+	// 	// $scope.Kind = "scm_login";
+	// 	// $scope.Admin_Code = $scope.loginData.Admin_Code;
+	// 	// $scope.G_id = $scope.loginData.UserId;
+	// 	// $scope.G_Pass = $scope.loginData.Pwd;
+	// 	// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
+	// 	// $scope.Auto_Login = $scope.loginData.Auto_Login
 
-		// if($rootScope.loginState == "E") {
-			$http({
-				method: 'POST',
-				url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm_Manage.asp',
-				data: 	"kind=" + "board_notice"
-						+ "&Admin_Code=" + "onz",
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
-			})
-			  .success(function (response) {
-				// console.log(response);
+	// 	// if($rootScope.loginState == "E") {
+	// 		$http({
+	// 			method: 'POST',
+	// 			url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm_Manage.asp',
+	// 			data: 	"kind=" + "board_notice"
+	// 					+ "&Admin_Code=" + "onz",
+	// 			headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+	// 		})
+	// 		  .success(function (response) {
+	// 			// console.log(response);
 
-				// console.log($stateParams);
-				// $scope.playlists2 = response
+	// 			// console.log($stateParams);
+	// 			// $scope.playlists2 = response
 
-				var items = [];
-  				for (var i = 0; i < 10; i++) {
-  					items = response.list[i]
-  					console.log(items);
-  				}
+	// 			var items = [];
+ //  				for (var i = 0; i < 10; i++) {
+ //  					items = response.list[i]
+ //  					console.log(items);
+ //  				}
 
-  				$scope.itemlist = items;
-  				console.log($scope.itemlist);
+ //  				$scope.itemlist = items;
+ //  				console.log($scope.itemlist);
   				
-				// $scope.E_BsComplete = response.list[1].Cnt
-				// $scope.E_InputMno = response.list[2].Cnt
-				// $scope.E_CgComplete = response.list[3].Cnt
-				// $scope.E_RegistMno = response.list[4].Cnt
+	// 			// $scope.E_BsComplete = response.list[1].Cnt
+	// 			// $scope.E_InputMno = response.list[2].Cnt
+	// 			// $scope.E_CgComplete = response.list[3].Cnt
+	// 			// $scope.E_RegistMno = response.list[4].Cnt
 
-				// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
-			})
-			  .error(function(data, status, headers, config){
-				console.log("Fail");
-			})
-		// }else{
-			// alert(response.list[0].ResultMsg);
-		// };
-	};
-	$scope.BoardBaseData();
+	// 			// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
+	// 		})
+	// 		  .error(function(data, status, headers, config){
+	// 			console.log("Fail");
+	// 		})
+	// 	// }else{
+	// 		// alert(response.list[0].ResultMsg);
+	// 	// };
+	// };
+	// $scope.BoardBaseData();
 })
 
 //////////////////////////////side///////////////////////////
