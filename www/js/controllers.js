@@ -598,6 +598,7 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 								case 17: $scope.chart_url17 = $sce.trustAsResourceUrl(response.list[0].url); break;
 								default : alert('chart error'); break;
 							}
+							console.log('chartUrl', response.list[0].url);
 						})
 					}
 				}
