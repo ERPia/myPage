@@ -68,7 +68,8 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 // 	};
 // })
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast, loginService, CertifyService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $cordovaToast
+	, loginService, CertifyService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
@@ -447,26 +448,56 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			$scope.noticeList = innerHtml;
 		})
 })
-.controller('configCtrl_statistics', function($scope, statisticService){
-	$scope.items = statisticService.all();
+.controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
+	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.items = data;
+		})
+	// $scope.items = statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id);
+	// console.log('controller',$scope.items)
 	$scope.moveItem = function(item, fromIndex, toIndex) {
-		$scope.items.splice(fromIndex, 1);
-		$scope.items.splice(toIndex, 0, item);
+		fromIdx = $scope.items[fromIndex].Idx;
+		fromTitle = $scope.items[fromIndex].title;
+		fromVisible = $scope.items[fromIndex].visible;
+
+		toIdx = $scope.items[toIndex].Idx;
+		toTitle = $scope.items[toIndex].title;
+		toVisible = $scope.items[toIndex].visible;
+
+		$scope.items[fromIndex].Idx = toIdx;
+		$scope.items[fromIndex].title = toTitle;
+		$scope.items[fromIndex].visible = toVisible;
+
+		$scope.items[toIndex].Idx = fromIdx;
+		$scope.items[toIndex].title = fromTitle;
+		$scope.items[toIndex].visible = fromVisible;
+
+		console.log('changed', $scope.items);
+		
+		var rsltList = '';
+		for(var i = 0; i < $scope.items.length; i++){
+			rsltList += $scope.items[i].cntOrder + '^';
+			rsltList += $scope.items[i].Idx + '^';
+			rsltList += $scope.items[i].visible + '^|';
+		}
+		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
+		console.log('rsltList', rsltList);
+		// $scope.items.splice(fromIndex, 1);
+		// $scope.items.splice(toIndex, 0, item);
 	};
 
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
-	// $scope.shouldShowDelete = false;
-	// $scope.shouldShowReorder = false;
-	// $scope.listCanSwipe = true;
 })
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, ERPiaAPI) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
 		};
+		var indexList = [];
 		// 날짜
 		var d= new Date();
 		var month = d.getMonth() + 1;
@@ -491,62 +522,86 @@ angular.module('starter.controllers', ['starter.services', 'ngCordova'])
 			function(){
 				alert('ProcessInfo Error');
 			});
+
 			$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
 			$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
 			$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
 
-			$scope.tabs = [{
-				"text" : "홈"
-			}, {
-				"text" : "매출 실적 추이"
-			}, {
-				"text" : "사이트별 매출 점유율"
-			}, {
-				"text" : "매출이익증감율"
-			}, { 
-				"text" : "상품별 매출 TOP5"
-			}, {
-				"text" : "브랜드별 매출 TOP5"
-			}, {
-				"text" : "온오프라인 비교 매출"
-			}, {
-				"text" : "매출반품현황"
-			}, {
-				"text" : "상품별 매출 반품 건수/반품액 TOP5"
-			}, {
-				"text" : "CS 컴플레인 현황"
-			}, {
-				"text" : "매입 현황"
-			}, {
-				"text" : "거래처별 매입 점유율 TOP 10"
-			}, {
-				"text" : "상품별 매입건수/매입액 TOP5"
-			}, { 
-				"text" : "최근배송현황"
-			}, {
-				"text" : "배송현황"
-			}, {
-				"text" : "택배사별 구분 건수 통계"
-			}, {
-				"text" : "재고 회전율 TOP5"
-			}];
+			statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+			.then(function(data){
+				console.log('data', data);
+				$scope.tabs = data;
+			})
 
-			$scope.url = "";
+			// $scope.tabs = [{
+			// 	"text" : "홈"
+			// }, {
+			// 	"text" : "매출 실적 추이"
+			// }, {
+			// 	"text" : "사이트별 매출 점유율"
+			// }, {
+			// 	"text" : "매출이익증감율"
+			// }, { 
+			// 	"text" : "상품별 매출 TOP5"
+			// }, {
+			// 	"text" : "브랜드별 매출 TOP5"
+			// }, {
+			// 	"text" : "온오프라인 비교 매출"
+			// }, {
+			// 	"text" : "매출반품현황"
+			// }, {
+			// 	"text" : "상품별 매출 반품 건수/반품액 TOP5"
+			// }, {
+			// 	"text" : "CS 컴플레인 현황"
+			// }, {
+			// 	"text" : "매입 현황"
+			// }, {
+			// 	"text" : "거래처별 매입 점유율 TOP 10"
+			// }, {
+			// 	"text" : "상품별 매입건수/매입액 TOP5"
+			// }, { 
+			// 	"text" : "최근배송현황"
+			// }, {
+			// 	"text" : "배송현황"
+			// }, {
+			// 	"text" : "택배사별 구분 건수 통계"
+			// }, {
+			// 	"text" : "재고 회전율 TOP5"
+			// }];
+
+			// $scope.url = "";
 			$scope.onSlideMove = function(data) {
-				$scope.chart_url = $sce.trustAsResourceUrl("http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart7");
+				console.log('index :', indexList.indexOf(data.index));
+				if(indexList.indexOf(data.index) < 0){
+					indexList.push(data.index);
+					console.log('indexList :', indexList);
+					if (data.index > 0){
+						statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, data.index)
+						.then(function(response){
+							switch(data.index){
+								case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 4: $scope.chart_url4 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 5: $scope.chart_url5 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 6: $scope.chart_url6 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 7: $scope.chart_url7 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 8: $scope.chart_url8 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 9: $scope.chart_url9 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 10: $scope.chart_url10 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 11: $scope.chart_url11 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 12: $scope.chart_url12 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 13: $scope.chart_url13 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 14: $scope.chart_url14 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 15: $scope.chart_url15 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 16: $scope.chart_url16 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								case 17: $scope.chart_url17 = $sce.trustAsResourceUrl(response.list[0].url); break;
+								default : alert('chart error'); break;
+							}
+						})
+					}
+				}
 
-				console.log($scope.chart_url);
-
-				// try{
-				// 	$scope.url = $rootScope.urlData[data.index].url;
-				// // 	$scope.login_alert = "";
-
-				// 	console.log("define:" + $scope.url);
-				// }catch (err){
-				// // 	// $scope.login_alert = "로그인하세요";
-				// 	console.log("undefine");
-				// }
-				
 				$scope.myStyle = {
 				    "width" : "100%",
 				    "height" : "100%"

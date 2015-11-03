@@ -153,64 +153,71 @@ angular.module('starter.services', [])
 	};
 })
 .factory('statisticService', function($http, $q, ERPiaAPI) {
-	var items = [{
-		Idx : 0,
-		title : "홈"
-	}, {
-		Idx : 1,
-		title : "매출 실적 추이"
-	}, {
-		Idx : 2,
-		title : "사이트별 매출 점유율"
-	}, {
-		Idx : 3,
-		title : "매출이익증감율"
-	}, { 
-		Idx : 4,
-		title : "상품별 매출 TOP5"
-	}, {
-		Idx : 5,
-		title : "브랜드별 매출 TOP5"
-	}, {
-		Idx : 6,
-		title : "온오프라인 비교 매출"
-	}, {
-		Idx : 7,
-		title : "매출반품현황"
-	}, {
-		Idx : 8,
-		title : "상품별 매출 반품 건수/반품액 TOP5"
-	}, {
-		Idx : 9,
-		title : "CS 컴플레인 현황"
-	}, {
-		Idx : 10,
-		title : "매입 현황"
-	}, {
-		Idx : 11,
-		title : "거래처별 매입 점유율 TOP 10"
-	}, {
-		Idx : 12,
-		title : "상품별 매입건수/매입액 TOP5"
-	}, { 
-		Idx : 13,
-		title : "최근배송현황"
-	}, {
-		Idx : 14,
-		title : "배송현황"
-	}, {
-		Idx : 15,
-		title : "택배사별 구분 건수 통계"
-	}, {
-		Idx : 16,
-		title : "재고 회전율 TOP5"
-	}];
-	
-	return {
-		all : function() {
-			return items;
+	var items =  [{order:0, Idx:0, title:"홈", visible:"Y"}
+				, {order:1, Idx:1, title:"매출 실적 추이", visible:"Y"}
+				, {order:2, Idx:2, title:"사이트별 매출 점유율", visible:"Y"}
+				, {order:3, Idx:3, title:"매출이익증감율", visible:"Y"}
+				, {order:4, Idx:4, title:"상품별 매출 TOP5", visible:"Y"}
+				, {order:5, Idx:5, title:"브랜드별 매출 TOP5", visible:"Y"}
+				, {order:6, Idx:6, title:"온오프라인 비교 매출", visible:"Y"}
+				, {order:7, Idx:7, title:"매출반품현황", visible:"Y"}
+				, {order:8, Idx:8, title:"상품별 매출 반품 건수/반품액 TOP5", visible:"Y"}
+				, {order:9, Idx:9, title:"CS 컴플레인 현황", visible:"Y"}
+				, {order:10, Idx:10, title:"매입 현황", visible:"Y"}
+				, {order:11, Idx:11, title:"거래처별 매입 점유율 TOP 10", visible:"Y"}
+				, {order:12, Idx:12, title:"상품별 매입건수/매입액 TOP5", visible:"Y"}
+				, {order:13, Idx:13, title:"최근배송현황", visible:"Y"}
+				, {order:14, Idx:14, title:"배송현황", visible:"Y"}
+				, {order:15, Idx:15, title:"택배사별 구분 건수 통계", visible:"Y"}
+				, {order:16, Idx:16, title:"재고 회전율 TOP5", visible:"Y"}];
+	return{
+		all : function(kind, mode, Admin_Code, loginType, G_Id) {
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
+			return $http.get(url + '?' + data)
+				.then(function(response) {
+					console.log(response)
+					if(typeof response.data == 'object'){
+						return response.data.list;	
+					}else{
+						return items;
+					}
+			})
+		},save : function(kind, mode, Admin_Code, loginType, G_Id, statistic){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
+			return $http.get(url + '?' + data)
+				.then(function(response) {
+					console.log('response', response);
+					return response.data;
+			})
+		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
+			return $http.get(url + '?' + data)
+				.then(function(response) {
+					console.log(response)
+					if(typeof response.data == 'object'){
+						return response.data.list;	
+					}else{
+						return items;
+					}
+			})
+		}, chart : function(kind, mode, Admin_Code, loginType, G_Id, chart_idx){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType;
+				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
+			return $http.get(url + '?' + data)
+				.then(function(response) {
+					console.log(response)
+					if(typeof response.data == 'object'){
+						return response.data;	
+					}else{
+						return items;
+					}
+			})
 		}
-	};
+	}
 })
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
