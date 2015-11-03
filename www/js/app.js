@@ -14,7 +14,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	url:'http://www.erpia.net/include'
 // 	, toast:'Y'
 // })
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 
 		if (window.cordova && window.cordova.plugins.Keyboard) {
