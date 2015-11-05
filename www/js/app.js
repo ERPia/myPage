@@ -101,7 +101,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-					// controller : 'MainCtrl'
+					//controller : 'BoardMainCtrl'
 			}
 		}
 	})
@@ -290,7 +290,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/alarm.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_alarm'
 			}
 		}
 	})
@@ -321,7 +321,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
-
+	////////////////////////////////chart///////////////////////////////////
+	.state('app.chart', {
+		url : '/chart/barAndLineMix',
+		views : {
+			'menuContent' : {
+				templateUrl : 'ionicChart/chartTest.html',
+				controller : 'chartCtrl'
+			}
+		}
+	})
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

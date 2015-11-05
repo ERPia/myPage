@@ -187,7 +187,6 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log(response)
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -199,7 +198,6 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log('response', response);
 					return response.data;
 			})
 		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
@@ -207,7 +205,6 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log(response)
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -220,7 +217,6 @@ angular.module('starter.services', [])
 				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log(response)
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{
@@ -228,6 +224,37 @@ angular.module('starter.services', [])
 					}
 			})
 		}
+	}
+})
+.factory('alarmService', function($http, $q, ERPiaAPI){
+	var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+	return{
+		select : function(kind, Admin_Code, loginType, G_Id){
+			var data = 'Value_Kind=list&Kind=' + kind + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}, save : function(kind, Admin_Code, loginType, G_Id, alarm){
+			var data = 'Value_Kind=list&Kind=' + kind + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&alarm=' + alarm;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}
+
 	}
 })
 .factory('pushInfoService', function($http, ERPiaAPI){

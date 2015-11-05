@@ -20,7 +20,7 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push'])
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
@@ -411,8 +411,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
-.controller('configCtrl', function($scope) {
+.controller('configCtrl', function($scope, $rootScope) {
+	console.log($rootScope);
+	if($rootScope.loginState == 'E'){
 
+	}
 })
 
 .controller('configCtrl_Info', function($scope, NoticeService) {
@@ -439,11 +442,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
 		.then(function(data){
-			console.log('data', data);
 			$scope.items = data;
 		})
-	// $scope.items = statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id);
-	// console.log('controller',$scope.items)
 	$scope.moveItem = function(item, fromIndex, toIndex) {
 		fromIdx = $scope.items[fromIndex].Idx;
 		fromTitle = $scope.items[fromIndex].title;
@@ -461,8 +461,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.items[toIndex].title = fromTitle;
 		$scope.items[toIndex].visible = fromVisible;
 
-		console.log('changed', $scope.items);
-		
 		var rsltList = '';
 		for(var i = 0; i < $scope.items.length; i++){
 			rsltList += $scope.items[i].cntOrder + '^';
@@ -470,14 +468,66 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			rsltList += $scope.items[i].visible + '^|';
 		}
 		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
-		console.log('rsltList', rsltList);
-		// $scope.items.splice(fromIndex, 1);
-		// $scope.items.splice(toIndex, 0, item);
 	};
 
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
+})
+.controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
+	$scope.settingsList = [];
+	var cntList = 0;
+	alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			cntList = data.list.length;
+			for(var i=0; i<cntList; i++){
+				switch(data.list[i].idx){
+					case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '공지사항';
+						break;
+					case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업데이트 현황';
+						break;
+					case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '지식 나눔방';
+						break;
+					case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업체문의 Q&A(답변)';
+						break;
+					case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '거래명세서 도착';
+						break;
+					case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '기타 이벤트';
+						break;
+					case 7: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '소리';
+						break;
+					case 8: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '진동';
+						break;
+				}
+			}
+			if(data.list[0].alarm == 'F') $scope.selectedAll = false;
+			else $scope.selectedAll = true;
+			$scope.settingsList = data.list;
+		});
+	$scope.check_change = function(item){
+		var rsltList = '';
+		for(var i=0; i<cntList; i++){
+			rsltList += $scope.settingsList[i].idx + '^';
+			rsltList += ($scope.settingsList[i].checked == true)?'T' + '^|':'F' + '^|';
+		}
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+	$scope.check_alarm = function(check){
+		angular.forEach($scope.settingsList, function(item){
+			item.checked = check;
+			if(item.checked) rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|7^T^|8^T^|';
+			else rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|7^F^|8^F^|';
+		})
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
 })
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
@@ -771,7 +821,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http){
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, ERPiaAPI){
 	console.log("BoardMainCtrl");
 
 	$scope.tabs2 = [{
@@ -815,7 +865,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		// if($rootScope.loginState == "E") {
 			$http({
 				method: 'POST',
-				url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm_Manage.asp',
+				url: ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp',
 				data: 	"kind=" + "board_notice"
 						+ "&Admin_Code=" + "onz",
 				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
@@ -906,3 +956,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 //       alert($scope.veiculo.nmPlaca);
 //     }
 // })
+.controller('chartCtrl', function($scope){
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+    ];
+})
