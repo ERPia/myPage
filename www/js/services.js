@@ -124,25 +124,42 @@ angular.module('starter.services', [])
 		check: check
 	}
 })
-.factory('tradeDetailService', function () {
-	var innerHtml = "";
-	var listCnt = 10;
-	if(listCnt > 0){
-		for(var i=1; i<listCnt; i++){
-			innerHtml += '<div class="row">';
-			innerHtml += '<div class="col">' + i + '</div>';
-			innerHtml += '<div class="col col-25">2015-02-05</div>';
-			innerHtml += '<div class="col col-20">onz</div>';
-			innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + i + ')">강아지 외 ' + i + '</a></div>';
-			innerHtml += '<div class="col col-20">X</div>';
-			innerHtml += '</div>';
-		}	
-	}else{
-		innerHtml += '<div class="row">';
-		innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
-		innerHtml += '</div>';
+.factory('tradeDetailService', function($http, $q, ERPiaAPI) {
+	var innerHtml = function(Admin_Code, GerCode){
+			var innerHtml = "";
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Kind=select_Trade' + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log(response);
+					if(typeof response.data == 'object'){
+						for(var i=0; i<response.data.list.length; i++){
+							innerHtml += '<div class="row">';
+							innerHtml += '<div class="col">' + response.data.list[i].Idx + '</div>';
+							innerHtml += '<div class="col col-25">' + response.data.list[i].in_date + '</div>';
+							innerHtml += '<div class="col col-20">' + response.data.list[i].Admin_Code + '</div>';
+							innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.data.list[i].Idx + ')">';
+							innerHtml += response.data.list[i].G_Name.substring(0, 3) + ' 외 ' + response.data.list[i].totCnt + '</a></div>';
+							innerHtml += '<div class="col col-20">X</div>';
+							innerHtml += '</div>';
+						}
+							// }else{
+							// 	innerHtml += '<div class="row">';
+							// 	innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
+							// 	innerHtml += '</div>';
+							// }
+							console.log('innerHtml', innerHtml);
+						return innerHtml;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}
+	return{
+		innerHtml:innerHtml
 	}
-	return innerHtml;
 })
 .factory('NoticeService', function($http, $q, ERPiaAPI){
 	return{
