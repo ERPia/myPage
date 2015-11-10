@@ -125,31 +125,15 @@ angular.module('starter.services', [])
 	}
 })
 .factory('tradeDetailService', function($http, $q, ERPiaAPI) {
-	var innerHtml = function(Admin_Code, GerCode){
-			var innerHtml = "";
+	return{
+		innerHtml: function(Admin_Code, GerCode){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Kind=select_Trade' + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response);
+					console.log(response.data);
 					if(typeof response.data == 'object'){
-						for(var i=0; i<response.data.list.length; i++){
-							innerHtml += '<div class="row">';
-							innerHtml += '<div class="col">' + response.data.list[i].Idx + '</div>';
-							innerHtml += '<div class="col col-25">' + response.data.list[i].in_date + '</div>';
-							innerHtml += '<div class="col col-20">' + response.data.list[i].Admin_Code + '</div>';
-							innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.data.list[i].Idx + ')">';
-							innerHtml += response.data.list[i].G_Name.substring(0, 3) + ' 외 ' + response.data.list[i].totCnt + '</a></div>';
-							innerHtml += '<div class="col col-20">X</div>';
-							innerHtml += '</div>';
-						}
-							// }else{
-							// 	innerHtml += '<div class="row">';
-							// 	innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
-							// 	innerHtml += '</div>';
-							// }
-							console.log('innerHtml', innerHtml);
-						return innerHtml;
+						return response.data;
 					}else{
 						return $q.reject(response.data);
 					}
@@ -157,9 +141,40 @@ angular.module('starter.services', [])
 					return $q.reject(response.data);
 				})
 		}
-	return{
-		innerHtml:innerHtml
-	}
+	};
+
+	// var innerHtml = function(Admin_Code, GerCode){
+	// 	var strHtml='';
+	// 	var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+	// 	var data = 'Kind=select_Trade' + '&Admin_Code=' + 'onz' + '&GerCode=' + '01016';
+	// 	$http.get(url + '?' + data)
+	// 	.then(function(response){
+	// 		console.log(response);
+	// 		if(typeof response.data == 'object'){
+	// 			for(var i=0; i<response.data.list.length; i++){
+	// 				strHtml += '<div class="row">';
+	// 				strHtml += '<div class="col">' + response.data.list[i].Idx + '</div>';
+	// 				strHtml += '<div class="col col-25">' + response.data.list[i].in_date + '</div>';
+	// 				strHtml += '<div class="col col-20">' + response.data.list[i].Admin_Code + '</div>';
+	// 				strHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.data.list[i].Idx + ')">';
+	// 				strHtml += response.data.list[i].G_Name.substring(0, 3) + ' 외 ' + response.data.list[i].totCnt + '</a></div>';
+	// 				strHtml += '<div class="col col-20">X</div>';
+	// 				strHtml += '</div>';
+	// 			}
+	// 				// }else{
+	// 				// 	innerHtml += '<div class="row">';
+	// 				// 	innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
+	// 				// 	innerHtml += '</div>';
+	// 				// }
+	// 				console.log('innerHtml', innerHtml);
+	// 		}
+	// 	})
+	// 	return strHtml;
+	// }
+	// console.log(innerHtml);
+	// return {
+	// 	innerHtml:innerHtml
+	// }
 })
 .factory('NoticeService', function($http, $q, ERPiaAPI){
 	return{

@@ -3,17 +3,18 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'starter.services'])
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+	, 'starter.services', 'chart.js'])
 
-.constant('ERPiaAPI',{
-	url:'http://localhost:8100/include'
-	, toast:'N'
-})
-// 실제 사용시
 // .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, toast:'Y'
+// 	url:'http://localhost:8100/include'
+// 	, toast:'N'
 // })
+// 실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, toast:'Y'
+})
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 

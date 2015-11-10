@@ -3,7 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'starter.services'])
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+	, 'starter.services', 'chart.js'])
 
 // .constant('ERPiaAPI',{
 // 	url:'http://localhost:8100/include'
@@ -79,15 +80,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		// dev_push: true // 개발테스트시
-		dev_push: false // 실적용시
+      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		dev_push: true // 개발테스트시
+		// dev_push: false // 실적용시
 	});
 }])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
-	$stateProvider.state('app', {
+	$stateProvider
+	
+	.state('app', {
 		url : '/app',
 		abstract : true,
 		templateUrl : 'side/menu.html',
@@ -99,7 +102,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-					// controller : 'MainCtrl'
+					//controller : 'BoardMainCtrl'
 			}
 		}
 	})
@@ -151,7 +154,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
-
+	.state('app.check_Sano', {
+		url : '/check_Sano',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/check_Sano.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.trade_Detail', {
 		url : '/trade_Detail',
 		views : {
@@ -195,7 +206,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_cs/cs.html',
-					// controller : 'CsCtrl'
+					controller : 'CsCtrl'
 			}
 		}
 	})
@@ -238,17 +249,89 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	// 		}
 	// 	}
 	// })
-
+	////////////////////////////////////config///////////////////////////////////
+	.state('app.config', {
+		url : '/config',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/home.html',
+				controller : 'configCtrl'
+			}
+		}
+	})
+	.state('app.config-Info', {
+		url : '/config/Info',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/Info.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-notice', {
+		url : '/config/notice',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/notice.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-custom', {
+		url : '/config/custom',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/custom.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-alarm', {
+		url : '/config/alarm',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/alarm.html',
+				controller : 'configCtrl_alarm'
+			}
+		}
+	})
+	.state('app.config-statistics', {
+		url : '/config/statistics',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/statistics.html',
+				controller : 'configCtrl_statistics'
+			}
+		}
+	})
+	.state('app.config-loginConfig', {
+		url : '/config/loginConfig',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/loginConfig.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
 	/////////////////////////////////////tab////////////////////////////////////
-	// .state('app.tab', {
-	// 		url : '/tab',
-	// 		views : {
-	// 			'menuContent' : {
-	// 				templateUrl : 'tab/tabs.html'				 
-	// 		}
-	// 	}
-	// })
-
+	.state('app.tab', {
+		url : '/tab',
+		views : {
+			'menuContent' : {
+				templateUrl : 'tab/tabs.html'				 
+			}
+		}
+	})
+	////////////////////////////////chart///////////////////////////////////
+	.state('app.chart', {
+		url : '/chart/barAndLineMix',
+		views : {
+			'menuContent' : {
+				templateUrl : 'ionicChart/chartTest.html',
+				controller : 'chartCtrl'
+			}
+		}
+	})
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

@@ -384,6 +384,31 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
 	$scope.check = {};
+	var innerHtml = '';
+	// $scope.tradeDetailList = 
+	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+		.then(function(response){
+			console.log('data', response);
+			if(response.list.length>0){
+				for(var i=0; i<response.list.length; i++){
+					innerHtml += '<div class="row">';
+					innerHtml += '<div class="col">' + response.list[i].Idx + '</div>';
+					innerHtml += '<div class="col col-25">' + response.list[i].in_date + '</div>';
+					innerHtml += '<div class="col col-20">' + response.list[i].Admin_Code + '</div>';
+					innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
+					innerHtml += response.list[i].G_Name.substring(0, 3) + ' 외 ' + response.list[i].totCnt + '</a></div>';
+					innerHtml += '<div class="col col-20">X</div>';
+					innerHtml += '</div>';
+				}
+			}else{
+				innerHtml += '<div class="row">';
+				innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
+				innerHtml += '</div>';
+			}
+			console.log('innerHtml', innerHtml);
+		})
+	$scope.tradeDetailList = innerHtml;
+	
 	$scope.readTradeDetail = function(idx){
 		$ionicSlideBoxDelegate.next();
 	}
@@ -403,7 +428,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
 		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.Sano){
-			$scope.tradeDetailList = tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode);
 			location.href="#/app/trade_Detail";
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');
@@ -531,7 +555,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
@@ -957,53 +981,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 //       alert($scope.veiculo.nmPlaca);
 //     }
 // })
-.controller('chartCtrl', function($scope){
-	$scope.amChartOptions = {
-        data: [{
-            year: 2005,
-            income: 23.5,
-            expenses: 18.1
-        }, {
-            year: 2006,
-            income: 26.2,
-            expenses: 22.8
-        }, {
-            year: 2007,
-            income: 30.1,
-            expenses: 23.9
-        }, {
-            year: 2008,
-            income: 29.5,
-            expenses: 25.1
-        }, {
-            year: 2009,
-            income: 24.6,
-            expenses: 25
-        }],
-        type: "serial",
-
-        categoryField: "year",
-        rotate: true,
-        pathToImages: 'https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.13.0/images/',
-        legend: {
-            enabled: true
-        },
-        chartScrollbar: {
-            enabled: true,
-        },
-        categoryAxis: {
-            gridPosition: "start",
-            parseDates: false
-        },
-        valueAxes: [{
-            position: "top",
-            title: "Million USD"
-        }],
-        graphs: [{
-            type: "column",
-            title: "Income",
-            valueField: "income",
-            fillAlphas: 1,
-        }]
-    }
+.controller('chartCtrl', function($scope, $rootScope, statisticService){
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.charts = data;
+		})
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B', 'SeriesC'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90],
+        [12, 54, 23, 43, 34, 45, 65]
+    ];
 })
