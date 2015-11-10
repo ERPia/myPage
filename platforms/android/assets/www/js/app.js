@@ -3,7 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'starter.services'])
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+	, 'starter.services', 'chart.js'])
 
 // .constant('ERPiaAPI',{
 // 	url:'http://localhost:8100/include'
@@ -106,7 +107,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
+<<<<<<< HEAD
 					controller : 'MainCtrl'
+=======
+					//controller : 'BoardMainCtrl'
+>>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -295,7 +300,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/alarm.html',
+<<<<<<< HEAD
 				controller : 'configCtrl_Info'
+=======
+				controller : 'configCtrl_alarm'
+>>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -326,7 +335,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+<<<<<<< HEAD
 
+=======
+	////////////////////////////////chart///////////////////////////////////
+	.state('app.chart', {
+		url : '/chart/barAndLineMix',
+		views : {
+			'menuContent' : {
+				templateUrl : 'ionicChart/chartTest.html',
+				controller : 'chartCtrl'
+			}
+		}
+	})
+>>>>>>> refs/remotes/origin/lhk
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
