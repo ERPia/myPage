@@ -24,30 +24,28 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			StatusBar.styleDefault();
 		}
 
-	// 	if($rootScope.loginState == "E"){console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')};
-
-	//    var user = $ionicUser.get();
-	//    if(!user.user_id) {
-	//     // Set your user_id here, or generate a random one.
-	//     user.user_id = $ionicUser.generateGUID();
-	//    };
+	   	var user = $ionicUser.get();
+		if(!user.user_id) {
+	    	// Set your user_id here, or generate a random one.
+	    	user.user_id = $ionicUser.generateGUID();
+	    	$rootScope.UserKey = user.user_id
+	   	};
 	   
-	//    // Metadata
-	//    angular.extend(user, {
-	//      name: 'zzzzz- TeamMate',
-	//      bio: 'zzz zdddzzz - TeamMate'
-	//    });
+	   	// Metadata
+	   	angular.extend(user, {
+	    	name: 'PushUser',
+	    	bio: 'ERPiaPushUser'
+	   	});
    
-	//    // Identify your user with the Ionic User Service
-	//    $ionicUser.identify(user).then(function(){
-	//    //$scope.identified = true;
-	//      console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-	//    });
-
+	   	// Identify your user with the Ionic User Service
+	   	$ionicUser.identify(user).then(function(){
+	   	//$scope.identified = true;
+	    	console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+	   	});
 
 	   // Register with the Ionic Push service.  All parameters are optional.
-	   $ionicPush.register({
-	    	canShowAlert: true, //Can pushes show an alert on your screen?
+	   	$ionicPush.register({
+			canShowAlert: true, //Can pushes show an alert on your screen?
 	    	canSetBadge: true, //Can pushes update app icon badges?
 	    	canPlaySound: true, //Can notifications play a sound?
 	    	canRunActionsOnWake: true, //Can run actions outside the app,
@@ -79,8 +77,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
 		dev_push: true // 개발테스트시
 		// dev_push: false // 실적용시
 	});
@@ -181,20 +179,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 	.state('app.erpia_board', {
-			url : '/boardSelect',
+			url : '/board',
 			views : {
 				'menuContent' : {
-					templateUrl : 'erpia_board/boardSelect.html',
-					// controller : 'BoardSelectCtrl'
+					templateUrl : 'erpia_board/board.html',
+					controller : 'BoardSelectCtrl'
 			}
 		}
 	})
 
-	.state('app.erpia_board2', {
-			url : '/boardMain',
+	.state('app.erpia_board-Main', {
+			url : '/board/Main',
 			views : {
 				'menuContent' : {
-					templateUrl : 'erpia_board2/boardMain.html',
+					templateUrl : 'erpia_board/board-main.html',
 					controller : 'BoardMainCtrl'
 			}
 		}
@@ -239,15 +237,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
-	// .state('app.erpia_board', {
-	// 		url : '/board',
-	// 		views : {
-	// 			'menuContent' : {
-	// 				templateUrl : 'erpia_board/board.html',
-	// 				controller : 'BoardCtrl'
-	// 		}
-	// 	}
-	// })
 	////////////////////////////////////config///////////////////////////////////
 	.state('app.config', {
 		url : '/config',
