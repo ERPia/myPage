@@ -24,30 +24,35 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			StatusBar.styleDefault();
 		}
 
-	// 	if($rootScope.loginState == "E"){console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')};
-
-	//    var user = $ionicUser.get();
-	//    if(!user.user_id) {
-	//     // Set your user_id here, or generate a random one.
-	//     user.user_id = $ionicUser.generateGUID();
-	//    };
+	   	var user = $ionicUser.get();
+		if(!user.user_id) {
+	    	// Set your user_id here, or generate a random one.
+	    	user.user_id = $ionicUser.generateGUID();
+	    	$rootScope.UserKey = user.user_id
+	   	};
 	   
-	//    // Metadata
-	//    angular.extend(user, {
-	//      name: 'zzzzz- TeamMate',
-	//      bio: 'zzz zdddzzz - TeamMate'
-	//    });
+	   	// Metadata
+	   	angular.extend(user, {
+	    	name: 'PushUser',
+	    	bio: 'ERPiaPushUser'
+	   	});
    
-	//    // Identify your user with the Ionic User Service
-	//    $ionicUser.identify(user).then(function(){
-	//    //$scope.identified = true;
-	//      console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-	//    });
+	   	// Identify your user with the Ionic User Service
+	   	$ionicUser.identify(user).then(function(){
+	   	//$scope.identified = true;
+	    	console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+	   	});
 
+		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+			alert("Successfully registered token " + data.token);
+			console.log('Ionic Push: Got token ', data.token, data.platform);
+			$rootScope.token = data.token;
+			//디바이스 토큰 값 받는곳
+		});
 
 	   // Register with the Ionic Push service.  All parameters are optional.
-	   $ionicPush.register({
-	    	canShowAlert: true, //Can pushes show an alert on your screen?
+	   	$ionicPush.register({
+			canShowAlert: true, //Can pushes show an alert on your screen?
 	    	canSetBadge: true, //Can pushes update app icon badges?
 	    	canPlaySound: true, //Can notifications play a sound?
 	    	canRunActionsOnWake: true, //Can run actions outside the app,
@@ -79,15 +84,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		// dev_push: true // 개발테스트시
-		dev_push: false // 실적용시
+      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		dev_push: true // 개발테스트시
+		// dev_push: false // 실적용시
 	});
 }])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
-	$stateProvider.state('app', {
+	$stateProvider
+	
+	.state('app', {
 		url : '/app',
 		abstract : true,
 		templateUrl : 'side/menu.html',
@@ -99,7 +106,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-					// controller : 'MainCtrl'
+					controller : 'MainCtrl'
 			}
 		}
 	})
@@ -151,7 +158,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
-
+	.state('app.check_Sano', {
+		url : '/check_Sano',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/check_Sano.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.trade_Detail', {
 		url : '/trade_Detail',
 		views : {
@@ -195,7 +210,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_cs/cs.html',
-					// controller : 'CsCtrl'
+					controller : 'CsCtrl'
 			}
 		}
 	})
@@ -238,16 +253,79 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	// 		}
 	// 	}
 	// })
-
+	////////////////////////////////////config///////////////////////////////////
+	.state('app.config', {
+		url : '/config',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/home.html',
+				controller : 'configCtrl'
+			}
+		}
+	})
+	.state('app.config-Info', {
+		url : '/config/Info',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/Info.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-notice', {
+		url : '/config/notice',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/notice.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-custom', {
+		url : '/config/custom',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/custom.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-alarm', {
+		url : '/config/alarm',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/alarm.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-statistics', {
+		url : '/config/statistics',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/statistics.html',
+				controller : 'configCtrl_statistics'
+			}
+		}
+	})
+	.state('app.config-loginConfig', {
+		url : '/config/loginConfig',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/loginConfig.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
 	/////////////////////////////////////tab////////////////////////////////////
-	// .state('app.tab', {
-	// 		url : '/tab',
-	// 		views : {
-	// 			'menuContent' : {
-	// 				templateUrl : 'tab/tabs.html'				 
-	// 		}
-	// 	}
-	// })
+	.state('app.tab', {
+		url : '/tab',
+		views : {
+			'menuContent' : {
+				templateUrl : 'tab/tabs.html'				 
+			}
+		}
+	})
 
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
