@@ -385,20 +385,30 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
 	$scope.check = {};
 	var innerHtml = '';
-	// $scope.tradeDetailList = 
+	$scope.tradeDetailList = innerHtml;
 	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
 		.then(function(response){
 			console.log('data', response);
 			if(response.list.length>0){
 				for(var i=0; i<response.list.length; i++){
-					innerHtml += '<div class="row">';
-					innerHtml += '<div class="col">' + response.list[i].Idx + '</div>';
-					innerHtml += '<div class="col col-25">' + response.list[i].in_date + '</div>';
-					innerHtml += '<div class="col col-20">' + response.list[i].Admin_Code + '</div>';
-					innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
-					innerHtml += response.list[i].G_Name.substring(0, 3) + ' 외 ' + response.list[i].totCnt + '</a></div>';
-					innerHtml += '<div class="col col-20">X</div>';
-					innerHtml += '</div>';
+					innerHtml += '<ul class="subject borderTop" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
+					innerHtml += '<li class="col10"> </li>';
+					innerHtml += '<li class="col40">' + response.list[i].in_date + '</li>'
+					innerHtml += '<li class="col40">' + response.list[i].Admin_Code + '</li>';
+					innerHtml += '<li class="col10">' + 'X' + '</li>'
+					innerHtml += '</ul>';
+					innerHtml += '<ul class="subject">'
+					innerHtml += '<li class="col10">' + response.list[i].Idx + '</li>';
+					innerHtml += '<li class="col90">' + response.list[i].G_Name.substring(0, 10) + ' 외 ' + response.list[i].totCnt + '</li>';
+					innerHtml += '</ul>';
+					// innerHtml += '<div class="row">';
+					// innerHtml += '<div class="col">' + response.list[i].Idx + '</div>';
+					// innerHtml += '<div class="col col-25">' + response.list[i].in_date + '</div>';
+					// innerHtml += '<div class="col col-20">' + response.list[i].Admin_Code + '</div>';
+					// innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
+					// innerHtml += response.list[i].G_Name.substring(0, 3) + ' 외 ' + response.list[i].totCnt + '</a></div>';
+					// innerHtml += '<div class="col col-20">X</div>';
+					// innerHtml += '</div>';
 				}
 			}else{
 				innerHtml += '<div class="row">';
@@ -406,9 +416,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				innerHtml += '</div>';
 			}
 			console.log('innerHtml', innerHtml);
+			$scope.tradeDetailList = innerHtml;
 		})
-	$scope.tradeDetailList = innerHtml;
-	
 	$scope.readTradeDetail = function(idx){
 		$ionicSlideBoxDelegate.next();
 	}

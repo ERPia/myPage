@@ -1,16 +1,40 @@
 <ion-slide-box on-slide-change="slideHasChanged($index)">
 	<ion-slide>
 		<ion-content class="padding2">
+			<style type="text/css">
+				.li_table {width: 100%; border:1 solid red;border-top:none;border-right:none}
+				.li_table ul {clear: left;margin: 0;padding: 10;list-style-type: none;border-top:1 solid red;} 
+				.li_table .subject {text-align: center;}
+				.li_table .borderSolid {border:1px solid gray;}
+				.li_table ul li {float: left;}
+				.li_table ul .col10 {width: 10%; text-align: center;}
+				.li_table ul .col40 {width: 40%; text-align: center;}
+				.li_table ul .col80 {width: 80%; text-align: left; line-height: 35px; font-size: 12pt; font-weight: bold; padding-left: 10px;}
+				.li_table ul .header {font-weight: bold;}
+			</style>
 			<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
-			<div class="list list-inset" ng-init='init()'>
-				<div class="row">
-					<div class="col">No</div>
-					<div class="col col-25">매출일</div>
-					<div class="col col-20">발행처</div>
-					<div class="col col-25">품목</div>
-					<div class="col col-20">열람</div>
-				</div>
-				<div compile-data template="{{tradeDetailList}}"></div>
+			<div class="li_table" ng-init='init()'>
+				<ul class="subject">
+					<li class="col10 header">No</li>
+					<li class="col40 header">매출일</li>
+					<li class="col40 header">발행처</li>
+					<li class="col10 header">열람</li>
+				</ul>
+				<ion-list>
+					<ion-item ng-repeat="item in items" style="padding:0px;">
+						<ul class="subject">
+							<li class="col10">&nbsp;</li>
+							<li class="col40">{{item.in_date}}</li>
+							<li class="col40">{{item.Admin_Code}}</li>
+							<li class="col10">&nbsp;</li>
+						</ul>
+						<ul>
+							<li class="col10">{{item.Idx}}</li>
+							<li class="col80">{{item.G_Name}}</li>
+							<li class="col10">x</li>
+						</ul>
+					</ion-item>
+				</ion-list>
 			</div>
 		</ion-content> 
 	</ion-slide>
