@@ -20,11 +20,11 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
 
-<<<<<<< HEAD
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
-=======
+// <<<<<<< HEAD
+// .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
+// =======
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
->>>>>>> refs/remotes/origin/lhk
+// >>>>>>> refs/remotes/origin/lhk
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
@@ -487,14 +487,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			rsltList += $scope.items[i].Idx + '^';
 			rsltList += $scope.items[i].visible + '^|';
 		}
-<<<<<<< HEAD
-		statisticService.save('myPage_Config_Stat', 'save_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, rsltList);
-		console.log('rsltList', rsltList);
-		// $scope.items.splice(fromIndex, 1);
-		// $scope.items.splice(toIndex, 0, item);
-=======
 		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
->>>>>>> refs/remotes/origin/lhk
 	};
 
 	$scope.onItemDelete = function(item) {
@@ -862,11 +855,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-<<<<<<< HEAD
-.controller('BoardMainCtrl', function($rootScope, $scope, $rootScope, $stateParams, $sce){
-=======
-.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, ERPiaAPI){
->>>>>>> refs/remotes/origin/lhk
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $sce, ERPiaAPI){
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -899,7 +888,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
 	}
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
 			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
@@ -909,53 +898,53 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 		$rootScope.useBoardCtrl = "N";
 		console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
-=======
-	$scope.BoardBaseData = function() {
+// =======
+// 	$scope.BoardBaseData = function() {
 		 
-		// $scope.Kind = "scm_login";
-		// $scope.Admin_Code = $scope.loginData.Admin_Code;
-		// $scope.G_id = $scope.loginData.UserId;
-		// $scope.G_Pass = $scope.loginData.Pwd;
-		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-		// $scope.Auto_Login = $scope.loginData.Auto_Login
+// 		// $scope.Kind = "scm_login";
+// 		// $scope.Admin_Code = $scope.loginData.Admin_Code;
+// 		// $scope.G_id = $scope.loginData.UserId;
+// 		// $scope.G_Pass = $scope.loginData.Pwd;
+// 		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
+// 		// $scope.Auto_Login = $scope.loginData.Auto_Login
 
-		// if($rootScope.loginState == "E") {
-			$http({
-				method: 'POST',
-				url: ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp',
-				data: 	"kind=" + "board_notice"
-						+ "&Admin_Code=" + "onz",
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
-			})
-			  .success(function (response) {
-				// console.log(response);
+// 		// if($rootScope.loginState == "E") {
+// 			$http({
+// 				method: 'POST',
+// 				url: ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp',
+// 				data: 	"kind=" + "board_notice"
+// 						+ "&Admin_Code=" + "onz",
+// 				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+// 			})
+// 			  .success(function (response) {
+// 				// console.log(response);
 
-				// console.log($stateParams);
-				// $scope.playlists2 = response
+// 				// console.log($stateParams);
+// 				// $scope.playlists2 = response
 
-				var items = [];
-  				for (var i = 0; i < 10; i++) {
-  					items = response.list[i]
-  					console.log(items);
-  				}
+// 				var items = [];
+//   				for (var i = 0; i < 10; i++) {
+//   					items = response.list[i]
+//   					console.log(items);
+//   				}
 
-  				$scope.itemlist = items;
-  				console.log($scope.itemlist);
+//   				$scope.itemlist = items;
+//   				console.log($scope.itemlist);
   				
-				// $scope.E_BsComplete = response.list[1].Cnt
-				// $scope.E_InputMno = response.list[2].Cnt
-				// $scope.E_CgComplete = response.list[3].Cnt
-				// $scope.E_RegistMno = response.list[4].Cnt
+// 				// $scope.E_BsComplete = response.list[1].Cnt
+// 				// $scope.E_InputMno = response.list[2].Cnt
+// 				// $scope.E_CgComplete = response.list[3].Cnt
+// 				// $scope.E_RegistMno = response.list[4].Cnt
 
-				// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
-			})
-			  .error(function(data, status, headers, config){
-				console.log("Fail");
-			})
-		// }else{
-			// alert(response.list[0].ResultMsg);
-		// };
->>>>>>> refs/remotes/origin/lhk
+// 				// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
+// 			})
+// 			  .error(function(data, status, headers, config){
+// 				console.log("Fail");
+// 			})
+// 		// }else{
+// 			// alert(response.list[0].ResultMsg);
+// 		// };
+// >>>>>>> refs/remotes/origin/lhk
 	};
 })
 
@@ -1019,10 +1008,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			console.log('data', data);
 			$scope.charts = data;
 		})
-	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.labels = ["JanuaryJanuaryJanuaryJanuaryJanuaryJanuary", "February", "March", "April", "May", "June", "July"];
     $scope.series = ['Series A', 'Series B', 'SeriesC'];
     $scope.data = [
-        [65, 59, 80, 81, 56, 55, 40],
+        [65, 59, 80, 800000000001, 56, 55, 40],
         [28, 48, 40, 19, 86, 27, 90],
         [12, 54, 23, 43, 34, 45, 65]
     ];

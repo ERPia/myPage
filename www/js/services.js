@@ -249,10 +249,6 @@ angular.module('starter.services', [])
 				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-<<<<<<< HEAD
-					console.log('chart', response)
-=======
->>>>>>> refs/remotes/origin/lhk
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{

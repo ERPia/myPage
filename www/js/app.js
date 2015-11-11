@@ -6,15 +6,15 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services', 'chart.js'])
 
-// .constant('ERPiaAPI',{
-// 	url:'http://localhost:8100/include'
-// 	, toast:'N'
-// })
-// 실제 사용시
 .constant('ERPiaAPI',{
-	url:'http://www.erpia.net/include'
-	, toast:'Y'
+	url:'http://localhost:8100/include'
+	, toast:'N'
 })
+// 실제 사용시
+// .constant('ERPiaAPI',{
+// 	url:'http://www.erpia.net/include'
+// 	, toast:'Y'
+// })
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 
@@ -100,11 +100,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-<<<<<<< HEAD
 					controller : 'MainCtrl'
-=======
-					//controller : 'BoardMainCtrl'
->>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
