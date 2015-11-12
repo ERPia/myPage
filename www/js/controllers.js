@@ -20,7 +20,8 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push'])
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
+	, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
@@ -388,8 +389,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(response){
 			$scope.items = response.list;
 		})
-	$scope.readTradeDetail = function(idx){
+	$scope.readTradeDetail = function(Sl_No){
 		$ionicSlideBoxDelegate.next();
+		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+			.then(function(response){
+				console.log('readDetail', response);
+				$scope.detail_items = response.list;
+			})
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();

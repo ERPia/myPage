@@ -20,7 +20,8 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push'])
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
+	, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
@@ -384,42 +385,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
 	$scope.check = {};
-	var innerHtml = '';
-	$scope.tradeDetailList = innerHtml;
 	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
 		.then(function(response){
-			console.log('data', response);
-			if(response.list.length>0){
-				for(var i=0; i<response.list.length; i++){
-					innerHtml += '<ul class="subject borderTop" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
-					innerHtml += '<li class="col10"> </li>';
-					innerHtml += '<li class="col40">' + response.list[i].in_date + '</li>'
-					innerHtml += '<li class="col40">' + response.list[i].Admin_Code + '</li>';
-					innerHtml += '<li class="col10">' + 'X' + '</li>'
-					innerHtml += '</ul>';
-					innerHtml += '<ul class="subject">'
-					innerHtml += '<li class="col10">' + response.list[i].Idx + '</li>';
-					innerHtml += '<li class="col90">' + response.list[i].G_Name.substring(0, 10) + ' 외 ' + response.list[i].totCnt + '</li>';
-					innerHtml += '</ul>';
-					// innerHtml += '<div class="row">';
-					// innerHtml += '<div class="col">' + response.list[i].Idx + '</div>';
-					// innerHtml += '<div class="col col-25">' + response.list[i].in_date + '</div>';
-					// innerHtml += '<div class="col col-20">' + response.list[i].Admin_Code + '</div>';
-					// innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + response.list[i].Idx + ')">';
-					// innerHtml += response.list[i].G_Name.substring(0, 3) + ' 외 ' + response.list[i].totCnt + '</a></div>';
-					// innerHtml += '<div class="col col-20">X</div>';
-					// innerHtml += '</div>';
-				}
-			}else{
-				innerHtml += '<div class="row">';
-				innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
-				innerHtml += '</div>';
-			}
-			console.log('innerHtml', innerHtml);
-			$scope.tradeDetailList = innerHtml;
+			$scope.items = response.list;
 		})
-	$scope.readTradeDetail = function(idx){
+	$scope.readTradeDetail = function(Sl_No){
 		$ionicSlideBoxDelegate.next();
+		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+			.then(function(response){
+				console.log('readDetail', response);
+				$scope.detail_items = response.list;
+			})
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
@@ -457,20 +433,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	NoticeService.getList()
 		.then(function(data){
 			var innerHtml = '';
-			for(var i=0; i<data.list.length; i++){
-				innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
-				innerHtml += '<li class="item">';
-				innerHtml += '<font>';
-				innerHtml += data.list[i].inDate;
-				innerHtml += '</font><br/>';
-				innerHtml += data.list[i].subject;
-				innerHtml += '</li>';
-				innerHtml += '</ui>';
-				innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
-				innerHtml += data.list[i].content;
-				innerHtml += '</div>';
-			}
-			$scope.noticeList = innerHtml;
+			$scope.items = data.list;
+			// for(var i=0; i<data.list.length; i++){
+			// 	innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
+			// 	innerHtml += '<li class="item">';
+			// 	innerHtml += '<font>';
+			// 	innerHtml += data.list[i].inDate;
+			// 	innerHtml += '</font><br/>';
+			// 	innerHtml += data.list[i].subject;
+			// 	innerHtml += '</li>';
+			// 	innerHtml += '</ui>';
+			// 	innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
+			// 	innerHtml += data.list[i].content;
+			// 	innerHtml += '</div>';
+			// }
+			// $scope.noticeList = innerHtml;
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
