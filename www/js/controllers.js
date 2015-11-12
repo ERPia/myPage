@@ -19,20 +19,10 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-
-<<<<<<< HEAD
-// <<<<<<< HEAD
-// .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
-// =======
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, CertifyService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService){
-// >>>>>>> refs/remotes/origin/lhk
-=======
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
 	, loginService, CertifyService, pushInfoService, ERPiaAPI){
->>>>>>> refs/remotes/origin/lhk
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
-	// console.log($rootScope.loginState);
 
 	$scope.loginData = {};
 	$scope.SMSData = {};
@@ -80,7 +70,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.loginState != "R"){
 			$scope.tokenReceive = function() {
 			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-				// alert("Successfully registered token " + data.token);
 				console.log('Ionic Push: Got token ', data.token, data.platform);
 				$scope.token = data.token;
 				$scope.pushUserRegist();
@@ -348,13 +337,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 			};
 		};
-		// console.log('Doing login', $scope.loginData);
-		//location.href="#/app/home";
-		//alert("로그인성공");
-
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		
 	};
 
   	$scope.loginHTML = "로그인";
@@ -433,20 +415,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(data){
 			var innerHtml = '';
 			$scope.items = data.list;
-			// for(var i=0; i<data.list.length; i++){
-			// 	innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
-			// 	innerHtml += '<li class="item">';
-			// 	innerHtml += '<font>';
-			// 	innerHtml += data.list[i].inDate;
-			// 	innerHtml += '</font><br/>';
-			// 	innerHtml += data.list[i].subject;
-			// 	innerHtml += '</li>';
-			// 	innerHtml += '</ui>';
-			// 	innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
-			// 	innerHtml += data.list[i].content;
-			// 	innerHtml += '</div>';
-			// }
-			// $scope.noticeList = innerHtml;
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
@@ -877,8 +845,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
 		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
 	}
-
-// <<<<<<< HEAD
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
 			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
@@ -888,59 +854,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 		$rootScope.useBoardCtrl = "N";
 		console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
-// =======
-// 	$scope.BoardBaseData = function() {
-		 
-// 		// $scope.Kind = "scm_login";
-// 		// $scope.Admin_Code = $scope.loginData.Admin_Code;
-// 		// $scope.G_id = $scope.loginData.UserId;
-// 		// $scope.G_Pass = $scope.loginData.Pwd;
-// 		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-// 		// $scope.Auto_Login = $scope.loginData.Auto_Login
-
-// 		// if($rootScope.loginState == "E") {
-// 			$http({
-// 				method: 'POST',
-// 				url: ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp',
-// 				data: 	"kind=" + "board_notice"
-// 						+ "&Admin_Code=" + "onz",
-// 				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
-// 			})
-// 			  .success(function (response) {
-// 				// console.log(response);
-
-// 				// console.log($stateParams);
-// 				// $scope.playlists2 = response
-
-// 				var items = [];
-//   				for (var i = 0; i < 10; i++) {
-//   					items = response.list[i]
-//   					console.log(items);
-//   				}
-
-//   				$scope.itemlist = items;
-//   				console.log($scope.itemlist);
-  				
-// 				// $scope.E_BsComplete = response.list[1].Cnt
-// 				// $scope.E_InputMno = response.list[2].Cnt
-// 				// $scope.E_CgComplete = response.list[3].Cnt
-// 				// $scope.E_RegistMno = response.list[4].Cnt
-
-// 				// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
-// 			})
-// 			  .error(function(data, status, headers, config){
-// 				console.log("Fail");
-// 			})
-// 		// }else{
-// 			// alert(response.list[0].ResultMsg);
-// 		// };
-// >>>>>>> refs/remotes/origin/lhk
 	};
 })
 
-//////////////////////////////side///////////////////////////
 .controller('PlaylistsCtrl', function($scope) {
-
 	console.log("PlaylistsCtrl");
 	$scope.playlists = g_playlists;
 })
@@ -950,18 +867,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.playlists = g_playlists;
 	$scope.playlist = $scope.playlists[$stateParams.playlistId - 1];
 })
-
-////////////////////////////tab///////////////////////////////
 .controller('DashCtrl', function($scope) {
 	console.log("DashCtrl");
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
-	// With the new view caching in Ionic, Controllers are only called
-	// when they are recreated or on app start, instead of every page change.
-	// To listen for when this page is active (for example, to refresh data),
-	// listen for the $ionicView.enter event:
-	
 	$scope.chats = Chats.all();
 	$scope.remove = function(chat) {
 		Chats.remove(chat);
@@ -981,17 +891,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('LoginCtrl', function($scope){
 
 })
-
-// var teste = angular.module('ionicTeste',['ionic','ionicSelect']);
-
-// teste.controller('CsCtrl',function($scope){
-   
-//     var data = [{id:1,nmPlaca:'IKC-1394'},{id:2,nmPlaca:'IKY-5437'},{id:3,nmPlaca:'IKC-1393'},{id:4,nmPlaca:'IKI-5437'},{id:5,nmPlaca:'IOC-8749'},{id:6,nmPlaca:'IMG-6509'}];
-//     $scope.veiculos = data;
-//     $scope.testa = function(){
-//       alert($scope.veiculo.nmPlaca);
-//     }
-// })
 .controller('chartCtrl', function($scope, $rootScope, statisticService){
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
 		.then(function(data){
