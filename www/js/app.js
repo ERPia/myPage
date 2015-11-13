@@ -6,16 +6,16 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services', 'chart.js'])
 
-// .constant('ERPiaAPI',{
-// 	url:'http://localhost:8100/include'
-// 	, toast:'N'
-// })
+.constant('ERPiaAPI',{
+	url:'http://localhost:8100/include'
+	, toast:'N'
+})
 
 // 실제 사용시
-.constant('ERPiaAPI',{
-	url:'http://www.erpia.net/include'
-	, toast:'Y'
-})
+// .constant('ERPiaAPI',{
+// 	url:'http://www.erpia.net/include'
+// 	, toast:'Y'
+// })
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
@@ -64,8 +64,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 					//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
 					if(notification.payload.payload.$state === "app.erpia_board-Main"){
 						// alert("tab.chats");
-						$rootScope.boardIndex = $rootScope.BoardParam
-						$state.go("app.erpia_board-Main")
+						//$rootScope.boardIndex = $rootScope.BoardParam
+						//$state.go("app.erpia_board-Main")
 					}
 					if(notification.payload.payload.$state === "app.config-notice"){
 						// alert("tab.A");
