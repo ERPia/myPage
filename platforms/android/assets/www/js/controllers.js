@@ -20,7 +20,12 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
 
+<<<<<<< HEAD
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
+	, loginService, CertifyService, pushInfoService, ERPiaAPI){
+=======
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
+>>>>>>> refs/remotes/origin/yyk
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 	// console.log($rootScope.loginState);
@@ -68,12 +73,135 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
+<<<<<<< HEAD
+		if($rootScope.loginState != 'R'){
+<<<<<<< HEAD
+		// 	// $rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+		// 	// 	// alert("Successfully registered token " + data.token);
+		// 	// 	console.log('Ionic Push: Got token ', data.token, data.platform);
+		// 	// 	$scope.token = data.token;
+		// 	// 	$scope.pushUserRegist();
+			
+		// 	// });
+
+		// $scope.identifyUser = function() {
+		// 	var user = $ionicUser.get();
+		// 	if(!user.user_id) {
+		// 		// Set your user_id here, or generate a random one.
+		// 		user.user_id = $ionicUser.generateGUID();
+		// 	};
+
+		// 	// Metadata
+		// 	angular.extend(user, {
+		// 		name: $scope.Admin_Code,
+		// 		bio: $rootScope.loginState + '_USER'
+		// 	});
+
+		// 	// Identify your user with the Ionic User Service
+		// 	$ionicUser.identify(user).then(function(){
+		// 	$scope.identified = true;
+		// 		console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+		// 		$scope.UserKey = user.user_id
+		// 	});
+		// };
+=======
+>>>>>>> refs/remotes/origin/yyk
 
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
+<<<<<<< HEAD
+		// 	// Register with the Ionic Push service.  All parameters are optional.
+		// 	$ionicPush.register({
+		// 		canShowAlert: true, //Can pushes show an alert on your screen?
+		// 		canSetBadge: true, //Can pushes update app icon badges?
+		// 		canPlaySound: true, //Can notifications play a sound?
+		// 		canRunActionsOnWake: true, //Can run actions outside the app,
+				
+		// 		onNotification: function(notification) {
+		// 			// Handle new push notifications here
+		// 			if(notification.payload.payload.$state === "app.slidingtab"){
+		// 				alert("app.slidingtab");
+		// 			}
+		// 			if(notification.payload.payload.$state === "tab.A"){
+		// 				alert("tab.A");
+		// 				//$state.go("경로") //해당 값으로 화면 이동
+		// 			}
+		// 			if(notification.payload.payload.$state === "tab.B"){
+		// 				alert("tab.B");
+		// 			}
+		// 			return true;
+		// 		}
+		// 	});
+		// };
+
+		$scope.pushUserRegist = function() {
+			pushInfoService.pushInfo($scope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
+=======
+			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+				// alert("Successfully registered token " + data.token);
+				console.log('Ionic Push: Got token ', data.token, data.platform);
+				$scope.token = data.token;
+				$scope.pushUserRegist();
+			
+			});
+
+		$scope.identifyUser = function() {
+			var user = $ionicUser.get();
+			if(!user.user_id) {
+				// Set your user_id here, or generate a random one.
+				user.user_id = $ionicUser.generateGUID();
+			};
+
+			// Metadata
+			angular.extend(user, {
+				name: $scope.Admin_Code,
+				bio: $rootScope.loginState + '_USER'
+			});
+
+			// Identify your user with the Ionic User Service
+			$ionicUser.identify(user).then(function(){
+			$scope.identified = true;
+				console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+				$scope.UserKey = user.user_id
+			});
+		};
+
+		// Registers a device for push notifications
+		$scope.pushRegister = function() {
+			console.log('Ionic Push: Registering user');
+
+			// Register with the Ionic Push service.  All parameters are optional.
+			$ionicPush.register({
+				canShowAlert: true, //Can pushes show an alert on your screen?
+				canSetBadge: true, //Can pushes update app icon badges?
+				canPlaySound: true, //Can notifications play a sound?
+				canRunActionsOnWake: true, //Can run actions outside the app,
+				
+				onNotification: function(notification) {
+					// Handle new push notifications here
+					if(notification.payload.payload.$state === "app.slidingtab"){
+						alert("app.slidingtab");
+					}
+					if(notification.payload.payload.$state === "tab.A"){
+						alert("tab.A");
+						//$state.go("경로") //해당 값으로 화면 이동
+					}
+					if(notification.payload.payload.$state === "tab.B"){
+						alert("tab.B");
+					}
+					return true;
+				}
+			});
+		};
+
+		$scope.pushUserRegist = function() {
+			pushInfoService.pushInfo($scope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $scope.UserKey, $scope.token, $rootScope.loginState, 'A', '', '')
+>>>>>>> refs/remotes/origin/lhk
+=======
 		$scope.pushUserCheck = function() {
 			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
+>>>>>>> refs/remotes/origin/yyk
 		    .then(function(pushInfo){
 		    	console.log('pushinfo::', pushInfo);
 		    	
@@ -96,6 +224,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			});
 		};
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+	 //    $scope.identifyUser();
+	    $scope.pushUserRegist();
+=======
+	    $scope.identifyUser();
+	    $scope.pushRegister();
+>>>>>>> refs/remotes/origin/lhk
+=======
 		$scope.pushUserRegist = function() {
 			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
@@ -103,6 +240,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
+>>>>>>> refs/remotes/origin/yyk
 		};
 		$scope.pushUserCheck();
 		// };
@@ -170,6 +308,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$rootScope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.G_Sano = comInfo.data.list[0].Sano;
+<<<<<<< HEAD
+=======
+						$scope.GerCode = comInfo.data.list[0].G_Code;
+>>>>>>> refs/remotes/origin/lhk
 
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
@@ -339,10 +481,29 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
+<<<<<<< HEAD
 	$scope.tradeDetailList = tradeDetailService;
 	$scope.check = {};
+=======
+	$scope.check = {};
+	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+		.then(function(response){
+			$scope.items = response.list;
+		})
+<<<<<<< HEAD
+	$scope.tradeDetailList = innerHtml;
+	
+>>>>>>> refs/remotes/origin/lhk
 	$scope.readTradeDetail = function(idx){
+=======
+	$scope.readTradeDetail = function(Sl_No){
+>>>>>>> refs/remotes/origin/lhk
 		$ionicSlideBoxDelegate.next();
+		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+			.then(function(response){
+				console.log('readDetail', response);
+				$scope.detail_items = response.list;
+			})
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
@@ -368,8 +529,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
+<<<<<<< HEAD
 .controller('configCtrl', function($scope) {
 
+=======
+.controller('configCtrl', function($scope, $rootScope) {
+	console.log($rootScope);
+	if($rootScope.loginState == 'E'){
+
+	}
+>>>>>>> refs/remotes/origin/lhk
 })
   
 .controller('configCtrl_Info', function($scope, NoticeService) {
@@ -377,30 +546,36 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	NoticeService.getList()
 		.then(function(data){
 			var innerHtml = '';
-			for(var i=0; i<data.list.length; i++){
-				innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
-				innerHtml += '<li class="item">';
-				innerHtml += '<font>';
-				innerHtml += data.list[i].inDate;
-				innerHtml += '</font><br/>';
-				innerHtml += data.list[i].subject;
-				innerHtml += '</li>';
-				innerHtml += '</ui>';
-				innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
-				innerHtml += data.list[i].content;
-				innerHtml += '</div>';
-			}
-			$scope.noticeList = innerHtml;
+			$scope.items = data.list;
+			// for(var i=0; i<data.list.length; i++){
+			// 	innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
+			// 	innerHtml += '<li class="item">';
+			// 	innerHtml += '<font>';
+			// 	innerHtml += data.list[i].inDate;
+			// 	innerHtml += '</font><br/>';
+			// 	innerHtml += data.list[i].subject;
+			// 	innerHtml += '</li>';
+			// 	innerHtml += '</ui>';
+			// 	innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
+			// 	innerHtml += data.list[i].content;
+			// 	innerHtml += '</div>';
+			// }
+			// $scope.noticeList = innerHtml;
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
 		.then(function(data){
+<<<<<<< HEAD
 			console.log('data', data);
 			$scope.items = data;
 		})
 	// $scope.items = statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id);
 	// console.log('controller',$scope.items)
+=======
+			$scope.items = data;
+		})
+>>>>>>> refs/remotes/origin/lhk
 	$scope.moveItem = function(item, fromIndex, toIndex) {
 		fromIdx = $scope.items[fromIndex].Idx;
 		fromTitle = $scope.items[fromIndex].title;
@@ -418,26 +593,96 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.items[toIndex].title = fromTitle;
 		$scope.items[toIndex].visible = fromVisible;
 
+<<<<<<< HEAD
 		console.log('changed', $scope.items);
 		
+=======
+>>>>>>> refs/remotes/origin/lhk
 		var rsltList = '';
 		for(var i = 0; i < $scope.items.length; i++){
 			rsltList += $scope.items[i].cntOrder + '^';
 			rsltList += $scope.items[i].Idx + '^';
 			rsltList += $scope.items[i].visible + '^|';
 		}
+<<<<<<< HEAD
+		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
+<<<<<<< HEAD
+=======
 		statisticService.save('myPage_Config_Stat', 'save_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, rsltList);
+>>>>>>> refs/remotes/origin/yyk
 		console.log('rsltList', rsltList);
 		// $scope.items.splice(fromIndex, 1);
 		// $scope.items.splice(toIndex, 0, item);
+=======
+>>>>>>> refs/remotes/origin/lhk
 	};
 
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
 })
+<<<<<<< HEAD
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
+=======
+.controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
+	$scope.settingsList = [];
+	var cntList = 0;
+	alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			cntList = data.list.length;
+			for(var i=0; i<cntList; i++){
+				switch(data.list[i].idx){
+					case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '공지사항';
+						break;
+					case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업데이트 현황';
+						break;
+					case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '지식 나눔방';
+						break;
+					case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업체문의 Q&A(답변)';
+						break;
+					case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '거래명세서 도착';
+						break;
+					case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '기타 이벤트';
+						break;
+					case 7: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '소리';
+						break;
+					case 8: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '진동';
+						break;
+				}
+			}
+			if(data.list[0].alarm == 'F') $scope.selectedAll = false;
+			else $scope.selectedAll = true;
+			$scope.settingsList = data.list;
+		});
+	$scope.check_change = function(item){
+		var rsltList = '';
+		for(var i=0; i<cntList; i++){
+			rsltList += $scope.settingsList[i].idx + '^';
+			rsltList += ($scope.settingsList[i].checked == true)?'T' + '^|':'F' + '^|';
+		}
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+	$scope.check_alarm = function(check){
+		angular.forEach($scope.settingsList, function(item){
+			item.checked = check;
+			if(item.checked) rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|7^T^|8^T^|';
+			else rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|7^F^|8^F^|';
+		})
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+})
+// .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
+>>>>>>> refs/remotes/origin/lhk
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
@@ -770,7 +1015,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
+<<<<<<< HEAD
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, ERPiaAPI){
+=======
 .controller('BoardMainCtrl', function($rootScope, $scope, $rootScope, $stateParams, $sce){
+>>>>>>> refs/remotes/origin/yyk
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -803,6 +1052,75 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
 	}
 
+<<<<<<< HEAD
+	// $scope.BoardBaseData = function() {
+		 
+<<<<<<< HEAD
+	// 	// $scope.Kind = "scm_login";
+	// 	// $scope.Admin_Code = $scope.loginData.Admin_Code;
+	// 	// $scope.G_id = $scope.loginData.UserId;
+	// 	// $scope.G_Pass = $scope.loginData.Pwd;
+	// 	// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
+	// 	// $scope.Auto_Login = $scope.loginData.Auto_Login
+
+	// 	// if($rootScope.loginState == "E") {
+	// 		$http({
+	// 			method: 'POST',
+	// 			url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm_Manage.asp',
+	// 			data: 	"kind=" + "board_notice"
+	// 					+ "&Admin_Code=" + "onz",
+	// 			headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+	// 		})
+	// 		  .success(function (response) {
+	// 			// console.log(response);
+=======
+		// $scope.Kind = "scm_login";
+		// $scope.Admin_Code = $scope.loginData.Admin_Code;
+		// $scope.G_id = $scope.loginData.UserId;
+		// $scope.G_Pass = $scope.loginData.Pwd;
+		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
+		// $scope.Auto_Login = $scope.loginData.Auto_Login
+
+		// if($rootScope.loginState == "E") {
+			$http({
+				method: 'POST',
+				url: ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp',
+				data: 	"kind=" + "board_notice"
+						+ "&Admin_Code=" + "onz",
+				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+			})
+			  .success(function (response) {
+				// console.log(response);
+>>>>>>> refs/remotes/origin/lhk
+
+	// 			// console.log($stateParams);
+	// 			// $scope.playlists2 = response
+
+	// 			var items = [];
+ //  				for (var i = 0; i < 10; i++) {
+ //  					items = response.list[i]
+ //  					console.log(items);
+ //  				}
+
+ //  				$scope.itemlist = items;
+ //  				console.log($scope.itemlist);
+  				
+	// 			// $scope.E_BsComplete = response.list[1].Cnt
+	// 			// $scope.E_InputMno = response.list[2].Cnt
+	// 			// $scope.E_CgComplete = response.list[3].Cnt
+	// 			// $scope.E_RegistMno = response.list[4].Cnt
+
+	// 			// $scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
+	// 		})
+	// 		  .error(function(data, status, headers, config){
+	// 			console.log("Fail");
+	// 		})
+	// 	// }else{
+	// 		// alert(response.list[0].ResultMsg);
+	// 	// };
+	// };
+	// $scope.BoardBaseData();
+=======
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
 			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
@@ -813,6 +1131,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$rootScope.useBoardCtrl = "N";
 		console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
 	};
+>>>>>>> refs/remotes/origin/yyk
 })
 
 //////////////////////////////side///////////////////////////
@@ -869,3 +1188,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 //       alert($scope.veiculo.nmPlaca);
 //     }
 // })
+.controller('chartCtrl', function($scope, $rootScope, statisticService){
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.charts = data;
+		})
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B', 'SeriesC'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90],
+        [12, 54, 23, 43, 34, 45, 65]
+    ];
+})

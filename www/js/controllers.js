@@ -19,11 +19,10 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
+	, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
-	// console.log($rootScope.loginState);
 
 	$scope.loginData = {};
 	$scope.SMSData = {};
@@ -68,6 +67,39 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
+<<<<<<< HEAD
+		if($rootScope.loginState != "R"){
+			$scope.tokenReceive = function() {
+			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+				console.log('Ionic Push: Got token ', data.token, data.platform);
+				$scope.token = data.token;
+				$scope.pushUserRegist();
+			
+				});
+			};
+
+		// $scope.identifyUser = function() {
+		// 	var user = $ionicUser.get();
+		// 	if(!user.user_id) {
+		// 		// Set your user_id here, or generate a random one.
+		// 		user.user_id = $ionicUser.generateGUID();
+		// 	};
+
+		// 	// Metadata
+		// 	angular.extend(user, {
+		// 		name: $scope.Admin_Code,
+		// 		bio: $rootScope.loginState + '_USER'
+		// 	});
+
+		// 	// Identify your user with the Ionic User Service
+		// 	$ionicUser.identify(user).then(function(){
+		// 	$scope.identified = true;
+		// 		console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+		// 		$scope.UserKey = user.user_id
+		// 	});
+		// };
+=======
+>>>>>>> refs/remotes/origin/yyk
 
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
@@ -170,6 +202,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$rootScope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.G_Sano = comInfo.data.list[0].Sano;
+						$scope.GerCode = comInfo.data.list[0].G_Code;
 
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
@@ -304,13 +337,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 			};
 		};
-		// console.log('Doing login', $scope.loginData);
-		//location.href="#/app/home";
-		//alert("로그인성공");
-
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		
 	};
 
   	$scope.loginHTML = "로그인";
@@ -339,10 +365,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
-	$scope.tradeDetailList = tradeDetailService;
 	$scope.check = {};
-	$scope.readTradeDetail = function(idx){
+	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+		.then(function(response){
+			$scope.items = response.list;
+		})
+	$scope.readTradeDetail = function(Sl_No){
 		$ionicSlideBoxDelegate.next();
+		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+			.then(function(response){
+				console.log('readDetail', response);
+				$scope.detail_items = response.list;
+			})
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
@@ -368,8 +402,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
-.controller('configCtrl', function($scope) {
+.controller('configCtrl', function($scope, $rootScope) {
+	console.log($rootScope);
+	if($rootScope.loginState == 'E'){
 
+	}
 })
   
 .controller('configCtrl_Info', function($scope, NoticeService) {
@@ -377,30 +414,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	NoticeService.getList()
 		.then(function(data){
 			var innerHtml = '';
-			for(var i=0; i<data.list.length; i++){
-				innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
-				innerHtml += '<li class="item">';
-				innerHtml += '<font>';
-				innerHtml += data.list[i].inDate;
-				innerHtml += '</font><br/>';
-				innerHtml += data.list[i].subject;
-				innerHtml += '</li>';
-				innerHtml += '</ui>';
-				innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
-				innerHtml += data.list[i].content;
-				innerHtml += '</div>';
-			}
-			$scope.noticeList = innerHtml;
+			$scope.items = data.list;
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
 		.then(function(data){
-			console.log('data', data);
 			$scope.items = data;
 		})
-	// $scope.items = statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id);
-	// console.log('controller',$scope.items)
 	$scope.moveItem = function(item, fromIndex, toIndex) {
 		fromIdx = $scope.items[fromIndex].Idx;
 		fromTitle = $scope.items[fromIndex].title;
@@ -418,26 +439,77 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.items[toIndex].title = fromTitle;
 		$scope.items[toIndex].visible = fromVisible;
 
-		console.log('changed', $scope.items);
-		
 		var rsltList = '';
 		for(var i = 0; i < $scope.items.length; i++){
 			rsltList += $scope.items[i].cntOrder + '^';
 			rsltList += $scope.items[i].Idx + '^';
 			rsltList += $scope.items[i].visible + '^|';
 		}
-		statisticService.save('myPage_Config_Stat', 'save_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, rsltList);
 		console.log('rsltList', rsltList);
-		// $scope.items.splice(fromIndex, 1);
-		// $scope.items.splice(toIndex, 0, item);
+		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
 	};
 
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
 })
+.controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
+	$scope.settingsList = [];
+	var cntList = 0;
+	alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			cntList = data.list.length;
+			for(var i=0; i<cntList; i++){
+				switch(data.list[i].idx){
+					case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '공지사항';
+						break;
+					case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업데이트 현황';
+						break;
+					case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '지식 나눔방';
+						break;
+					case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업체문의 Q&A(답변)';
+						break;
+					case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '거래명세서 도착';
+						break;
+					case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '기타 이벤트';
+						break;
+					case 7: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '소리';
+						break;
+					case 8: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '진동';
+						break;
+				}
+			}
+			if(data.list[0].alarm == 'F') $scope.selectedAll = false;
+			else $scope.selectedAll = true;
+			$scope.settingsList = data.list;
+		});
+	$scope.check_change = function(item){
+		var rsltList = '';
+		for(var i=0; i<cntList; i++){
+			rsltList += $scope.settingsList[i].idx + '^';
+			rsltList += ($scope.settingsList[i].checked == true)?'T' + '^|':'F' + '^|';
+		}
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+	$scope.check_alarm = function(check){
+		angular.forEach($scope.settingsList, function(item){
+			item.checked = check;
+			if(item.checked) rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|7^T^|8^T^|';
+			else rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|7^F^|8^F^|';
+		})
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+})
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
@@ -770,7 +842,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-.controller('BoardMainCtrl', function($rootScope, $scope, $rootScope, $stateParams, $sce){
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $sce, ERPiaAPI){
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -802,7 +874,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
 		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
 	}
-
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
 			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
@@ -815,9 +886,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-//////////////////////////////side///////////////////////////
 .controller('PlaylistsCtrl', function($scope) {
-
 	console.log("PlaylistsCtrl");
 	$scope.playlists = g_playlists;
 })
@@ -827,18 +896,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.playlists = g_playlists;
 	$scope.playlist = $scope.playlists[$stateParams.playlistId - 1];
 })
-
-////////////////////////////tab///////////////////////////////
 .controller('DashCtrl', function($scope) {
 	console.log("DashCtrl");
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
-	// With the new view caching in Ionic, Controllers are only called
-	// when they are recreated or on app start, instead of every page change.
-	// To listen for when this page is active (for example, to refresh data),
-	// listen for the $ionicView.enter event:
-	
 	$scope.chats = Chats.all();
 	$scope.remove = function(chat) {
 		Chats.remove(chat);
@@ -858,14 +920,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('LoginCtrl', function($scope){
 
 })
-
-// var teste = angular.module('ionicTeste',['ionic','ionicSelect']);
-
-// teste.controller('CsCtrl',function($scope){
-   
-//     var data = [{id:1,nmPlaca:'IKC-1394'},{id:2,nmPlaca:'IKY-5437'},{id:3,nmPlaca:'IKC-1393'},{id:4,nmPlaca:'IKI-5437'},{id:5,nmPlaca:'IOC-8749'},{id:6,nmPlaca:'IMG-6509'}];
-//     $scope.veiculos = data;
-//     $scope.testa = function(){
-//       alert($scope.veiculo.nmPlaca);
-//     }
-// })
+.controller('chartCtrl', function($scope, $rootScope, statisticService){
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.charts = data;
+		})
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B', 'SeriesC'];
+    $scope.data = [
+        [65, 59, 80, 80, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90],
+        [12, 54, 23, 43, 34, 45, 65]
+    ];
+})

@@ -124,25 +124,38 @@ angular.module('starter.services', [])
 		check: check
 	}
 })
-.factory('tradeDetailService', function () {
-	var innerHtml = "";
-	var listCnt = 10;
-	if(listCnt > 0){
-		for(var i=1; i<listCnt; i++){
-			innerHtml += '<div class="row">';
-			innerHtml += '<div class="col">' + i + '</div>';
-			innerHtml += '<div class="col col-25">2015-02-05</div>';
-			innerHtml += '<div class="col col-20">onz</div>';
-			innerHtml += '<div class="col col-25"><a href="" ng-click="readTradeDetail(' + i + ')">강아지 외 ' + i + '</a></div>';
-			innerHtml += '<div class="col col-20">X</div>';
-			innerHtml += '</div>';
-		}	
-	}else{
-		innerHtml += '<div class="row">';
-		innerHtml += '<div class="col">열람 가능한 명세서가 없습니다.</div>';
-		innerHtml += '</div>';
-	}
-	return innerHtml;
+.factory('tradeDetailService', function($http, $q, ERPiaAPI) {
+	return{
+		innerHtml: function(Admin_Code, GerCode){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Kind=select_Trade' + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log(response.data);
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}, readDetail: function(Admin_Code, Sl_No){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Kind=select_Trade_Detail' + '&Admin_Code=' + Admin_Code + '&Sl_No=' + Sl_No;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log(response.data);
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}
+	};
 })
 .factory('NoticeService', function($http, $q, ERPiaAPI){
 	return{
@@ -187,7 +200,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
 					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -199,7 +215,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
 					console.log('response', response);
+=======
+>>>>>>> refs/remotes/origin/lhk
 					return response.data;
 			})
 		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
@@ -207,7 +226,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
 					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -220,7 +242,14 @@ angular.module('starter.services', [])
 				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
+=======
 					console.log('chart', response)
+>>>>>>> refs/remotes/origin/yyk
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{
@@ -230,6 +259,40 @@ angular.module('starter.services', [])
 		}
 	}
 })
+<<<<<<< HEAD
+=======
+.factory('alarmService', function($http, $q, ERPiaAPI){
+	var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+	return{
+		select : function(kind, Admin_Code, loginType, G_Id){
+			var data = 'Value_Kind=list&Kind=' + kind + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}, save : function(kind, Admin_Code, loginType, G_Id, alarm){
+			var data = 'Value_Kind=list&Kind=' + kind + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&alarm=' + alarm;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}
+
+	}
+})
+>>>>>>> refs/remotes/origin/lhk
 .factory('pushInfoService', function($http, ERPiaAPI){
 	var pushInfo = function(Admin_Code, UserId, kind, Mode, UserKey, Token, ChkAdmin, DeviceOS, sDate, eDate){
 		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
