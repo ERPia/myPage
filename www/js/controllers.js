@@ -67,40 +67,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
-<<<<<<< HEAD
-		if($rootScope.loginState != "R"){
-			$scope.tokenReceive = function() {
-			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-				console.log('Ionic Push: Got token ', data.token, data.platform);
-				$scope.token = data.token;
-				$scope.pushUserRegist();
-			
-				});
-			};
-
-		// $scope.identifyUser = function() {
-		// 	var user = $ionicUser.get();
-		// 	if(!user.user_id) {
-		// 		// Set your user_id here, or generate a random one.
-		// 		user.user_id = $ionicUser.generateGUID();
-		// 	};
-
-		// 	// Metadata
-		// 	angular.extend(user, {
-		// 		name: $scope.Admin_Code,
-		// 		bio: $rootScope.loginState + '_USER'
-		// 	});
-
-		// 	// Identify your user with the Ionic User Service
-		// 	$ionicUser.identify(user).then(function(){
-		// 	$scope.identified = true;
-		// 		console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-		// 		$scope.UserKey = user.user_id
-		// 	});
-		// };
-=======
->>>>>>> refs/remotes/origin/yyk
-
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
