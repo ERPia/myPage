@@ -339,6 +339,19 @@ angular.module('starter.services', [])
 		csInfo: csInfo
 	}
 })
+.factory('TestService', function($http, ERPiaAPI){
+	var testInfo = function(Admin_Code, UserId, kind, Mode, Sl_No, GerName, GoodsName, G_OnCode, GoodsCode, GI_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No 
+		data += '&GerName=' + GerName + '&GoodsName=' + GoodsName + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
+		data += '&sDate=' + sDate + '&eDate=' + eDate 
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		testInfo: testInfo
+	}
+})
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 
