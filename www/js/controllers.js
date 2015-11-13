@@ -68,78 +68,44 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
-		if($rootScope.loginState != "R"){
-			$scope.tokenReceive = function() {
-			$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-				// alert("Successfully registered token " + data.token);
-				console.log('Ionic Push: Got token ', data.token, data.platform);
-				$scope.token = data.token;
-				$scope.pushUserRegist();
-			
-				});
-			};
 
-		// $scope.identifyUser = function() {
-		// 	var user = $ionicUser.get();
-		// 	if(!user.user_id) {
-		// 		// Set your user_id here, or generate a random one.
-		// 		user.user_id = $ionicUser.generateGUID();
-		// 	};
+		var PushInsertCheck = "";
+		var PushInsertCheck2 = "";
 
-		// 	// Metadata
-		// 	angular.extend(user, {
-		// 		name: $scope.Admin_Code,
-		// 		bio: $rootScope.loginState + '_USER'
-		// 	});
+		$scope.pushUserCheck = function() {
+			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
+		    .then(function(pushInfo){
+		    	console.log('pushinfo::', pushInfo);
+		    	
+		    	if(pushInfo.data.list.length != 0){
+		    		PushInsertCheck = pushInfo.data.list[0].token;
+		    	}
 
-		// 	// Identify your user with the Ionic User Service
-		// 	$ionicUser.identify(user).then(function(){
-		// 	$scope.identified = true;
-		// 		console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-		// 		$scope.UserKey = user.user_id
-		// 	});
-		// };
-
-		// // Registers a device for push notifications
-		// $scope.pushRegister = function() {
-		// 	console.log('Ionic Push: Registering user');
-
-		// 	// Register with the Ionic Push service.  All parameters are optional.
-		// 	$ionicPush.register({
-		// 		canShowAlert: true, //Can pushes show an alert on your screen?
-		// 		canSetBadge: true, //Can pushes update app icon badges?
-		// 		canPlaySound: true, //Can notifications play a sound?
-		// 		canRunActionsOnWake: true, //Can run actions outside the app,
-				
-		// 		onNotification: function(notification) {
-		// 			// Handle new push notifications here
-		// 			if(notification.payload.payload.$state === "app.slidingtab"){
-		// 				alert("app.slidingtab");
-		// 			}
-		// 			if(notification.payload.payload.$state === "tab.A"){
-		// 				alert("tab.A");
-		// 				//$state.go("경로") //해당 값으로 화면 이동
-		// 			}
-		// 			if(notification.payload.payload.$state === "tab.B"){
-		// 				alert("tab.B");
-		// 			}
-		// 			return true;
-		// 		}
-		// 	});
-		// };
+		    	if(PushInsertCheck == $rootScope.token){
+		    		PushInsertCheck2 = "duplication";
+		    		console.log('pushinfo:: duplication');
+		    	}else{
+		    		PushInsertCheck2 = "NewToken";
+		    		console.log('pushinfo:: NewToken.. Insert&Update Start');
+	    			if(PushInsertCheck2 == "NewToken"){
+						$scope.pushUserRegist();
+					};
+		    	}
+		    },function(){
+				alert('pushUserCheck fail')	
+			});
+		};
 
 		$scope.pushUserRegist = function() {
-			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $scope.UserKey, $scope.token, $rootScope.loginState, 'A', '', '')
+			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
-		    	console.log('pushUserRegist success ::' + $scope.token + '::이어야 되는데.. 키저장좀되셈');
+		    	console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
 		};
-
-	    $scope.tokenReceive();
-	    $scope.pushUserRegist();
-		};
+		$scope.pushUserCheck();
+		// };
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
@@ -655,32 +621,32 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	$scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
 	// 	$scope.Auto_Login = $scope.loginData.Auto_Login
 
-	// 	if($rootScope.loginState == "E") {
-	// 		$http({
-	// 			method: 'POST',
-	// 			url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm.asp',
-	// 			data: 	"kind=" + "erpia_dashBoard"
-	// 					+ "&Admin_Code=" + $scope.Admin_Code
-	// 					+ "&sDate=" + "2015-07-01"
-	// 					+ "&eDate=" + "2015-09-31",
-	// 			headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
-	// 		})
-	// 		  .success(function (response) {
-	// 			console.log(response);
-	// 			$scope.E_NewOrder = response.list[0].Cnt
-	// 			$scope.E_BsComplete = response.list[1].Cnt
-	// 			$scope.E_InputMno = response.list[2].Cnt
-	// 			$scope.E_CgComplete = response.list[3].Cnt
-	// 			$scope.E_RegistMno = response.list[4].Cnt
+		// if($rootScope.loginState == "E") {
+		// 	$http({
+		// 		method: 'POST',
+		// 		url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm.asp',
+		// 		data: 	"kind=" + "erpia_dashBoard"
+		// 				+ "&Admin_Code=" + $scope.Admin_Code
+		// 				+ "&sDate=" + "2015-07-01"
+		// 				+ "&eDate=" + "2015-09-31",
+		// 		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+		// 	})
+		// 	  .success(function (response) {
+		// 		console.log(response);
+		// 		$scope.E_NewOrder = response.list[0].Cnt
+		// 		$scope.E_BsComplete = response.list[1].Cnt
+		// 		$scope.E_InputMno = response.list[2].Cnt
+		// 		$scope.E_CgComplete = response.list[3].Cnt
+		// 		$scope.E_RegistMno = response.list[4].Cnt
 
-	// 			$scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
-	// 		})
-	// 		  .error(function(data, status, headers, config){
-	// 			console.log("Fail");
-	// 		})
-	// 	}else{
-	// 		// alert(response.list[0].ResultMsg);
-	// 	};
+		// 		$scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
+		// 	})
+		// 	  .error(function(data, status, headers, config){
+		// 		console.log("Fail");
+		// 	})
+		// }else{
+		// 	// alert(response.list[0].ResultMsg);
+		// };
 	// };
 	// $scope.ERPiaBaseData();
 })
@@ -745,10 +711,38 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 							 $scope.csData.inflowRoute, $scope.csData.contents)
 	    .then(function(csInfo){
 	    	console.log('csRegist success');
+	    	a
 	    },function(){
 			alert('csRegist fail')	
 		});
 	};
+
+	//test 용 OT201304100001
+	// $scope.csRegist = function() {
+ //  		console.log($scope.csData);
+ //  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_Date', '','','','','','','2013-01-01','2015-01-01' )
+	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', 'OT201304100001','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+
+	//     .then(function(testInfo){
+	//     	console.log(testInfo.data);
+	//     },function(){
+	// 		alert('csRegist fail')	
+	// 	});
+	// };
 })
 
 .controller('BoardSelectCtrl', function($rootScope, $scope, $state, $stateParams){

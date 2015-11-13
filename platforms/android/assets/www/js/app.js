@@ -9,71 +9,81 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	url:'http://localhost:8100/include'
 // 	, toast:'N'
 // })
+
 // 실제 사용시
 .constant('ERPiaAPI',{
 	url:'http://www.erpia.net/include'
 	, toast:'Y'
 })
+
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
-		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 
-		if (window.cordova && window.cordova.plugins.Keyboard) {
+		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+		// for form inputs)
+		if(window.cordova && window.cordova.plugins.Keyboard) {
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 		}
-		if (window.StatusBar) {
+		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
+		console.log('Ionic Push: Registering user');
 
-	   	var user = $ionicUser.get();
+		var user = $ionicUser.get();
 		if(!user.user_id) {
-	    	// Set your user_id here, or generate a random one.
-	    	user.user_id = $ionicUser.generateGUID();
-	    	$rootScope.UserKey = user.user_id
-	   	};
-	   
-	   	// Metadata
-	   	angular.extend(user, {
-	    	name: 'PushUser',
-	    	bio: 'ERPiaPushUser'
-	   	});
-   
-	   	// Identify your user with the Ionic User Service
-	   	$ionicUser.identify(user).then(function(){
-	   	//$scope.identified = true;
-	    	console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-	   	});
+			// Set your user_id here, or generate a random one.
+			user.user_id = $ionicUser.generateGUID();
+			$rootScope.UserKey = user.user_id
+		};
 
-		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-			alert("Successfully registered token " + data.token);
-			console.log('Ionic Push: Got token ', data.token, data.platform);
-			$rootScope.token = data.token;
-			//디바이스 토큰 값 받는곳
+		// Metadata
+		angular.extend(user, {
+			name: 'ERPiaUser',
+			bio: 'ERPiaPush'
 		});
 
-	   // Register with the Ionic Push service.  All parameters are optional.
-	   	$ionicPush.register({
+		// Identify your user with the Ionic User Service
+		$ionicUser.identify(user).then(function(){
+			//$scope.identified = true;
+			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+		});
+
+
+		// Register with the Ionic Push service.  All parameters are optional.
+		$ionicPush.register({
 			canShowAlert: true, //Can pushes show an alert on your screen?
-	    	canSetBadge: true, //Can pushes update app icon badges?
-	    	canPlaySound: true, //Can notifications play a sound?
-	    	canRunActionsOnWake: true, //Can run actions outside the app,
-	    	onNotification: function(notification) {
-	      		// Handle new push notifications here
-	      		console.log(notification);
-	        	//notification.message;  푸시 알람 내용
-	        	//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
-	        	if(notification.payload.payload.$state === "app.slidingtab"){
-	          		$state.go('app.slidingtab');
-	        	}
-	        	if(notification.payload.payload.$state === "tab.A"){
-	          		alert("tab.A");
-	          		//$state.go("경로") //해당 값으로 화면 이동
-	        	}
-	        	if(notification.payload.payload.$state === "tab.B"){
-	          		alert("tab.B");
-	        	}
-	       		return true;
-	     	}
-	   	});
+			canSetBadge: true, //Can pushes update app icon badges?
+			canPlaySound: true, //Can notifications play a sound?
+			canRunActionsOnWake: true, //Can run actions outside the app,
+			
+			onNotification: function(notification) {
+				// Handle new push notifications here
+				console.log(notification);
+				//notification.message;  푸시 알람 내용
+				if(notification.payload){	
+					//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
+					if(notification.payload.payload.$state === "app.erpia_board-Main"){
+						// alert("tab.chats");
+						$rootScope.boardIndex = $rootScope.BoardParam
+						$state.go("app.erpia_board-Main")
+					}
+					if(notification.payload.payload.$state === "app.config-notice"){
+						// alert("tab.A");
+						//$state.go("경로") //해당 값으로 화면 이동
+					}
+					if(notification.payload.payload.$state === "tab.B"){
+						// alert("tab.B");
+					}
+					//return true;
+				}
+			}
+		});
+
+		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+		    // alert("Successfully registered token " + data.token);
+		    console.log('Ionic Push: Got token ', data.token, data.platform);
+		    $rootScope.token = data.token;
+		    //디바이스 토큰 값 받는곳
+		});
 	});
 })
 
@@ -86,8 +96,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
       	app_id: 'b94db7cd', //app id
       	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
       	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 
@@ -186,20 +196,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 	.state('app.erpia_board', {
-			url : '/boardSelect',
+			url : '/board',
 			views : {
 				'menuContent' : {
-					templateUrl : 'erpia_board/boardSelect.html',
-					// controller : 'BoardSelectCtrl'
+					templateUrl : 'erpia_board/board.html',
+					controller : 'BoardSelectCtrl'
 			}
 		}
 	})
 
-	.state('app.erpia_board2', {
-			url : '/boardMain',
+	.state('app.erpia_board-Main', {
+			url : '/board/Main',
 			views : {
 				'menuContent' : {
-					templateUrl : 'erpia_board2/boardMain.html',
+					templateUrl : 'erpia_board/board-main.html',
 					controller : 'BoardMainCtrl'
 			}
 		}
@@ -244,15 +254,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
-	// .state('app.erpia_board', {
-	// 		url : '/board',
-	// 		views : {
-	// 			'menuContent' : {
-	// 				templateUrl : 'erpia_board/board.html',
-	// 				controller : 'BoardCtrl'
-	// 		}
-	// 	}
-	// })
 	////////////////////////////////////config///////////////////////////////////
 	.state('app.config', {
 		url : '/config',
