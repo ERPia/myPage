@@ -445,6 +445,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			rsltList += $scope.items[i].Idx + '^';
 			rsltList += $scope.items[i].visible + '^|';
 		}
+		console.log('rsltList', rsltList);
 		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
 	};
 
@@ -897,10 +898,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			console.log('data', data);
 			$scope.charts = data;
 		})
-	$scope.labels = ["JanuaryJanuaryJanuaryJanuaryJanuaryJanuary", "February", "March", "April", "May", "June", "July"];
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
     $scope.series = ['Series A', 'Series B', 'SeriesC'];
     $scope.data = [
-        [65, 59, 80, 800000000001, 56, 55, 40],
+        [65, 59, 80, 80, 56, 55, 40],
         [28, 48, 40, 19, 86, 27, 90],
         [12, 54, 23, 43, 34, 45, 65]
     ];

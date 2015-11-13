@@ -2,43 +2,35 @@
 	<ion-slide>
 		<ion-content class="padding2">
 			<link href="css/lhkTradeDetail.css" rel="stylesheet">
-			<style type="text/css">
-				.li_table {width: 100%; border:1 solid red;border-top:none;border-right:none}
-				.li_table ul {clear: left;margin: 0;padding: 10;list-style-type: none;border-top:1 solid red;} 
-				.li_table .subject {text-align: center;}
-				.li_table .borderSolid {border:1px solid gray;}
-				.li_table ul li {float: left;}
-				.li_table ul .col10 {width: 10%; text-align: center;}
-				.li_table ul .col40 {width: 40%; text-align: center;}
-				.li_table ul .col80 {width: 80%; text-align: left; line-height: 35px; font-size: 12pt; font-weight: bold; padding-left: 10px;}
-				.li_table ul .header {font-weight: bold;}
-			</style>
 			<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
-			<div class="li_table" ng-init='init()'>
-				<ul class="subject">
-					<li class="col10 header">No</li>
-					<li class="col40 header">매출일</li>
-					<li class="col40 header">발행처</li>
-					<li class="col10 header">열람</li>
-				</ul>
-				<ion-list>
-					<ion-item ng-repeat="item in items" style="padding:0px;">
-						<div ng-click="readTradeDetail('{{item.Sl_No}}')">
-							<ul class="subject">
-								<li class="col10">&nbsp;</li>
-								<li class="col40">{{item.in_date}}</li>
-								<li class="col40">{{item.Admin_Code}}</li>
-								<li class="col10">&nbsp;</li>
-							</ul>
-							<ul>
-								<li class="col10">{{item.Idx}}</li>
-								<li class="col80">{{item.G_Name.substring(0, 15)}} 외 {{item.totCnt}}</li>
-								<li class="col10">x</li>
-							</ul>
-						</div>
-					</ion-item>
-				</ion-list>
+			<div style="padding-top:5px; padding-bottom:10px; border-bottom: 1px solid #e0e0e0;">
+				<table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
+					<tr>
+						<td style="width:10%; text-align: center; vertical-align: middle;">No</td>
+						<td style="width:40%; text-align: center; vertical-align: middle;">매출일</td>
+						<td style="width:40%; text-align: center; vertical-align: middle;">발행처</td>
+						<td style="width:10%; text-align: center; vertical-align: middle;">열람</td>
+					</tr>
+				</table>
 			</div>
+
+			<ion-list>
+				<ion-item ng-repeat="item in items" style="padding:0px;">
+					<div  style="padding:10px 0; border-bottom: 1px solid #e0e0e0;">
+						<table border="0" cellpadding="0" cellspacing="0" style="width:100%;" ng-click="readTradeDetail('{{item.Sl_No}}')">
+							<tr>
+								<td rowspan="2" style="width:10%; text-align: center; vertical-align: middle;">{{item.Idx}}</td>
+								<td style="width:40%; text-align: center; vertical-align: middle;">{{item.in_date}}</td>
+								<td style="width:40%; text-align: center; vertical-align: middle;">{{item.Admin_Code}}</td>
+								<td rowspan="2" style="width:10%; text-align: center; vertical-align: middle;">x</td>
+							</tr>
+							<tr>							
+								<td colspan="2" style="width:80%; text-align: left; vertical-align: middle;">{{item.G_Name.substring(0, 15)}} 외 {{item.totCnt}}</td>
+							</tr>
+						</table>
+					</div>
+				</ion-item>
+			</ion-list>
 		</ion-content> 
 	</ion-slide>
 	<ion-slide>
