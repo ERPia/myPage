@@ -282,6 +282,19 @@ angular.module('starter.services', [])
 		pushInfo: pushInfo
 	}
 })
+.factory('csInfoService', function($http, ERPiaAPI){
+	var csInfo = function(Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic, inflowRoute, contents){
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&chkAdmin=' + chkAdmin + '&comName=' + comName 
+		data += '&writer=' + writer + '&subject=' + subject + '&tel=' + tel + '&sectors=' + sectors + '&interestTopic=' + interestTopic
+		data += '&inflowRoute=' + inflowRoute + '&contents=' + contents 
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		csInfo: csInfo
+	}
+})
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 

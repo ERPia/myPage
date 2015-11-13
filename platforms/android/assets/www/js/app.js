@@ -25,30 +25,35 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			StatusBar.styleDefault();
 		}
 
-	// 	if($rootScope.loginState == "E"){console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')};
-
-	//    var user = $ionicUser.get();
-	//    if(!user.user_id) {
-	//     // Set your user_id here, or generate a random one.
-	//     user.user_id = $ionicUser.generateGUID();
-	//    };
+	   	var user = $ionicUser.get();
+		if(!user.user_id) {
+	    	// Set your user_id here, or generate a random one.
+	    	user.user_id = $ionicUser.generateGUID();
+	    	$rootScope.UserKey = user.user_id
+	   	};
 	   
-	//    // Metadata
-	//    angular.extend(user, {
-	//      name: 'zzzzz- TeamMate',
-	//      bio: 'zzz zdddzzz - TeamMate'
-	//    });
+	   	// Metadata
+	   	angular.extend(user, {
+	    	name: 'PushUser',
+	    	bio: 'ERPiaPushUser'
+	   	});
    
-	//    // Identify your user with the Ionic User Service
-	//    $ionicUser.identify(user).then(function(){
-	//    //$scope.identified = true;
-	//      console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-	//    });
+	   	// Identify your user with the Ionic User Service
+	   	$ionicUser.identify(user).then(function(){
+	   	//$scope.identified = true;
+	    	console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+	   	});
 
+		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+			alert("Successfully registered token " + data.token);
+			console.log('Ionic Push: Got token ', data.token, data.platform);
+			$rootScope.token = data.token;
+			//디바이스 토큰 값 받는곳
+		});
 
 	   // Register with the Ionic Push service.  All parameters are optional.
-	   $ionicPush.register({
-	    	canShowAlert: true, //Can pushes show an alert on your screen?
+	   	$ionicPush.register({
+			canShowAlert: true, //Can pushes show an alert on your screen?
 	    	canSetBadge: true, //Can pushes update app icon badges?
 	    	canPlaySound: true, //Can notifications play a sound?
 	    	canRunActionsOnWake: true, //Can run actions outside the app,
@@ -102,7 +107,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
+<<<<<<< HEAD
+					controller : 'MainCtrl'
+=======
 					//controller : 'BoardMainCtrl'
+>>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -291,7 +300,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/alarm.html',
+<<<<<<< HEAD
+				controller : 'configCtrl_Info'
+=======
 				controller : 'configCtrl_alarm'
+>>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -322,6 +335,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+<<<<<<< HEAD
+
+=======
 	////////////////////////////////chart///////////////////////////////////
 	.state('app.chart', {
 		url : '/chart/barAndLineMix',
@@ -332,6 +348,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+>>>>>>> refs/remotes/origin/lhk
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

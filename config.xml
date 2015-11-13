@@ -30,6 +30,7 @@
       Ionic Framework Team
     </author>
   <content src="index.html"/>
+<<<<<<< HEAD
   <access origin="http://www.erpia.net"/>
   <access origin="tel:*" launch-external="yes"/>
   <allow-intent href="tel:*"/>
@@ -37,6 +38,15 @@
   <allow-navigation href="http://*/*"/>
   <allow-navigation href="https://*/*"/>
   <allow-navigation href="data:*"/>
+=======
+  <access origin="http://www.erpia.net" />
+  <access origin="tel:*" launch-external="yes" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="*://*www.erpia.net/*" />
+  <allow-navigation href="http://*/*" />
+  <allow-navigation href="https://*/*" />
+  <allow-navigation href="data:*" />
+>>>>>>> master
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
