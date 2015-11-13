@@ -200,6 +200,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
+					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -211,6 +215,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
+					console.log('response', response);
+=======
+>>>>>>> refs/remotes/origin/lhk
 					return response.data;
 			})
 		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
@@ -218,6 +226,10 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
+					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
 					if(typeof response.data == 'object'){
 						return response.data.list;	
 					}else{
@@ -230,6 +242,14 @@ angular.module('starter.services', [])
 				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+					console.log(response)
+=======
+>>>>>>> refs/remotes/origin/lhk
+=======
+					console.log('chart', response)
+>>>>>>> refs/remotes/origin/yyk
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{
@@ -239,6 +259,8 @@ angular.module('starter.services', [])
 		}
 	}
 })
+<<<<<<< HEAD
+=======
 .factory('alarmService', function($http, $q, ERPiaAPI){
 	var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 	return{
@@ -270,6 +292,7 @@ angular.module('starter.services', [])
 
 	}
 })
+>>>>>>> refs/remotes/origin/lhk
 .factory('pushInfoService', function($http, ERPiaAPI){
 	var pushInfo = function(Admin_Code, UserId, kind, Mode, UserKey, Token, ChkAdmin, DeviceOS, sDate, eDate){
 		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
@@ -280,6 +303,32 @@ angular.module('starter.services', [])
 	}
 	return{
 		pushInfo: pushInfo
+	}
+})
+.factory('csInfoService', function($http, ERPiaAPI){
+	var csInfo = function(Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic, inflowRoute, contents){
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&chkAdmin=' + chkAdmin + '&comName=' + comName 
+		data += '&writer=' + writer + '&subject=' + subject + '&tel=' + tel + '&sectors=' + sectors + '&interestTopic=' + interestTopic
+		data += '&inflowRoute=' + inflowRoute + '&contents=' + contents 
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		csInfo: csInfo
+	}
+})
+.factory('TestService', function($http, ERPiaAPI){
+	var testInfo = function(Admin_Code, UserId, kind, Mode, Sl_No, GerName, GoodsName, G_OnCode, GoodsCode, GI_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No 
+		data += '&GerName=' + GerName + '&GoodsName=' + GoodsName + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
+		data += '&sDate=' + sDate + '&eDate=' + eDate 
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data);
+	}
+	return{
+		testInfo: testInfo
 	}
 })
 .factory('Chats', function() {
