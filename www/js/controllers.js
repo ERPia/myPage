@@ -67,10 +67,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/yyk
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
