@@ -64,8 +64,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 					//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
 					if(notification.payload.payload.$state === "app.erpia_board-Main"){
 						// alert("tab.chats");
-						$rootScope.boardIndex = $rootScope.BoardParam
-						$state.go("app.erpia_board-Main")
+						//$rootScope.boardIndex = $rootScope.BoardParam
+						//$state.go("app.erpia_board-Main")
 					}
 					if(notification.payload.payload.$state === "app.config-notice"){
 						// alert("tab.A");
@@ -117,11 +117,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-<<<<<<< HEAD
 					controller : 'MainCtrl'
-=======
-					//controller : 'BoardMainCtrl'
->>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -301,11 +297,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/alarm.html',
-<<<<<<< HEAD
-				controller : 'configCtrl_Info'
-=======
 				controller : 'configCtrl_alarm'
->>>>>>> refs/remotes/origin/lhk
 			}
 		}
 	})
@@ -336,9 +328,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
-<<<<<<< HEAD
-
-=======
 	////////////////////////////////chart///////////////////////////////////
 	.state('app.chart', {
 		url : '/chart/barAndLineMix',
@@ -349,7 +338,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
->>>>>>> refs/remotes/origin/lhk
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

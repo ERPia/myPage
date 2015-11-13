@@ -3,55 +3,47 @@
 		<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
 
 		<div class="list list-inset">
-			<button class="button button-block button-dark" style="margin-top:50px" ng-click="dialNumber(' 07070123071')">
-				전화 걸기
-			</button> 
+			<img src="./img/img_junhwa.jpg" width="100%; margin-top:-10px;" ng-click="dialNumber(' 07070123071')">
 			<label class="item item-input">
-				<span class="input-label">*회사명 : </span>
+				<span class="input-label psm_sang_01">*회사명 : </span>
 				<input type="text" placeholder="회사명" ng-model="csData.comName"><br>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*작성자 : </span>
+				<span class="input-label psm_sang_01">*작성자 : </span>
 				<input type="text" placeholder="작성자" ng-model="csData.writer"><br>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*제목 : </span>
+				<span class="input-label psm_sang_01">*제목 : </span>
 				<input type="text" placeholder="제목" ng-model="csData.subject"><br>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*연락처 : </span>
+				<span class="input-label psm_sang_01">*연락처 : </span>
 				<input type="tel" placeholder="-제외 입력하세요" ng-model="csData.tel"><br>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*업종 : </span>
-				<select ng-model="csData.sectors">
-					<option ng-repeat="item in sectorslist" ng-value="item.id">
-						{{item.value}}
-					</option>
+				<span class="input-label psm_sang_01">*업종 : </span>
+				<select ng-model="csData.sectors" class="psm_sang_02">
+					<option ng-repeat="item in sectorslist" ng-value="item.id">{{item.value}}</option>
 				</select>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*관심항목 : </span>
-				<select ng-model="csData.interestTopic">
-					<option ng-repeat="item in interestTopiclist" ng-value="item.id">
-						{{item.value}}
-					</option>
+				<span class="input-label psm_sang_01">*관심항목 : </span>
+				<select ng-model="csData.interestTopic" class="psm_sang_02">
+					<option ng-repeat="item in interestTopiclist" ng-value="item.id">{{item.value}}</option>
 				</select>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*유입경로 : </span>
-				<select ng-model="csData.inflowRoute">
-					<option ng-repeat="item in inflowRoutelist" ng-value="item.id">
-						{{item.value}}
-					</option>
+				<span class="input-label psm_sang_01">*유입경로 : </span>
+				<select ng-model="csData.inflowRoute" class="psm_sang_02">
+					<option ng-repeat="item in inflowRoutelist" ng-value="item.id">{{item.value}}</option>
 				</select>
 			</label>
 			<label class="item item-input">
-				<span class="input-label">*문의사항 : </span>
-				<textarea placeholder="내용을 입력하세요" style="height:250px; width:100%" ng-model="csData.contents"></textarea>
+				<span class="input-label psm_sang_01">*문의사항 : </span>
+				<textarea placeholder="내용을 입력하세요" class="psm_sang_03" ng-model="csData.contents"></textarea>
 			</label>
 			<form ng-submit="csRegist()">
-				<button class="button button-block button-dark" style="margin-top:20px" type="submit">
+				<button class="button button-block psm_login_ink" style="margin-top:20px" type="submit">
 					등록
 				</button>
 			</form>

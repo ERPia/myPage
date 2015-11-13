@@ -11,21 +11,25 @@
 
 			<ion-slide-box does-continue="true" show-pager="false" on-slide-changed="slideHasChanged($index)">
 				<ion-slide>
-					<ion-content  overflow-scroll="true">
+					<ion-content overf low-scroll="false">
 					<p ng-bind-html="login_alert"></p>
 						<div style="height:100%">
 							<!-- <iframe src="#/erpia_erpiahome/erpiahome" frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 							<!--  <iframe src="http://www.erpia.net/psm/02/html/dashboard_top.asp?gu=2&admin_code=YGNEXT#" frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle" height="200px"></iframe> -->
 							<!-- <img src="./img/banner_event1.jpg" width="100%"> -->
+
+
 							<!-- 컨텐츠 상단 (정보)-->
-							<link href="./css/bootstrap.css" rel="stylesheet" type="text/css" />
+							<!-- <link href="./css/bootstrap.css" rel="stylesheet" type="text/css" /> -->
 							<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 							<link href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
 
-							<div class="row" style="letter-spacing:-1px;">
+
+
+							<div class="row" style="letter-spacing:-1px; width:100%;">
 
 								<!-- 사용만료일 -->
-								<div class=" col-xs-psm3">
+								<div class=" col-xs-psm3" style="width:33%; padding-right: 2px;">
 									<div class="info-box bg-yellow">
 										<span class="info-box-icon"><i class="ion ion-ios-calendar-outline"></i></span>
 										<div class="info-box-content">
@@ -34,13 +38,13 @@
 											<div class="progress">
 												<div class="progress-bar" style="width: 30%"></div>
 											</div>
-											<span class="progress-description">31일 중 11일 사용.</span>
+											<span class="progress-description">31일 중 10일 사용.</span>
 										</div><!-- /.info-box-content -->
 									</div><!-- /.info-box -->
 								</div>
 
 								<!-- 남은기간 -->
-								<div class=" col-xs-psm3">
+								<div class=" col-xs-psm3"  style="width:33%;  padding-left: 2px;  padding-right: 2px;">
 									<div class="info-box bg-aqua">
 										<span class="info-box-icon"><i class="ion ion-ios-clock-outline"></i></span>
 										<div class="info-box-content">
@@ -55,7 +59,7 @@
 								</div>
 
 								<!-- 계산서 미수신건 -->
-								<div class=" col-xs-psm3">
+								<div class=" col-xs-psm3"  style="width:33%; padding-left: 2px; ">
 									<div class="info-box bg-red">
 										<span class="info-box-icon"><i class="ion ion-ios-paper-outline"></i></span>
 										<div class="info-box-content">
@@ -78,10 +82,8 @@
 							</section>
 
 							<div style="width:100%; text-align:right; margin-top:20px">
-								<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='nowTime'></span>
-								<span>
-									<button class="refresh" ng-click="ERPiaBaseData()"><img src="./img/icon_toggle.png" width="30px"></button>
-								</span>
+								<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='nowTime' ng-click="ERPiaBaseData()"></span>
+								<span class="refresh" ng-click="ERPiaBaseData()"><img src="./img/icon_toggle.png" width="30px"></span>
 							</div>
 
 							<!-- 컨텐츠 상단 (미처리 조회)-->
@@ -158,144 +160,181 @@
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
-							<iframe ng-src="{{chart_url1}}" ng-style="myStyle"></iframe>
-						</div>
+					<ion-content overflow-scroll="true" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
+						<iframe ng-src="{{chart_url1}}" ng-style="myStyle"></iframe>
 					</ion-content>
 				</ion-slide>
 				
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="true" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url2}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url2}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="true" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url3}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url3}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url5}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url5}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart4"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url6}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url6}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart3"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url7}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url7}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart11"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url8}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url8}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart12"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url9}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url9}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart13"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url10}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url10}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart14"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url11}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url11}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart8"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url12}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url12}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart1"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url13}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url13}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart15"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url14}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url14}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart9"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url15}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url15}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart17"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url16}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url16}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart10"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
 
 				<ion-slide>
-					<ion-content overflow-scroll="true">
-					<p ng-bind-html="login_alert"></p>
+					<ion-content overflow-scroll="false" style="background: #c48f7a; ">
+						<p ng-bind-html="login_alert"></p>
 						<div style="height: 100%;">
-							<iframe ng-src="{{chart_url17}}" ng-style="myStyle"></iframe>
+							<iframe ng-src="{{chart_url17}}" ng-style="myStyle" width=100% height=90% frameborder=0 marginwidth=0 marginheight=0 scrolling=no></iframe>
+							<!-- <iframe ng-src="{{chart_url}}" ng-style="myStyle"></iframe> -->
+
+							<!-- <iframe src="http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=YGNEXT&swm_gu=1&kind=chart16"   frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
 						</div>
 					</ion-content>
 				</ion-slide>
