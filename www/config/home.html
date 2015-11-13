@@ -1,27 +1,24 @@
 <ion-view view-title="설정">
 	<ion-content class="padding2">
 		<body>
-			<div ng-switch='loginState'>
-				<div class="list">
-					<a class="item item-icon-left" href="#/app/config/Info">
-					<i class="icon ion-information"></i>프로그램 정보</a>
+			<div class="list">
+				<a class="item item-icon-left" href="#/app/config/Info">
+				<i class="icon ion-information"></i>프로그램 정보</a>
 
-					<a class="item item-icon-left" href="#/app/config/notice">
-					<i class="icon ion-alert"></i>공지사항</a>
+				<a class="item item-icon-left" href="#/app/config/notice">
+				<i class="icon ion-alert"></i>공지사항</a>
 
-					<a class="item item-icon-left" href="#/app/config/custom">
-					<i class="icon ion-person-stalker"></i>고객센터</a>
+				<a class="item item-icon-left" href="#/app/config/custom">
+				<i class="icon ion-person-stalker"></i>고객센터</a>
 
-					<a class="item item-icon-left" href="#/app/config/alarm">
-					<i class="icon ion-ios-bell"></i>알림설정</a>
+				<a class="item item-icon-left" href="#/app/config/alarm">
+				<i class="icon ion-ios-bell"></i>알림설정</a>
 
-					<div name='selectUserType' ng-switch-when='E'>
-						<a class="item item-icon-left" href="#/app/config/statistics">
-						<i class="icon ion-stats-bars"></i>통계 리포트 설정</a>
-					</div>
-					<a class="item item-icon-left" href="#/app/config/loginConfig">
-					<i class="icon ion-person"></i>로그인 설정</a>
-				</div>
+				<a class="item item-icon-left" href="#/app/config/statistics">
+				<i class="icon ion-stats-bars"></i>통계 리포트 설정</a>
+
+				<a class="item item-icon-left" href="#/app/config/loginConfig">
+				<i class="icon ion-person"></i>로그인 설정</a>
 			</div>
 		</body>
 	</ion-content>

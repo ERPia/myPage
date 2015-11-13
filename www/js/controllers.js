@@ -757,8 +757,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	//test 용 OT201304100001
 	// $scope.csRegist = function() {
- //  		console.log($scope.csData);
- //  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
+ 	//  		console.log($scope.csData);
+ 	//  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
 	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_Date', '','','','','','','2013-01-01','2015-01-01' )
 	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', 'OT201304100001','','','','','','','' )
 	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )

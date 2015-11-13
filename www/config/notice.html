@@ -4,16 +4,7 @@
 	</ion-nav-bar>
 	<ion-content class="padding2">
 		<body ng-app="ngAnimate">
-			<ion-list>
-				<ion-item ng-repeat="item in items" style="padding:0px;">
-					<ui class="list" ng-click="toggle_{{item.key_id}} = !toggle_{{item.key_id}}">
-						<li class="item">
-							<font>{{item.inDate}}</font><br/>{{item.subject}}
-						</li>
-					</ui>
-					<div class="lhkNoticeContent" ng-show="toggle_{{item.key_id}}" ng-animate="'box'" ng-bind-html="item.content"></div>
-				</ion-item>
-			</ion-list>
+			<div compile-data template="{{noticeList}}"></div>
 		</body>
 	</ion-content>
 </ion-view>
