@@ -1,6 +1,28 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.myappframe188486" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <preference name="AllowInlineMediaPlayback" value="false" />
+  
+  
+  
+  
+  
+  
+  
+  r
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+      <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
     <preference name="EnableViewportScale" value="false" />
@@ -16,6 +38,9 @@
     </feature>
     <feature name="PushPlugin">
         <param name="ios-package" value="PushPlugin" />
+    </feature>
+    <feature name="Toast">
+        <param name="ios-package" value="Toast" />
     </feature>
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
@@ -57,8 +82,13 @@
       Ionic Framework Team
     </author>
     <content src="index.html" />
+    <access origin="http://www.erpia.net" />
     <access launch-external="yes" origin="tel:*" />
     <allow-intent href="tel:*" />
+    <allow-intent href="*://*www.erpia.net/*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

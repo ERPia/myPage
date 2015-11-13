@@ -3,18 +3,73 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'])
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+	, 'starter.services', 'chart.js'])
 
-.run(function($ionicPlatform) {
+// .constant('ERPiaAPI',{
+// 	url:'http://localhost:8100/include'
+// 	, toast:'N'
+// })
+// 실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, toast:'Y'
+})
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
-		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-		// for form inputs)
+		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs) 
 		if (window.cordova && window.cordova.plugins.Keyboard) {
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 		}
 		if (window.StatusBar) {
 			StatusBar.styleDefault();
 		}
+
+	// 	if($rootScope.loginState == "E"){console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')};
+
+	//    var user = $ionicUser.get();
+	//    if(!user.user_id) {
+	//     // Set your user_id here, or generate a random one.
+	//     user.user_id = $ionicUser.generateGUID();
+	//    };
+	   
+	//    // Metadata
+	//    angular.extend(user, {
+	//      name: 'zzzzz- TeamMate',
+	//      bio: 'zzz zdddzzz - TeamMate'
+	//    });
+   
+	//    // Identify your user with the Ionic User Service
+	//    $ionicUser.identify(user).then(function(){
+	//    //$scope.identified = true;
+	//      console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+	//    });
+
+
+	   // Register with the Ionic Push service.  All parameters are optional.
+	   $ionicPush.register({
+	    	canShowAlert: true, //Can pushes show an alert on your screen?
+	    	canSetBadge: true, //Can pushes update app icon badges?
+	    	canPlaySound: true, //Can notifications play a sound?
+	    	canRunActionsOnWake: true, //Can run actions outside the app,
+	    	onNotification: function(notification) {
+	      		// Handle new push notifications here
+	      		console.log(notification);
+	        	//notification.message;  푸시 알람 내용
+	        	//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
+	        	if(notification.payload.payload.$state === "app.slidingtab"){
+	          		$state.go('app.slidingtab');
+	        	}
+	        	if(notification.payload.payload.$state === "tab.A"){
+	          		alert("tab.A");
+	          		//$state.go("경로") //해당 값으로 화면 이동
+	        	}
+	        	if(notification.payload.payload.$state === "tab.B"){
+	          		alert("tab.B");
+	        	}
+	       		return true;
+	     	}
+	   	});
 	});
 })
 
@@ -25,13 +80,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key: 'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150', //public key
-		dev_push: true // 개발자 테스트랑 디바이스 테스트
+      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		dev_push: true // 개발테스트시
+		// dev_push: false // 실적용시
 	});
 }])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
-	$stateProvider.state('app', {
+	$stateProvider
+	
+	.state('app', {
 		url : '/app',
 		abstract : true,
 		templateUrl : 'side/menu.html',
@@ -43,7 +102,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			views : {
 				'menuContent' : {
 					templateUrl : 'erpia_main/main.html',
-					controller : 'AppCtrl'
+					//controller : 'BoardMainCtrl'
 			}
 		}
 	})
@@ -76,6 +135,52 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
+	.state('app.agreement', {
+		url : '/agreement',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/agreement.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+
+	.state('app.mobile_certification', {
+		url : '/certification',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/certification.html',
+				controller : 'AppCtrl'
+			}
+		}
+	})
+	.state('app.check_Sano', {
+		url : '/check_Sano',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/check_Sano.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
+	.state('app.trade_Detail', {
+		url : '/trade_Detail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
+	.state('app.trade_Detail_Print', {
+		url : '/trade_Detail_Print',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/trade_Detail_Print.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.erpia_board', {
 			url : '/boardSelect',
 			views : {
@@ -144,110 +249,169 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	// 		}
 	// 	}
 	// })
-
+	////////////////////////////////////config///////////////////////////////////
+	.state('app.config', {
+		url : '/config',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/home.html',
+				controller : 'configCtrl'
+			}
+		}
+	})
+	.state('app.config-Info', {
+		url : '/config/Info',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/Info.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-notice', {
+		url : '/config/notice',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/notice.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-custom', {
+		url : '/config/custom',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/custom.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
+	.state('app.config-alarm', {
+		url : '/config/alarm',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/alarm.html',
+				controller : 'configCtrl_alarm'
+			}
+		}
+	})
+	.state('app.config-statistics', {
+		url : '/config/statistics',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/statistics.html',
+				controller : 'configCtrl_statistics'
+			}
+		}
+	})
+	.state('app.config-loginConfig', {
+		url : '/config/loginConfig',
+		views : {
+			'menuContent' : {
+				templateUrl : 'config/loginConfig.html',
+				controller : 'configCtrl_Info'
+			}
+		}
+	})
 	/////////////////////////////////////tab////////////////////////////////////
 	.state('app.tab', {
-			url : '/tab',
-			views : {
-				'menuContent' : {
-					templateUrl : 'tab/tabs.html'				 
+		url : '/tab',
+		views : {
+			'menuContent' : {
+				templateUrl : 'tab/tabs.html'				 
 			}
 		}
 	})
-
- 	.state('app.tab.dash', {
-		url : '/dash',
+	////////////////////////////////chart///////////////////////////////////
+	.state('app.chart', {
+		url : '/chart/barAndLineMix',
 		views : {
-			'tab-dash' : {
-				templateUrl : 'tab/tab-dash.html'
+			'menuContent' : {
+				templateUrl : 'ionicChart/chartTest.html',
+				controller : 'chartCtrl'
+			}
+		}
+	})
+ // 	.state('app.tab.dash', {
+	// 	url : '/dash',
+	// 	views : {
+	// 		'tab-dash' : {
+	// 			templateUrl : 'tab/tab-dash.html'
 				
-			}
-		}
-	})
+	// 		}
+	// 	}
+	// })
 
-  	.state('app.tab.chats', {
-		url : '/chats',
-		views : {
-			'tab-chats' : {
-				templateUrl : 'tab/tab-chats.html',
-				controller : 'ChatsCtrl'
-			}
-		}
-	})
+ //  	.state('app.tab.chats', {
+	// 	url : '/chats',
+	// 	views : {
+	// 		'tab-chats' : {
+	// 			templateUrl : 'tab/tab-chats.html',
+	// 			controller : 'ChatsCtrl'
+	// 		}
+	// 	}
+	// })
 
-	.state('app.tab.chat-detail', {
-		url : '/chats/:chatId',
-		views : {
-			'tab-chats' : {
-				templateUrl : 'tab/chat-detail.html',
-				controller : 'ChatDetailCtrl'
-			}
-		}
-	})
+	// .state('app.tab.chat-detail', {
+	// 	url : '/chats/:chatId',
+	// 	views : {
+	// 		'tab-chats' : {
+	// 			templateUrl : 'tab/chat-detail.html',
+	// 			controller : 'ChatDetailCtrl'
+	// 		}
+	// 	}
+	// })
 
-	.state('app.tab.account', {
-		url : '/account',
-		views : {
-			'tab-account' : {
-				templateUrl : 'tab/tab-account.html',
-				controller : 'AccountCtrl'
-			}
-		}
-	})
+	// .state('app.tab.account', {
+	// 	url : '/account',
+	// 	views : {
+	// 		'tab-account' : {
+	// 			templateUrl : 'tab/tab-account.html',
+	// 			controller : 'AccountCtrl'
+	// 		}
+	// 	}
+	// })
 
   ////////////////////////////////side///////////////////////////////////
-    .state('app.browse', {
-		url : '/browse',
-		views : {
-			'menuContent' : {
-				templateUrl : 'side/browse.html'
-			}
-		}
-	})
+ //    .state('app.browse', {
+	// 	url : '/browse',
+	// 	views : {
+	// 		'menuContent' : {
+	// 			templateUrl : 'side/browse.html'
+	// 		}
+	// 	}
+	// })
 
-    .state('app.search', {
-		url : '/search',
-		views : {
-			'menuContent' : {
-				templateUrl : 'side/search.html'
-			}
-		}
-	})
+ //    .state('app.search', {
+	// 	url : '/search',
+	// 	views : {
+	// 		'menuContent' : {
+	// 			templateUrl : 'side/search.html'
+	// 		}
+	// 	}
+	// })
 
-	.state('app.playlists', {
-		url : '/playlists',
-		views : {
-			'menuContent' : {
-				templateUrl : 'side/playlists.html',
-				controller : 'PlaylistsCtrl'
-			}
-		}
-	})
+	// .state('app.playlists', {
+	// 	url : '/playlists',
+	// 	views : {
+	// 		'menuContent' : {
+	// 			templateUrl : 'side/playlists.html',
+	// 			controller : 'PlaylistsCtrl'
+	// 		}
+	// 	}
+	// })
 
-	.state('app.single', {
-		url : '/playlists/:playlistId',
-		views : {
-			'menuContent' : {
-				templateUrl : 'side/playlist.html',
-				controller : 'PlaylistCtrl'
-			}
-		}
-	});
+	// .state('app.single', {
+	// 	url : '/playlists/:playlistId',
+	// 	views : {
+	// 		'menuContent' : {
+	// 			templateUrl : 'side/playlist.html',
+	// 			controller : 'PlaylistCtrl'
+	// 		}
+	// 	}
+	// });
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/main');
 }); 
-// 2015-10-05 이호경 추가
-// angular.module('starter.service', [])
-// .factory('xmlParser', function () {
-// 	var x2js = new X2JS();
-// 	return {
-// 		xml2json: x2js.xml2json,
-// 		xml_str2json_withOutBind : x2js.xml_str2json,
-// 		xml_str2json: function (args) {
-// 			return angular.bind(x2js, x2js.xml_str2json, args)();
-// 		},
-// 		json2xml: x2js.json2xml_str
-// 	}
-// })
 

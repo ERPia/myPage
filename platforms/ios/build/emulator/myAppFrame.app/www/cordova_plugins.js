@@ -8,6 +8,17 @@ module.exports = [
         ]
     },
     {
+        "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+        "id": "cordova-plugin-x-toast.Toast",
+        "clobbers": [
+            "window.plugins.toast"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+        "id": "cordova-plugin-x-toast.tests"
+    },
+    {
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "id": "org.apache.cordova.device.device",
         "clobbers": [
@@ -27,6 +38,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "com.phonegap.plugins.PushPlugin": "2.5.0",
+    "cordova-plugin-x-toast": "2.2.1",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.vibration": "0.3.13"
 }
