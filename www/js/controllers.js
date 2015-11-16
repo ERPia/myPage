@@ -330,23 +330,33 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
-.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, tradeDetailService, ERPiaAPI){
+	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.trade_Detail_Modal = modal;
+	});
 	$scope.check = {};
 	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
 		.then(function(response){
 			$scope.items = response.list;
 		})
-	$scope.readTradeDetail = function(Sl_No){
-		$ionicSlideBoxDelegate.next();
+	$scope.readTradeDetail = function(dataParam){
+		var Sl_No = dataParam.substring(0, dataParam.indexOf('^'));
+		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
 		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
 			.then(function(response){
 				console.log('readDetail', response);
 				$scope.detail_items = response.list;
+				$scope.trade_Detail_Modal.show();
 			})
 	}
-	$scope.backToList = function(){
-		$ionicSlideBoxDelegate.previous();
+	$scope.close = function(){
+		$scope.trade_Detail_Modal.hide();
 	}
+	// $scope.backToList = function(){
+	// 	$ionicSlideBoxDelegate.previous();
+	// }
 	$scope.print = function(){
 		var page = location.href;
 		if($cordovaPrinter.isAvailable()){
@@ -360,7 +370,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
 		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.Sano){
-			location.href="#/app/trade_Detail";
+			location.href="#/app/tradeList";
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');
 			else alert('사업자 번호와 일치하지 않습니다.');
@@ -379,7 +389,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.toggle = false;
 	NoticeService.getList()
 		.then(function(data){
-			var innerHtml = '';
+			console.log('noticeData', data);
 			$scope.items = data.list;
 		})
 })

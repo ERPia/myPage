@@ -178,6 +178,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+	/////////////////////////////////////trade////////////////////////////////////
+	.state('app.tradeList', {
+		url : '/tradeList',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/tradeList.html',
+				controller : 'tradeCtrl'
+			}
+		}
+	})
 	.state('app.trade_Detail', {
 		url : '/trade_Detail',
 		views : {
