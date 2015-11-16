@@ -1,81 +1,13 @@
-<ion-view view-title="알림 설정">
+	<ion-view view-title="알림 설정">
 	<ion-nav-bar>
 		<ion-nav-back-button></ion-nav-back-button>
 	</ion-nav-bar>
 	<ion-content class="padding2">
-		<body>
-			<li class="item item-toggle">
-				푸시 알림
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				공지사항
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				업데이트 현황
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				지식나눔방
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				업체문의 Q&A(답변)
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				거래명세서 도착
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				기타 이벤트
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				소리
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-			<li class="item item-toggle">
-				진동
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-		</body>
+		<ion-toggle ng-model="selectedAll" ng-change='check_alarm(selectedAll)'>
+          	푸시알림
+        </ion-toggle>
+		<ion-toggle ng-repeat="item in settingsList" ng-model="item.checked" ng-checked="item.checked" ng-change='check_change(item)'>
+          	{{ item.name }}
+        </ion-toggle>
 	</ion-content>
 </ion-view>

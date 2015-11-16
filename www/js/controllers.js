@@ -389,7 +389,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.toggle = false;
 	NoticeService.getList()
 		.then(function(data){
-			console.log('noticeData', data);
 			$scope.items = data.list;
 		})
 })

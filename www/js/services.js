@@ -164,7 +164,7 @@ angular.module('starter.services', [])
 			var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response.data);
+					console.log('NoticeService', response.data);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
