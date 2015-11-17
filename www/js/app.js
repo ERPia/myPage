@@ -144,8 +144,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			url : '/slidingtab',
 			views : {
 				'menuContent' : {
-					templateUrl : 'slidingtab/slidingTabsUsingRepeat.html'
-					// controller : 'IndexCtrl'
+					templateUrl : 'slidingtab/slidingTabsUsingRepeat.html',
+					controller : 'IndexCtrl'
 			}
 		}
 	})

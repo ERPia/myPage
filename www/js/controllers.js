@@ -504,7 +504,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.fnAlarm('loadAlarm');
 })
-// .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
 		    "width" : "100%",
@@ -523,70 +522,58 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
 		var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
 
-		if($rootScope.loginState == "E") {
-			IndexService.dashBoard('erpia_dashBoard', $scope.Admin_Code, aWeekAgo, nowday)
-			.then(function(processInfo){
-				$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
-				$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
-				$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
-				$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
-				$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
-			},
-			function(){
-				alert('ProcessInfo Error');
-			});
-			$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
-			$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
-			$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
+		IndexService.dashBoard('erpia_dashBoard', $scope.Admin_Code, aWeekAgo, nowday)
+		.then(function(processInfo){
+			$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
+			$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
+			$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
+			$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
+			$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
+		},
+		function(){
+			alert('ProcessInfo Error');
+		});
+		$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
+		$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
+		$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
 
-			statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
-			.then(function(data){
-				console.log('data', data);
-				$scope.tabs = data;
-			})
-
-			// $scope.url = "";
-			$scope.onSlideMove = function(data) {
-				console.log('index :', indexList.indexOf(data.index));
-				if(indexList.indexOf(data.index) < 0){
-					indexList.push(data.index);
-					console.log('indexList :', indexList);
-					if (data.index > 0){
-						statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
-						.then(function(response){
-							switch(data.index){
-								case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 4: $scope.chart_url4 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 5: $scope.chart_url5 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 6: $scope.chart_url6 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 7: $scope.chart_url7 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 8: $scope.chart_url8 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 9: $scope.chart_url9 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 10: $scope.chart_url10 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 11: $scope.chart_url11 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 12: $scope.chart_url12 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 13: $scope.chart_url13 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 14: $scope.chart_url14 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 15: $scope.chart_url15 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 16: $scope.chart_url16 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 17: $scope.chart_url17 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								default : alert('chart error'); break;
-							}
-							console.log('chartUrl', response.list[0].url);
-						})
-					}
+		statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.tabs = data;
+		})
+		$scope.onSlideMove = function(data) {
+			if(indexList.indexOf(data.index) < 0){
+				indexList.push(data.index);
+				if (data.index > 0){
+					statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
+					.then(function(response){
+						console.log('chart', response);
+						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $rootScope.Admin_Code;
+						strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
+						console.log(strChartUrl);
+						switch(data.index){
+							case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 4: $scope.chart_url5 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 5: $scope.chart_url6 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 6: $scope.chart_url7 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 7: $scope.chart_url8 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 8: $scope.chart_url9 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 9: $scope.chart_url10 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 10: $scope.chart_url11 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 11: $scope.chart_url12 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 12: $scope.chart_url13 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 13: $scope.chart_url14 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 14: $scope.chart_url15 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 15: $scope.chart_url16 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
+							default : alert('chart error'); break;
+						}
+					})
 				}
-
-				$scope.myStyle = {
-				    "width" : "100%",
-				    "height" : "100%"
-				};
-				//alert("You have selected " + $scope.tabs[data.index].text + " tab");
-			};
-		}else if($rootScope.loginState == "S") {
-
+			}
 		};
 	})
 
