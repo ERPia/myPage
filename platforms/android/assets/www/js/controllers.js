@@ -19,21 +19,18 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
-	, loginService, CertifyService, pushInfoService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush, $cordovaToast, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
 	$scope.loginData = {};
 	$scope.SMSData = {};
 
-	console.log('AppCtrl'); 
-
 	// Create the login modal that we will use later
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
 		scope : $scope
 	}).then(function(modal) {
-		$scope.modal = modal;
+		$scope.loginModal = modal;
 	});
 
 	$ionicModal.fromTemplateUrl('side/agreement.html',{
@@ -47,20 +44,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal){
 		$scope.certificationModal = modal;
 	});
-	
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
-		$scope.modal.hide();
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});
+		$scope.loginModal.hide();
+		console.log('hideModal', $scope.loginModal);
 		if($rootScope.mobile_Certify_YN == 'Y'){
 			if($rootScope.loginState == "S"){
-				$ionicHistory.nextViewOptions({
-	            	disableBack: true
-		        });
+				
 		        $state.go("app.erpia_scmhome");
 			}else if($rootScope.loginState == "E"){
-				$ionicHistory.nextViewOptions({
-	            	disableBack: true
-		        });
 		        $state.go("app.slidingtab");
 			};
 		}
@@ -78,7 +73,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    	if(pushInfo.data.list.length != 0){
 		    		PushInsertCheck = pushInfo.data.list[0].token;
 		    	}
-
 		    	if(PushInsertCheck == $rootScope.token){
 		    		PushInsertCheck2 = "duplication";
 		    		console.log('pushinfo:: duplication');
@@ -119,32 +113,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// Open the login modal
 	$scope.login = function() {
 		console.log('loginState', $rootScope.loginState);
+		console.log('scope', $scope);
 		$rootScope.loginMenu = 'selectUser';
 		if($rootScope.loginState == "R"){
-			$scope.modal.show();
+			console.log('loginModal', $scope.loginModal);
+			$scope.loginModal.show();
 		}else{
-			$scope.id_title = "";
-			$rootScope.UserId = "";
-			$rootScope.Admin_Code = "";
-			$scope.management_day = "";
-			$scope.management_bill = "";
-			$scope.sms = "";
-			$scope.tax = "";
-			$scope.e_money = "";
-			$scope.every = "";
-			$scope.package = "";
-			$scope.user = "";
-			$scope.site = "";
-			$scope.account = "";
+			$ionicHistory.clearCache();
+			$ionicHistory.clearHistory();
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
 
+			$state.go("app.erpia_main");
 			$scope.loginHTML = "로그인";
 			$rootScope.loginState = "R";
-			alert("로그아웃 되었습니다.");
-
-			$ionicHistory.nextViewOptions({
-            	disableBack: true
-	        });
-			$state.go("app.erpia_main");
 		};
 	};
 
@@ -160,6 +143,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if ($scope.Auto_Login != true) {
 			//SCM 로그인
 			if ($scope.userType == 'SCM') {
+				$ionicModal.fromTemplateUrl('side/check_Sano.html',{
+					scope : $scope
+				}).then(function(modal){
+					$scope.check_sano_Modal = modal;
+				});
 				loginService.comInfo('scm_login', $scope.Admin_Code, $rootScope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
 					if (comInfo.data.list[0].ResultCk == '1'){
@@ -181,9 +169,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
 						else alert(comInfo.data.list[0].ResultMsg);
 					}	
-				},
-				function(){
-					alert('login error');
+				},function(){
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('login error', 'long', 'center');
+						else alert('login error');
 				});
 			}else if ($scope.userType == 'ERPia'){
 				//ERPia 로그인
@@ -296,8 +284,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
 						else alert(comInfo.data.list[0].Comment);
 					}
-				},
-				function(){
+				},function(){
 					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
 					else alert('comInfo error');
 				});
@@ -328,25 +315,43 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.certificationModal.hide();
 		})
 	}
+	$scope.lhk_test = function(){
+		location.href="#/app/tradeList";
+	}
+
+	$scope.showCheckSano = function(){
+		$scope.check_sano_Modal.show();
+	}
 })
 
-.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
-	$scope.check = {};
-	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, tradeDetailService, ERPiaAPI){
+	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.trade_Detail_Modal = modal;
+	});
+	//tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+	tradeDetailService.innerHtml('onz', '01016')
 		.then(function(response){
 			$scope.items = response.list;
 		})
-	$scope.readTradeDetail = function(Sl_No){
-		$ionicSlideBoxDelegate.next();
-		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+	$scope.readTradeDetail = function(dataParam){
+		var Sl_No = dataParam.substring(0, dataParam.indexOf('^'));
+		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
+		//tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+		tradeDetailService.readDetail('onz', Sl_No)
 			.then(function(response){
-				console.log('readDetail', response);
+				$scope.detail_title = detail_title;
 				$scope.detail_items = response.list;
+				$scope.trade_Detail_Modal.show();
 			})
 	}
-	$scope.backToList = function(){
-		$ionicSlideBoxDelegate.previous();
+	$scope.close = function(){
+		$scope.trade_Detail_Modal.hide();
 	}
+	// $scope.backToList = function(){
+	// 	$ionicSlideBoxDelegate.previous();
+	// }
 	$scope.print = function(){
 		var page = location.href;
 		if($cordovaPrinter.isAvailable()){
@@ -359,12 +364,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
-		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.Sano){
-			location.href="#/app/trade_Detail";
+		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check_sano){
+			location.href="#/app/tradeList";
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');
 			else alert('사업자 번호와 일치하지 않습니다.');
 		}
+	}
+	$scope.sano_close = function(){
+		$scope.check_sano_Modal.hide();	
 	}
 })
 
@@ -379,7 +387,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.toggle = false;
 	NoticeService.getList()
 		.then(function(data){
-			var innerHtml = '';
 			$scope.items = data.list;
 		})
 })
@@ -474,7 +481,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
 	}
 })
-// .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
 		    "width" : "100%",
@@ -493,73 +499,62 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
 		var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
 
-		if($rootScope.loginState == "E") {
-			IndexService.dashBoard('erpia_dashBoard', $scope.Admin_Code, aWeekAgo, nowday)
-			.then(function(processInfo){
-				$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
-				$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
-				$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
-				$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
-				$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
-			},
-			function(){
-				alert('ProcessInfo Error');
-			});
-			$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
-			$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
-			$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
+		IndexService.dashBoard('erpia_dashBoard', $scope.Admin_Code, aWeekAgo, nowday)
+		.then(function(processInfo){
+			$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
+			$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
+			$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
+			$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
+			$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
+		},
+		function(){
+			alert('ProcessInfo Error');
+		});
+		$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
+		$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
+		$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
 
-			statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
-			.then(function(data){
-				console.log('data', data);
-				$scope.tabs = data;
-			})
+		statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.tabs = data;
+		})
 
-			// $scope.url = "";
-			$scope.onSlideMove = function(data) {
-				console.log('index :', indexList.indexOf(data.index));
-				if(indexList.indexOf(data.index) < 0){
-					indexList.push(data.index);
-					console.log('indexList :', indexList);
-					if (data.index > 0){
-						statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
-						.then(function(response){
-							switch(data.index){
-								case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 4: $scope.chart_url4 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 5: $scope.chart_url5 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 6: $scope.chart_url6 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 7: $scope.chart_url7 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 8: $scope.chart_url8 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 9: $scope.chart_url9 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 10: $scope.chart_url10 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 11: $scope.chart_url11 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 12: $scope.chart_url12 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 13: $scope.chart_url13 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 14: $scope.chart_url14 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 15: $scope.chart_url15 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 16: $scope.chart_url16 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								case 17: $scope.chart_url17 = $sce.trustAsResourceUrl(response.list[0].url); break;
-								default : alert('chart error'); break;
-							}
-							console.log('chartUrl', response.list[0].url);
-						})
-					}
+		$scope.onSlideMove = function(data) {
+			console.log('index :', indexList.indexOf(data.index));
+			if(indexList.indexOf(data.index) < 0){
+				indexList.push(data.index);
+				console.log('indexList :', indexList);
+				if (data.index > 0){
+					statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
+					.then(function(response){
+						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $rootScope.Admin_Code;
+						strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
+						switch(data.index){
+							case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 4: $scope.chart_url5 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 5: $scope.chart_url6 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 6: $scope.chart_url7 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 7: $scope.chart_url8 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 8: $scope.chart_url9 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 9: $scope.chart_url10 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 10: $scope.chart_url11 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 11: $scope.chart_url12 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 12: $scope.chart_url13 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 13: $scope.chart_url14 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 14: $scope.chart_url15 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 15: $scope.chart_url16 = $sce.trustAsResourceUrl(strChartUrl); break;
+							case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
+							default : alert('chart error'); break;
+						}
+						console.log('chartUrl', response.list[0].url);
+					})
 				}
-
-				$scope.myStyle = {
-				    "width" : "100%",
-				    "height" : "100%"
-				};
-				//alert("You have selected " + $scope.tabs[data.index].text + " tab");
-			};
-		}else if($rootScope.loginState == "S") {
-
+			}
 		};
 	})
-
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, scmInfoService){
 	$scope.ScmBaseData = function() {
 		if($rootScope.loginState == "S") {

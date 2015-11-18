@@ -1,8 +1,16 @@
 <ion-modal-view class="psm_login_body">
+	<ion-header-bar class="bar-dark">
+		<h1 class="title ">{{detail_title}}</h1>
+		<div class="buttons">
+			<button class="button button-clear" ng-click="close()">
+				닫기
+			</button>
+		</div>
+	</ion-header-bar>
 	<ion-view view-title="거래명세서">
 		<ion-content class="padding2">
 			<ion-scroll zooming="true" direction="xy" style="width:100%; height:100%;">
-				<div style="width: 1020px; height: 850px;">
+				<div style="width: 1110px; height: 850px;">
 					<ion-item ng-repeat="detail in detail_items">
 						<table width=1080>
 						    <tr>
@@ -88,63 +96,63 @@
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name2}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea2}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price2}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong2}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name3}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea3}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price3}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong3}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name4}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea4}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price4}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong4}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name5}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea5}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price5}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong5}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name6}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea6}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price6}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong6}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name7}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea7}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price7}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong7}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name8}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea8}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price8}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong8}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdList tdLeftSolid' colspan=3>{{detail.G_name9}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_ea9}}</td>
 						        <td class='tdNumber tdList'>{{detail.G_price9}}</td>
-						        <td class='tdNumber tdList'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdList'>{{detail.G_Gong9}}</td>
 						        <td class='tdNumber tdList tdRightSolid'></td>
 						    </tr>
 						    <tr>
 						        <td class='tdText tdListEnd tdLeftSolid tdBottomSolid' colspan=3>{{detail.G_name10}}</td>
 						        <td class='tdNumber tdListEnd tdBottomSolid'>{{detail.G_ea10}}</td>
 						        <td class='tdNumber tdListEnd tdBottomSolid'>{{detail.G_price10}}</td>
-						        <td class='tdNumber tdListEnd tdBottomSolid'>{{detail.G_Gong1}}</td>
+						        <td class='tdNumber tdListEnd tdBottomSolid'>{{detail.G_Gong10}}</td>
 						        <td class='tdNumber tdListEnd tdRightSolid tdBottomSolid'></td>
 						    </tr>
 						    <tr height=30>
