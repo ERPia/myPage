@@ -325,6 +325,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, tradeDetailService, ERPiaAPI){
+	$scope.check = '';
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -364,7 +365,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
-		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check_sano){
+		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.sano){
 			location.href="#/app/tradeList";
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');

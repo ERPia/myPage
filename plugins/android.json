@@ -13,11 +13,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
@@ -25,7 +21,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -85,16 +85,16 @@
         "com.phonegap.plugins.PushPlugin": {
             "PACKAGE_NAME": "com.erpiaTest"
         },
-        "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.erpiaTest"
-        },
-        "org.apache.cordova.vibration": {
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.erpiaTest"
         },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.erpiaTest"
         },
-        "cordova-plugin-whitelist": {
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "com.erpiaTest"
+        },
+        "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "com.erpiaTest"
         }
     },
