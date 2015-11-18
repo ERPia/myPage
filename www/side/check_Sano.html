@@ -1,12 +1,4 @@
-<ion-modal-view class="psm_login_body">
-	<ion-header-bar class="bar-dark">
-		<h1 class="title ">수신함 확인 사업자번호 입력</h1>
-		<div class="buttons">
-			<button class="button button-clear" ng-click="sano_close()">
-				닫기
-			</button>
-		</div>
-	</ion-header-bar>
+<ion-view view-title="수신함 확인 사업자번호 입력">
 	<ion-content class="padding2">
 		<body>
 			<div class="psm_segum01">
@@ -15,11 +7,11 @@
 
 
 				<div class="psm_segum04">
-					<input type='text' class="psm_segum05"  ng-model='check.sano' placeHolder='사업자번호 뒤 5자리'/>
+					<input type='text' class="psm_segum05"  ng-model='check.Sano' placeHolder='사업자번호 뒤 5자리'/>
 				</div>
 
 				<div class="psm_segum02"><button class="psm_segum06" ng-click='check_Sano()'>확인</button></div>
 			</div>
 		</body>
 	</ion-content>
-</ion-modal-view>
+</ion-view>
