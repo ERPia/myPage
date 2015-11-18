@@ -325,7 +325,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, tradeDetailService, ERPiaAPI){
-	$scope.check = '';
+	$scope.check = {};
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
