@@ -53,7 +53,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('hideModal', $scope.loginModal);
 		if($rootScope.mobile_Certify_YN == 'Y'){
 			if($rootScope.loginState == "S"){
-				
 		        $state.go("app.erpia_scmhome");
 			}else if($rootScope.loginState == "E"){
 		        $state.go("app.slidingtab");
@@ -424,58 +423,79 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 .controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
 	$scope.settingsList = [];
-	var cntList = 0;
-	alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
-		.then(function(data){
-			cntList = data.list.length;
-			for(var i=0; i<cntList; i++){
-				switch(data.list[i].idx){
-					case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '공지사항';
-						break;
-					case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '업데이트 현황';
-						break;
-					case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '지식 나눔방';
-						break;
-					case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '업체문의 Q&A(답변)';
-						break;
-					case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '거래명세서 도착';
-						break;
-					case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '기타 이벤트';
-						break;
-					case 7: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '소리';
-						break;
-					case 8: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
-						data.list[i].name = '진동';
-						break;
+	var cntList = 6;
+	$scope.fnAlarm = function(isCheckAll){
+		if(isCheckAll == 'checkAll'){
+			var arrAlarm = new Array();
+			arrAlarm.push({idx:1,name:'공지사항',checked:true});
+			arrAlarm.push({idx:2,name:'업데이트현황',checked:true});
+			arrAlarm.push({idx:3,name:'지식 나눔방',checked:true});
+			arrAlarm.push({idx:4,name:'업체문의 Q&A(답변)',checked:true});
+			arrAlarm.push({idx:5,name:'거래명세서 도착',checked:true});
+			arrAlarm.push({idx:6,name:'기타 이벤트',checked:true});
+			$scope.settingsList = arrAlarm;
+		}else{
+			alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+			.then(function(data){
+				// cntList = data.list.length;
+				for(var i=0; i<cntList; i++){
+					switch(data.list[i].idx){
+						case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '공지사항';
+							break;
+						case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '업데이트 현황';
+							break;
+						case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '지식 나눔방';
+							break;
+						case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '업체문의 Q&A(답변)';
+							break;
+						case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '거래명세서 도착';
+							break;
+						case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+							data.list[i].name = '기타 이벤트';
+							break;
+					}
 				}
-			}
-			if(data.list[0].alarm == 'F') $scope.selectedAll = false;
-			else $scope.selectedAll = true;
-			$scope.settingsList = data.list;
-		});
-	$scope.check_change = function(item){
-		var rsltList = '';
-		for(var i=0; i<cntList; i++){
-			rsltList += $scope.settingsList[i].idx + '^';
-			rsltList += ($scope.settingsList[i].checked == true)?'T' + '^|':'F' + '^|';
+				if(data.list[0].alarm == 'F'){
+					$scope.selectedAll = false;
+					$scope.settingsList = [];
+				}
+				else{
+					$scope.selectedAll = true;
+					$scope.settingsList = data.list;
+				}
+			});
 		}
-		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
 	}
 	$scope.check_alarm = function(check){
+		if(check) {
+			rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|'; //7^T^|8^T^|';
+			alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
+			$scope.fnAlarm('checkAll');
+		}
+		else{
+			$scope.settingsList = [];
+			rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|'; //7^F^|8^F^|';
+			alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
+		}
 		angular.forEach($scope.settingsList, function(item){
-			item.checked = check;
-			if(item.checked) rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|7^T^|8^T^|';
-			else rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|7^F^|8^F^|';
+			item.checked = check; 
 		})
-		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
 	}
+	$scope.check_change = function(item){
+		var rsltList = '';
+		console.log('settingsList', $scope.settingsList[0]);
+		for(var i=0; i<cntList; i++){
+			rsltList += $scope.settingsList[i].idx + '^';
+			rsltList += ($scope.settingsList[i].checked == true)?'T^|':'F^|';
+		}
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, '0^U|' + rsltList)
+	}
+	$scope.fnAlarm('loadAlarm');
 })
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
@@ -515,17 +535,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			console.log('data', data);
 			$scope.tabs = data;
 		})
-
 		$scope.onSlideMove = function(data) {
-			console.log('index :', indexList.indexOf(data.index));
 			if(indexList.indexOf(data.index) < 0){
 				indexList.push(data.index);
-				console.log('indexList :', indexList);
 				if (data.index > 0){
 					statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
 					.then(function(response){
+						console.log('chart', response);
 						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $rootScope.Admin_Code;
 						strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
+						console.log(strChartUrl);
 						switch(data.index){
 							case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
 							case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;
@@ -545,7 +564,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 							case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
 							default : alert('chart error'); break;
 						}
-						console.log('chartUrl', response.list[0].url);
 					})
 				}
 			}
