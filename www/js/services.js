@@ -178,22 +178,22 @@ angular.module('starter.services', [])
 })
 .factory('statisticService', function($http, $q, ERPiaAPI) {
 	var titles =  [{Idx:0, title:"홈"}
-				, {Idx:1, title:"매출 실적 추이"}
+				, {Idx:1, title:"거래처별 매입 점유율 TOP 10"}
 				, {Idx:2, title:"사이트별 매출 점유율"}
-				, {Idx:3, title:"매출이익증감율"}
+				, {Idx:3, title:"브랜드별 매출 TOP5"}
 				, {Idx:4, title:"상품별 매출 TOP5"}
-				, {Idx:5, title:"브랜드별 매출 TOP5"}
-				, {Idx:6, title:"온오프라인 비교 매출"}
-				, {Idx:7, title:"매출반품현황"}
-				, {Idx:8, title:"상품별 매출 반품 건수/반품액 TOP5"}
-				, {Idx:9, title:"CS 컴플레인 현황"}
-				, {Idx:10, title:"매입 현황"}
-				, {Idx:11, title:"거래처별 매입 점유율 TOP 10"}
-				, {Idx:12, title:"상품별 매입건수/매입액 TOP5"}
-				, {Idx:13, title:"최근배송현황"}
-				, {Idx:14, title:"배송현황"}
-				, {Idx:15, title:"택배사별 구분 건수 통계"}
-				, {Idx:16, title:"재고 회전율 TOP5"}];
+				, {Idx:5, title:"매출이익증감율"}
+				, {Idx:6, title:"매출 실적 추이"}
+				, {Idx:7, title:"매입 현황"}
+				, {Idx:8, title:"재고 회전율 TOP5"}
+				, {Idx:9, title:"택배사별 구분 건수 통계"}
+				, {Idx:10, title:"온오프라인 비교 매출"}
+				, {Idx:11, title:"매출반품현황"}
+				, {Idx:12, title:"상품별 매출 반품 건수/반품액 TOP5"}
+				, {Idx:13, title:"CS 컴플레인 현황"}
+				, {Idx:14, title:"상품별 매입건수/매입액 TOP5"}
+				, {Idx:15, title:"최근배송현황"}
+				, {Idx:16, title:"배송현황"}];
 	return{
 		all : function(kind, mode, Admin_Code, loginType, G_Id) {
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';

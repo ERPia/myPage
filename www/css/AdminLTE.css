@@ -2936,9 +2936,9 @@ table.text-center th {
  * Component: modal
  * ----------------
  */
-.modal {
+/*.modal {
   background: rgba(0, 0, 0, 0.3);
-}
+}*/
 .modal-content {
   border-radius: 0;
   -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.125) !important;

@@ -44,6 +44,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal){
 		$scope.certificationModal = modal;
 	});
+
+	$ionicModal.fromTemplateUrl('side/check_Sano.html',{
+		scope : $scope
+	}).then(function(modal){
+		$scope.check_sano_Modal = modal;
+	});
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
 		$ionicHistory.nextViewOptions({
@@ -142,11 +148,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if ($scope.Auto_Login != true) {
 			//SCM 로그인
 			if ($scope.userType == 'SCM') {
-				$ionicModal.fromTemplateUrl('side/check_Sano.html',{
-					scope : $scope
-				}).then(function(modal){
-					$scope.check_sano_Modal = modal;
-				});
 				loginService.comInfo('scm_login', $scope.Admin_Code, $rootScope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
 					if (comInfo.data.list[0].ResultCk == '1'){
