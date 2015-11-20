@@ -61,7 +61,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			if($rootScope.loginState == "S"){
 		        $state.go("app.erpia_scmhome");
 			}else if($rootScope.loginState == "E"){
-		        $state.go("app.slidingtab");
+				$state.go("app.erpia_main");
+		        // $state.go("app.slidingtab");
 			};
 		}
 		else if($rootScope.loginState != "R") {
@@ -533,7 +534,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
 		.then(function(data){
-			console.log('data', data);
 			$scope.tabs = data;
 		})
 		$scope.onSlideMove = function(data) {
@@ -542,10 +542,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				if (data.index > 0){
 					statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
 					.then(function(response){
-						console.log('chart', response);
 						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $rootScope.Admin_Code;
 						strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
-						console.log(strChartUrl);
 						switch(data.index){
 							case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
 							case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;

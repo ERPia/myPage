@@ -20,20 +20,47 @@ angular.module('starter.services', [])
 	};
 })
 
-.factory('loginService', function($http, ERPiaAPI){
+.factory('loginService', function($http, $q, ERPiaAPI){
 	var comInfo = function(kind, Admin_Code, G_id, G_Pass){
 		if(kind == 'scm_login'){
 			var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&G_id=' + G_id + '&G_Pass=' + G_Pass;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
 		}else if(kind == 'ERPiaLogin'){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&uid=' + G_id + '&pwd=' + G_Pass;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
 		}else if(kind =='erpia_ComInfo'){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
 		}
 	}
 	return{
@@ -62,11 +89,20 @@ angular.module('starter.services', [])
 		scmInfo: scmInfo
 	}
 })
-.factory('IndexService', function($http, ERPiaAPI){
+.factory('IndexService', function($http, $q, ERPiaAPI){
 	var dashBoard = function(kind, Admin_Code, sDate, eDate){
 		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
-		return $http.get(url + '?' + data);
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response.data == 'object'){
+					return response;
+				}else{
+					return $q.reject(response);
+				}
+			},function(response){
+				return $q.reject(response);
+			});
 	}
 	return{
 		dashBoard: dashBoard
@@ -200,7 +236,6 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log('response All', response)
 					if(typeof response.data == 'object'){
 						for(var i=0; i<response.data.list.length; i++){
 							switch(response.data.list[i].Idx){
@@ -221,9 +256,7 @@ angular.module('starter.services', [])
 								case "16": response.data.list[i].title = titles[15].title; break;
 								case "17": response.data.list[i].title = titles[16].title; break;
 							}
-							console.log(response.data.list[i].title);
 						}
-						console.log('dataList', response.data);
 						return response.data.list;	
 					}else{
 						return items;
