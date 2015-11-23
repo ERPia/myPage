@@ -526,7 +526,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
 		},
 		function(){
-			alert('ProcessInfo Error');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('IndexService Error', 'long', 'center');
+			else alert('IndexService Error');
 		});
 		$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
 		$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
@@ -561,7 +562,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 							case 14: $scope.chart_url15 = $sce.trustAsResourceUrl(strChartUrl); break;
 							case 15: $scope.chart_url16 = $sce.trustAsResourceUrl(strChartUrl); break;
 							case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
-							default : alert('chart error'); break;
+							default : 
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('chart Error', 'long', 'center');
+								else alert('chart Error'); 
+							break;
 						}
 					})
 				}

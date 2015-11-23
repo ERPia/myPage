@@ -200,7 +200,6 @@ angular.module('starter.services', [])
 			var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log('NoticeService', response.data);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
@@ -259,16 +258,24 @@ angular.module('starter.services', [])
 						}
 						return response.data.list;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				}, function(response){
+					return $q.reject(response.data);
+				})
 		},save : function(kind, mode, Admin_Code, loginType, G_Id, statistic){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					return response.data;
-			})
+					if(typeof response.data == 'object'){
+						return response.data;	
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
 		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
@@ -298,9 +305,11 @@ angular.module('starter.services', [])
 						}
 						return response.data.list;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				}, function(response){
+					return $q.rejec(response.data);
+				})
 		}, chart : function(kind, mode, Admin_Code, loginType, G_Id, chart_idx){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType;
@@ -310,9 +319,9 @@ angular.module('starter.services', [])
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				})
 		}
 	}
 })
