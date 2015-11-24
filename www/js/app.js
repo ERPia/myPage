@@ -17,6 +17,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	, toast:'Y'
 // })
 
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100'
+ // 	, toast:'N'
+ // })
+
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -169,16 +174,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+	/////////////////////////////////////trade////////////////////////////////////
 	.state('app.check_Sano', {
 		url : '/check_Sano',
 		views : {
 			'menuContent' : {
 				templateUrl : 'side/check_Sano.html',
-				controller : 'tradeCtrl'
+				//controller : 'tradeCtrl'
 			}
 		}
 	})
-	/////////////////////////////////////trade////////////////////////////////////
 	.state('app.tradeList', {
 		url : '/tradeList',
 		views : {
@@ -345,6 +350,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			'menuContent' : {
 				templateUrl : 'ionicChart/chartTest.html',
 				controller : 'chartCtrl'
+			}
+		}
+	})
+	.state('app.chartTest', {
+		url : '/chart/chartTest',
+		views : {
+			'menuContent' : {
+				templateUrl : 'ionicChart/testChart.html',
+				controller : 'chartTestCtrl'
 			}
 		}
 	})

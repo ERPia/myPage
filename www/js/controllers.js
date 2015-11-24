@@ -19,11 +19,13 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush, $cordovaToast, loginService, CertifyService, pushInfoService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory
+	, $ionicUser, $ionicPush, $cordovaToast, $ionicLoading, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
 	$scope.loginData = {};
+	$scope.userData = {};
 	$scope.SMSData = {};
 
 	// Create the login modal that we will use later
@@ -50,6 +52,20 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal){
 		$scope.check_sano_Modal = modal;
 	});
+	$scope.logout = function(){
+		$ionicLoading.show({template:'Logging out...'});
+
+		$timeout(function(){
+			$ionicLoading.hide();
+			$scope.loginData = {};
+			$scope.userData = {};
+
+			$ionicHistory.clearCache();
+			$ionicHistory.clearHistory();
+			$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+			$state.go('app.erpia_main');
+		}, 500);
+	}
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
 		$ionicHistory.nextViewOptions({
@@ -63,7 +79,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}else if($rootScope.loginState == "E"){
 				$state.go("app.erpia_main");
 		        // $state.go("app.slidingtab");
-			};
+			}else if($rootScope.loginState == 'N'){
+				$state.go("app.erpia_main");
+			}
 		}
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
@@ -72,7 +90,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var PushInsertCheck2 = "";
 
 		$scope.pushUserCheck = function() {
-			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
+			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
 		    .then(function(pushInfo){
 		    	console.log('pushinfo::', pushInfo);
 		    	
@@ -95,7 +113,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		};
 
 		$scope.pushUserRegist = function() {
-			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
+			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
 		    	console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
@@ -118,30 +136,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	// Open the login modal
 	$scope.login = function() {
-		console.log('loginState', $rootScope.loginState);
-		console.log('scope', $scope);
 		$rootScope.loginMenu = 'selectUser';
 		if($rootScope.loginState == "R"){
-			console.log('loginModal', $scope.loginModal);
 			$scope.loginModal.show();
 		}else{
-			$ionicHistory.clearCache();
-			$ionicHistory.clearHistory();
-			$ionicHistory.nextViewOptions({
-				disableBack: true
-			});
-
-			$state.go("app.erpia_main");
 			$scope.loginHTML = "로그인";
 			$rootScope.loginState = "R";
+			$scope.logout();
 		};
 	};
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function() {
 		// $scope.Kind = "scm_login";
-		$rootScope.Admin_Code = $scope.loginData.Admin_Code;
-		$rootScope.G_id = $scope.loginData.UserId;
+		$scope.Admin_Code = $scope.loginData.Admin_Code;
+		$scope.G_id = $scope.loginData.UserId;
 		$scope.G_Pass = $scope.loginData.Pwd;
 		// $scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN;
 		$scope.Auto_Login = $scope.loginData.Auto_Login;
@@ -149,15 +158,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if ($scope.Auto_Login != true) {
 			//SCM 로그인
 			if ($scope.userType == 'SCM') {
-				loginService.comInfo('scm_login', $scope.Admin_Code, $rootScope.G_id, $scope.G_Pass)
+				loginService.comInfo('scm_login', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
 					if (comInfo.data.list[0].ResultCk == '1'){
-						$rootScope.Admin_Code = comInfo.data.list[0].Admin_Code;
-						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
-						$rootScope.G_id = comInfo.data.list[0].G_ID;
-						$scope.G_Code = comInfo.data.list[0].G_Code;
-						$scope.G_Sano = comInfo.data.list[0].Sano;
-						$scope.GerCode = comInfo.data.list[0].G_Code;
+						$scope.userData.Admin_Code = comInfo.data.list[0].Admin_Code;
+						$scope.userData.G_id = comInfo.data.list[0].G_ID;
+						$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+						$scope.userData.G_Code = comInfo.data.list[0].G_Code;
+						$scope.userData.G_Sano = comInfo.data.list[0].Sano;
+						$scope.userData.GerCode = comInfo.data.list[0].G_Code;
 
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
@@ -176,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 			}else if ($scope.userType == 'ERPia'){
 				//ERPia 로그인
-				loginService.comInfo('ERPiaLogin', $rootScope.Admin_Code, $rootScope.G_id, $scope.G_Pass)
+				loginService.comInfo('ERPiaLogin', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
 				.then(function(comInfo){
 					console.log('comInfo', comInfo);
 					if(comInfo.data.list[0].Result=='1'){
@@ -289,8 +298,32 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
 					else alert('comInfo error');
 				});
-			};
-		};
+			}else if($scope.userType == 'Normal'){
+				loginService.comInfo('ERPia_Ger_Login', $scope.Admin_Code, $scope.G_id, $scope.G_Pass)
+				.then(function(comInfo){
+					console.log(comInfo.data);
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].comment, 'long', 'center');
+					else alert(comInfo.data.list[0].comment);
+					if(comInfo.data.list[0].result == '0'){ 
+						$scope.Admin_Code = comInfo.data.list[0].Admin_Code;
+						$scope.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+						$scope.G_id = comInfo.data.list[0].G_ID;
+						$scope.G_Code = comInfo.data.list[0].G_Code;
+						$scope.G_Sano = comInfo.data.list[0].Sano;
+						$scope.GerCode = comInfo.data.list[0].G_Code;
+						$scope.cntNotRead = comInfo.data.list[0].cntNotRead;
+
+						$scope.loginHTML = "로그아웃";
+						$rootScope.loginState = "N";
+						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
+
+						$timeout(function() {
+							$scope.closeLogin();
+						}, 100);
+					}
+				})
+			}
+		}
 	};
 
   	$scope.loginHTML = "로그인";
@@ -306,18 +339,23 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 
+	$scope.click_cancel = function(){
+		$scope.agreeModal.hide();
+		$state.go('app.erpia_main');
+	}
 	// $rootScope.CertificationSwitch = 'firstPage';
 	$scope.click_Certification = function(){
-		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $rootScope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
+		CertifyService.certify($scope.Admin_Code, $rootScope.loginState, $scope.G_id, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
 	}
 	$scope.click_responseText = function(){
-		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $rootScope.G_id, $scope.SMSData.rspnText)
+		CertifyService.check($scope.Admin_Code, $rootScope.loginState, $scope.G_id, $scope.SMSData.rspnText)
 		.then(function(response){
 			$scope.certificationModal.hide();
 		})
 	}
 	$scope.lhk_test = function(){
-		location.href="#/app/tradeList";
+		// $state.go("app.chartTest");
+		//$scope.check_sano_Modal.show();
 	}
 
 	$scope.showCheckSano = function(){
@@ -325,26 +363,31 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
-.controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, tradeDetailService, ERPiaAPI){
+.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){
+	console.log('tradeCtrl');
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.trade_Detail_Modal = modal;
 	});
 	$scope.check = {};
-	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+	tradeDetailService.innerHtml($scope.userData.Admin_Code, $scope.userData.GerCode)
 		.then(function(response){
 			$scope.items = response.list;
 		})
 	$scope.readTradeDetail = function(dataParam){
 		var Sl_No = dataParam.substring(0, dataParam.indexOf('^'));
 		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
-		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+		tradeDetailService.readDetail($scope.userData.Admin_Code, Sl_No)
 			.then(function(response){
 				console.log('readDetail', response);
 				$scope.detail_items = response.list;
 				$scope.trade_Detail_Modal.show();
 			})
+	}
+	$scope.close_sano = function(){
+		console.log('asdsss');
+		$scope.check_sano_Modal.hide();
 	}
 	$scope.close = function(){
 		$scope.trade_Detail_Modal.hide();
@@ -363,9 +406,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 	$scope.check_Sano = function(){
-		console.log('sano', $scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1));
-		if($scope.G_Sano.substring($scope.G_Sano.lastIndexOf('-') + 1) == $scope.check.Sano){
-			location.href="#/app/tradeList";
+		console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
+		if($scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1) == $scope.userData.Sano){
+			$scope.check_sano_Modal.hide();
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			$state.go('app.tradeList');
+			// location.href="#/app/tradeList";
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('사업자 번호와 일치하지 않습니다.', 'long', 'center');
 			else alert('사업자 번호와 일치하지 않습니다.');
@@ -388,7 +436,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
-	statisticService.all('myPage_Config_Stat', 'select_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
+	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
 		.then(function(data){
 			$scope.items = data;
 		})
@@ -533,7 +581,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
 		$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
 
-		statisticService.title('myPage_Config_Stat', 'select_Title', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
+		statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
 		.then(function(data){
 			$scope.tabs = data;
 		})
@@ -541,9 +589,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			if(indexList.indexOf(data.index) < 0){
 				indexList.push(data.index);
 				if (data.index > 0){
-					statisticService.chart('myPage_Config_Stat', 'select_Chart', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, data.index)
+					statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, data.index)
 					.then(function(response){
-						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $rootScope.Admin_Code;
+						var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $scope.Admin_Code;
 						strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
 						switch(data.index){
 							case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
@@ -911,4 +959,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         [28, 48, 40, 19, 86, 27, 90],
         [12, 54, 23, 43, 34, 45, 65]
     ];
+})
+.controller('chartTestCtrl', function($scope, $sce, testLhkServicse){
+	testLhkServicse.test()
+		.then(function(data){
+			//console.log('test', data);
+			$scope.innerHtml = $sce.trustAsResourceUrl(data);
+		})
 })

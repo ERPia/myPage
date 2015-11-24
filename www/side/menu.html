@@ -33,7 +33,7 @@
 				</div>
 
 				<div name="main_side" class="button-bar" ng-switch-when="R">
-					<a class="button psm_left_mediv psm_left_box4" menu-close href="#/app/cs"><img src="./img/icon_sang.png" class="psm_left_img4"><br>상담요청</a>
+					<a class="button psm_left_mediv psm_left_box4" menu-close href="#/app/cs"><img src="./img/icon_sang.png" class="psm_left_img4"><br>가입상담</a>
 					<a class="button psm_left_mediv psm_left_box5" menu-close href="#/app/push"><img src="./img/icon_push.png" class="psm_left_img4"><br>알림</a>
 				</div>
 
@@ -50,13 +50,13 @@
 				</div>
 
 				<div name="scm_side" class="button-bar" ng-switch-when="S">
-					<a class="button psm_left_mediv psm_left_box4" menu-close href="#/app/cs"><img src="./img/icon_sang.png" class="psm_left_img4"><br>상담요청</a>
+					<a class="button psm_left_mediv psm_left_box4" menu-close href="#/app/cs"><img src="./img/icon_sang.png" class="psm_left_img4"><br>가입상담</a>
 					<a class="button psm_left_mediv psm_left_box5" menu-close href="#/app/push"><img src="./img/icon_push.png" class="psm_left_img4"><br>알림</a>
 				</div>
 
 				<div ng-switch-when="S">
 					<div class="naviGubun">ERPia 거래명세표</div>
-					<a class="item item-icon-left navi-item" menu-close href="#/app/check_Sano">
+					<a class="item item-icon-left navi-item" menu-close ng-click="showCheckSano()">
 						<i class="icon"><img src="./img/icon_deal.png" class="psm_left_icon"><span class="navi-item-leftText">거래명세표<br>미수신건</span><span class="navi-item-rightText" style="color:#ff0000;">10 건</span></i>
 					</a>
 				</div>
@@ -64,12 +64,12 @@
 				<div ng-switch-when="S">
 					<div class="naviGubun">SCM 계정정보</div>
 
-					<a class="item item-icon-left navi-item" href="#">
-						<i class="icon"><img src="./img/icon_layers.png" class="psm_left_icon"><span class="navi-item-leftText">업체코드</span><span class="navi-item-rightText" ng-bind-html="GerName"></span></i>
+					<a class="item item-icon-left navi-item">
+						<i class="icon"><img src="./img/icon_layers.png" class="psm_left_icon"><span class="navi-item-leftText">업체코드</span><span class="navi-item-rightText" ng-bind-html="userData.GerName"></span></i>
 					</a>
 
-					<a class="item item-icon-left navi-item" href="#">
-						<i class="icon"><img src="./img/icon_compose.png" class="psm_left_icon"><span class="navi-item-leftText">아이디</span><span class="navi-item-rightText" ng-bind-html="G_id"></span></i>
+					<a class="item item-icon-left navi-item">
+						<i class="icon"><img src="./img/icon_compose.png" class="psm_left_icon"><span class="navi-item-leftText">아이디</span><span class="navi-item-rightText" ng-bind-html="userData.G_id"></span></i>
 					</a>
 				</div>
 
@@ -88,8 +88,7 @@
 
 				<div ng-switch-when="E">
 					<div class="naviGubun">ERPia 거래명세표</div>
-
-					<a class="item item-icon-left navi-item" href="#">
+					<a class="item item-icon-left navi-item" menu-close ng-click="showCheckSano()">
 						<i class="icon"><img src="./img/icon_deal.png" class="psm_left_icon"><span class="navi-item-leftText">거래명세표<br>미수신건</span><span class="navi-item-rightText" style="color:#ff0000;" ng-bind-html="CNT_Tax_No_Read"></span></i>
 					</a>
 				</div>
@@ -152,6 +151,36 @@
 				</div>
 			</div>
 			<!-- // erpia 로그인 -->
+
+			<!-- 일반 거래처 로그인 -->
+			<div ng-switch="loginState">
+				<div name="scm_side" class="button-bar" ng-switch-when="N">
+					<a class="button psm_left_mediv psm_left_box1" menu-close href="#/app/scmhome"><img src="./img/icon_home1.png" class="psm_left_img2"><br>HOME</a>
+					<a class="button psm_left_mediv psm_left_box2" menu-close href="#/app/introduce"><img src="./img/icon_erpia.png" class="psm_left_img2"><br>ERPia 소개</a>
+					<a class="button psm_left_mediv psm_left_box3" menu-close href="#/app/servicelist"><img src="./img/icon_buga.png" class="psm_left_img2"><br>부가서비스</a>
+				</div>
+				<div name="scm_side" class="button-bar" ng-switch-when="N">
+					<a class="button psm_left_mediv psm_left_box4" menu-close href="#/app/cs"><img src="./img/icon_sang.png" class="psm_left_img4"><br>가입상담</a>
+					<a class="button psm_left_mediv psm_left_box5" menu-close href="#/app/push"><img src="./img/icon_push.png" class="psm_left_img4"><br>알림</a>
+				</div>
+				<div ng-switch-when="N">
+					<div class="naviGubun">ERPia 거래명세표</div>
+					<a class="item item-icon-left navi-item" menu-close ng-click="showCheckSano()">
+						<i class="icon"><img src="./img/icon_deal.png" class="psm_left_icon"><span class="navi-item-leftText">거래명세표<br>미수신건</span><span class="navi-item-rightText" style="color:#ff0000;">{{cntNotRead}} 건</span></i>
+					</a>
+				</div>
+				<div ng-switch-when="N">
+					<div class="naviGubun">SCM 계정정보</div>
+					<a class="item item-icon-left navi-item">
+						<i class="icon"><img src="./img/icon_layers.png" class="psm_left_icon"><span class="navi-item-leftText">업체코드</span><span class="navi-item-rightText" ng-bind-html="GerName"></span></i>
+					</a>
+					<a class="item item-icon-left navi-item">
+						<i class="icon"><img src="./img/icon_compose.png" class="psm_left_icon"><span class="navi-item-leftText">아이디</span><span class="navi-item-rightText" ng-bind-html="G_id"></span></i>
+					</a>
+				</div>
+				<div ng-switch-when="N"><img src="./img/left_add.jpg" width="100%"></div>
+			</div>
+			<!-- // 일반 거래처 로그인 -->
 
 			<!-- 하단 (공통) -->
 			<div class="button-bar">
