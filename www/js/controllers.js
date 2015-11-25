@@ -89,7 +89,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 		}
 		else if($rootScope.loginState != "R") {
-			$scope.agreeModal.show(); //location.href="#/app/agreement";
+			$scope.agreeModal.show();
 		}
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
@@ -171,7 +171,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 						$timeout(function() {
 							$scope.closeLogin();
-						}, 100);
+						}, 500);
 					}else{
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
 						else alert(comInfo.data.list[0].ResultMsg);
@@ -277,7 +277,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 							$rootScope.loginState = "E";
 							$timeout(function() {
 								$scope.closeLogin();
-							}, 100);
+							}, 500);
 						},
 						function(){
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
@@ -309,7 +309,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 						$timeout(function() {
 							$scope.closeLogin();
-						}, 100);
+						}, 500);
 					}else{
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].comment, 'long', 'center');
 						else alert(comInfo.data.list[0].comment);	
@@ -323,7 +323,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
   	$scope.click_agreement = function(agrees){
 		if(agrees.agree_1 && agrees.agree_2){
-			//location.href="#/app/certification";
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
@@ -399,9 +398,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	$ionicSlideBoxDelegate.previous();
 	// }
 	$scope.print = function(){
-		var page = location.href;
 		if($cordovaPrinter.isAvailable()){
-			// $cordovaPrinter.print(page.replace('trade_Detail','trade_Detail_Print'));
 			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');

@@ -106,15 +106,13 @@ angular.module('starter.services', [])
 		scmInfo: scmInfo
 	}
 })
-.factory('IndexService', function($http, $q, $ionicLoading, ERPiaAPI){
+.factory('IndexService', function($http, $q, ERPiaAPI){
 	var dashBoard = function(kind, Admin_Code, sDate, eDate){
 		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
 		return $http.get(url + '?' + data)
 			.then(function(response){
-				$ionicLoading.show({template:'data loading...'});
 				if(typeof response.data == 'object'){
-					$ionicLoading.hide();
 					return response;
 				}else{
 					return $q.reject(response);
@@ -229,7 +227,7 @@ angular.module('starter.services', [])
 		}
 	};
 })
-.factory('statisticService', function($http, $q, $timeout, $ionicLoading, ERPiaAPI) {
+.factory('statisticService', function($http, $q, ERPiaAPI) {
 	var titles =  [{Idx:0, title:"홈"}
 				, {Idx:1, title:"거래처별 매입 점유율 TOP 10"}
 				, {Idx:2, title:"사이트별 매출 점유율"}
@@ -334,12 +332,8 @@ angular.module('starter.services', [])
 				data += '&G_Id=' + G_Id + '&chart_idx=' + chart_idx;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					$ionicLoading.show({template:'data loading...'});
 					if(typeof response.data == 'object'){
-						$timeout(function(){
-							$ionicLoading.hide();
-							return response.data;
-						}, 1500);
+						return response.data;	
 					}else{
 						return $q.reject(response.data);
 					}
