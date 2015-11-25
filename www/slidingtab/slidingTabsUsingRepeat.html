@@ -34,7 +34,7 @@
 										<span class="info-box-icon"><i class="ion ion-ios-calendar-outline"></i></span>
 										<div class="info-box-content">
 											<span class="info-box-text">사용만료일</span>
-											<span class="info-box-number" ng-bind-html="G_Expire_Date">2015.08.31</span>
+											<span class="info-box-number" ng-bind-html="userData.expire_date"></span>
 											<div class="progress">
 												<div class="progress-bar" style="width: 30%"></div>
 											</div>
@@ -49,11 +49,11 @@
 										<span class="info-box-icon"><i class="ion ion-ios-clock-outline"></i></span>
 										<div class="info-box-content">
 											<span class="info-box-text">남은기간(일)</span>
-											<span class="info-box-number" ng-bind-html="G_Expire_Days">20일</span>
+											<span class="info-box-number" ng-bind-html="userData.expire_days"></span>
 											<div class="progress">
 												<div class="progress-bar" style="width: 30%"></div>
 											</div>
-											<span class="progress-description">만료일 까지 20일 남음.</span>
+											<span class="progress-description">만료일 까지 {{userData.expire_days}}일 남음.</span>
 										</div><!-- /.info-box-content -->
 									</div><!-- /.info-box -->
 								</div>
@@ -64,7 +64,7 @@
 										<span class="info-box-icon"><i class="ion ion-ios-paper-outline"></i></span>
 										<div class="info-box-content">
 											<span class="info-box-text">계산서 미수신건</span>
-											<span class="info-box-number" ng-bind-html="CNT_Tax_No_Read">20개</span>
+											<span class="info-box-number" ng-bind-html="userData.cntNotRead"></span>
 											<div class="progress">
 												<div class="progress-bar" style="width: 80%;"></div>
 											</div>
@@ -95,7 +95,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">신규 주문</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='E_NewOrder'></h1>
+											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_NewOrder'></h1>
 										</div>
 									</div>
 								</div>
@@ -107,7 +107,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">물류 처리</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='E_BsComplete'></h1>
+											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_BsComplete'></h1>
 										</div>
 									</div>
 								</div>
@@ -119,7 +119,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">송장 입력</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='E_InputMno'></h1>
+											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_InputMno'></h1>
 										</div>
 									</div>
 								</div>
@@ -131,7 +131,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">출고 처리</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='E_CgComplete'></h1>
+											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_CgComplete'></h1>
 										</div>
 									</div>
 								</div>
@@ -143,7 +143,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">송장 전송</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='E_RegistMno'></h1>
+											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_RegistMno'></h1>
 										</div>
 									</div>
 								</div>

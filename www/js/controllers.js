@@ -63,6 +63,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$ionicLoading.hide();
 			$scope.loginData = {};
 			$scope.userData = {};
+			$scope.dashBoard = {};
 
 			$ionicHistory.clearCache();
 			$ionicHistory.clearHistory();
@@ -263,10 +264,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 							}
 
 							$scope.userData.cntNotRead = data.list[0].CNT_Tax_No_Read;	//계산서 미수신건
-							$scope.userData.management_day = G_Expire_Date; //"2015년<br>8월20일";
-							$scope.cnt_user = "5 명";
-							
-							$scope.cnt_account = "20 개";
+							$scope.userData.expire_date = G_Expire_Date; //"2015년<br>8월20일";
+							$scope.userData.expire_days = G_Expire_Days;
 
 							$scope.management_bill = "330,000원	<br><small>(VAT 포함)</small>";
 							$scope.sms = "15000 개<br><small>(건당 19원)</small>";
@@ -556,6 +555,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    "width" : "100%",
 		    "height" : "100%"
 		};
+		$scope.dashBoard = {};
 		var indexList = [];
 		// 날짜
 		var d= new Date();
@@ -571,19 +571,20 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		IndexService.dashBoard('erpia_dashBoard', $scope.loginData.Admin_Code, aWeekAgo, nowday)
 		.then(function(processInfo){
-			$scope.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
-			$scope.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
-			$scope.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
-			$scope.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
-			$scope.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
+			$scope.dashBoard.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
+			$scope.dashBoard.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
+			$scope.dashBoard.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
+			$scope.dashBoard.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
+			$scope.dashBoard.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
 		},
 		function(){
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('IndexService Error', 'long', 'center');
 			else alert('IndexService Error');
 		});
-		$scope.G_Expire_Date = $rootScope.ComInfo.G_Expire_Date;
-		$scope.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
-		$scope.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
+		
+		// $scope.dashBoard.G_Expire_Date = $scope.userData.management_day;
+		// $scope.dashBoard.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
+		// $scope.dashBoard.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
 
 		statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 		.then(function(data){
