@@ -151,7 +151,7 @@ angular.module('starter.services', [])
 	}
 	var check = function(Admin_Code, loginType, ID, Input_Code){
 		var data ='';
-		if(loginType=='S'){
+		if(loginType == 'S' || loginType == 'N'){
 			data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
 			data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
 		}else if(loginType=='E'){
@@ -161,11 +161,11 @@ angular.module('starter.services', [])
 		return $http.get(url + '?' + data)
 		.success(function(response){
 			if (response.list[0].Result == '1'){
-				if(loginType == "S"){
-					location.href = "#/app/scmhome";
-				}else if(loginType == "E"){
-					location.href = "#/app/slidingtab";
-				};
+				switch(loginType){
+					case 'S': location.href = "#/app/scmhome"; break;
+					case 'E': location.href = "#/app/slidingtab"; break;
+					case 'N': location.href = "#/app/main"; break;
+				}
 			}else{
 				if(ERPiaAPI.toast == 'Y') $cordovaToast.show(response.list[0].Comment, 'long', 'center');
 				else alert(response.list[0].Comment);
@@ -179,12 +179,11 @@ angular.module('starter.services', [])
 })
 .factory('tradeDetailService', function($http, $q, ERPiaAPI) {
 	return{
-		innerHtml: function(Admin_Code, GerCode){
+		tradeList: function(Admin_Code, GerCode){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Kind=select_Trade' + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response.data);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
