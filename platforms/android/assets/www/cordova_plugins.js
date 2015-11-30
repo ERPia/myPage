@@ -24,6 +24,14 @@ module.exports = [
         "id": "cordova-plugin-x-toast.tests"
     },
     {
+        "file": "plugins/de.appplant.cordova.plugin.printer/www/printer.js",
+        "id": "de.appplant.cordova.plugin.printer.Printer",
+        "clobbers": [
+            "plugin.printer",
+            "cordova.plugins.printer"
+        ]
+    },
+    {
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "id": "org.apache.cordova.device.device",
         "clobbers": [
@@ -45,6 +53,7 @@ module.exports.metadata =
     "com.phonegap.plugins.PushPlugin": "2.5.0",
     "cordova-plugin-whitelist": "1.1.1-dev",
     "cordova-plugin-x-toast": "2.2.1",
+    "de.appplant.cordova.plugin.printer": "0.7.1",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.vibration": "0.3.13"
 }

@@ -6,16 +6,16 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services', 'chart.js'])
 
- .constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, toast:'N'
- })
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, toast:'N'
+ // })
 
 // 실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, toast:'Y'
-// })
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, toast:'Y'
+})
 
  // .constant('ERPiaAPI',{
  // 	url:'http://localhost:8100'
@@ -118,39 +118,40 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	})
 
 	.state('app.erpia_main', {
-			url : '/main',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_main/main.html',
-					controller : 'MainCtrl'
+		url : '/main',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_main/main.html',
+				controller : 'MainCtrl'
 			}
 		}
 	})
 
 	.state('app.erpia_login', {
-			url : '/login',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_login/login.html'
+		url : '/login',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_login/login.html'
 			}
 		}
 	})
   
 	.state('app.erpia_scmhome', {
-			url : '/scmhome',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_scmhome/scmhome.html'
+		url : '/scmhome',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_scmhome/scmhome.html',
+				controller : 'ScmUser_HomeCtrl'
 			}
 		}
 	})
 
 	.state('app.slidingtab', {
-			url : '/slidingtab',
-			views : {
-				'menuContent' : {
-					templateUrl : 'slidingtab/slidingTabsUsingRepeat.html',
-					controller : 'IndexCtrl'
+		url : '/slidingtab',
+		views : {
+			'menuContent' : {
+				templateUrl : 'slidingtab/slidingTabsUsingRepeat.html',
+				controller : 'IndexCtrl'
 			}
 		}
 	})
@@ -212,60 +213,60 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 	.state('app.erpia_board', {
-			url : '/board',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_board/board.html',
-					controller : 'BoardSelectCtrl'
+		url : '/board',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_board/board.html',
+				controller : 'BoardSelectCtrl'
 			}
 		}
 	})
 
 	.state('app.erpia_board-Main', {
-			url : '/board/Main',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_board/board-main.html',
-					controller : 'BoardMainCtrl'
+		url : '/board/Main',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_board/board-main.html',
+				controller : 'BoardMainCtrl'
 			}
 		}
 	})
 
 	.state('app.erpia_cs', {
-			url : '/cs',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_cs/cs.html',
-					controller : 'CsCtrl'
+		url : '/cs',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_cs/cs.html',
+				controller : 'CsCtrl'
 			}
 		}
 	})
 
 	.state('app.erpia_push', {
-			url : '/push',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_push/push.html'
+		url : '/push',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_push/push.html'
 			}
 		}
 	})
 
 	.state('app.erpia_introduce', {
-			url : '/introduce',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_introduce/erpiaIntroduce.html',
-					// controller : 'CsCtrl'
+		url : '/introduce',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_introduce/erpiaIntroduce.html',
+				// controller : 'CsCtrl'
 			}
 		}
 	})
 
 	.state('app.erpia_servicelist', {
-			url : '/servicelist',
-			views : {
-				'menuContent' : {
-					templateUrl : 'erpia_servicelist/erpiaServicelist.html',
-					// controller : 'CsCtrl'
+		url : '/servicelist',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_servicelist/erpiaServicelist.html',
+				// controller : 'CsCtrl'
 			}
 		}
 	})
@@ -359,6 +360,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			'menuContent' : {
 				templateUrl : 'ionicChart/testChart.html',
 				controller : 'chartTestCtrl'
+			}
+		}
+	})
+	////////////////////////////////sample///////////////////////////////////
+	.state('app.sample_Main', {
+		url : '/sample/Main',
+		views : {
+			'menuContent' : {
+				templateUrl : 'sample/sample_Main.html',
+				controller : 'sampleCtrl'
 			}
 		}
 	})

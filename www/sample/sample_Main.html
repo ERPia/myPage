@@ -4,7 +4,7 @@
 			<div class="tsb-icons">
 				<div class="tsb-ic-wrp">
 					<ion-scroll direction="x" class="tsb-hscroll">
-						<a ng-href="javascript:;" class="{{tab.icon}}" ng-repeat="tab in tabs" on-finish-render="test()">{{tab.title}}</a>
+						<a ng-href="javascript:;" class="{{sample.icon}}" ng-repeat="sample in samples" on-finish-render="test()">{{sample.title}}</a>
 					</ion-scroll>
 				</div>
 			</div>
@@ -14,17 +14,8 @@
 					<ion-content overf low-scroll="false">
 					<p ng-bind-html="login_alert"></p>
 						<div style="height:100%">
-							<!-- <iframe src="#/erpia_erpiahome/erpiahome" frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle"></iframe> -->
-							<!--  <iframe src="http://www.erpia.net/psm/02/html/dashboard_top.asp?gu=2&admin_code=YGNEXT#" frameborder=0 marginwidth=0 marginheight=0 scrolling=no align="left" ng-style="myStyle" height="200px"></iframe> -->
-							<!-- <img src="./img/banner_event1.jpg" width="100%"> -->
-
-
-							<!-- 컨텐츠 상단 (정보)-->
-							<!-- <link ng-href="./css/bootstrap.css" rel="stylesheet" type="text/css" /> -->
 							<link ng-href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 							<link ng-href="./css/AdminLTE.css" rel="stylesheet" type="text/css" />
-
-
 
 							<div class="row" style="letter-spacing:-1px; width:100%;">
 
@@ -49,11 +40,11 @@
 										<span class="info-box-icon"><i class="ion ion-ios-clock-outline"></i></span>
 										<div class="info-box-content">
 											<span class="info-box-text">남은기간(일)</span>
-											<span class="info-box-number" ng-bind-html="userData.expire_days"></span>
+											<span class="info-box-number">7일</span>
 											<div class="progress">
 												<div class="progress-bar" style="width: 30%"></div>
 											</div>
-											<span class="progress-description">만료일 까지 {{userData.expire_days}}일 남음.</span>
+											<span class="progress-description">만료일 까지 7일 남음.</span>
 										</div><!-- /.info-box-content -->
 									</div><!-- /.info-box -->
 								</div>
@@ -64,7 +55,7 @@
 										<span class="info-box-icon"><i class="ion ion-ios-paper-outline"></i></span>
 										<div class="info-box-content">
 											<span class="info-box-text">계산서 미수신건</span>
-											<span class="info-box-number" ng-bind-html="userData.cntNotRead"></span>
+											<span class="info-box-number">20건</span>
 											<div class="progress">
 												<div class="progress-bar" style="width: 80%;"></div>
 											</div>
@@ -82,8 +73,8 @@
 							</section>
 
 							<div style="width:100%; text-align:right; margin-top:20px">
-								<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='nowTime' ng-click="ERPiaBaseData()"></span>
-								<span class="refresh" ng-click="ERPiaBaseData()"><img src="./img/icon_toggle.png" width="30px"></span>
+								<span style="display:inline-blank; margin-top:-10px;" ng-bind-html='sampleData.now_date'></span>
+								<span class="refresh" ng-click="refresh()"><img src="./img/icon_toggle.png" width="30px"></span>
 							</div>
 
 							<!-- 컨텐츠 상단 (미처리 조회)-->
@@ -95,7 +86,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">신규 주문</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_NewOrder'></h1>
+											<h1 style="margin:0 0 10px 0;">25</h1>
 										</div>
 									</div>
 								</div>
@@ -107,7 +98,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">물류 처리</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_BsComplete'></h1>
+											<h1 style="margin:0 0 10px 0;">10</h1>
 										</div>
 									</div>
 								</div>
@@ -119,7 +110,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">송장 입력</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_InputMno'></h1>
+											<h1 style="margin:0 0 10px 0;">15</h1>
 										</div>
 									</div>
 								</div>
@@ -131,7 +122,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">출고 처리</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_CgComplete'></h1>
+											<h1 style="margin:0 0 10px 0;">20</h1>
 										</div>
 									</div>
 								</div>
@@ -143,7 +134,7 @@
 									<div class="psm-box">
 										<div class="inner" style="text-align:center;">
 											<p style="margin:10px 0 0 0; word-break:keep-all">송장 전송</p>
-											<h1 style="margin:0 0 10px 0;" ng-bind-html='dashBoard.E_RegistMno'></h1>
+											<h1 style="margin:0 0 10px 0;">35</h1>
 										</div>
 									</div>
 								</div>
