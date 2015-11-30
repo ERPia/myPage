@@ -398,6 +398,38 @@ angular.module('starter.services', [])
 		csInfo: csInfo
 	}
 })
+.factory('uuidService', function($http, $q, ERPiaAPI){
+	return{
+		getUUID : function(uuid){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'Kind=getUUID&uuid=' + uuid;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, saveUUID : function(uuid, admin_code, loginType, id, pwd, autoLogin_YN){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'Kind=saveUUID&uuid=' + uuid + '&admin_code=' + admin_code + '&loginType=' + loginType;
+			data += '&id=' + id + '&pwd=' + pwd + '&autoLogin_YN=' + autoLogin_YN;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	}
+})
 .factory('TestService', function($http, $q, ERPiaAPI){
 	var testInfo = function(Admin_Code, UserId, kind, Mode, Sl_No, GerName, GoodsName, G_OnCode, GoodsCode, GI_Code, sDate, eDate){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';

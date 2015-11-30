@@ -17,11 +17,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	, toast:'Y'
 })
 
- // .constant('ERPiaAPI',{
- // 	url:'http://localhost:8100'
- // 	, toast:'N'
- // })
-
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -331,7 +326,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/loginConfig.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_login'
 			}
 		}
 	})

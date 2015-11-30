@@ -20,18 +20,7 @@ var g_playlists = [{
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice
-	, loginService, CertifyService, pushInfoService, ERPiaAPI){
-	document.addEventListener("deviceready", function () {
-		var device = $cordovaDevice.getDevice();
-		var cordova = $cordovaDevice.getCordova();
-		var model = $cordovaDevice.getModel();
-		var platform = $cordovaDevice.getPlatform();
-		var uuid = $cordovaDevice.getUUID();
-		var version = $cordovaDevice.getVersion();
-		console.log('uuid : ', device.uuid);
-		alert('uuid : ' + device.uuid);
-	}, false);
-
+	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
 
@@ -168,187 +157,197 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 
 	// Perform the login action when the user submits the login form
-	$scope.doLogin = function() {
-		if (!$scope.loginData.Auto_Login) {
+	$scope.doLogin = function(admin_code, loginType, id, pwd, autologin_YN) {
+		console.log('autologin_YN', autologin_YN);
+		if (autologin_YN == 'Y') {
+			switch(loginType){
+				case 'E' : $scope.userType = 'ERPia'; break;
+				case 'S' : $scope.userType = 'SCM'; break;
+				case 'N' : $scope.userType = 'Normal'; break;
+			}
+			$scope.loginData.Admin_Code = admin_code;
+			$scope.loginData.UserId = id;
+			$scope.loginData.Pwd = pwd;
+		} //else{
 			//SCM 로그인
-			if ($scope.userType == 'SCM') {
-				loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
-				.then(function(comInfo){
-					if (comInfo.data.list[0].ResultCk == '1'){
-						$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
-						$scope.userData.G_Code = comInfo.data.list[0].G_Code;
-						$scope.userData.G_Sano = comInfo.data.list[0].Sano;
-						$scope.userData.GerCode = comInfo.data.list[0].G_Code;
-						$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
+		if ($scope.userType == 'SCM') {
+			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			.then(function(comInfo){
+				if (comInfo.data.list[0].ResultCk == '1'){
+					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
+					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
+					$scope.userData.GerCode = comInfo.data.list[0].G_Code;
+					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
-						$scope.loginHTML = "로그아웃";
-						$rootScope.loginState = "S";
-						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
+					$scope.loginHTML = "로그아웃";
+					$rootScope.loginState = "S";
+					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
-						$timeout(function() {
-							$scope.closeLogin();
-						}, 500);
-					}else{
-						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
-						else alert(comInfo.data.list[0].ResultMsg);
-					}	
-				},function(){
-					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('login error', 'long', 'center');
-						else alert('login error');
-				});
-			}else if ($scope.userType == 'ERPia'){
-				//ERPia 로그인
-				loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
-				.then(function(comInfo){
-					console.log('comInfo', comInfo);
-					if(comInfo.data.list[0].Result=='1'){
-						$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
+					$timeout(function() {
+						$scope.closeLogin();
+					}, 500);
+				}else{
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
+					else alert(comInfo.data.list[0].ResultMsg);
+				}	
+			},function(){
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('login error', 'long', 'center');
+					else alert('login error');
+			});
+		}else if ($scope.userType == 'ERPia'){
+			//ERPia 로그인
+			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			.then(function(comInfo){
+				console.log('comInfo', comInfo);
+				if(comInfo.data.list[0].Result=='1'){
+					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
+					
+					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
+					$scope.userData.package = comInfo.data.list[0].Pack_Name;
+					$scope.userData.cnt_user = comInfo.data.list[0].User_Count + ' 명';
+					$scope.userData.cnt_site = comInfo.data.list[0].Mall_ID_Count + ' 개';
+					
+					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN;
+
+					loginService.comInfo('erpia_ComInfo', $scope.loginData.Admin_Code)
+					.then(function(comTax){
+						var d= new Date();
+						var month = d.getMonth() + 1;
+						var day = d.getDate();
+						var data = comTax.data;
 						
-						$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
-						$scope.userData.package = comInfo.data.list[0].Pack_Name;
-						$scope.userData.cnt_user = comInfo.data.list[0].User_Count + ' 명';
-						$scope.userData.cnt_site = comInfo.data.list[0].Mall_ID_Count + ' 개';
-						
-						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN;
+						Pay_Method = data.list[0].Pay_Method;
+						Pay_State = data.list[0].Pay_State;
+						Max_Pay_YM = data.list[0].Max_Pay_YM;
+						Pay_Ex_Days = data.list[0].Pay_Ex_Days;
+						Pay_Day = data.list[0].Pay_Day;
+						Pay_Ex_Date = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
 
-						loginService.comInfo('erpia_ComInfo', $scope.loginData.Admin_Code)
-						.then(function(comTax){
-							var d= new Date();
-							var month = d.getMonth() + 1;
-							var day = d.getDate();
-							var data = comTax.data;
-							
-							Pay_Method = data.list[0].Pay_Method;
-							Pay_State = data.list[0].Pay_State;
-							Max_Pay_YM = data.list[0].Max_Pay_YM;
-							Pay_Ex_Days = data.list[0].Pay_Ex_Days;
-							Pay_Day = data.list[0].Pay_Day;
-							Pay_Ex_Date = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
-
-							if (Pay_Method != 'P')
+						if (Pay_Method != 'P')
+						{
+							if (Pay_State == 'Y')	//당월결재존재
 							{
-								if (Pay_State == 'Y')	//당월결재존재
+								if (Max_Pay_YM != '')
 								{
-									if (Max_Pay_YM != '')
+									if (Pay_Ex_Days >= 0)
 									{
-										if (Pay_Ex_Days >= 0)
-										{
-											//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("M", 1, Max_Pay_YM & "-01")) + CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1
-											Max_Pay_Y = Max_Pay_YM.split('-')[0];
-											Max_Pay_M = Max_Pay_YM.split('-')[1];
-											var d1 = new Date(Max_Pay_Y, Max_Pay_M, Pay_Day);
-											var diffD = d1 - d;
-											G_Expire_Date = d1.format("yyyy.MM.dd");
-											G_Expire_Days = Math.ceil(diffD/(24*3600*1000));
-										}else{
-											G_Expire_Days = '무제한';
-											G_Expire_Date = '무제한';
-										}
-									}
-								}else{
-									if (Pay_Ex_Days < 0)		//당월결재미존재, 초과허용무제한
-									{
+										//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("M", 1, Max_Pay_YM & "-01")) + CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1
+										Max_Pay_Y = Max_Pay_YM.split('-')[0];
+										Max_Pay_M = Max_Pay_YM.split('-')[1];
+										var d1 = new Date(Max_Pay_Y, Max_Pay_M, Pay_Day);
+										var diffD = d1 - d;
+										G_Expire_Date = d1.format("yyyy.MM.dd");
+										G_Expire_Days = Math.ceil(diffD/(24*3600*1000));
+									}else{
 										G_Expire_Days = '무제한';
 										G_Expire_Date = '무제한';
-									}else{
-										if (Last_Pay_YM == '')	//당월결재미존재, 이전결재내역미존재
-										{
-											G_Expire_Days = "0";
-											G_Expire_Date = "기간만료";
-										}else{					//당월결재미존재, 이전결재내역존재
-											Max_Pay_Y = Max_Pay_YM.split('-')[0];
-											Max_Pay_M = Max_Pay_YM.split('-')[1];
-											if (new Date(Max_Pay_Y, Max_Pay_M, Pay_Day) < d)
-											{
-												G_Expire_Days = "0"
-												G_Expire_Date = "기간만료"
-											}else{
-												//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01")))
-												//G_Expire_Date = DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01"))
-											}
-										}
 									}
 								}
 							}else{
-								G_Expire_Days = "무제한"
-								if (CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt) <= 0)
+								if (Pay_Ex_Days < 0)		//당월결재미존재, 초과허용무제한
 								{
-									G_Expire_Date = "포인트부족"
+									G_Expire_Days = '무제한';
+									G_Expire_Date = '무제한';
 								}else{
-									G_Expire_Date = CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt)
+									if (Last_Pay_YM == '')	//당월결재미존재, 이전결재내역미존재
+									{
+										G_Expire_Days = "0";
+										G_Expire_Date = "기간만료";
+									}else{					//당월결재미존재, 이전결재내역존재
+										Max_Pay_Y = Max_Pay_YM.split('-')[0];
+										Max_Pay_M = Max_Pay_YM.split('-')[1];
+										if (new Date(Max_Pay_Y, Max_Pay_M, Pay_Day) < d)
+										{
+											G_Expire_Days = "0"
+											G_Expire_Date = "기간만료"
+										}else{
+											//G_Expire_Days = DateDiff("D", Now_Date, DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01")))
+											//G_Expire_Date = DateAdd("D", CInt(Pay_Day) + CInt(Pay_Ex_Days) - 1, DateAdd("M", 1, Last_Pay_YM & "-01"))
+										}
+									}
 								}
 							}
+						}else{
+							G_Expire_Days = "무제한"
+							if (CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt) <= 0)
+							{
+								G_Expire_Date = "포인트부족"
+							}else{
+								G_Expire_Date = CLng(IO_Amt) + CLng(Point_Ex_Amt) - CLng(Point_Out_StandBy_Amt)
+							}
+						}
 
-							$scope.userData.cntNotRead = data.list[0].CNT_Tax_No_Read;	//계산서 미수신건
-							$scope.userData.expire_date = G_Expire_Date; //"2015년<br>8월20일";
-							$scope.userData.expire_days = G_Expire_Days;
+						$scope.userData.cntNotRead = data.list[0].CNT_Tax_No_Read;	//계산서 미수신건
+						$scope.userData.expire_date = G_Expire_Date; //"2015년<br>8월20일";
+						$scope.userData.expire_days = G_Expire_Days;
 
-							$scope.management_bill = "330,000원	<br><small>(VAT 포함)</small>";
-							$scope.sms = "15000 개<br><small>(건당 19원)</small>";
-							$scope.tax = "150 개<br><small>(건당 165원)</small>";
-							$scope.e_money = "30,000원<br><small>(자동이체 사용중)</small>";
-							$scope.every = "10,000 P";
-							
+						$scope.management_bill = "330,000원	<br><small>(VAT 포함)</small>";
+						$scope.sms = "15000 개<br><small>(건당 19원)</small>";
+						$scope.tax = "150 개<br><small>(건당 165원)</small>";
+						$scope.e_money = "30,000원<br><small>(자동이체 사용중)</small>";
+						$scope.every = "10,000 P";
+						
 
-							$rootScope.loginState = "E";
-							$timeout(function() {
-								$scope.closeLogin();
-							}, 500);
-						},
-						function(){
-							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
-							else alert('comTax error');
-						})
-					}else{
-						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
-						else alert(comInfo.data.list[0].Comment);
-					}
-				},function(){
-					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
-					else alert('comInfo error');
-				});
-			}else if($scope.userType == 'Normal'){
-				loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
-				.then(function(comInfo){
-					if(comInfo.data.list[0].result == '0'){ 
-						$scope.loginData.UserId = comInfo.data.list[0].G_ID;
-
-						$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
-						$scope.userData.G_Code = comInfo.data.list[0].G_Code;
-						$scope.userData.G_Sano = comInfo.data.list[0].Sano;
-						$scope.userData.GerCode = comInfo.data.list[0].G_Code;
-						$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
-
-						$scope.loginHTML = "로그아웃";
-						$rootScope.loginState = "N";
-						$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
-
+						$rootScope.loginState = "E";
 						$timeout(function() {
 							$scope.closeLogin();
 						}, 500);
-					}else{
-						if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].comment, 'long', 'center');
-						else alert(comInfo.data.list[0].comment);	
-					}
-				})
-			}else if($scope.userType == 'Guest'){
-				$rootScope.loginState = "E"
-				$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
-						
-				$scope.userData.Com_Name = 'ERPia' + '<br>(' + 'onz' + ')';
-				$scope.loginData.Admin_Code = 'ERPia';
-				$scope.loginData.UserId = 'Guest';
+					},
+					function(){
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
+						else alert('comTax error');
+					})
+				}else{
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].Comment, 'long', 'center');
+					else alert(comInfo.data.list[0].Comment);
+				}
+			},function(){
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
+				else alert('comInfo error');
+			});
+		}else if($scope.userType == 'Normal'){
+			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			.then(function(comInfo){
+				if(comInfo.data.list[0].result == '0'){ 
+					$scope.loginData.UserId = comInfo.data.list[0].G_ID;
 
-				$scope.userData.package = 'Professional';
-				$scope.userData.cnt_user = '5 명';
-				$scope.userData.cnt_site = '10 개';
+					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
+					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
+					$scope.userData.GerCode = comInfo.data.list[0].G_Code;
+					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
-				$scope.userData.cntNotRead = 10;	//계산서 미수신건
-				$scope.userData.expire_date = '2015-12-31'; //"2015년<br>8월20일";
-				$scope.userData.expire_days = 50;
-				$state.go('app.sample_Main');
-			}
+					$scope.loginHTML = "로그아웃";
+					$rootScope.loginState = "N";
+					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
+
+					$timeout(function() {
+						$scope.closeLogin();
+					}, 500);
+				}else{
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].comment, 'long', 'center');
+					else alert(comInfo.data.list[0].comment);	
+				}
+			})
+		}else if($scope.userType == 'Guest'){
+			$rootScope.loginState = "E"
+			$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
+					
+			$scope.userData.Com_Name = 'ERPia' + '<br>(' + 'onz' + ')';
+			$scope.loginData.Admin_Code = 'ERPia';
+			$scope.loginData.UserId = 'Guest';
+
+			$scope.userData.package = 'Professional';
+			$scope.userData.cnt_user = '5 명';
+			$scope.userData.cnt_site = '10 개';
+
+			$scope.userData.cntNotRead = 10;	//계산서 미수신건
+			$scope.userData.expire_date = '2015-12-31'; //"2015년<br>8월20일";
+			$scope.userData.expire_days = 50;
+			$state.go('app.sample_Main');
 		}
+		//}
 	};
 
   	$scope.loginHTML = "로그인";
@@ -392,6 +391,34 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($scope.userType == 'ERPia') $state.go('app.slidingtab');
 		else if($scope.userType == 'Guest') $state.go('app.sample_Main');
 	}
+	document.addEventListener("deviceready", function () {
+		var device = $cordovaDevice.getDevice();
+		var cordova = $cordovaDevice.getCordova();
+		var model = $cordovaDevice.getModel();
+		var platform = $cordovaDevice.getPlatform();
+		var uuid = $cordovaDevice.getUUID();
+		var version = $cordovaDevice.getVersion();
+
+		$scope.uuid = uuid;
+		console.log('uuid', uuid)
+
+		uuidService.getUUID(uuid)
+		.then(function(response){
+			if(response.list[0].result == '1'){
+				console.log('response', response);
+				var admin_code = response.list[0].admin_code;
+				var loginType = response.list[0].loginType;
+				var id = response.list[0].ID;
+				var pwd = response.list[0].pwd;
+				var autologin_YN = response.list[0].autoLogin_YN;
+				$scope.autologin_YN = autologin_YN;
+				$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
+				alert(response.list[0].uuid);
+			}else{
+				alert(response.list[0].result);
+			}
+		})
+	}, false);
 })
 
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){
@@ -469,6 +496,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(data){
 			$scope.items = data.list;
 		})
+})
+.controller('configCtrl_login', function($scope, $rootScope, uuidService){
+	console.log('autoloign', $scope.autologin_YN);
+	if($scope.autologin_YN == 'Y') $scope.autoLogin = true;
+	else $scope.autoLogin = false;
+	$scope.autoLogin_YN = function(check){
+		if(check) uuidService.saveUUID($scope.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
+		else uuidService.saveUUID($scope.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
+	}
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
