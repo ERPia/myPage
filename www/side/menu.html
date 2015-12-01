@@ -15,8 +15,8 @@
 		<div class="bar-header psm_left_top">
 			<table border="0" cellpadding="0" cellspacing="0" class="psm_left_topta">
 				<tr>
-					<td class="psm_left_toptd1"><img src="./img/erpia_logo.png" class="psm_left_img1" menu-close ng-click="lhk_test()"></td>
-					<td class="psm_left_toptd2"><a  menu-close ng-click="login()" ng-bind-html="loginHTML"></a></td>
+					<td class="psm_left_toptd1"><a menu-close ng-href="#/app/main"><img src="./img/erpia_logo.png" class="psm_left_img1"></a></td>
+					<td class="psm_left_toptd2"><a menu-close ng-click="login()" ng-bind-html="loginHTML"></a></td>
 					<td menu-close class="psm_left_toptd3"><img src="./img/icon_close.png" class="psm_left_img3"></td>
 				</tr>
 			</table>
@@ -73,7 +73,7 @@
 
 				<!-- erpia 로그인 -->
 				<div name="erpia_side" class="button-bar" ng-switch-when="E">
-					<a class="button psm_left_mediv psm_left_box1" menu-close ng-click="click_home()"><img src="./img/icon_home1.png" class="psm_left_img2"><br>HOME</a>
+					<a class="button psm_left_mediv psm_left_box1" menu-close ng-href="#/app/slidingtab"><img src="./img/icon_home1.png" class="psm_left_img2"><br>HOME</a>
 					<a class="button psm_left_mediv psm_left_box2" menu-close ng-href="#/app/board"><img src="./img/icon_board.png" class="psm_left_img2"><br>게시판</a>
 					<a class="button psm_left_mediv psm_left_box3" menu-close ng-href="#/app/push"><img src="./img/icon_push.png" class="psm_left_img2"><br>알림</a>
 				</div>
@@ -87,19 +87,15 @@
 
 				<div ng-switch-when="E">
 					<div class="naviGubun">ERPia 계정정보</div>
-
 					<a class="item item-icon-left navi-item" ng-href="#">
 						<i class="icon"><img src="./img/icon_layers.png" class="psm_left_icon"><span class="navi-item-leftText">업체코드</span><span class="navi-item-rightText" ng-bind-html="userData.Com_Name"></span></i>
 					</a>
-
 					<a class="item item-icon-left navi-item" ng-href="#">
 						<i class="icon"><img src="./img/icon_compose.png" class="psm_left_icon"><span class="navi-item-leftText">아이디</span><span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span></i>
 					</a>
-
 					<a class="item item-icon-left navi-item" ng-href="#">
 						<i class="icon"><img src="./img/icon_calendar.png" class="psm_left_icon"><span class="navi-item-leftText">월 관리비<br>결제일</span><span class="navi-item-rightText" ng-bind-html="userData.expire_date"></span></i>
 					</a>
-
 					<!-- <a class="item item-icon-left navi-item" ng-href="#">
 						<i class="icon"><img src="./img/icon_phone.png" class="psm_left_icon"><span class="navi-item-leftText">월 관리비</span><span class="navi-item-rightText" ng-bind-html="management_bill"></span></i>
 					</a>
