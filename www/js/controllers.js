@@ -23,7 +23,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
-	$scope.ion_login = "ion-log-in";
+	$scope.ion_login = "ion-power active";
 
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
@@ -58,7 +58,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$ionicLoading.show({template:'Logging out...'});
 			$rootScope.loginState = "R";
 			$scope.loginHTML = "로그인";
-			$scope.ion_login = "ion-log-in";
+			$scope.ion_login = "ion-power active";
 		}
 
 		$timeout(function(){
@@ -185,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
 					$scope.loginHTML = "로그아웃";
-					$scope.ion_login = "ion-log-out";
+					$scope.ion_login = "ion-power";
 					$rootScope.loginState = "S";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
@@ -207,7 +207,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
-					$scope.ion_login = "ion-log-out";
+					$scope.ion_login = "ion-power";
 
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
@@ -325,7 +325,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
 					$scope.loginHTML = "로그아웃";
-					$scope.ion_login = "ion-log-out";
+					$scope.ion_login = "ion-power";
 					$rootScope.loginState = "N";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
@@ -340,7 +340,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}else if($scope.userType == 'Guest'){
 			$rootScope.loginState = "E"
 			$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
-			$scope.ion_login = "ion-log-out";	
+			$scope.ion_login = "ion-power";	
 			$scope.userData.Com_Name = 'ERPia' + '<br>(' + 'onz' + ')';
 			$scope.loginData.Admin_Code = 'ERPia';
 			$scope.loginData.UserId = 'Guest';
@@ -493,7 +493,28 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
   
-.controller('configCtrl_Info', function($scope, NoticeService) {
+.controller('configCtrl_Info', function($scope, $ionicPopup, $ionicHistory, NoticeService) {
+	$scope.myGoBack = function() {
+		$ionicPopup.show({
+			title: 'View',
+			subTitle: '',
+			content: '¿Are you sure you back?',
+			buttons: [
+				{ text: 'No',
+					onTap: function(e){
+					}
+				},
+				{
+					text: 'Yes',
+					type: 'button-positive',
+					onTap: function(e) {
+					$ionicHistory.goBack();
+					}
+				},
+			]
+		})
+	};
+	
 	$scope.toggle = false;
 	NoticeService.getList()
 		.then(function(data){
@@ -696,7 +717,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	};
 })
-.controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService){
+.controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
 	$scope.ScmBaseData = function() {
 		if($rootScope.loginState == "S") {
 			// 날짜
@@ -781,9 +802,77 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 	$scope.ScmBaseData();
-	var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $scope.loginData.Admin_Code;
-	strChartUrl += '&gu=3&kind=chart5&Ger_code=' + $scope.userData.GerCode;
-	$scope.scm_chart = $sce.trustAsResourceUrl(strChartUrl);
+	//scm Chart
+	$scope.load_scm_chart = function(){
+	    AmChart_Service.scm_Chart('scm', 'scm', $scope.loginData.Admin_Code, 3, $scope.userData.G_Code)
+	    .then(function(response){
+	    	var chartData = response;
+	    	console.log('chartData', chartData);
+	    	var chart = AmCharts.makeChart("chart5", {
+			   theme: "dark",
+				type: "serial",
+				dataProvider: chartData,
+				startDuration: 1,
+				prefixesOfBigNumbers: [
+					{
+						"number": 10000,
+						"prefix": ""
+					}
+				],
+				valueAxes: [
+					{
+						id: "ValueAxis-1",
+						title: "금액",
+						titleRotation: 0,
+						usePrefixes: true
+					},
+					{
+						id: "ValueAxis-2",
+						title: "수량",
+						titleRotation: 0,
+						position: "right"
+					}
+				],
+				graphs: [{
+//					balloonText: "수량: <b>[[value]]</b>",
+					balloonText: "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> 개</span>",
+					fillAlphas: 0.9,
+					lineAlpha: 0.2,
+					title: "수량",
+					type: "column",
+					valueAxis: "ValueAxis-2",
+					valueField: "su"
+				}, {
+//					"balloonText": "금액: <b>[[value]]</b>",
+					balloonText: "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> 원</span>",
+					fillAlphas: 0.9,
+					lineAlpha: 0.2,
+					title: "금액",
+					type: "column",
+					clustered:false,
+					columnWidth:0.5,
+					valueAxis: "ValueAxis-1",
+					valueField: "value"
+				}],
+				plotAreaFillAlphas: 0.1,
+				categoryField: "name",
+				categoryAxis: {
+					gridPosition: "start",
+					autoRotateAngle : 0,
+					autoRotateCount: 1,
+				},
+				export: {
+					enabled: true
+				 },
+                legend: {
+                    align: "center",
+                    markerType: "circle",
+					balloonText : "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>"
+                }
+			});
+	    })
+	}
+	$scope.load_scm_chart();   
 })
 
 .controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){

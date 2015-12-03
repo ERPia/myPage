@@ -220,12 +220,10 @@ angular.module('starter.services', [])
 				if(typeof response.data == 'object'){
 					for(var i=0; i<response.data.list.length; i++){
 						oldContent = response.data.list[i].content;
-						console.log('oldContent', oldContent);
 						response.data.list[i].content = oldContent
 							.replace(/http:\/\/erpia2.godohosting.com\/erpia_update\/img\/notice\/phj/g, ERPiaAPI.imgUrl + '/notice/phj')
 							.replace(/&quot;/g,'')
 							.replace(/<img src=/g, '<img width=100% src=');
-						console.log('newContent', response.data.list[i].content);
 					}
 					return response.data;
 				}else{
@@ -471,6 +469,25 @@ angular.module('starter.services', [])
 			})
 		}
 	};
+})
+.factory('AmChart_Service', function($http, $q, ERPiaAPI){
+	return{
+		scm_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu,Ger_code){
+		var url = ERPiaAPI.url + '/JSon_Proc_graph.asp';
+		var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu + '&Ger_code=' + Ger_code;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('testChart', typeof response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	}
 })
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
