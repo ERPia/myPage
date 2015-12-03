@@ -11,7 +11,7 @@
 							<font>{{item.inDate}}</font><br/>{{item.subject}}
 						</li>
 					</ui>
-					<div class="lhkNoticeContent" ng-show="toggle_{{item.key_id}}" ng-animate="'box'" ng-bind-html="item.content"></div>
+					<pre class="lhkNoticeContent" style="font-family: sans-serif;" ng-show="toggle_{{item.key_id}}" ng-animate="'box'" ng-bind-html="item.content"></pre>
 				</ion-item>
 			</ion-list>
 		</body>

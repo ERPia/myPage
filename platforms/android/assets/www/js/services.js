@@ -211,12 +211,23 @@ angular.module('starter.services', [])
 })
 .factory('NoticeService', function($http, $q, ERPiaAPI){
 	return{
+		//http://erpia2.godohosting.com/erpia_update/img
 		getList: function(){
 		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 		var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
 		return $http.get(url + '?' + data)
 			.then(function(response){
 				if(typeof response.data == 'object'){
+					for(var i=0; i<response.data.list.length; i++){
+						oldContent = response.data.list[i].content;
+						console.log('oldContent', oldContent);
+						response.data.list[i].content = oldContent
+							// .replace(/http:\/\/erpia2.godohosting.com\/erpia_update\/img\/notice\/phj/g, 'erpia_update/img/notice/phj')
+							.replace(/http:\/\/erpia2.godohosting.com\/erpia_update\/img\/notice\/phj/g, ERPiaAPI.imgUrl + '/notice/phj')
+							.replace(/&quot;/g,'')
+							.replace(/<img src=/g, '<img width=100% src=');
+						console.log('newContent', response.data.list[i].content);
+					}
 					return response.data;
 				}else{
 					return $q.reject(response.data);

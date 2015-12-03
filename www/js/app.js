@@ -8,12 +8,14 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
  .constant('ERPiaAPI',{
  	url:'http://localhost:8100/include'
+ 	, imgUrl:'http://localhost:8100/erpia_update/img'
  	, toast:'N'
  })
 
 // 실제 사용시
 // .constant('ERPiaAPI',{
 // 	url:'http://www.erpia.net/include'
+// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
 // 	, toast:'Y'
 // })
 
@@ -336,25 +338,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'tab/tabs.html'				 
-			}
-		}
-	})
-	////////////////////////////////chart///////////////////////////////////
-	.state('app.chart', {
-		url : '/chart/barAndLineMix',
-		views : {
-			'menuContent' : {
-				templateUrl : 'ionicChart/chartTest.html',
-				controller : 'chartCtrl'
-			}
-		}
-	})
-	.state('app.chartTest', {
-		url : '/chart/chartTest',
-		views : {
-			'menuContent' : {
-				templateUrl : 'ionicChart/testChart.html',
-				controller : 'chartTestCtrl'
 			}
 		}
 	})

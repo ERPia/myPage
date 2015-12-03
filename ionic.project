@@ -6,5 +6,9 @@
       "path":"/include",
       "proxyUrl":"http://www.erpia.net/include"
     }
+    ,{
+      "path":"/erpia_update/img",
+      "proxyUrl":"http://erpia2.godohosting.com/erpia_update/img"	
+    }
   ]
 }

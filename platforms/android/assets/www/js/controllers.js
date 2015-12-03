@@ -19,10 +19,11 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
+	$scope.ion_login = "ion-log-in";
 
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
@@ -57,6 +58,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$ionicLoading.show({template:'Logging out...'});
 			$rootScope.loginState = "R";
 			$scope.loginHTML = "로그인";
+			$scope.ion_login = "ion-log-in";
 		}
 
 		$timeout(function(){
@@ -87,7 +89,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}else if($rootScope.loginState == 'N'){
 				$state.go("app.erpia_main");
 			}else if($scope.userType == 'Guest'){
-				$state.go('app.sample_Main');
+				$location.href
+				//$state.go('app.sample_Main');
 			}
 		}
 		else if($rootScope.loginState != "R") {
@@ -135,10 +138,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.selectType = function(userType){
 		console.log('userType', userType);
 		switch(userType){
-			case 'ERPia': $rootScope.loginMenu = 'User'; $scope.userType = 'ERPia'; break;
-			case 'SCM': $rootScope.loginMenu = 'User'; $scope.userType = 'SCM'; break;
-			case 'Normal': $rootScope.loginMenu = 'User'; $scope.userType = 'Normal'; break;
-			case 'Guest': $rootScope.loginMenu = 'User'; $scope.userType = 'Guest'; 
+			case 'ERPia': $rootScope.loginMenu = 'User'; $scope.userType = 'ERPia'; $scope.footer_menu = 'U'; break;
+			case 'SCM': $rootScope.loginMenu = 'User'; $scope.userType = 'SCM'; $scope.footer_menu = 'U'; break;
+			case 'Normal': $rootScope.loginMenu = 'User'; $scope.userType = 'Normal'; $scope.footer_menu = 'U'; break;
+			case 'Guest': $rootScope.loginMenu = 'User'; $scope.userType = 'Guest'; $scope.footer_menu = 'G';
 				$scope.loginModal.hide(); 
 				$scope.doLogin(); 
 			break;
@@ -148,10 +151,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// Open the login modal
 	$scope.login = function() {
 		$rootScope.loginMenu = 'selectUser';
-		if($rootScope.loginState == "R"){
+		if($rootScope.loginState == 'R'){
 			$scope.loginModal.show();
 			$scope.init('login');
 		}else{
+			$scope.footer_menu = 'G';
 			$scope.init('logout');
 		};
 	};
@@ -161,9 +165,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('autologin_YN', autologin_YN);
 		if (autologin_YN == 'Y') {
 			switch(loginType){
-				case 'E' : $scope.userType = 'ERPia'; break;
-				case 'S' : $scope.userType = 'SCM'; break;
-				case 'N' : $scope.userType = 'Normal'; break;
+				case 'E' : $scope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'S' : $scope.userType = 'SCM'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'N' : $scope.userType = 'Normal'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
 			}
 			$scope.loginData.Admin_Code = admin_code;
 			$scope.loginData.UserId = id;
@@ -181,6 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
 					$scope.loginHTML = "로그아웃";
+					$scope.ion_login = "ion-log-out";
 					$rootScope.loginState = "S";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
@@ -202,7 +207,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
-					
+					$scope.ion_login = "ion-log-out";
+
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
 					$scope.userData.cnt_user = comInfo.data.list[0].User_Count + ' 명';
@@ -319,6 +325,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.userData.cntNotRead = comInfo.data.list[0].cntNotRead;
 
 					$scope.loginHTML = "로그아웃";
+					$scope.ion_login = "ion-log-out";
 					$rootScope.loginState = "N";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
@@ -333,7 +340,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}else if($scope.userType == 'Guest'){
 			$rootScope.loginState = "E"
 			$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
-					
+			$scope.ion_login = "ion-log-out";	
 			$scope.userData.Com_Name = 'ERPia' + '<br>(' + 'onz' + ')';
 			$scope.loginData.Admin_Code = 'ERPia';
 			$scope.loginData.UserId = 'Guest';
@@ -377,10 +384,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.certificationModal.hide();
 		})
 	}
-	$scope.lhk_test = function(){
-		// $state.go("app.chartTest");
-		//$scope.check_sano_Modal.show();
-	}
 	$scope.showCheckSano = function(){
 		$scope.check_sano_Modal.show();
 	}
@@ -388,8 +391,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$rootScope.loginMenu = "selectUser";
 	}
 	$scope.click_home = function(){
-		if($scope.userType == 'ERPia') $state.go('app.slidingtab');
-		else if($scope.userType == 'Guest') $state.go('app.sample_Main');
+		if($scope.userType == 'ERPia') location.href = '#/slidingtab'; //$state.go('app.slidingtab');
+		else if($scope.userType == 'Guest') location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
 	document.addEventListener("deviceready", function () {
 		var device = $cordovaDevice.getDevice();

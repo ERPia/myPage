@@ -165,9 +165,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('autologin_YN', autologin_YN);
 		if (autologin_YN == 'Y') {
 			switch(loginType){
-				case 'E' : $scope.userType = 'ERPia'; break;
-				case 'S' : $scope.userType = 'SCM'; break;
-				case 'N' : $scope.userType = 'Normal'; break;
+				case 'E' : $scope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'S' : $scope.userType = 'SCM'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'N' : $scope.userType = 'Normal'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
 			}
 			$scope.loginData.Admin_Code = admin_code;
 			$scope.loginData.UserId = id;
@@ -383,13 +383,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(response){
 			$scope.certificationModal.hide();
 		})
-	}
-	$scope.goERPiaMain = function(){
-		$ionicHistory.nextViewOptions({
-			disableBack: true
-		});
-		$state.go("app.erpia_main");
-		//$scope.check_sano_Modal.show();
 	}
 	$scope.showCheckSano = function(){
 		$scope.check_sano_Modal.show();

@@ -10,9 +10,11 @@
   <content src="index.html"/>
   <access origin="*"/>
   <access origin="http://www.erpia.net"/>
+  <access origin="http://erpia2.godohosting.com/"/>
   <access origin="tel:*" launch-external="yes"/>
   <allow-intent href="tel:*"/>
   <allow-intent href="*://*www.erpia.net/*"/>
+  <allow-intent href="*://*erpia2.godohosting.com/*"/>
   <allow-intent href="https://code.ionicframework.com/*"/>
   <allow-navigation href="http://*/*"/>
   <allow-navigation href="https://*/*"/>
