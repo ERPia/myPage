@@ -59,6 +59,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$rootScope.loginState = "R";
 			$scope.loginHTML = "로그인";
 			$scope.ion_login = "ion-power active";
+			$scope.icon_home = "";
+		}else{
+			$scope.icon_home = "ion-home";
 		}
 
 		$timeout(function(){
@@ -88,7 +91,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		        // $state.go("app.slidingtab");
 			}else if($rootScope.loginState == 'N'){
 				$state.go("app.erpia_main");
-			}else if($scope.userType == 'Guest'){
+			}else if($rootScope.userType == 'Guest'){
 				$location.href
 				//$state.go('app.sample_Main');
 			}
@@ -138,10 +141,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.selectType = function(userType){
 		console.log('userType', userType);
 		switch(userType){
-			case 'ERPia': $rootScope.loginMenu = 'User'; $scope.userType = 'ERPia'; $scope.footer_menu = 'U'; break;
-			case 'SCM': $rootScope.loginMenu = 'User'; $scope.userType = 'SCM'; $scope.footer_menu = 'U'; break;
-			case 'Normal': $rootScope.loginMenu = 'User'; $scope.userType = 'Normal'; $scope.footer_menu = 'U'; break;
-			case 'Guest': $rootScope.loginMenu = 'User'; $scope.userType = 'Guest'; $scope.footer_menu = 'G';
+			case 'ERPia': $rootScope.loginMenu = 'User'; $rootScope.userType = 'ERPia'; $scope.footer_menu = 'U'; break;
+			case 'SCM': $rootScope.loginMenu = 'User'; $rootScope.userType = 'SCM'; $scope.footer_menu = 'U'; break;
+			case 'Normal': $rootScope.loginMenu = 'User'; $rootScope.userType = 'Normal'; $scope.footer_menu = 'U'; break;
+			case 'Guest': $rootScope.loginMenu = 'User'; $rootScope.userType = 'Guest'; $scope.footer_menu = 'G';
 				$scope.loginModal.hide(); 
 				$scope.doLogin(); 
 			break;
@@ -165,16 +168,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('autologin_YN', autologin_YN);
 		if (autologin_YN == 'Y') {
 			switch(loginType){
-				case 'E' : $scope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
-				case 'S' : $scope.userType = 'SCM'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
-				case 'N' : $scope.userType = 'Normal'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'E' : $rootScope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'S' : $rootScope.userType = 'SCM'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
+				case 'N' : $rootScope.userType = 'Normal'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
 			}
 			$scope.loginData.Admin_Code = admin_code;
 			$scope.loginData.UserId = id;
 			$scope.loginData.Pwd = pwd;
 		} //else{
 			//SCM 로그인
-		if ($scope.userType == 'SCM') {
+		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
 			.then(function(comInfo){
 				if (comInfo.data.list[0].ResultCk == '1'){
@@ -200,7 +203,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('login error', 'long', 'center');
 					else alert('login error');
 			});
-		}else if ($scope.userType == 'ERPia'){
+		}else if ($rootScope.userType == 'ERPia'){
 			//ERPia 로그인
 			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
 			.then(function(comInfo){
@@ -312,7 +315,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comInfo error', 'long', 'center');
 				else alert('comInfo error');
 			});
-		}else if($scope.userType == 'Normal'){
+		}else if($rootScope.userType == 'Normal'){
 			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
 			.then(function(comInfo){
 				if(comInfo.data.list[0].result == '0'){ 
@@ -337,7 +340,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					else alert(comInfo.data.list[0].comment);	
 				}
 			})
-		}else if($scope.userType == 'Guest'){
+		}else if($rootScope.userType == 'Guest'){
 			$rootScope.loginState = "E"
 			$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
 			$scope.ion_login = "ion-power";	
@@ -391,8 +394,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$rootScope.loginMenu = "selectUser";
 	}
 	$scope.click_home = function(){
-		if($scope.userType == 'ERPia') location.href = '#/slidingtab'; //$state.go('app.slidingtab');
-		else if($scope.userType == 'Guest') location.href = '#/sample/Main'; //$state.go('app.sample_Main');
+		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
+		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
 	document.addEventListener("deviceready", function () {
 		var device = $cordovaDevice.getDevice();
@@ -530,7 +533,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else uuidService.saveUUID($scope.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
 	}
 })
-.controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
+.controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 		.then(function(data){
 			$scope.items = data;
@@ -566,8 +569,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
 })
-.controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
-	$scope.settingsList = [];
+.controller('configCtrl_alarm', function($scope, $rootScope, $location, alarmService){
+	 $scope.settingsList = [];
 	var cntList = 6;
 	$scope.fnAlarm = function(isCheckAll){
 		if(isCheckAll == 'checkAll'){

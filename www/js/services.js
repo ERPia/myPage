@@ -489,6 +489,20 @@ angular.module('starter.services', [])
 		}
 	}
 })
+.factory('publicFunction', function($ionicHistory){
+	return{
+		goHome: function(userType){
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			switch(userType){
+				case 'ERPia': location.href = '#/app/slidingtab'; break;
+				case 'SCM' : location.href = '#/app/scmhome'; break;
+				case 'Geust': location.href = '#/app/sample/Main'; break;
+			}
+		}
+	}
+})
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 
