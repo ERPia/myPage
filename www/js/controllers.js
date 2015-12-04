@@ -676,7 +676,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('IndexService Error', 'long', 'center');
 		else alert('IndexService Error');
 	});
-	
+
 	// $scope.dashBoard.G_Expire_Date = $scope.userData.management_day;
 	// $scope.dashBoard.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
 	// $scope.dashBoard.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
