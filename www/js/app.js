@@ -353,12 +353,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 	////////////////////////////////sample///////////////////////////////////
-	.state('app.sample_Main', {
-		url : '/sample/Main',
+	.state('app.chart_test', {
+		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'sample/sample_Main.html',
-				controller : 'sampleCtrl'
+				templateUrl : 'test/chart_test.html',
+				controller : 'testCtrl'
 			}
 		}
 	})

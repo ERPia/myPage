@@ -1,35 +1,14 @@
 //최근갱신일 버튼 눌렀을 경우
-function refresh(kind, gu, admin_code,Ger_code)
+function refresh(kind, gu, admin_code,Ger_code, ERPiaApi_url)
 {
-	switch (kind)
-	{
-		case "chart1" : kind = "meaip_jem"; break;
-		case "chart2" : kind = "meachul_jem"; break;
-		case "chart3" : kind = "brand_top5"; break;
-		case "chart4" : kind = "meachul_top5"; break;
-		case "chart5" : kind = "scm"; break;
-		case "chart6" : kind = "Meachul_ik"; break;
-		case "chart7" : kind = "meachul_7"; break;
-		case "chart8" : kind = "meaip_7"; break;
-		case "chart9" : kind = "beasonga"; break;
-		case "chart10" : kind = "beasong_gu"; break;
-		case "chart11" : kind = "meachul_onoff"; break;
-		case "chart12" : kind = "banpum"; break;
-		case "chart13" : kind = "banpum_top5"; break;
-		case "chart14" : kind = "meachul_cs"; break;
-		case "chart15" : kind = "meaip_commgoods"; break;
-		case "chart16" : kind = "JeGo_TurnOver"; break;
-		case "chart17" : kind = "beasongb"; break;
-		default : kind = ""; break;
-
-	}
-	AmCharts.loadJSON("http://www.erpia.net/include/graph_DataUpdate.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu +"&Ger_code="+ Ger_code, "refresh");
+	console.log(kind)
+	AmCharts.loadJSON(ERPiaApi_url + "/graph_DataUpdate.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu +"&Ger_code="+ Ger_code, "refresh");
 	makeCharts(kind, gu, admin_code,Ger_code);
 }
 
 
 // 처음 로딩 할때
-function renewalDay(kind, gu, admin_code, Ger_code)  
+function renewalDay(kind, gu, admin_code, Ger_code, ERPiaApi_url)  
 {
 	//로딩중처리
 	//document.getElementById("loading").innerHTML = "로딩중....";
@@ -38,32 +17,32 @@ function renewalDay(kind, gu, admin_code, Ger_code)
 
 	$("#loading").css("display","block");
 
-	switch (kind)
-	{
-		case "chart1" : kind = "meaip_jem"; break;
-		case "chart2" : kind = "meachul_jem"; break;
-		case "chart3" : kind = "brand_top5"; break;
-		case "chart4" : kind = "meachul_top5"; break;
-		case "chart5" : kind = "scm"; break;
-		case "chart6" : kind = "Meachul_ik"; break;
-		case "chart7" : kind = "meachul_7"; break;
-		case "chart8" : kind = "meaip_7"; break;
-		case "chart9" : kind = "beasonga"; break;
-		case "chart10" : kind = "beasong_gu"; break;
-		case "chart11" : kind = "meachul_onoff"; break;
-		case "chart12" : kind = "banpum"; break;
-		case "chart13" : kind = "banpum_top5"; break;
-		case "chart14" : kind = "meachul_cs"; break;
-		case "chart15" : kind = "meaip_commgoods"; break;
-		case "chart16" : kind = "JeGo_TurnOver"; break;
-		case "chart17" : kind = "beasongb"; break;
-		default : kind = ""; break;
-	}
-	AmCharts.loadJSON("http://www.erpia.net/include/renewalDay.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu +"&Ger_code="+ Ger_code, "refresh"); //최근갱신일 로딩		
+	// switch (kind)
+	// {
+	// 	case "chart1" : kind = "meaip_jem"; break;
+	// 	case "chart2" : kind = "meachul_jem"; break;
+	// 	case "chart3" : kind = "brand_top5"; break;
+	// 	case "chart4" : kind = "meachul_top5"; break;
+	// 	case "chart5" : kind = "scm"; break;
+	// 	case "chart6" : kind = "Meachul_ik"; break;
+	// 	case "chart7" : kind = "meachul_7"; break;
+	// 	case "chart8" : kind = "meaip_7"; break;
+	// 	case "chart9" : kind = "beasonga"; break;
+	// 	case "chart10" : kind = "beasong_gu"; break;
+	// 	case "chart11" : kind = "meachul_onoff"; break;
+	// 	case "chart12" : kind = "banpum"; break;
+	// 	case "chart13" : kind = "banpum_top5"; break;
+	// 	case "chart14" : kind = "meachul_cs"; break;
+	// 	case "chart15" : kind = "meaip_commgoods"; break;
+	// 	case "chart16" : kind = "JeGo_TurnOver"; break;
+	// 	case "chart17" : kind = "beasongb"; break;
+	// 	default : kind = ""; break;
+	// }
+	AmCharts.loadJSON(ERPiaApi_url + "/renewalDay.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu +"&Ger_code="+ Ger_code, "refresh"); //최근갱신일 로딩		
 }
 
 
-function makeCharts(kind, gu, admin_code,Ger_code){
+function makeCharts(kind, gu, admin_code,Ger_code, ERPiaApi_url){
 	$("#gu_hidden").val(gu);
 
 	$("#btnW").removeClass();
@@ -75,29 +54,29 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 	$("#btnY").addClass("btn bg-purple btn-xs");
 
 	$('#gridBody').hide();		//gigler추가
-	$("#<%=kind%>").show();
+	$("#" + kind).show();
 
 	if (gu == 1) {
 		$("#btnW").removeClass();
 		$("#btnW").addClass("btn btn-warning btn-xs");
-		sDate = '<%=DateAdd("D", -7, Date())%>';
-		eDate = '<%=Date()%>';
+		sDate = '2015-12-01';
+		eDate = '2015-12-08';
 		temp ="주간 - "
 	} else if (gu == 2) {
 		$("#btnM").removeClass();
 		$("#btnM").addClass("btn btn-warning btn-xs");
-		sDate = '<%=DateAdd("M", -1, Date())%>';
-		eDate = '<%=Date()%>';
+		sDate = '2015-11-01';
+		eDate = '2015-12-01';
 		temp = "월간 - "
 	} else if (gu == 3) {
 		$("#btnY").removeClass();
 		$("#btnY").addClass("btn btn-warning btn-xs");
-		sDate = '<%=DateAdd("YYYY", -1, Date())%>';
-		eDate = '<%=Date()%>';
+		sDate = '2014-12-01';
+		eDate = '2015-12-01';
 		temp ="년간 - "
 	}
 
-	if (kind == "chart2" || kind == "chart1" || kind == "chart9" || kind == "chart11" || kind == "chart14")
+	if (kind == "meachul_jem" || kind == "meaip_jem" || kind == "beasonga" || kind == "meachul_onoff" || kind == "meachul_cs")
 	{
 		AmCharts.addInitHandler(function(kind) {
 		  if (kind.legend === undefined || kind.legend.truncateLabels === undefined)
@@ -124,7 +103,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 	switch (kind)
 	{
-		case "chart1" :			//거래처별 매입 점유율
+		case "meaip_jem" :			//거래처별 매입 점유율
 
 			var chart = AmCharts.makeChart("chart1", {
 				"type": "pie",
@@ -150,12 +129,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				],
 				"balloon": {},
 				"labelRadius": 1,
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meaip_jem&value_kind=meaip_jem&admin_code=" + admin_code + "&swm_gu=" + gu)
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meaip_jem&value_kind=meaip_jem&admin_code=" + admin_code + "&swm_gu=" + gu)
 			});
 
 			break;
 
-		case "chart2" :			//사이트별 매출 점유율
+		case "meachul_jem" :			//사이트별 매출 점유율
 			var chart = AmCharts.makeChart("chart2", {
 				"type": "pie",
  			    "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<span style='font-size:20px;'>[[value]]</span> ([[percents]]%)</span>",
@@ -180,12 +159,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				],
 				"balloon": {},
 				"labelRadius": 1,
-				 "dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meachul_jem&value_kind=meachul_jem&admin_code=" + admin_code + "&swm_gu=" + gu)
+				 "dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meachul_jem&value_kind=meachul_jem&admin_code=" + admin_code + "&swm_gu=" + gu)
 			});
 
 			break;
 
-		case "chart3" :			//브랜드별 매출 Top 5
+		case "brand_top5" :			//브랜드별 매출 Top 5
 
 			var chart = AmCharts.makeChart("chart3", {
 				"type": "serial",
@@ -276,7 +255,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				],
 				"balloon": {},
 				"titles": [],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=brand_top5&value_kind=brand_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=brand_top5&value_kind=brand_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"export": {
 					"enabled": true
 				 },
@@ -296,7 +275,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart4" :			//상품별 매출 TOP5
+		case "meachul_top5" :			//상품별 매출 TOP5
 
 			var chart = AmCharts.makeChart("chart4", {
 				"type": "serial",
@@ -382,7 +361,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 						"position": "bottom"
 					}
 				],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meachul_top5&value_kind=meachul_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meachul_top5&value_kind=meachul_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"export": {
 					"enabled": true
 				 },
@@ -402,13 +381,13 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart5" :		//scm
+		case "scm" :		//scm
 
 			var chart = AmCharts.makeChart("chart5", {
 			   "theme": "dark",
 				"type": "serial",
 				//"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=scm&value_kind=scm&admin_code=" + admin_code + "&swm_gu=" + gu + "&Ger_code=" + Ger_code),
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?Kind=scm&Value_Kind=scm&admin_code=" + admin_code + "&swm_gu=" + gu + "&Ger_code=" + Ger_code),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?Kind=scm&Value_Kind=scm&admin_code=" + admin_code + "&swm_gu=" + gu + "&Ger_code=" + Ger_code),
 				"startDuration": 1,
 				"prefixesOfBigNumbers": [
 					{
@@ -470,12 +449,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart6" :			//월간 매출 이익
+		case "Meachul_ik" :			//월간 매출 이익
 
 			var chart = AmCharts.makeChart("chart6", {
 			   "theme": "dark",
 				"type": "serial",
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=Meachul_ik&value_kind=Meachul_ik&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=Meachul_ik&value_kind=Meachul_ik&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"startDuration": 1,
 				"marginTop": 30,
 				"prefixesOfBigNumbers": [
@@ -615,7 +594,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart7" :			//매출 실적 추이
+		case "meachul_7" :			//매출 실적 추이
 
 			var chart = AmCharts.makeChart("chart7", {
 			  "type": "serial",
@@ -637,7 +616,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 								"prefix": ""
 							}
 				],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meachul_7&value_kind=meachul_7&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meachul_7&value_kind=meachul_7&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"valueAxes": [
 						{
 							"id": "ValueAxis-1",
@@ -726,12 +705,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart8" :			//매입현황
+		case "meaip_7" :			//매입현황
 
 			var chart = AmCharts.makeChart("chart8", {
 			   "theme": "dark",
 				"type": "serial",
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meaip_7&value_kind=meaip_7&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meaip_7&value_kind=meaip_7&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"startDuration": 1,
 				"marginTop": 30,
 				"prefixesOfBigNumbers": [
@@ -820,11 +799,11 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart9" :			//금일 출고 현황
+		case "beasonga" :			//금일 출고 현황
 			var chart = AmCharts.makeChart("chart9", {
 			  "type": "pie",
 			  "theme": "dark",
-			  "dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=beasonga&value_kind=beasonga&admin_code=" + admin_code + "&swm_gu=" + gu),
+			  "dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=beasonga&value_kind=beasonga&admin_code=" + admin_code + "&swm_gu=" + gu),
 			  "titleField": "name",
 			  "valueField": "value",
 			  "labelRadius": 5,
@@ -847,7 +826,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart10" :			//택배사별 통계 
+		case "beasong_gu" :			//택배사별 통계 
 
 			var chart = AmCharts.makeChart("chart10", {
 					"type": "serial",
@@ -859,7 +838,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 						"useGraphSettings": true,
 						"markerSize": 10
 					},
-					"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=beasong_gu&value_kind=beasong_gu&admin_code=" + admin_code + "&swm_gu=" + gu),
+					"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=beasong_gu&value_kind=beasong_gu&admin_code=" + admin_code + "&swm_gu=" + gu),
 					"valueAxes": [{
 						"stackType": "regular",
 						"axisAlpha": 0.3,
@@ -918,7 +897,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart11" :			//온 오프라인 비교 매출
+		case "meachul_onoff" :			//온 오프라인 비교 매출
 
 			var chart = AmCharts.makeChart("chart11", {
 				"type": "pie",
@@ -946,12 +925,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				"balloon": {},
 				"titles": [],
 				"labelRadius": 1,
-				 dataProvider: AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meachul_onoff&value_kind=meachul_onoff&admin_code=" + admin_code + "&swm_gu=" + gu)
+				 dataProvider: AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meachul_onoff&value_kind=meachul_onoff&admin_code=" + admin_code + "&swm_gu=" + gu)
 			});
 
 			break;
 
-		case "chart12" :			//매출 반품 현황
+		case "banpum" :			//매출 반품 현황
 
 			var chart = AmCharts.makeChart("chart12", {
 				 "type": "serial",
@@ -971,7 +950,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 								"prefix": ""
 							}
 				],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=banpum&value_kind=banpum&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=banpum&value_kind=banpum&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"valueAxes": [
 						{
 							"id": "ValueAxis-1",
@@ -1059,7 +1038,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart13" :			//상품별 매출 반품 건수/ 반품액 Top 5
+		case "banpum_top5" :			//상품별 매출 반품 건수/ 반품액 Top 5
 
 			var chart = AmCharts.makeChart("chart13", {
 				"type": "serial",
@@ -1149,7 +1128,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				],
 				"balloon": {},
 				"titles": [],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=banpum_top5&value_kind=banpum_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=banpum_top5&value_kind=banpum_top5&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"export": {
 					"enabled": true
 				 },
@@ -1169,7 +1148,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart14" :			//CS 컴플레인 현황
+		case "meachul_cs" :			//CS 컴플레인 현황
 
 			var chart = AmCharts.makeChart("chart14", {
 				"type": "pie",
@@ -1197,12 +1176,12 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				"balloon": {},
 				"titles": [],
 				"labelRadius": 5,
-				 dataProvider: AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meachul_cs&value_kind=meachul_cs&admin_code=" + admin_code + "&swm_gu=" + gu)
+				 dataProvider: AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meachul_cs&value_kind=meachul_cs&admin_code=" + admin_code + "&swm_gu=" + gu)
 			});
 
 			break;
 
-		case "chart15" :			//상품별 매입건수/매입액 top5
+		case "meaip_commgoods" :			//상품별 매입건수/매입액 top5
 
 			var chart = AmCharts.makeChart("chart15", {
 				"type": "serial",
@@ -1292,7 +1271,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				],
 				"balloon": {},
 				"titles": [],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=meaip_commgoods&value_kind=meaip_commgoods&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meaip_commgoods&value_kind=meaip_commgoods&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"export": {
 					"enabled": true
 				 },
@@ -1312,7 +1291,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart16" :			//재고회전율top5
+		case "JeGo_TurnOver" :			//재고회전율top5
 
 			var chart = AmCharts.makeChart("chart16", {
 				"type": "serial",
@@ -1378,7 +1357,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 				"allLabels": [],
 				"balloon": {},
 				"titles": [],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=JeGo_TurnOver&value_kind=JeGo_TurnOver&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=JeGo_TurnOver&value_kind=JeGo_TurnOver&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"export": {
 					"enabled": true
 				 }
@@ -1386,7 +1365,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 
 			break;
 
-		case "chart17" :			//출고현황
+		case "beasongb" :			//출고현황
 
 			var chart = AmCharts.makeChart("chart17", {
 			  "type": "serial",
@@ -1406,7 +1385,7 @@ function makeCharts(kind, gu, admin_code,Ger_code){
 								"prefix": ""
 							}
 				],
-				"dataProvider": AmCharts.loadJSON("http://www.erpia.net/include/JSon_Proc_graph.asp?kind=beasongb&value_kind=beasongb&admin_code=" + admin_code + "&swm_gu=" + gu),
+				"dataProvider": AmCharts.loadJSON(ERPiaApi_url + "/JSon_Proc_graph.asp?kind=beasongb&value_kind=beasongb&admin_code=" + admin_code + "&swm_gu=" + gu),
 				"valueAxes": [
 						{
 							"id": "ValueAxis-1",

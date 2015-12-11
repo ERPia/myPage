@@ -86,13 +86,7 @@ body {
 .psm_left_06 {vertical-align:top; padding-top:10px;}
 .psm_left_07 {vertical-align:top; padding-top:11px;}
 .psm_left_08 {display:inline-block;}
-
-
-
 /* psm Ãß°¡ end */
-
-
-
 
 
 @media (max-width: 767px) {
@@ -2936,9 +2930,9 @@ table.text-center th {
  * Component: modal
  * ----------------
  */
-/*.modal {
-  background: rgba(0, 0, 0, 0.3);
-}*/
+.modal {
+  /*background: rgba(0, 0, 0, 0.3);*/
+}
 .modal-content {
   border-radius: 0;
   -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.125) !important;
