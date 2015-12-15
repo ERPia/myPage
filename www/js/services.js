@@ -471,13 +471,12 @@ angular.module('starter.services', [])
 	};
 })
 .factory('AmChart_Service', function($http, $q, ERPiaAPI){
+	var url = ERPiaAPI.url + '/JSon_Proc_graph.asp';
 	return{
-		scm_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu,Ger_code){
-		var url = ERPiaAPI.url + '/JSon_Proc_graph.asp';
-		var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu + '&Ger_code=' + Ger_code;
-		return $http.get(url + '?' + data)
+		scm_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu, Ger_code){
+			var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu + '&Ger_code=' + Ger_code;
+			return $http.get(url + '?' + data)
 			.then(function(response){
-				console.log('testChart', typeof response);
 				if(typeof response == 'object'){
 					return response.data;
 				}else{
@@ -486,8 +485,21 @@ angular.module('starter.services', [])
 			}, function(response){
 				return $q.reject(response.data);
 			})
+		}, erpia_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu){
+			var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			}) 
 		}
 	}
+	ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meaip_jem&value_kind=meaip_jem&admin_code=" + admin_code + "&swm_gu=" + gu
 })
 .factory('publicFunction', function($ionicHistory){
 	return{
