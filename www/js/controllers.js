@@ -70,9 +70,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.userData = {};
 			$scope.dashBoard = {};
 
-			$ionicHistory.clearCache();
-			$ionicHistory.clearHistory();
-			$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+			$rootScope.goto_with_clearHistory('#/app/main');
+			// $ionicHistory.clearCache();
+			// $ionicHistory.clearHistory();
+			// $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 			$state.go('app.erpia_main');
 		}, 500);
 	}
@@ -92,8 +93,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}else if($rootScope.loginState == 'N'){
 				$state.go("app.erpia_main");
 			}else if($rootScope.userType == 'Guest'){
-				$location.href
-				//$state.go('app.sample_Main');
+				$location.href = '#/app/slidingtab';
 			}
 		}
 		else if($rootScope.loginState != "R") {
@@ -1407,9 +1407,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$.each(response[0], function(index, jsonData){
 					tmpAlert += jsonData;
 				});
-				console.log('response', response);
+				console.log('htmlTable : ', response);
 				//상세보기 그리드 생성
-				insertRow(response, $scope.kind);
+				insertRow(response, $scope.kind);    
 			}
 			console.log(request.responseText);
 			return eval(request.responseText);

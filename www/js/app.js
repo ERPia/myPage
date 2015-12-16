@@ -99,6 +99,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			case 'Geust': location.href = '#/app/sample/Main'; break;
 		} 
 	}
+	$rootScope.goto_with_clearHistory = function(goto_Href){
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		location.href = goto_Href; 
+	}
 })
 
 // 	// if none of the above states are matched, use this as the fallback
