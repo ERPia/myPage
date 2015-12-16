@@ -494,24 +494,28 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
   
 .controller('configCtrl_Info', function($scope, $ionicPopup, $ionicHistory, NoticeService) {
 	$scope.myGoBack = function() {
-		$ionicPopup.show({
-			title: 'View',
-			subTitle: '',
-			content: '¿Are you sure you back?',
-			buttons: [
-				{ text: 'No',
-					onTap: function(e){
-					}
-				},
-				{
-					text: 'Yes',
-					type: 'button-positive',
-					onTap: function(e) {
-					$ionicHistory.goBack();
-					}
-				},
-			]
-		})
+		// $ionicPopup.show({
+		// 	title: 'View',
+		// 	subTitle: '',
+		// 	content: '¿Are you sure you back?',
+		// 	buttons: [
+		// 		{ text: 'No',
+		// 			onTap: function(e){
+		// 			}
+		// 		},
+		// 		{
+		// 			text: 'Yes',
+		// 			type: 'button-positive',
+		// 			onTap: function(e) {
+		// 			$ionicHistory.goBack();
+		// 			}
+		// 		},
+		// 	]
+		// })
+		$ionicHistory.goBack();
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 	};
 	
 	$scope.toggle = false;

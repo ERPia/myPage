@@ -89,10 +89,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		});
 	});
 	$rootScope.goHome = function(userType){
-		console.log(userType)
-		$ionicHistory.nextViewOptions({
-			disableBack: true
-		});
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		switch($rootScope.userType){
 			case 'ERPia': location.href = '#/app/slidingtab'; break;
 			case 'SCM' : location.href = '#/app/scmhome'; break;
@@ -105,6 +104,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		location.href = goto_Href; 
 	}
+	$rootScope.goBack_witd_clearHistory = function() {
+		$ionicHistory.goBack();
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+	};
 })
 
 // 	// if none of the above states are matched, use this as the fallback
