@@ -102,13 +102,14 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-		location.href = goto_Href; 
+		location.href = goto_Href;
 	}
 	$rootScope.goBack_witd_clearHistory = function() {
-		$ionicHistory.goBack();
+		// $ionicHistory.goBack();
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		location.href = '#app/config';
 	};
 })
 
