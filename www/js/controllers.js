@@ -417,7 +417,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$rootScope.deviceInfo.uuid = $cordovaDevice.getUUID();
 		$rootScope.deviceInfo.version = $cordovaDevice.getVersion();
 		
-		alert('uuid : ', $rootScope.deviceInfo.uuid)
+		alert('uuid : ', $cordovaDevice.getUUID())
 		uuidService.getUUID($rootScope.deviceInfo.uuid)
 		.then(function(response){
 			if(response.list[0].result == '1'){
@@ -534,12 +534,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		})
 })
 .controller('configCtrl_login', function($scope, $rootScope, uuidService){
-	console.log('autoloign', $scope.autologin_YN);
-	if($scope.autologin_YN == 'Y') $scope.autoLogin = true;
+	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
 	else $scope.autoLogin = false;
 	$scope.autoLogin_YN = function(check){
-		if(check) uuidService.saveUUID($scope.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
-		else uuidService.saveUUID($scope.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
+		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
+		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
 	}
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
