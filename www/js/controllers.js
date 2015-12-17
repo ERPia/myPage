@@ -88,8 +88,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			if($rootScope.loginState == "S"){
 		        $state.go("app.erpia_scmhome");
 			}else if($rootScope.loginState == "E"){
-				$state.go("app.erpia_main");
-		        // $state.go("app.slidingtab");
+				//$state.go("app.erpia_main");
+		        $state.go("app.slidingtab");
 			}else if($rootScope.loginState == 'N'){
 				$state.go("app.erpia_main");
 			}else if($rootScope.userType == 'Guest'){
