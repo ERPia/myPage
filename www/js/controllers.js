@@ -413,7 +413,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		uuidService.getUUID(uuid)
 		.then(function(response){
 			if(response.list[0].result == '1'){
-				alert('response' + response);
 				var admin_code = response.list[0].admin_code;
 				var loginType = response.list[0].loginType;
 				var id = response.list[0].ID;
@@ -421,7 +420,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				var autologin_YN = response.list[0].autoLogin_YN;
 				$scope.autologin_YN = autologin_YN;
 				$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
-
+				alert('autologin_YN : ' + autologin_YN);
 				if(autologin_YN == 'Y'){
 					uuidService.saveUUID(uuid, admin_code, loginType, id, pwd, autoLogin_YN)
 					.then(function(response){
