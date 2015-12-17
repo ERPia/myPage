@@ -92,9 +92,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		        $state.go("app.slidingtab");
 			}else if($rootScope.loginState == 'N'){
 				$state.go("app.erpia_main");
-			}else if($rootScope.userType == 'Guest'){
-				$location.href = '#/app/slidingtab';
 			}
+			// else if($rootScope.userType == 'Guest'){
+			// 	$location.href = '#/app/slidingtab';
+			// }
 		}
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show();
@@ -165,6 +166,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function(admin_code, loginType, id, pwd, autologin_YN) {
+
 		if (autologin_YN == 'Y') {
 			switch(loginType){
 				case 'E' : $rootScope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
@@ -419,6 +421,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				var autologin_YN = response.list[0].autoLogin_YN;
 				$scope.autologin_YN = autologin_YN;
 				$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
+
+				if($scope.autologin_YN == 'Y'){
+					uuidService.saveUUID(uuid, admin_code, loginType, id, pwd, autoLogin_YN)
+					.then(function(response){
+						console.log('saveUUID', response);
+					})
+				}
 			}
 		})
 	}, false);
