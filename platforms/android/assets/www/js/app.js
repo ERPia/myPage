@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	, toast:'Y'
 })
 
-.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -88,6 +88,34 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		    //디바이스 토큰 값 받는곳
 		});
 	});
+	$rootScope.goHome = function(userType){
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		switch($rootScope.userType){
+			case 'ERPia': location.href = '#/app/slidingtab'; break;
+			case 'SCM' : location.href = '#/app/scmhome'; break;
+			case 'Geust': location.href = '#/app/sample/Main'; break;
+		} 
+	}
+	$rootScope.goto_with_clearHistory = function(goto_Href){
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		location.href = goto_Href;
+	}
+	$rootScope.goto_with_bachButton = function(goto_Href){
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		location.href = goto_Href;	
+	}
+	$rootScope.goBack_witd_clearHistory = function() {
+		// $ionicHistory.goBack();
+		$ionicHistory.clearCache();
+		$ionicHistory.clearHistory();
+		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		location.href = '#app/config';
+	};
 })
 
 // 	// if none of the above states are matched, use this as the fallback
@@ -342,12 +370,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 	////////////////////////////////sample///////////////////////////////////
-	.state('app.sample_Main', {
-		url : '/sample/Main',
+	.state('app.chart_test', {
+		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'sample/sample_Main.html',
-				controller : 'sampleCtrl'
+				templateUrl : 'test/chart_test.html',
+				controller : 'testCtrl'
 			}
 		}
 	})
