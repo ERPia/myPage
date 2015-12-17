@@ -408,32 +408,28 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
-	if($rootScope.autologin_YN){
-		alert('uuid : ', $rootScope.uuid);
-		$scope.doLogin($rootScope.Admin_Code, $rootScope.loginType, $rootScope.User_Id, $rootScope.User_PW, $rootScope.autologin_YN);	
-	} 
-	// document.addEventListener("deviceready", function () {
-	// 	var device = $cordovaDevice.getDevice();
-	// 	var cordova = $cordovaDevice.getCordova();
-	// 	var model = $cordovaDevice.getModel();
-	// 	var platform = $cordovaDevice.getPlatform();
-	// 	var uuid = $cordovaDevice.getUUID();
-	// 	var version = $cordovaDevice.getVersion();
-	// 	$scope.uuid = uuid;
-	// 	uuidService.getUUID(uuid)
-	// 	.then(function(response){
-	// 		if(response.list[0].result == '1'){
-	// 			var admin_code = response.list[0].admin_code;
-	// 			var loginType = response.list[0].loginType;
-	// 			var id = response.list[0].ID;
-	// 			var pwd = response.list[0].pwd;
-	// 			var autologin_YN = response.list[0].autoLogin_YN;
-	// 			$scope.autologin_YN = autologin_YN;
-	// 			$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
+	document.addEventListener("deviceready", function () {
+		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
+		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
+		$rootScope.deviceInfo.model = $cordovaDevice.getModel();
+		$rootScope.deviceInfo.platform = $cordovaDevice.getPlatform();
+		$rootScope.deviceInfo.uuid = $cordovaDevice.getUUID();
+		$rootScope.deviceInfo.version = $cordovaDevice.getVersion();
+		
+		alert('uuid : ', $rootScope.deviceInfo.uuid)
+		uuidService.getUUID($rootScope.deviceInfo.uuid)
+		.then(function(response){
+			if(response.list[0].result == '1'){
+				$scope.loginData.Admin_Code = response.list[0].admin_code;
+				$scope.loginData.loginType = response.list[0].loginType;
+				$scope.loginData.User_Id = response.list[0].ID;
+				$scope.loginData.User_PW = response.list[0].pwd;
+				$scope.loginData.autologin_YN = response.list[0].autoLogin_YN;
 
-	// 		}
-	// 	})
-	// }, false);
+				$scope.doLogin($scope.loginData.Admin_Code, $scope.loginData.loginType, $scope.loginData.User_Id, $scope.loginData.User_PW, $scope.loginData.autologin_YN);
+			}
+		})
+	}, false);
 })
 
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){
