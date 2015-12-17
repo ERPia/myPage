@@ -23,8 +23,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
+	$rootScope.deviceInfo = {};
+	
 	$scope.ion_login = "ion-power active";
-
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
 	$scope.SMSData = {};
