@@ -166,7 +166,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function(admin_code, loginType, id, pwd, autologin_YN) {
-
 		if (autologin_YN == 'Y') {
 			switch(loginType){
 				case 'E' : $rootScope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
@@ -176,8 +175,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.loginData.Admin_Code = admin_code;
 			$scope.loginData.UserId = id;
 			$scope.loginData.Pwd = pwd;
-		} //else{
-			//SCM 로그인
+		}
+		// console.log('autoLogin : ', $rootScope.autologin_YN);
+		// if($rootScope.autologin_YN) {
+		// 	var userType = '';
+		// 	switch($rootScope.userType){
+		// 		case 'ERPia': userType ='E'; break;
+		// 		case 'SCM': userType = 'S'; break;
+		// 		case 'Normal': userType = 'N'; break;
+		// 	}
+		// 	uuidService.saveUUID(uuid, $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
+		// }
+		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
 			.then(function(comInfo){
@@ -399,37 +408,32 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
-	document.addEventListener("deviceready", function () {
-		var device = $cordovaDevice.getDevice();
-		var cordova = $cordovaDevice.getCordova();
-		var model = $cordovaDevice.getModel();
-		var platform = $cordovaDevice.getPlatform();
-		var uuid = $cordovaDevice.getUUID();
-		var version = $cordovaDevice.getVersion();
+	if($rootScope.autologin_YN){
+		alert('uuid : ', $rootScope.uuid);
+		$scope.doLogin($rootScope.Admin_Code, $rootScope.loginType, $rootScope.User_Id, $rootScope.User_PW, $rootScope.autologin_YN);	
+	} 
+	// document.addEventListener("deviceready", function () {
+	// 	var device = $cordovaDevice.getDevice();
+	// 	var cordova = $cordovaDevice.getCordova();
+	// 	var model = $cordovaDevice.getModel();
+	// 	var platform = $cordovaDevice.getPlatform();
+	// 	var uuid = $cordovaDevice.getUUID();
+	// 	var version = $cordovaDevice.getVersion();
+	// 	$scope.uuid = uuid;
+	// 	uuidService.getUUID(uuid)
+	// 	.then(function(response){
+	// 		if(response.list[0].result == '1'){
+	// 			var admin_code = response.list[0].admin_code;
+	// 			var loginType = response.list[0].loginType;
+	// 			var id = response.list[0].ID;
+	// 			var pwd = response.list[0].pwd;
+	// 			var autologin_YN = response.list[0].autoLogin_YN;
+	// 			$scope.autologin_YN = autologin_YN;
+	// 			$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
 
-		$scope.uuid = uuid;
-		alert('UUID : ' + uuid);
-
-		uuidService.getUUID(uuid)
-		.then(function(response){
-			if(response.list[0].result == '1'){
-				var admin_code = response.list[0].admin_code;
-				var loginType = response.list[0].loginType;
-				var id = response.list[0].ID;
-				var pwd = response.list[0].pwd;
-				var autologin_YN = response.list[0].autoLogin_YN;
-				$scope.autologin_YN = autologin_YN;
-				$scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
-				alert('autologin_YN : ' + autologin_YN);
-				if(autologin_YN == 'Y'){
-					uuidService.saveUUID(uuid, admin_code, loginType, id, pwd, autoLogin_YN)
-					.then(function(response){
-						alert('saveUUID : ' + response);
-					})
-				}
-			}
-		})
-	}, false);
+	// 		}
+	// 	})
+	// }, false);
 })
 
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){

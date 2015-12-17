@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	, toast:'Y'
 })
 
-.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory, $cordovaDevice) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -116,6 +116,26 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		location.href = '#app/config';
 	};
+	document.addEventListener("deviceready", function () {
+		var device = $cordovaDevice.getDevice();
+		var cordova = $cordovaDevice.getCordova();
+		var model = $cordovaDevice.getModel();
+		var platform = $cordovaDevice.getPlatform();
+		var version = $cordovaDevice.getVersion();
+		$rootScope.uuid = $cordovaDevice.getUUID();
+
+		uuidService.getUUID($rootScope.uuid)
+		.then(function(response){
+			if(response.list[0].result == '1'){
+				$rootScope.Admin_Code = response.list[0].admin_code;
+				$rootScope.loginType = response.list[0].loginType;
+				$rootScope.User_Id = response.list[0].ID;
+				$rootScope.User_PW = response.list[0].pwd;
+				$rootScope.autologin_YN = response.list[0].autoLogin_YN;
+				// $scope.doLogin(admin_code, loginType, id, pwd, autologin_YN);
+			}
+		})
+	}, false);
 })
 
 // 	// if none of the above states are matched, use this as the fallback
