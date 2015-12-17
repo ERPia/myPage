@@ -176,16 +176,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.loginData.Admin_Code = admin_code;
 			$scope.loginData.UserId = id;
 			$scope.loginData.Pwd = pwd;
+		}else{
+			switch($rootScope.userType){
+				case 'ERPia': userType ='E'; break;
+				case 'SCM': userType = 'S'; break;
+				case 'Normal': userType = 'N'; break;
+			}
+			uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y');
 		}
 		// console.log('autoLogin : ', $rootScope.autologin_YN);
 		// if($rootScope.autologin_YN) {
 		// 	var userType = '';
-		// 	switch($rootScope.userType){
-		// 		case 'ERPia': userType ='E'; break;
-		// 		case 'SCM': userType = 'S'; break;
-		// 		case 'Normal': userType = 'N'; break;
-		// 	}
-		// 	uuidService.saveUUID(uuid, $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
+			
 		// }
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
@@ -417,7 +419,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$rootScope.deviceInfo.uuid = $cordovaDevice.getUUID();
 		$rootScope.deviceInfo.version = $cordovaDevice.getVersion();
 		
-		alert('uuid : ', $cordovaDevice.getUUID())
 		uuidService.getUUID($rootScope.deviceInfo.uuid)
 		.then(function(response){
 			if(response.list[0].result == '1'){
@@ -629,13 +630,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.check_alarm = function(check){
 		if(check) {
-			rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|'; //7^T^|8^T^|';
+			rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|';
 			alarmService.save('save_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
 			$scope.fnAlarm('checkAll');
 		}
 		else{
 			$scope.settingsList = [];
-			rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|'; //7^F^|8^F^|';
+			rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|';
 			alarmService.save('save_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
 		}
 		angular.forEach($scope.settingsList, function(item){
