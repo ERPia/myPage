@@ -182,7 +182,22 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'SCM': userType = 'S'; break;
 				case 'Normal': userType = 'N'; break;
 			}
-			uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y');
+			if(ERPiaAPI.toast == 'Y'){
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
+			}else{
+				switch($rootScope.userType){
+					case 'SCM':
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = '111';
+						$scope.loginData.Pwd = '111';
+					break;
+					case 'ERPia':
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = 'lhk';
+						$scope.loginData.Pwd = 'alsdud0125!';
+					break;
+				}
+			}
 		}
 		// console.log('autoLogin : ', $rootScope.autologin_YN);
 		// if($rootScope.autologin_YN) {
@@ -1149,457 +1164,430 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		})
 })
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
-		var request = null;
-		$scope.gu = 1;
-		function deleteRow()
-		{
-			var tbGrid = $("table[name=tbGrid]");
-			console.log(tbGrid);
-			var tRow = "";
-			if (tbGrid.length > 0)
+	var request = null;
+	var indexList = [];
+	$scope.gu = 1;
+	function commaChange(Num)
+	{
+		fl="" 
+		Num = new String(Num) 
+		temp="" 
+		co=3 
+		num_len=Num.length 
+		while (num_len>0)
+		{ 
+			num_len=num_len-co 
+			if(num_len<0)
 			{
-				for (a=0; a<tbGrid.length; a++)
-				{
-					tbGrid.remove(); 
-				}
-			}
-		}
-		function commaChange(Num)
-		{
-			fl="" 
-			Num = new String(Num) 
-			temp="" 
-			co=3 
-			num_len=Num.length 
-			while (num_len>0)
-			{ 
-				num_len=num_len-co 
-				if(num_len<0)
-				{
-					co=num_len+co;
-					num_len=0
-				} 
-				temp=","+Num.substr(num_len,co)+temp 
+				co=num_len+co;
+				num_len=0
 			} 
-			rResult =  fl+temp.substr(1);
-			return rResult;
+			temp=","+Num.substr(num_len,co)+temp 
+		} 
+		rResult =  fl+temp.substr(1);
+		return rResult;
+	}
+	function insertRow(data, kind)
+	{
+		var strHtml = "";
+		var strSubject = "";
+		var strSubgu="";
+		
+		switch($('input[name=gu_hidden]').val()){
+			case "1": strSubgu = " (주간)"; break;
+			case "2": strSubgu = " (월간)"; break;
+			case "3": strSubgu = " (년간)"; break;
 		}
-		function insertRow(data, kind)
+		switch (kind)
 		{
-			var strHtml = "";
-			var strSubject = "";
-			var strSubgu="";
-			
-			switch($('input[name=gu_hidden]').val()){
-				case "1": strSubgu = " (주간)"; break;
-				case "2": strSubgu = " (월간)"; break;
-				case "3": strSubgu = " (년간)"; break;
-			}
-			console.log('kind_name : ', kind);
+			case "meaip_jem" :
+				strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>금액</th></tr>";
+				strSubject = "거래처별 매입 점유율 TOP 10" + strSubgu;
+				break;
+			case "meachul_jem" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>사이트명</th><th style='color:white'>매출액</th></tr>";
+				strSubject = "사이트별 매출 점유율"  + strSubgu ;
+				break;
+			case "brand_top5" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>브랜드명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "브랜드별 매출 TOP 5" + strSubgu;
+				break;
+			case "meachul_top5" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "상품별 매출 TOP 5" + strSubgu;
+				break;
+			case "scm" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>구분</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "SCM " + strSubgu;
+				break;
+			case "Meachul_ik" :
+				strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>공급이익</th><th style='color:white'>매출이익</th><th style='color:white'>공급이익률</th><th style='color:white'>매출이익률</th></tr>";
+				strSubject = "매출 이익 증감률" + strSubgu;
+				break;
+			case "meachul_7" :
+				strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "매출 실적 추이" + strSubgu;
+				break;
+			case "meaip_7" :
+				strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>금액</th><th style='color:white'>수량</th></tr>";
+				strSubject = "매입 현황" + strSubgu;
+				break;
+			case "beasonga" :
+				strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>건수</th></tr>";
+				strSubject = "최근 배송 현황" + strSubgu;
+				break;
+			case "beasong_gu" :
+				strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>선불</th><th style='color:white'>착불</th><th style='color:white'>신용</th></tr>";
+				strSubject = "택배사별 구분 건수 통계" + strSubgu;
+				break;
+			case "meachul_onoff" :
+				strHtml = "<tr><th style='color:white'>구분</th><th style='color:white'>금액</th></tr>";
+				strSubject = "온오프라인 비교 매출" + strSubgu;
+				break;
+			case "banpum" :
+				strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "매출 반품 현황" + strSubgu;
+				break;
+			case "banpum_top5" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "상품별 매출 반품 건수/반품액 TOP5" + strSubgu;
+				break;
+			case "meachul_cs" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>구분</th><th style='color:white'>건수</th></tr>";
+				strSubject = "CS 컴플레인 현황" + strSubgu;
+				break;
+			case "meaip_commgoods" :
+				strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
+				strSubject = "상품별 매입건수/매입액 TOP5" + strSubgu;
+				break;
+			case "JeGo_TurnOver" :
+				strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>선불</th><th style='color:white'>착불</th><th style='color:white'>신용</th></tr>";
+				strSubject = "재고 회전률 TOP5" + strSubgu;
+				break;
+			case "beasongb" :
+				strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>날짜</th><th style='color:white'>건수</th></tr>";
+				strSubject = "배송 현황" + strSubgu;
+				break;
+		}
+
+		$("div[name=gridSubject]").html("<font style='color:#000000; font-weight:bold;'>" + strSubject + "</font>");
+
+		for (i=0, len=data.length; i<len; i++)
+		{
 			switch (kind)
 			{
-				case "meaip_jem" :
-					strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>금액</th></tr>";
-					strSubject = "거래처별 매입 점유율 TOP 10" + strSubgu;
+				case  "meaip_jem": case "meachul_jem" :
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml +  (i+1) ;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
-				case "meachul_jem" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>사이트명</th><th style='color:white'>매출액</th></tr>";
-					strSubject = "사이트별 매출 점유율"  + strSubgu ;
-					break;
-				case "brand_top5" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>브랜드명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "브랜드별 매출 TOP 5" + strSubgu;
-					break;
-				case "meachul_top5" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "상품별 매출 TOP 5" + strSubgu;
-					break;
-				case "scm" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>구분</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "SCM " + strSubgu;
+				case "meachul_top5" : case "brand_top5" : case "banpum_top5" : case "meaip_7" : case "meaip_commgoods" : case "scm" :
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml +  (i+1) ;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].su);
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
 				case "Meachul_ik" :
-					strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>공급이익</th><th style='color:white'>매출이익</th><th style='color:white'>공급이익률</th><th style='color:white'>매출이익률</th></tr>";
-					strSubject = "매출 이익 증감률" + strSubgu;
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml +  commaChange(data[i].value1) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value2) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].su1) + " %";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].su2) + " %";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
-				case "meachul_7" :
-					strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "매출 실적 추이" + strSubgu;
-					break;
-				case "meaip_7" :
-					strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>금액</th><th style='color:white'>수량</th></tr>";
-					strSubject = "매입 현황" + strSubgu;
-					break;
-				case "beasonga" :
-					strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>건수</th></tr>";
-					strSubject = "최근 배송 현황" + strSubgu;
-					break;
-				case "beasong_gu" :
-					strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>선불</th><th style='color:white'>착불</th><th style='color:white'>신용</th></tr>";
-					strSubject = "택배사별 구분 건수 통계" + strSubgu;
+				case "meachul_cs": case "beasonga": case "beasongb" :
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml +  (i+1) ;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
 				case "meachul_onoff" :
-					strHtml = "<tr><th style='color:white'>구분</th><th style='color:white'>금액</th></tr>";
-					strSubject = "온오프라인 비교 매출" + strSubgu;
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
-				case "banpum" :
-					strHtml = "<tr><th style='color:white'>날짜</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "매출 반품 현황" + strSubgu;
+				case  "meachul_7": case "banpum": case "meaip_7":
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].su);
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
-				case "banpum_top5" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "상품별 매출 반품 건수/반품액 TOP5" + strSubgu;
+				case  "beasong_gu" :
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml +  (i+1) ;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + data[i].name;
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value1) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + commaChange(data[i].value2) + " ??";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
-				case "meachul_cs" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>구분</th><th style='color:white'>건수</th></tr>";
-					strSubject = "CS 컴플레인 현황" + strSubgu;
-					break;
-				case "meaip_commgoods" :
-					strHtml = "<tr><th style='color:white'>번호</th><th style='color:white'>상품명</th><th style='color:white'>수량</th><th style='color:white'>금액</th></tr>";
-					strSubject = "상품별 매입건수/매입액 TOP5" + strSubgu;
-					break;
-				case "JeGo_TurnOver" :
-					strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>구분</th><th style='color:white'>선불</th><th style='color:white'>착불</th><th style='color:white'>신용</th></tr>";
-					strSubject = "재고 회전률 TOP5" + strSubgu;
-					break;
-				case "beasongb" :
-					strHtml = "<tr><th style='color:white'>순번</th><th style='color:white'>날짜</th><th style='color:white'>건수</th></tr>";
-					strSubject = "배송 현황" + strSubgu;
+				default :
+					strHtml = strHtml + "<tr>";
+					strHtml = strHtml + "<td>";
+					strHtml = strHtml + "</td>";
+					strHtml = strHtml + "</tr>";
 					break;
 			}
-
-			$("div[name=gridSubject]").html("<font style='color:#000000; font-weight:bold;'>" + strSubject + "</font>");
-
-			for (i=0, len=data.length; i<len; i++)
-			{
-				switch (kind)
-				{
-					case  "meaip_jem": case "meachul_jem" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml +  (i+1) ;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case "meachul_top5" : case "brand_top5" : case "banpum_top5" : case "meaip_7" : case "meaip_commgoods" : case "scm" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml +  (i+1) ;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].su);
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case "Meachul_ik" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml +  commaChange(data[i].value1) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value2) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].su1) + " %";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].su2) + " %";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case "meachul_cs": case "beasonga": case "beasongb" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml +  (i+1) ;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case "meachul_onoff" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case  "meachul_7": case "banpum": case "meaip_7":
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].su);
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					case  "beasong_gu" :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml +  (i+1) ;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + data[i].name;
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value1) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + commaChange(data[i].value2) + " ??";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-					default :
-						strHtml = strHtml + "<tr>";
-						strHtml = strHtml + "<td>";
-						strHtml = strHtml + "</td>";
-						strHtml = strHtml + "</tr>";
-						break;
-				}
-			}
-			console.log('strHtml', strHtml);
-			$("table[name=tbGrid]").append(strHtml);
 		}
-		AmCharts.loadJSON = function(url, load_kind) {	
-			console.log(url);
+		console.log('strHtml', strHtml);
+		$("table[name=tbGrid]").html(strHtml);
+	}
+	AmCharts.loadJSON = function(url, load_kind) {	
+		// create the request
+		if (window.XMLHttpRequest) {
+		// IE7+, Firefox, Chrome, Opera, Safari
+		var request = new XMLHttpRequest();
+		} else {
+		// code for IE6, IE5
+		var request = new ActiveXObject('Microsoft.XMLHTTP');
+		}
 
-			// create the request
-			if (window.XMLHttpRequest) {
-			// IE7+, Firefox, Chrome, Opera, Safari
-			var request = new XMLHttpRequest();
-			} else {
-			// code for IE6, IE5
-			var request = new ActiveXObject('Microsoft.XMLHTTP');
-			}
+		request.onreadystatechange = callback;
 
-			request.onreadystatechange = callback;
+		request.open('POST', url, false);
+		request.send();
+		var tmpAlert = "최근갱신일 : ";
+		if (load_kind == "refresh")
+		{
+			response = eval(request.responseText);	  
+			$.each(response[0], function(index, jsonData){
+						tmpAlert += jsonData;
+			});
+			$("h3[name=refresh_date]").html(tmpAlert);
+		}
+		if (load_kind == "gridInfo")
+		{
+			response = eval(request.responseText);
+			$.each(response[0], function(index, jsonData){
+				tmpAlert += jsonData;
+			});
+			//상세보기 그리드 생성
+			insertRow(response, $scope.kind);    
+		}
+		return eval(request.responseText);
 
-			request.open('POST', url, false);
-			request.send();
-			var tmpAlert = "최근갱신일 : ";
-			if (load_kind == "refresh")
+		function callback()
+		{
+			if(request.readyState == 1 || request.readyState == 2 || request.readyState == 3)
 			{
-				response = eval(request.responseText);	  
-				$.each(response[0], function(index, jsonData){
-							tmpAlert += jsonData;
-				});
-				$("h3[name=refresh_date]").html(tmpAlert);
+				$("#loading").css("display","block");
 			}
-			if (load_kind == "gridInfo")
+			else if(request.readyState == 4)
 			{
-				deleteRow();
-				response = eval(request.responseText);
-				$.each(response[0], function(index, jsonData){
-					tmpAlert += jsonData;
-				});
-				console.log('htmlTable : ', response);
-				//상세보기 그리드 생성
-				insertRow(response, $scope.kind);    
-			}
-			console.log(request.responseText);
-			return eval(request.responseText);
-
-			function callback()
-			{
-				if(request.readyState == 1 || request.readyState == 2 || request.readyState == 3)
+				 if (request.status == 200)
 				{
-					$("#loading").css("display","block");
+					$("#loading").css("display","none");
 				}
-				else if(request.readyState == 4)
-				{
-					 if (request.status == 200)
-					{
-						$("#loading").css("display","none");
-					}
-				}
-			};
+			}
 		};
-		statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
-		.then(function(data){
-			$scope.tabs = data;
-		})
+	};
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
+	.then(function(data){
+		$scope.tabs = data;
+	})
+	$scope.kind= '', $scope.htmlCode= '';
 
-		// $scope.onSlideMove = function(data) {
-		// 	if(indexList.indexOf(data.index) < 0){
-		// 		indexList.push(data.index);
-		// 	}
-		// };
-		$scope.kind= '', $scope.htmlCode= '';
+	$scope.onSlideMove = function(data) {
+		console.log('selectedIdx', $scope.userData.selectedIdx);
+		console.log("You have selected " + data.index + " tab");
+		var titles =  [{Idx:0, title:"홈"}
+			, {Idx:1, title:"meaip_jem"}
+			, {Idx:2, title:"meachul_jem"}
+			, {Idx:3, title:"brand_top5"}
+			, {Idx:4, title:"meachul_top5"}
+			, {Idx:5, title:"Meachul_ik"}
+			, {Idx:6, title:"meachul_7"}
+			, {Idx:7, title:"meaip_7"}
+			, {Idx:8, title:"beasonga"}
+			, {Idx:9, title:"beasong_gu"}
+			, {Idx:10, title:"meachul_onoff"}
+			, {Idx:11, title:"banpum"}
+			, {Idx:12, title:"banpum_top5"}
+			, {Idx:13, title:"meachul_cs"}
+			, {Idx:14, title:"meaip_commgoods"}
+			, {Idx:15, title:"JeGo_TurnOver"}
+			, {Idx:16, title:"beasongb"}];
 
-		$scope.onSlideMove = function(data) {
-			console.log("You have selected " + data.index + " tab");
-			var titles =  [{Idx:0, title:"홈"}
-				, {Idx:1, title:"meaip_jem"}
-				, {Idx:2, title:"meachul_jem"}
-				, {Idx:3, title:"brand_top5"}
-				, {Idx:4, title:"meachul_top5"}
-				, {Idx:5, title:"Meachul_ik"}
-				, {Idx:6, title:"meachul_7"}
-				, {Idx:7, title:"meaip_7"}
-				, {Idx:8, title:"beasonga"}
-				, {Idx:9, title:"beasong_gu"}
-				, {Idx:10, title:"meachul_onoff"}
-				, {Idx:11, title:"banpum"}
-				, {Idx:12, title:"banpum_top5"}
-				, {Idx:13, title:"meachul_cs"}
-				, {Idx:14, title:"meaip_commgoods"}
-				, {Idx:15, title:"JeGo_TurnOver"}
-				, {Idx:16, title:"beasongb"}];
-
-			if (data.index > 0){
-				statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, data.index)
-				.then(function(response){
-					console.log('response', response);
-					$rootScope.kind = 'chart' + response.list[0].idx;
-					switch (response.list[0].idx)
-					{
-						case '1' : $scope.kind = titles[1].title; break;
-						case '2' : $scope.kind = titles[2].title; break;
-						case '3' : $scope.kind = titles[3].title; break;
-						case '4' : $scope.kind = titles[4].title; break;
-						case '6' : $scope.kind = titles[5].title; break;
-						case '7' : $scope.kind = titles[6].title; break;
-						case '8' : $scope.kind = titles[7].title; break;
-						case '9' : $scope.kind = titles[8].title; break;
-						case '10' : $scope.kind = titles[9].title; break;
-						case '11' : $scope.kind = titles[10].title; break;
-						case '12' : $scope.kind = titles[11].title; break;
-						case '13' : $scope.kind = titles[12].title; break;
-						case '14' : $scope.kind = titles[13].title; break;
-						case '15' : $scope.kind = titles[14].title; break;
-						case '16' : $scope.kind = titles[15].title; break;
-						case '17' : $scope.kind = titles[16].title; break;
-					}
-					if($scope.kind === "meachul_onoff"){
-						$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
-								'<div class="direct-chat">'+
-									'<div class="box-header">'+
-										'<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
-										'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
-										'<div class="pull-right">'+
-										'<button name="btnGrid" class="btn btn-box-tool" ><i class="fa fa-bars"></i></button>'+
-										'</div>'+
-										'<div name="loading">로딩중...</div>'+
-										'<div name="loading2"></div>'+
+		if (data.index > 0){
+			statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, data.index)
+			.then(function(response){
+				console.log('response', response);
+				$rootScope.kind = 'chart' + response.list[0].idx;
+				switch (response.list[0].idx)
+				{
+					case '1' : $scope.kind = titles[1].title; break;
+					case '2' : $scope.kind = titles[2].title; break;
+					case '3' : $scope.kind = titles[3].title; break;
+					case '4' : $scope.kind = titles[4].title; break;
+					case '6' : $scope.kind = titles[5].title; break;
+					case '7' : $scope.kind = titles[6].title; break;
+					case '8' : $scope.kind = titles[7].title; break;
+					case '9' : $scope.kind = titles[8].title; break;
+					case '10' : $scope.kind = titles[9].title; break;
+					case '11' : $scope.kind = titles[10].title; break;
+					case '12' : $scope.kind = titles[11].title; break;
+					case '13' : $scope.kind = titles[12].title; break;
+					case '14' : $scope.kind = titles[13].title; break;
+					case '15' : $scope.kind = titles[14].title; break;
+					case '16' : $scope.kind = titles[15].title; break;
+					case '17' : $scope.kind = titles[16].title; break;
+				}
+				if($scope.kind === "meachul_onoff"){
+					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
+							'<div class="direct-chat">'+
+								'<div class="box-header">'+
+									'<button name="btnW" class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
+									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
+									'<div class="pull-right">'+
+									'<button name="btnGrid" class="btn btn-box-tool" ><i class="fa fa-bars"></i></button>'+
 									'</div>'+
-									'<div class="box-body" style="padding:10px 0px;">'+
-										'<div id=\"'+$scope.kind+'\" style="width: 100%; height: 300px;"></div>'+
-										'<div name="gridBody" height: 320px; ">'+
-											'<ul class="contacts-list">'+
-												'<li>'+
-													'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
-													'<table name="tbGrid" class="table table-bordered" style="font-size:12px; margin-bottom:10px;">'+
-													'</table>'+
-													'<div style="width:100%; text-align:center;">'+
-														'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
-													'</div>'+
-												'</li>'+
-											'</ul>'+
-										'</div>'+
+									'<div name="loading">로딩중...</div>'+
+									'<div name="loading2"></div>'+
+								'</div>'+
+								'<div class="box-body" style="padding:10px 0px;">'+
+									'<div id=\"'+$scope.kind+'\" style="width: 100%; height: 300px;"></div>'+
+									'<div name="gridBody" height: 320px; ">'+
+										'<ul class="contacts-list">'+
+											'<li>'+
+												'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
+												'<table name="tbGrid" class="table table-bordered" style="color:rgb(208, 208, 212); width:100%; font-size:12pt; margin-bottom:10px;">'+
+												'</table>'+
+												'<div style="width:100%; text-align:center;">'+
+													'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
+												'</div>'+
+											'</li>'+
+										'</ul>'+
 									'</div>'+
-								'</div>';
-					}else{
-						$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
-								'<div class="direct-chat">'+
-									'<div class="box-header">'+
-										'<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\''+ $scope.kind +'\',\''+$scope.gu+'\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
-										'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
-										'<div class="pull-right">'+
-										'<button name="btnW" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
-										'<button name="btnM" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'2\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">월간</button>'+
-										'<button name="btnY" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'3\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">년간</button>&nbsp;&nbsp;&nbsp;&nbsp;'+
-										'<button name="btnGrid" class="btn btn-box-tool"><i class="fa fa-bars"></i></button>'+
-										'</div>'+
-										'<div name="loading">로딩중...</div>'+
-										'<div name="loading2"></div>'+
+								'</div>'+
+							'</div>';
+				}else{
+					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
+							'<div class="direct-chat">'+
+								'<div class="box-header">'+
+									'<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\''+ $scope.kind +'\',\''+$scope.gu+'\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
+									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
+									'<div class="pull-right">'+
+									'<button name="btnW" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
+									'<button name="btnM" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'2\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">월간</button>'+
+									'<button name="btnY" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'3\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">년간</button>&nbsp;&nbsp;&nbsp;&nbsp;'+
+									'<button name="btnGrid" class="btn btn-box-tool"><i class="fa fa-bars"></i></button>'+
 									'</div>'+
-									'<div class="box-body" style="padding:10px 0px;">'+
-										'<div id=\"'+$scope.kind+'\" style="width: 100%; height: 300px;"></div>'+
-										'<div name="gridBody" height: 320px; ">'+
-											'<ul class="contacts-list">'+
-												'<li>'+
-													'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
-													'<table name="tbGrid" class="table table-bordered" style="font-size:12px; margin-bottom:10px;">'+
-													'</table>'+
-													'<div style="width:100%; text-align:center;">'+
-														'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
-													'</div>'+
-												'</li>'+
-											'</ul>'+
-										'</div>'+
+									'<div name="loading">로딩중...</div>'+
+									'<div name="loading2"></div>'+
+								'</div>'+
+								'<div class="box-body" style="padding:10px 0px;">'+
+									'<div id=\"'+$scope.kind+'\" style="width: 100%; height: 300px;"></div>'+
+									'<div name="gridBody" height: 320px; ">'+
+										'<ul class="contacts-list">'+
+											'<li>'+
+												'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
+												'<table name="tbGrid" class="table table-bordered" style="color:rgb(208, 208, 212); width:100%; font-size:12pt; margin-bottom:10px;">'+
+												'</table>'+
+												'<div style="width:100%; text-align:center;">'+
+													'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
+												'</div>'+
+											'</li>'+
+										'</ul>'+
 									'</div>'+
-								'</div>';
-					}
-
-					makeCharts($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
-					renewalDay($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
-					switch(data.index){
-						case 1: $('#s1').html($scope.htmlCode); break;
-						case 2: $('#s2').html($scope.htmlCode); break;
-						case 3: $('#s3').html($scope.htmlCode); break;
-						case 4: $('#s4').html($scope.htmlCode); break;
-						case 5: $('#s5').html($scope.htmlCode); break;
-						case 6: $('#s6').html($scope.htmlCode); break;
-						case 7: $('#s7').html($scope.htmlCode); break;
-						case 8: $('#s8').html($scope.htmlCode); break;
-						case 9: $('#s9').html($scope.htmlCode); break;
-						case 10: $('#s10').html($scope.htmlCode); break;
-						case 11: $('#s11').html($scope.htmlCode); break;
-						case 12: $('#s12').html($scope.htmlCode); break;
-						case 13: $('#s13').html($scope.htmlCode); break;
-						case 14: $('#s14').html($scope.htmlCode); break;
-						case 15: $('#s15').html($scope.htmlCode); break;
-						case 16: $('#s16').html($scope.htmlCode); break;
-						case 17: $('#s17').html($scope.htmlCode); break;
-					}
-					// $('div[name=gridBody]').hide();
-					$("button[name=btnGrid]").click(function() {
-						console.log('gridBody_css : ', $('div[name=gridBody]').css('display'));
-						if ($('div[name=gridBody]').css('display') == 'none') {
-							$('div[name=gridBody]').css('display','block');
-							$('#' + $scope.kind).css('display', 'none');
-							$scope.gu = $("input[name=gu_hidden]").val();
-							AmCharts.loadJSON(ERPiaAPI.url + "/JSon_Proc_graph.asp?kind="+ $scope.kind +"&value_kind="+ $scope.kind +"&admin_code=" + $scope.loginData.Admin_Code + "&swm_gu=" + $scope.gu + "&Ger_code=" + $scope.userData.GerCode, "gridInfo");
-						} else {
-							$("div[name=gridBody]").css('display', 'none');
-							$('#' + $scope.kind).css('display', 'block');
-						}
-					});
-					$("button[name=btnGridClose]").click(function() {
+								'</div>'+
+							'</div>';
+				}
+				renewalDay($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
+				// makeCharts($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
+				switch(data.index){
+					case 1: $('#s1').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 2: $('#s2').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 3: $('#s3').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 4: $('#s4').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 5: $('#s5').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 6: $('#s6').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 7: $('#s7').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 8: $('#s8').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 9: $('#s9').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 10: $('#s10').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 11: $('#s11').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 12: $('#s12').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 13: $('#s13').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 14: $('#s14').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 15: $('#s15').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 16: $('#s16').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 17: $('#s17').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+				}
+				// $('div[name=gridBody]').hide();
+				$("button[name=btnGrid]").click(function() {
+					if ($('div[name=gridBody]').css('display') == 'none') {
+						$('div[name=gridBody]').css('display','block');
+						$('#' + $scope.kind).css('display', 'none');
+						$scope.gu = $("input[name=gu_hidden]").val();
+						AmCharts.loadJSON(ERPiaAPI.url + "/JSon_Proc_graph.asp?kind="+ $scope.kind +"&value_kind="+ $scope.kind +"&admin_code=" + $scope.loginData.Admin_Code + "&swm_gu=" + $scope.gu + "&Ger_code=" + $scope.userData.GerCode, "gridInfo");
+					} else {
 						$("div[name=gridBody]").css('display', 'none');
 						$('#' + $scope.kind).css('display', 'block');
-					});
-				})
-			}
-        };
-        
-	}
-);
+					}
+				});
+				$("button[name=btnGridClose]").click(function() {
+					$("div[name=gridBody]").css('display', 'none');
+					$('#' + $scope.kind).css('display', 'block');
+				});
+			})
+		}
+    };
+});

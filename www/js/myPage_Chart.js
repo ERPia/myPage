@@ -1,7 +1,6 @@
 //최근갱신일 버튼 눌렀을 경우
 function refresh(kind, gu, admin_code, ERPiaApi_url)
 {
-	console.log(kind)
 	AmCharts.loadJSON(ERPiaApi_url + "/graph_DataUpdate.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu, "refresh");
 	makeCharts(kind, gu, admin_code,ERPiaApi_url);
 }
@@ -10,39 +9,35 @@ function refresh(kind, gu, admin_code, ERPiaApi_url)
 // 처음 로딩 할때
 function renewalDay(kind, gu, admin_code, ERPiaApi_url)  
 {
-	//로딩중처리
-	//document.getElementById("loading").innerHTML = "로딩중....";
-	//alert("로딩중");	
-	//gu = $("#gu_hidden").val();
-
 	$("#loading").css("display","block");
-
-	// switch (kind)
-	// {
-	// 	case "chart1" : kind = "meaip_jem"; break;
-	// 	case "chart2" : kind = "meachul_jem"; break;
-	// 	case "chart3" : kind = "brand_top5"; break;
-	// 	case "chart4" : kind = "meachul_top5"; break;
-	// 	case "chart5" : kind = "scm"; break;
-	// 	case "chart6" : kind = "Meachul_ik"; break;
-	// 	case "chart7" : kind = "meachul_7"; break;
-	// 	case "chart8" : kind = "meaip_7"; break;
-	// 	case "chart9" : kind = "beasonga"; break;
-	// 	case "chart10" : kind = "beasong_gu"; break;
-	// 	case "chart11" : kind = "meachul_onoff"; break;
-	// 	case "chart12" : kind = "banpum"; break;
-	// 	case "chart13" : kind = "banpum_top5"; break;
-	// 	case "chart14" : kind = "meachul_cs"; break;
-	// 	case "chart15" : kind = "meaip_commgoods"; break;
-	// 	case "chart16" : kind = "JeGo_TurnOver"; break;
-	// 	case "chart17" : kind = "beasongb"; break;
-	// 	default : kind = ""; break;
-	// }
 	AmCharts.loadJSON(ERPiaApi_url + "/renewalDay.asp?admin_code="+ admin_code +"&kind="+ kind +"&swm_gu="+ gu, "refresh"); //최근갱신일 로딩		
 }
 
 
 function makeCharts(kind, gu, admin_code, ERPiaApi_url){
+	//javascript로 parameter 읽어오기
+	// 날짜
+	var d= new Date();
+	var month = d.getMonth() + 1;
+	var day = d.getDate();
+	//일주일전
+	var w = new Date(Date.parse(d) -7 * 1000 * 60 * 60 * 24)
+	var wMonth = w.getMonth() + 1;
+	var wDay = w.getDate();
+	//30일전
+	var m = new Date(Date.parse(d) -30 * 1000 * 60 * 60 * 24) 
+	var mMonth = m.getMonth() + 1;
+	var mDay = m.getDate();
+	//1년 전
+	var tm = new Date(Date.parse(d) -365 * 1000 * 60 * 60 * 24)
+	var tmMonth = tm.getMonth() + 1;
+	var tmDay = tm.getDate();
+
+	var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
+	var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
+	var aMonthAgo = m.getFullYear() + '-' + (mMonth<10 ? '0':'') + mMonth + '-' + (mDay<10 ? '0' : '') + mDay;
+	var aYearAgo = tm.getFullYear() + '-' + (tmMonth<10 ? '0':'') + tmMonth + '-' + (tmDay<10 ? '0' : '') + tmDay;
+	
 	$("input[name=gu_hidden]").val(gu);
 
 	$("button[name=btnW]").removeClass();
@@ -60,22 +55,22 @@ function makeCharts(kind, gu, admin_code, ERPiaApi_url){
 		$("button[name=btnW]").removeClass();
 		$("button[name=btnW]").addClass("btn btn-warning btn-xs");
 		$("input[name=gu_hidden]").val(1);
-		sDate = '2015-12-01';
-		eDate = '2015-12-08';
+		sDate = aWeekAgo;
+		eDate = nowday;
 		temp ="주간 - ";
 	} else if (gu == 2) {
 		$("button[name=btnM]").removeClass();
 		$("button[name=btnM]").addClass("btn btn-warning btn-xs");
 		$("input[name=gu_hidden]").val(2);
-		sDate = '2015-11-01';
-		eDate = '2015-12-01';
+		sDate = aMonthAgo;
+		eDate = nowday;
 		temp = "월간 - ";
 	} else if (gu == 3) {
 		$("button[name=btnY]").removeClass();
 		$("button[name=btnY]").addClass("btn btn-warning btn-xs");
 		$("input[name=gu_hidden]").val(3);
-		sDate = '2014-12-01';
-		eDate = '2015-12-01';
+		sDate = aYearAgo;
+		eDate = nowday;
 		temp ="년간 - ";
 	}
 
@@ -1429,7 +1424,6 @@ function makeCharts(kind, gu, admin_code, ERPiaApi_url){
 			break;
 	
 	}
-
 	if (!chart.dataProvider[0])
 	{
 		$("div[name=loading2]").html("정보없음");
