@@ -449,7 +449,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 })
 
-.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){
+.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, 
+	tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -489,6 +490,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	$ionicSlideBoxDelegate.previous();
 	// }
 	$scope.print = function(){
+		// KaKaoLinkPlugin.call('kakaotalk share...');
 		if($cordovaPrinter.isAvailable()){
 			$cordovaToast.show('printing is available');
 			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');

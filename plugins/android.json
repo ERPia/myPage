@@ -103,6 +103,10 @@
         },
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "com.gnustory.kakaolink": {
+            "APP_KEY": "e8aa9b80eb803ab5ca55a22b2d0ff46b",
+            "PACKAGE_NAME": "erpia.lhk.test"
         }
     },
     "dependent_plugins": {}

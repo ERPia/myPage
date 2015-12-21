@@ -45,6 +45,13 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/com.gnustory.kakaolink/www/js/KakaoLinkPlugin.js",
+        "id": "com.gnustory.kakaolink.KakaoLinkPlugin",
+        "clobbers": [
+            "KakaoLinkPlugin"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -55,7 +62,8 @@ module.exports.metadata =
     "cordova-plugin-x-toast": "2.2.1",
     "de.appplant.cordova.plugin.printer": "0.7.1",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "com.gnustory.kakaolink": "0.0.1"
 }
 // BOTTOM OF METADATA
 });

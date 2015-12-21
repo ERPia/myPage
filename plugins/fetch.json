@@ -65,5 +65,16 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "com.gnustory.kakaolink": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/gnustory/cordova_plugin-KakaoLinkPlugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {
+            "APP_KEY": "e8aa9b80eb803ab5ca55a22b2d0ff46b"
+        }
     }
 }
