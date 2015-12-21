@@ -490,6 +490,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// }
 	$scope.print = function(){
 		if($cordovaPrinter.isAvailable()){
+			$cordovaToast.show('printing is available');
 			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
 		}else{
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
