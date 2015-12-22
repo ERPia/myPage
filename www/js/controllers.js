@@ -494,7 +494,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    function (isAvailable) {
 		    	// URI for the index.html
 				//var page = 'www.erpia.net/mobile/trade_Detail.asp';
-				var page = $location.absUrl();
+				var page = document.getElementById('divTradeDetail_Print_Area');
 				cordova.plugins.printer.print(page, 'Document.html', function () {
 				    alert('printing finished or canceled')
 				});
