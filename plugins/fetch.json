@@ -43,9 +43,8 @@
     },
     "de.appplant.cordova.plugin.printer": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-printer.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "de.appplant.cordova.plugin.printer"
         },
         "is_top_level": true,
         "variables": {}

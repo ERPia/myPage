@@ -449,8 +449,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 })
 
-.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, 
-	tradeDetailService, ERPiaAPI){
+.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
+	, tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -490,14 +490,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	$ionicSlideBoxDelegate.previous();
 	// }
 	$scope.print = function(){
-		// KaKaoLinkPlugin.call('kakaotalk share...');
-		if($cordovaPrinter.isAvailable()){
-			$cordovaToast.show('printing is available');
-			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
-		}else{
-			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
-			else alert('Printing is not available on device');
-		}
+		cordova.plugins.printer.isAvailable(
+		    function (isAvailable) {
+		    	// URI for the index.html
+				//var page = 'www.erpia.net/mobile/trade_Detail.asp';
+				var page = $location.absUrl();
+				cordova.plugins.printer.print(page, 'Document.html', function () {
+				    alert('printing finished or canceled')
+				});
+		    }
+		);
 	}
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
