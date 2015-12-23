@@ -104,17 +104,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		location.href = goto_Href;
 	}
-	$rootScope.goto_with_bachButton = function(goto_Href){
+	$rootScope.goto_with_backButton = function(goto_Href){
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		location.href = goto_Href;	
 	}
-	$rootScope.goBack_witd_clearHistory = function() {
-		// $ionicHistory.goBack();
+	$rootScope.goBack_with_clearHistory = function() {
+		$ionicHistory.goBack();
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-		location.href = '#app/config';
+		//location.href = '#app/config';
 	};
 })
 

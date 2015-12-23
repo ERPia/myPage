@@ -502,29 +502,29 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		);
 	}
 	// create canvas object
-	function getCanvas(form, a4){
-		form.width((a4[0]*1.33333) -80).css('max-width','none');
-		return html2canvas(form,{imageTimeout:2000,removeContainer:true}); 
-	}
-	// function createPDF(form){
-	// 	getCanvas().then(function(canvas){
-	// 	var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
+	// function getCanvas(form, a4){
+	// 	form.width((a4[0]*1.33333) -80).css('max-width','none');
+	// 	return html2canvas(form,{imageTimeout:2000,removeContainer:true}); 
+	// }
+	// // function createPDF(form){
+	// // 	getCanvas().then(function(canvas){
+	// // 	var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
+	// // 		doc.addImage(img, 'JPEG', 20, 20);
+	// // 		doc.save('techumber-html-to-pdf.pdf');
+	// // 		form.width(cache_width);
+	// // 	});
+	// // }
+	// $scope.createPDF = function(){
+	// 	// for a4 size paper width and height
+	// 	var form = $('.form'), cache_width = form.width(), a4  =[ 595.28,  841.89];
+	// 	$('body').scrollTop(0);
+	// 	getCanvas(form, a4).then(function(canvas){
+	// 		var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
 	// 		doc.addImage(img, 'JPEG', 20, 20);
 	// 		doc.save('techumber-html-to-pdf.pdf');
 	// 		form.width(cache_width);
-	// 	});
+	// 	})
 	// }
-	$scope.createPDF = function(){
-		// for a4 size paper width and height
-		var form = $('.form'), cache_width = form.width(), a4  =[ 595.28,  841.89];
-		$('body').scrollTop(0);
-		getCanvas(form, a4).then(function(canvas){
-			var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
-			doc.addImage(img, 'JPEG', 20, 20);
-			doc.save('techumber-html-to-pdf.pdf');
-			form.width(cache_width);
-		})
-	}
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
 		if($scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1) == $scope.userData.Sano){
