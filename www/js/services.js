@@ -197,7 +197,7 @@ angular.module('starter.services', [])
 			var data = 'Kind=select_Trade_Detail' + '&Admin_Code=' + Admin_Code + '&Sl_No=' + Sl_No;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response.data);
+					console.log('readDetail_Service : ', response.data);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
