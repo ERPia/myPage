@@ -6,16 +6,16 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services', 'chart.js'])
 
-// .constant('ERPiaAPI',{
-// 	url:'http://localhost:8100/include'
-// 	, toast:'N'
-// })
+.constant('ERPiaAPI',{
+	url:'http://localhost:8100/include'
+	, toast:'N'
+})
 
 // 실제 사용시
-.constant('ERPiaAPI',{
-	url:'http://www.erpia.net/include'
-	, toast:'Y'
-})
+// .constant('ERPiaAPI',{
+// 	url:'http://www.erpia.net/include'
+// 	, toast:'Y'
+// })
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope) {
 	$ionicPlatform.ready(function() {
@@ -77,14 +77,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 							$rootScope.boardIndex = notification.payload.payload.$BoardParam
 						}							
 					}
-					if(notification.payload.payload.$state === "app.config-notice"){
-						// alert("tab.A");
-						//$state.go("경로") //해당 값으로 화면 이동
-					}
-					if(notification.payload.payload.$state === "tab.B"){
-						// alert("tab.B");
-					}
-					//return true;
 				}
 			}
 		});
