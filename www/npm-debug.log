@@ -1,0 +1,95 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'amcharts-angular',
+1 verbose cli   '--save' ]
+2 info using npm@2.14.4
+3 info using node@v4.1.1
+4 verbose install initial load of D:\work\ERPiaTeam\myPage\package.json
+5 warn package.json myappframe@1.0.0 No repository field.
+6 warn package.json myappframe@1.0.0 No README data
+7 warn package.json myappframe@1.0.0 No license field.
+8 verbose installManyTop reading scoped package data from D:\work\ERPiaTeam\myPage\node_modules\android\package.json
+9 verbose installManyTop reading scoped package data from D:\work\ERPiaTeam\myPage\node_modules\angular-chart.js\package.json
+10 verbose installManyTop reading scoped package data from D:\work\ERPiaTeam\myPage\node_modules\chart.js\package.json
+11 verbose installManyTop reading scoped package data from D:\work\ERPiaTeam\myPage\node_modules\xml2json\package.json
+12 info package.json android@0.0.8 license should be a valid SPDX license expression
+13 info package.json chart.js@1.0.2 No license field.
+14 verbose readDependencies loading dependencies from D:\work\ERPiaTeam\myPage\package.json
+15 silly cache add args [ 'amcharts-angular', null ]
+16 verbose cache add spec amcharts-angular
+17 silly cache add parsed spec Result {
+17 silly cache add   raw: 'amcharts-angular',
+17 silly cache add   scope: null,
+17 silly cache add   name: 'amcharts-angular',
+17 silly cache add   rawSpec: '',
+17 silly cache add   spec: '*',
+17 silly cache add   type: 'range' }
+18 silly addNamed amcharts-angular@*
+19 verbose addNamed "*" is a valid semver range for amcharts-angular
+20 silly addNameRange { name: 'amcharts-angular', range: '*', hasData: false }
+21 silly mapToRegistry name amcharts-angular
+22 silly mapToRegistry using default registry
+23 silly mapToRegistry registry https://registry.npmjs.org/
+24 silly mapToRegistry uri https://registry.npmjs.org/amcharts-angular
+25 verbose addNameRange registry:https://registry.npmjs.org/amcharts-angular not in flight; fetching
+26 verbose request uri https://registry.npmjs.org/amcharts-angular
+27 verbose request no auth needed
+28 info attempt registry request try #1 at 17:49:56
+29 verbose request id 27f0f4ca098708ed
+30 http request GET https://registry.npmjs.org/amcharts-angular
+31 http 404 https://registry.npmjs.org/amcharts-angular
+32 verbose headers { 'content-type': 'application/json',
+32 verbose headers   'cache-control': 'max-age=0',
+32 verbose headers   'content-length': '2',
+32 verbose headers   'accept-ranges': 'bytes',
+32 verbose headers   date: 'Thu, 05 Nov 2015 08:49:45 GMT',
+32 verbose headers   via: '1.1 varnish',
+32 verbose headers   age: '0',
+32 verbose headers   connection: 'keep-alive',
+32 verbose headers   'x-served-by': 'cache-hkg6825-HKG',
+32 verbose headers   'x-cache': 'MISS',
+32 verbose headers   'x-cache-hits': '0',
+32 verbose headers   'x-timer': 'S1446713385.353587,VS0,VE239' }
+33 silly get cb [ 404,
+33 silly get   { 'content-type': 'application/json',
+33 silly get     'cache-control': 'max-age=0',
+33 silly get     'content-length': '2',
+33 silly get     'accept-ranges': 'bytes',
+33 silly get     date: 'Thu, 05 Nov 2015 08:49:45 GMT',
+33 silly get     via: '1.1 varnish',
+33 silly get     age: '0',
+33 silly get     connection: 'keep-alive',
+33 silly get     'x-served-by': 'cache-hkg6825-HKG',
+33 silly get     'x-cache': 'MISS',
+33 silly get     'x-cache-hits': '0',
+33 silly get     'x-timer': 'S1446713385.353587,VS0,VE239' } ]
+34 verbose stack Error: Registry returned 404 for GET on https://registry.npmjs.org/amcharts-angular
+34 verbose stack     at makeError (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:263:12)
+34 verbose stack     at CachingRegistryClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:241:14)
+34 verbose stack     at Request._callback (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:171:14)
+34 verbose stack     at Request.self.callback (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:198:22)
+34 verbose stack     at emitTwo (events.js:87:13)
+34 verbose stack     at Request.emit (events.js:172:7)
+34 verbose stack     at Request.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1073:14)
+34 verbose stack     at emitOne (events.js:82:20)
+34 verbose stack     at Request.emit (events.js:169:7)
+34 verbose stack     at IncomingMessage.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1019:12)
+35 verbose statusCode 404
+36 verbose pkgid amcharts-angular
+37 verbose cwd D:\work\ERPiaTeam\myPage\www
+38 error Windows_NT 6.1.7601
+39 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "amcharts-angular" "--save"
+40 error node v4.1.1
+41 error npm  v2.14.4
+42 error code E404
+43 error 404 Registry returned 404 for GET on https://registry.npmjs.org/amcharts-angular
+43 error 404
+43 error 404 'amcharts-angular' is not in the npm registry.
+43 error 404 You should bug the author to publish it (or use the name yourself!)
+43 error 404 It was specified as a dependency of 'myappframe'
+43 error 404
+43 error 404 Note that you can also install from a
+43 error 404 tarball, folder, http url, or git url.
+44 verbose exit [ 1, true ]

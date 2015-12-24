@@ -3,7 +3,8 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'starter.services'])
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+	, 'starter.services', 'chart.js'])
 
 // .constant('ERPiaAPI',{
 // 	url:'http://localhost:8100/include'
@@ -26,8 +27,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-		console.log('Ionic Push: Registering user');
 
+		//★push regist
+		console.log('Ionic Push: Registering user');
 		var user = $ionicUser.get();
 		if(!user.user_id) {
 			// Set your user_id here, or generate a random one.
@@ -63,8 +65,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 					//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
 					if(notification.payload.payload.$state === "app.erpia_board-Main"){
 						// alert("tab.chats");
-						$rootScope.boardIndex = $rootScope.BoardParam
-						$state.go("app.erpia_board-Main")
+						//$rootScope.boardIndex = $rootScope.BoardParam
+						//$state.go("app.erpia_board-Main")
+						if(notification.payload.payload.$BoardParam === "0"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "1"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "2"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "4"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}							
 					}
 					if(notification.payload.payload.$state === "app.config-notice"){
 						// alert("tab.A");
@@ -296,7 +307,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/alarm.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_alarm'
 			}
 		}
 	})
@@ -327,7 +338,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
-
+	////////////////////////////////chart///////////////////////////////////
+	.state('app.chart', {
+		url : '/chart/barAndLineMix',
+		views : {
+			'menuContent' : {
+				templateUrl : 'ionicChart/chartTest.html',
+				controller : 'chartCtrl'
+			}
+		}
+	})
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

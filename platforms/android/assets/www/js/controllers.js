@@ -19,11 +19,10 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, loginService, $ionicHistory, $ionicUser, $ionicPush ,pushInfoService, CertifyService, ERPiaAPI){
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $state, $ionicHistory, $ionicUser, $ionicPush
+	, loginService, CertifyService, pushInfoService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
-	// console.log($rootScope.loginState);
 
 	$scope.loginData = {};
 	$scope.SMSData = {};
@@ -68,7 +67,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.loginState != "R") {
 			$scope.agreeModal.show(); //location.href="#/app/agreement";
 		}
-
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
@@ -99,7 +97,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.pushUserRegist = function() {
 			pushInfoService.pushInfo($rootScope.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
-		    	console.log('pushUserRegist success ::[' + $rootScope.token + ']');
+		    	console.log(pushInfo)
+		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
@@ -170,6 +169,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$rootScope.G_id = comInfo.data.list[0].G_ID;
 						$scope.G_Code = comInfo.data.list[0].G_Code;
 						$scope.G_Sano = comInfo.data.list[0].Sano;
+						$scope.GerCode = comInfo.data.list[0].G_Code;
 
 						$scope.loginHTML = "로그아웃";
 						$rootScope.loginState = "S";
@@ -304,13 +304,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 			};
 		};
-		// console.log('Doing login', $scope.loginData);
-		//location.href="#/app/home";
-		//alert("로그인성공");
-
-		// Simulate a login delay. Remove this and replace with your login
-		// code if using a login system
-		
 	};
 
   	$scope.loginHTML = "로그인";
@@ -339,10 +332,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 .controller('tradeCtrl', function($scope, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, tradeDetailService, ERPiaAPI){
-	$scope.tradeDetailList = tradeDetailService;
 	$scope.check = {};
-	$scope.readTradeDetail = function(idx){
+	tradeDetailService.innerHtml($scope.Admin_Code, $scope.GerCode)
+		.then(function(response){
+			$scope.items = response.list;
+		})
+	$scope.readTradeDetail = function(Sl_No){
 		$ionicSlideBoxDelegate.next();
+		tradeDetailService.readDetail($scope.Admin_Code, Sl_No)
+			.then(function(response){
+				console.log('readDetail', response);
+				$scope.detail_items = response.list;
+			})
 	}
 	$scope.backToList = function(){
 		$ionicSlideBoxDelegate.previous();
@@ -368,8 +369,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 })
 
-.controller('configCtrl', function($scope) {
+.controller('configCtrl', function($scope, $rootScope) {
+	console.log($rootScope);
+	if($rootScope.loginState == 'E'){
 
+	}
 })
   
 .controller('configCtrl_Info', function($scope, NoticeService) {
@@ -377,30 +381,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	NoticeService.getList()
 		.then(function(data){
 			var innerHtml = '';
-			for(var i=0; i<data.list.length; i++){
-				innerHtml += '<ui class="list" ng-click="toggle_' + i + ' = !toggle_' + i + '">'
-				innerHtml += '<li class="item">';
-				innerHtml += '<font>';
-				innerHtml += data.list[i].inDate;
-				innerHtml += '</font><br/>';
-				innerHtml += data.list[i].subject;
-				innerHtml += '</li>';
-				innerHtml += '</ui>';
-				innerHtml += '<div class="lhkNoticeContent" ng-show="toggle_' + i + '" ng-animate="\'box\'">';
-				innerHtml += data.list[i].content;
-				innerHtml += '</div>';
-			}
-			$scope.noticeList = innerHtml;
+			$scope.items = data.list;
 		})
 })
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id)
 		.then(function(data){
-			console.log('data', data);
 			$scope.items = data;
 		})
-	// $scope.items = statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id);
-	// console.log('controller',$scope.items)
 	$scope.moveItem = function(item, fromIndex, toIndex) {
 		fromIdx = $scope.items[fromIndex].Idx;
 		fromTitle = $scope.items[fromIndex].title;
@@ -418,26 +406,77 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.items[toIndex].title = fromTitle;
 		$scope.items[toIndex].visible = fromVisible;
 
-		console.log('changed', $scope.items);
-		
 		var rsltList = '';
 		for(var i = 0; i < $scope.items.length; i++){
 			rsltList += $scope.items[i].cntOrder + '^';
 			rsltList += $scope.items[i].Idx + '^';
 			rsltList += $scope.items[i].visible + '^|';
 		}
-		statisticService.save('myPage_Config_Stat', 'save_Statistic', $rootScope.Admin_Code, $rootScope.loginState, $rootScope.G_id, rsltList);
 		console.log('rsltList', rsltList);
-		// $scope.items.splice(fromIndex, 1);
-		// $scope.items.splice(toIndex, 0, item);
+		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList);
 	};
 
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
 })
+.controller('configCtrl_alarm', function($scope, $rootScope, alarmService){
+	$scope.settingsList = [];
+	var cntList = 0;
+	alarmService.select('select_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			cntList = data.list.length;
+			for(var i=0; i<cntList; i++){
+				switch(data.list[i].idx){
+					case 1: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '공지사항';
+						break;
+					case 2: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업데이트 현황';
+						break;
+					case 3: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '지식 나눔방';
+						break;
+					case 4: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '업체문의 Q&A(답변)';
+						break;
+					case 5: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '거래명세서 도착';
+						break;
+					case 6: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '기타 이벤트';
+						break;
+					case 7: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '소리';
+						break;
+					case 8: data.list[i].checked = (data.list[i].checked == 'T')?true:false;
+						data.list[i].name = '진동';
+						break;
+				}
+			}
+			if(data.list[0].alarm == 'F') $scope.selectedAll = false;
+			else $scope.selectedAll = true;
+			$scope.settingsList = data.list;
+		});
+	$scope.check_change = function(item){
+		var rsltList = '';
+		for(var i=0; i<cntList; i++){
+			rsltList += $scope.settingsList[i].idx + '^';
+			rsltList += ($scope.settingsList[i].checked == true)?'T' + '^|':'F' + '^|';
+		}
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+	$scope.check_alarm = function(check){
+		angular.forEach($scope.settingsList, function(item){
+			item.checked = check;
+			if(item.checked) rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|7^T^|8^T^|';
+			else rsltList = '0^F^|1^F^|2^F^|3^F^|4^F^|5^F^|6^F^|7^F^|8^F^|';
+		})
+		alarmService.save('save_Alarm', $scope.Admin_Code, $rootScope.loginState, $scope.G_id, rsltList)
+	}
+})
 // .controller("IndexCtrl", ['$rootScope', "$scope", "$stateParams", "$q", "$location", "$window", '$timeout', '$http', '$sce',
-.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService, ERPiaAPI) {
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 		$scope.myStyle = {
 		    "width" : "100%",
 		    "height" : "100%"
@@ -662,9 +701,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 })
 
-.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, csInfoService){
+.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, csInfoService, TestService){
 	console.log("CsCtrl");
 	$scope.csData = {};
+
+	var ChkinterestTopic = [];
+	$scope.interestTopic1 = "";
+	$scope.interestTopic2 = "";
+	$scope.interestTopic3 = "";
+
+	var csResigtData = [];
+	$scope.interestTopicRemoveYN = "";
 
     $scope.dialNumber = function(number) {
         window.open('tel:' + number, '_system');
@@ -693,7 +740,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    { id: 10, value: "발주관리" },
 	    { id: 11, value: "그룹사관리" }
   	];
-
+	
+	var updated = 0;
+	$scope.$watch('csData.interestTopic', function(newValue, oldValue, oldValue2) {
+		if (newValue === oldValue || newValue === oldValue2 || oldValue === oldValue2) {
+				return;
+		}
+		switch(updated){
+			case 0: ChkinterestTopic[0] = $scope.csData.interestTopic; updated++; $scope.interestTopic1 = ChkinterestTopic[0]; $scope.interestTopicRemoveYN = "Y"; break;
+			case 1: ChkinterestTopic[1] = $scope.csData.interestTopic; updated++; $scope.interestTopic2 = ' /' + ChkinterestTopic[1]; break;
+			case 2: ChkinterestTopic[2] = $scope.csData.interestTopic; updated = 0; $scope.interestTopic3 = ' /' + ChkinterestTopic[2]; break;
+		}
+		console.log(ChkinterestTopic);
+		},true
+	);
+		
   	$scope.inflowRoutelist = [
 	    { id: 1, value: "검색엔진" },
 	    { id: 2, value: "인터넷광고" },
@@ -706,37 +767,86 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	
   	$scope.csRegist = function() {
   		console.log($scope.csData);
-		csInfoService.csInfo($scope.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, $scope.csData.comName,
-							 $scope.csData.writer , $scope.csData.subject, $scope.csData.tel, $scope.csData.sectors, $scope.csData.interestTopic,
-							 $scope.csData.inflowRoute, $scope.csData.contents)
-	    .then(function(csInfo){
-	    	console.log('csRegist success');
-	    	a
-	    },function(){
-			alert('csRegist fail')	
-		});
+  		
+  		var errMsg = "";
+  		csResigtData[0] = $scope.csData.comName;
+	  	csResigtData[1] = $scope.csData.writer;
+	  	csResigtData[2] = $scope.csData.subject;
+	  	csResigtData[3] = $scope.csData.tel;
+	  	csResigtData[4] = $scope.csData.sectors;
+	  	csResigtData[5] = $scope.interestTopic1;
+	  	csResigtData[6] = $scope.interestTopic2;
+	  	csResigtData[7] = $scope.interestTopic3;
+	  	csResigtData[8] = $scope.csData.inflowRoute;
+	  	csResigtData[9] = $scope.csData.contents;
+
+	  	if(!$scope.csData.comName != ''){
+	  		errMsg += "회사명";
+	  	}
+	  	if(!$scope.csData.subject != ''){
+	  		errMsg += "/제목";
+	  	}
+	  	if(!$scope.csData.tel != ''){
+	  		errMsg += "/연락처";
+	  	}
+	  	if(!$scope.csData.sectors != ''){
+	  		errMsg += "/업종"
+	  	}
+	  	if(!csResigtData[5] != ''){
+	  		errMsg += "/관심항목";
+	  	}
+	  	if(!$scope.csData.inflowRoute != ''){
+	  		errMsg += "/유입경로";
+	  	}
+	  	if(!$scope.csData.contents != ''){
+	  		errMsg += "/문의사항";
+	  	}
+	  	if(errMsg != ""){
+	  		console.log(errMsg + "쓰셈");
+	  		if(errMsg.substring(0, 1) == "/"){
+	  			errMsg = errMsg.replace("/", "");
+	  		}
+	  		alert(errMsg + " 은(는) 필수 입력 항목입니다.")
+	  	}else{
+			// Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic1,interestTopic2, interestTopic3, inflowRoute, contents
+			csInfoService.csInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, escape(csResigtData[0]),
+								 escape(csResigtData[1]), escape(csResigtData[2]), escape(csResigtData[3]), escape(csResigtData[4]), escape(csResigtData[5]),
+								 escape(csResigtData[6]), escape(csResigtData[7]), escape(csResigtData[8]), escape(csResigtData[9]))
+		    .then(function(csInfo){
+		    	alert('등록 성공');
+		    },function(){
+				alert('등록 실패')	
+			});
+		};
 	};
 
-	//test 용 OT201304100001
-	// $scope.csRegist = function() {
- //  		console.log($scope.csData);
- //  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_Date', '','','','','','','2013-01-01','2015-01-01' )
-	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', 'OT201304100001','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	$scope.interestTopicRemove = function() {
+		$scope.interestTopic1 = "";
+		$scope.interestTopic2 = "";
+		$scope.interestTopic3 = "";
+		$scope.interestTopicRemoveYN = "N";
+		updated = 0;
+	}
 
+	// //test 용 OT201304100001
+	// $scope.csRegist2 = function() {
+ // 	 	console.log($scope.csData);
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Master', 'Select_ILNo', 'Ip201512030001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Master', 'Select_Date', '2015-11-01', '2015-12-03')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Detail', '', 'Ip201512020001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_GerName', '', 'g')
+	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_Place')
+	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_CName', '001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GoodsName', 'ra')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_G_OnCode', 'erpia:SFSELFAA0000036')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Goods', 'Select_G_Code', '9806200718567')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GI_Code', '5555')
+		
+	// 	//되는거
+	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>02474</GuMeaCom_Code><Meaip_Amt>2200000</Meaip_Amt><Sale_Place>001</Sale_Place><Remk> <![CDATA[띄어쓰기 테스트 입니다 /?!]]> </Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9808316000018</G_Code><G_name> <![CDATA[띄어쓰기 테스트 상품 ㅁ ㅁ ㅁ]]> </G_name><G_stand> <![CDATA[]]> </G_stand><G_Price>1004</G_Price><G_Qty>200</G_Qty><G_vat>1800</G_vat></item><item><seq>2</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]> </G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item><item><seq>3</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]></G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
+	// 	//안되는거 
+	// 	TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
+	// 	// erpia.net/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>99921</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>
 	//     .then(function(testInfo){
 	//     	console.log(testInfo.data);
 	//     },function(){
@@ -770,7 +880,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-.controller('BoardMainCtrl', function($rootScope, $scope, $rootScope, $stateParams, $sce){
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, $sce, ERPiaAPI){
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -802,7 +912,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
 		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
 	}
-
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
 			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
@@ -815,9 +924,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-//////////////////////////////side///////////////////////////
 .controller('PlaylistsCtrl', function($scope) {
-
 	console.log("PlaylistsCtrl");
 	$scope.playlists = g_playlists;
 })
@@ -827,18 +934,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.playlists = g_playlists;
 	$scope.playlist = $scope.playlists[$stateParams.playlistId - 1];
 })
-
-////////////////////////////tab///////////////////////////////
 .controller('DashCtrl', function($scope) {
 	console.log("DashCtrl");
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
-	// With the new view caching in Ionic, Controllers are only called
-	// when they are recreated or on app start, instead of every page change.
-	// To listen for when this page is active (for example, to refresh data),
-	// listen for the $ionicView.enter event:
-	
 	$scope.chats = Chats.all();
 	$scope.remove = function(chat) {
 		Chats.remove(chat);
@@ -858,14 +958,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('LoginCtrl', function($scope){
 
 })
-
-// var teste = angular.module('ionicTeste',['ionic','ionicSelect']);
-
-// teste.controller('CsCtrl',function($scope){
-   
-//     var data = [{id:1,nmPlaca:'IKC-1394'},{id:2,nmPlaca:'IKY-5437'},{id:3,nmPlaca:'IKC-1393'},{id:4,nmPlaca:'IKI-5437'},{id:5,nmPlaca:'IOC-8749'},{id:6,nmPlaca:'IMG-6509'}];
-//     $scope.veiculos = data;
-//     $scope.testa = function(){
-//       alert($scope.veiculo.nmPlaca);
-//     }
-// })
+.controller('chartCtrl', function($scope, $rootScope, statisticService){
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.Admin_Code, $rootScope.loginState, $scope.G_id)
+		.then(function(data){
+			console.log('data', data);
+			$scope.charts = data;
+		})
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B', 'SeriesC'];
+    $scope.data = [
+        [65, 59, 80, 80, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90],
+        [12, 54, 23, 43, 34, 45, 65]
+    ];
+})
