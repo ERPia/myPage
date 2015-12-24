@@ -188,8 +188,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				switch($rootScope.userType){
 					case 'SCM':
 						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = '111';
-						$scope.loginData.Pwd = '111';
+						$scope.loginData.UserId = '1111';
+						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
