@@ -13,10 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -63,11 +59,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<permission android:name=\"com.ionicframework.myappframe188486.permission.C2D_MESSAGE\" android:protectionLevel=\"signature\" />",
+                            "xml": "<permission android:name=\"erpia.lhk.test.permission.C2D_MESSAGE\" android:protectionLevel=\"signature\" />",
                             "count": 1
                         },
                         {
-                            "xml": "<uses-permission android:name=\"com.ionicframework.myappframe188486.permission.C2D_MESSAGE\" />",
+                            "xml": "<uses-permission android:name=\"erpia.lhk.test.permission.C2D_MESSAGE\" />",
                             "count": 1
                         }
                     ],
@@ -77,7 +73,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<receiver android:name=\"com.plugin.gcm.CordovaGCMBroadcastReceiver\" android:permission=\"com.google.android.c2dm.permission.SEND\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><action android:name=\"com.google.android.c2dm.intent.REGISTRATION\" /><category android:name=\"com.ionicframework.myappframe188486\" /></intent-filter></receiver>",
+                            "xml": "<receiver android:name=\"com.plugin.gcm.CordovaGCMBroadcastReceiver\" android:permission=\"com.google.android.c2dm.permission.SEND\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><action android:name=\"com.google.android.c2dm.intent.REGISTRATION\" /><category android:name=\"erpia.lhk.test\" /></intent-filter></receiver>",
                             "count": 1
                         },
                         {
@@ -91,25 +87,26 @@
     },
     "installed_plugins": {
         "com.phonegap.plugins.PushPlugin": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "de.appplant.cordova.plugin.printer": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "org.apache.cordova.vibration": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "com.gnustory.kakaolink": {
+            "APP_KEY": "e8aa9b80eb803ab5ca55a22b2d0ff46b",
+            "PACKAGE_NAME": "erpia.lhk.test"
         }
     },
     "dependent_plugins": {}

@@ -8,14 +8,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-whitelist/whitelist.js",
         "id": "cordova-plugin-whitelist.whitelist",
         "runs": true
@@ -53,18 +45,25 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/com.gnustory.kakaolink/www/js/KakaoLinkPlugin.js",
+        "id": "com.gnustory.kakaolink.KakaoLinkPlugin",
+        "clobbers": [
+            "KakaoLinkPlugin"
+        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
     "com.phonegap.plugins.PushPlugin": "2.5.0",
-    "cordova-plugin-inappbrowser": "1.0.1",
     "cordova-plugin-whitelist": "1.1.1-dev",
     "cordova-plugin-x-toast": "2.2.1",
     "de.appplant.cordova.plugin.printer": "0.7.1",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "com.gnustory.kakaolink": "0.0.1"
 }
 // BOTTOM OF METADATA
 });

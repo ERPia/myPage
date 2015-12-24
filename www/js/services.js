@@ -20,20 +20,64 @@ angular.module('starter.services', [])
 	};
 })
 
-.factory('loginService', function($http, ERPiaAPI){
+.factory('loginService', function($http, $q, $cordovaToast, ERPiaAPI){
 	var comInfo = function(kind, Admin_Code, G_id, G_Pass){
 		if(kind == 'scm_login'){
 			var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&G_id=' + G_id + '&G_Pass=' + G_Pass;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
 		}else if(kind == 'ERPiaLogin'){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&uid=' + G_id + '&pwd=' + G_Pass;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
 		}else if(kind =='erpia_ComInfo'){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code;
-			return $http.get(url + '?' + data);
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						return $q.reject(response);
+					}
+				},function(response){
+					return $q.reject(response);
+				});
+		}else if(kind == 'ERPia_Ger_Login'){
+			var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+			var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&id=' + G_id + '&pwd=' + G_Pass;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response;
+					}else{
+						if(ERPiaAPI.toast == 'Y') $cordovaToast.show('유효한 업체코드가 아닙니다.', 'long', 'center');
+						else alert('유효한 업체코드가 아닙니다.');
+						return $q.reject(response);
+					}
+				},function(response){
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('유효한 업체코드가 아닙니다.', 'long', 'center');
+					else alert('유효한 업체코드가 아닙니다.');
+					return $q.reject(response);
+				});
 		}
 	}
 	return{
@@ -62,11 +106,20 @@ angular.module('starter.services', [])
 		scmInfo: scmInfo
 	}
 })
-.factory('IndexService', function($http, ERPiaAPI){
+.factory('IndexService', function($http, $q, ERPiaAPI){
 	var dashBoard = function(kind, Admin_Code, sDate, eDate){
 		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
-		return $http.get(url + '?' + data);
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response.data == 'object'){
+					return response;
+				}else{
+					return $q.reject(response);
+				}
+			},function(response){
+				return $q.reject(response);
+			});
 	}
 	return{
 		dashBoard: dashBoard
@@ -98,7 +151,7 @@ angular.module('starter.services', [])
 	}
 	var check = function(Admin_Code, loginType, ID, Input_Code){
 		var data ='';
-		if(loginType=='S'){
+		if(loginType == 'S' || loginType == 'N'){
 			data = 'Kind=check_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
 			data += '&Input_Code=' + Input_Code + '&loginType=' + loginType;
 		}else if(loginType=='E'){
@@ -108,11 +161,11 @@ angular.module('starter.services', [])
 		return $http.get(url + '?' + data)
 		.success(function(response){
 			if (response.list[0].Result == '1'){
-				if(loginType == "S"){
-					location.href = "#/app/scmhome";
-				}else if(loginType == "E"){
-					location.href = "#/app/slidingtab";
-				};
+				switch(loginType){
+					case 'S': location.href = "#/app/scmhome"; break;
+					case 'E': location.href = "#/app/slidingtab"; break;
+					case 'N': location.href = "#/app/main"; break;
+				}
 			}else{
 				if(ERPiaAPI.toast == 'Y') $cordovaToast.show(response.list[0].Comment, 'long', 'center');
 				else alert(response.list[0].Comment);
@@ -126,12 +179,11 @@ angular.module('starter.services', [])
 })
 .factory('tradeDetailService', function($http, $q, ERPiaAPI) {
 	return{
-		innerHtml: function(Admin_Code, GerCode){
+		tradeList: function(Admin_Code, GerCode){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Kind=select_Trade' + '&Admin_Code=' + Admin_Code + '&GerCode=' + GerCode;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response.data);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
@@ -145,8 +197,20 @@ angular.module('starter.services', [])
 			var data = 'Kind=select_Trade_Detail' + '&Admin_Code=' + Admin_Code + '&Sl_No=' + Sl_No;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log(response.data);
+					console.log('readDetail_Service : ', response.data.list[0].G_ea1);
 					if(typeof response.data == 'object'){
+						var tot_Ea = 0;
+						tot_Ea += Number(((response.data.list[0].G_ea1)?response.data.list[0].G_ea1:0));
+						tot_Ea += Number(((response.data.list[0].G_ea2)?response.data.list[0].G_ea2:0));
+						tot_Ea += Number(((response.data.list[0].G_ea3)?response.data.list[0].G_ea3:0));
+						tot_Ea += Number(((response.data.list[0].G_ea4)?response.data.list[0].G_ea4:0));
+						tot_Ea += Number(((response.data.list[0].G_ea5)?response.data.list[0].G_ea5:0));
+						tot_Ea += Number(((response.data.list[0].G_ea6)?response.data.list[0].G_ea6:0));
+						tot_Ea += Number(((response.data.list[0].G_ea7)?response.data.list[0].G_ea7:0));
+						tot_Ea += Number(((response.data.list[0].G_ea8)?response.data.list[0].G_ea8:0));
+						tot_Ea += Number(((response.data.list[0].G_ea9)?response.data.list[0].G_ea9:0));
+						tot_Ea += Number(((response.data.list[0].G_ea10)?response.data.list[0].G_ea10:0));
+						response.data.list[0].tot_Ea = tot_Ea;
 						return response.data;
 					}else{
 						return $q.reject(response.data);
@@ -159,48 +223,54 @@ angular.module('starter.services', [])
 })
 .factory('NoticeService', function($http, $q, ERPiaAPI){
 	return{
+		//http://erpia2.godohosting.com/erpia_update/img
 		getList: function(){
-			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
-			var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
-			return $http.get(url + '?' + data)
-				.then(function(response){
-					console.log(response.data);
-					if(typeof response.data == 'object'){
-						return response.data;
-					}else{
-						return $q.reject(response.data);
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'Kind=myPage_Notice&Value_Kind=encode&cntRow=10';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response.data == 'object'){
+					for(var i=0; i<response.data.list.length; i++){
+						oldContent = response.data.list[i].content;
+						response.data.list[i].content = oldContent
+							.replace(/http:\/\/erpia2.godohosting.com\/erpia_update\/img\/notice\/phj/g, ERPiaAPI.imgUrl + '/notice/phj')
+							.replace(/&quot;/g,'')
+							.replace(/<img src=/g, '<img width=100% src=');
 					}
-				}, function(response){
+					return response.data;
+				}else{
 					return $q.reject(response.data);
-				})
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
 		}
 	};
 })
 .factory('statisticService', function($http, $q, ERPiaAPI) {
 	var titles =  [{Idx:0, title:"홈"}
-				, {Idx:1, title:"매출 실적 추이"}
+				, {Idx:1, title:"거래처별 매입 점유율 TOP 10"}
 				, {Idx:2, title:"사이트별 매출 점유율"}
-				, {Idx:3, title:"매출이익증감율"}
+				, {Idx:3, title:"브랜드별 매출 TOP5"}
 				, {Idx:4, title:"상품별 매출 TOP5"}
-				, {Idx:5, title:"브랜드별 매출 TOP5"}
-				, {Idx:6, title:"온오프라인 비교 매출"}
-				, {Idx:7, title:"매출반품현황"}
-				, {Idx:8, title:"상품별 매출 반품 건수/반품액 TOP5"}
-				, {Idx:9, title:"CS 컴플레인 현황"}
-				, {Idx:10, title:"매입 현황"}
-				, {Idx:11, title:"거래처별 매입 점유율 TOP 10"}
-				, {Idx:12, title:"상품별 매입건수/매입액 TOP5"}
-				, {Idx:13, title:"최근배송현황"}
-				, {Idx:14, title:"배송현황"}
-				, {Idx:15, title:"택배사별 구분 건수 통계"}
-				, {Idx:16, title:"재고 회전율 TOP5"}];
+				, {Idx:5, title:"매출이익증감율"}
+				, {Idx:6, title:"매출 실적 추이"}
+				, {Idx:7, title:"매입 현황"}
+				, {Idx:8, title:"재고 회전율 TOP5"}
+				, {Idx:9, title:"택배사별 구분 건수 통계"}
+				, {Idx:10, title:"온오프라인 비교 매출"}
+				, {Idx:11, title:"매출반품현황"}
+				, {Idx:12, title:"상품별 매출 반품 건수/반품액 TOP5"}
+				, {Idx:13, title:"CS 컴플레인 현황"}
+				, {Idx:14, title:"상품별 매입건수/매입액 TOP5"}
+				, {Idx:15, title:"최근배송현황"}
+				, {Idx:16, title:"배송현황"}];
 	return{
 		all : function(kind, mode, Admin_Code, loginType, G_Id) {
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					console.log('response All', response)
 					if(typeof response.data == 'object'){
 						for(var i=0; i<response.data.list.length; i++){
 							switch(response.data.list[i].Idx){
@@ -221,21 +291,27 @@ angular.module('starter.services', [])
 								case "16": response.data.list[i].title = titles[15].title; break;
 								case "17": response.data.list[i].title = titles[16].title; break;
 							}
-							console.log(response.data.list[i].title);
 						}
-						console.log('dataList', response.data);
 						return response.data.list;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				}, function(response){
+					return $q.reject(response.data);
+				})
 		},save : function(kind, mode, Admin_Code, loginType, G_Id, statistic){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id + '&statistic=' + statistic;
 			return $http.get(url + '?' + data)
 				.then(function(response) {
-					return response.data;
-			})
+					if(typeof response.data == 'object'){
+						return response.data;	
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
 		}, title : function(kind, mode, Admin_Code, loginType, G_Id){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
@@ -265,9 +341,11 @@ angular.module('starter.services', [])
 						}
 						return response.data.list;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				}, function(response){
+					return $q.rejec(response.data);
+				})
 		}, chart : function(kind, mode, Admin_Code, loginType, G_Id, chart_idx){
 			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
 			var data = 'Value_Kind=list&Kind=' + kind + '&mode=' + mode + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType;
@@ -277,9 +355,9 @@ angular.module('starter.services', [])
 					if(typeof response.data == 'object'){
 						return response.data;	
 					}else{
-						return items;
+						return $q.reject(response.data);
 					}
-			})
+				})
 		}
 	}
 })
@@ -290,6 +368,7 @@ angular.module('starter.services', [])
 			var data = 'Value_Kind=list&Kind=' + kind + '&Admin_Code=' + Admin_Code + '&loginType=' + loginType + '&G_Id=' + G_Id;
 			return $http.get(url + '?' + data)
 				.then(function(response){
+					console.log('response', response);
 					if(typeof response.data == 'object'){
 						return response.data;
 					}else{
@@ -339,7 +418,39 @@ angular.module('starter.services', [])
 		csInfo: csInfo
 	}
 })
-.factory('TestService', function($http, ERPiaAPI){
+.factory('uuidService', function($http, $q, ERPiaAPI){
+	return{
+		getUUID : function(uuid){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'Kind=getUUID&uuid=' + uuid;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, saveUUID : function(uuid, admin_code, loginType, id, pwd, autoLogin_YN){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+			var data = 'Kind=saveUUID&uuid=' + uuid + '&admin_code=' + admin_code + '&loginType=' + loginType;
+			data += '&id=' + id + '&pwd=' + pwd + '&autoLogin_YN=' + autoLogin_YN;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	}
+})
+.factory('TestService', function($http, $q, ERPiaAPI){
 	var testInfo = function(Admin_Code, UserId, kind, Mode, Sl_No, GerName, GoodsName, G_OnCode, GoodsCode, GI_Code, sDate, eDate){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
 		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No 
@@ -350,6 +461,70 @@ angular.module('starter.services', [])
 	}
 	return{
 		testInfo: testInfo
+	}
+})
+.factory('testLhkServicse', function($http, $q, ERPiaAPI){
+	return{
+		test: function(){
+		var url = ERPiaAPI.url + '/psm/02/html/Graph.asp';
+		var data = 'Admin_Code=onz&swm_gu=1&kind=chart7';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('testChart', typeof response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	};
+})
+.factory('AmChart_Service', function($http, $q, ERPiaAPI){
+	var url = ERPiaAPI.url + '/JSon_Proc_graph.asp';
+	return{
+		scm_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu, Ger_code){
+			var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu + '&Ger_code=' + Ger_code;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, erpia_Chart: function(Kind, Value_Kind, Admin_Code, swm_gu){
+			var data = 'Kind=' + Kind + '&Value_Kind=' + Value_Kind + '&admin_code=' + Admin_Code + '&swm_gu=' + swm_gu;
+			return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			}) 
+		}
+	}
+	ERPiaApi_url + "/JSon_Proc_graph.asp?kind=meaip_jem&value_kind=meaip_jem&admin_code=" + admin_code + "&swm_gu=" + gu
+})
+.factory('publicFunction', function($ionicHistory){
+	return{
+		goHome: function(userType){
+			$ionicHistory.nextViewOptions({
+				disableBack: true
+			});
+			switch(userType){
+				case 'ERPia': location.href = '#/app/slidingtab'; break;
+				case 'SCM' : location.href = '#/app/scmhome'; break;
+				case 'Geust': location.href = '#/app/sample/Main'; break;
+			}
+		}
 	}
 })
 .factory('Chats', function() {

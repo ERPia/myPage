@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.myappframe188486" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="erpia.lhk.test" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <feature name="PushPlugin">
         <param name="android-package" value="com.plugin.gcm.PushPlugin" />
-    </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
@@ -46,13 +43,17 @@
         An Ionic Framework and Cordova project.
     </description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+      Ionic Framework Team.
     </author>
     <content src="index.html" />
+    <access origin="*" />
     <access origin="http://www.erpia.net" />
+    <access origin="http://erpia2.godohosting.com/" />
     <access launch-external="yes" origin="tel:*" />
     <allow-intent href="tel:*" />
     <allow-intent href="*://*www.erpia.net/*" />
+    <allow-intent href="*://*erpia2.godohosting.com/*" />
+    <allow-intent href="https://code.ionicframework.com/*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
