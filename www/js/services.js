@@ -408,11 +408,11 @@ angular.module('starter.services', [])
 	}
 })
 .factory('csInfoService', function($http, ERPiaAPI){
-	var csInfo = function(Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic, inflowRoute, contents){
+	var csInfo = function(Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic1,interestTopic2, interestTopic3, inflowRoute, contents){
 		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
 		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&chkAdmin=' + chkAdmin + '&comName=' + comName 
-		data += '&writer=' + writer + '&subject=' + subject + '&tel=' + tel + '&sectors=' + sectors + '&interestTopic=' + interestTopic
-		data += '&inflowRoute=' + inflowRoute + '&contents=' + contents 
+		data += '&writer=' + writer + '&subject=' + subject + '&tel=' + tel + '&sectors=' + sectors + '&interestTopic1=' + interestTopic1
+		data += '&interestTopic2=' + interestTopic2 + '&interestTopic3=' + interestTopic3 + '&inflowRoute=' + inflowRoute + '&contents=' + contents 
 		console.log(url + '?' + data)
 		return $http.get(url + '?' + data);
 	}
@@ -452,12 +452,12 @@ angular.module('starter.services', [])
 		}
 	}
 })
-.factory('TestService', function($http, $q, ERPiaAPI){
-	var testInfo = function(Admin_Code, UserId, kind, Mode, Sl_No, GerName, GoodsName, G_OnCode, GoodsCode, GI_Code, sDate, eDate){
+.factory('TestService', function($http, ERPiaAPI){
+	var testInfo = function(Admin_Code, UserId, kind, Mode, RequestXml){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No 
-		data += '&GerName=' + GerName + '&GoodsName=' + GoodsName + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
-		data += '&sDate=' + sDate + '&eDate=' + eDate 
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&RequestXml=' + RequestXml
+		// data += '&GerName=' + GerName + '&GoodsName=' + GoodsName + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
+		// data += '&sDate=' + sDate + '&eDate=' + eDate 
 		console.log(url + '?' + data)
 		return $http.get(url + '?' + data);
 	}

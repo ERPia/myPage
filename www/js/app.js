@@ -29,8 +29,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-		console.log('Ionic Push: Registering user');
 
+		//★push regist
+		console.log('Ionic Push: Registering user');
 		var user = $ionicUser.get();
 		if(!user.user_id) {
 			// Set your user_id here, or generate a random one.
@@ -68,15 +69,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 						// alert("tab.chats");
 						//$rootScope.boardIndex = $rootScope.BoardParam
 						//$state.go("app.erpia_board-Main")
+						if(notification.payload.payload.$BoardParam === "0"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "1"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "2"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "4"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}							
 					}
-					if(notification.payload.payload.$state === "app.config-notice"){
-						// alert("tab.A");
-						//$state.go("경로") //해당 값으로 화면 이동
-					}
-					if(notification.payload.payload.$state === "tab.B"){
-						// alert("tab.B");
-					}
-					//return true;
 				}
 			}
 		});
