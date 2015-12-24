@@ -200,17 +200,19 @@ angular.module('starter.services', [])
 					console.log('readDetail_Service : ', response.data.list[0].G_ea1);
 					if(typeof response.data == 'object'){
 						var tot_Ea = 0;
-						tot_Ea += Number(((response.data.list[0].G_ea1)?response.data.list[0].G_ea1:0));
-						tot_Ea += Number(((response.data.list[0].G_ea2)?response.data.list[0].G_ea2:0));
-						tot_Ea += Number(((response.data.list[0].G_ea3)?response.data.list[0].G_ea3:0));
-						tot_Ea += Number(((response.data.list[0].G_ea4)?response.data.list[0].G_ea4:0));
-						tot_Ea += Number(((response.data.list[0].G_ea5)?response.data.list[0].G_ea5:0));
-						tot_Ea += Number(((response.data.list[0].G_ea6)?response.data.list[0].G_ea6:0));
-						tot_Ea += Number(((response.data.list[0].G_ea7)?response.data.list[0].G_ea7:0));
-						tot_Ea += Number(((response.data.list[0].G_ea8)?response.data.list[0].G_ea8:0));
-						tot_Ea += Number(((response.data.list[0].G_ea9)?response.data.list[0].G_ea9:0));
-						tot_Ea += Number(((response.data.list[0].G_ea10)?response.data.list[0].G_ea10:0));
-						response.data.list[0].tot_Ea = tot_Ea;
+						for(var i=0; i<response.data.length; i++){
+							tot_Ea += Number(((response.data.list[i].G_ea1)?response.data.list[0].G_ea1:0));
+							tot_Ea += Number(((response.data.list[i].G_ea2)?response.data.list[0].G_ea2:0));
+							tot_Ea += Number(((response.data.list[i].G_ea3)?response.data.list[0].G_ea3:0));
+							tot_Ea += Number(((response.data.list[i].G_ea4)?response.data.list[0].G_ea4:0));
+							tot_Ea += Number(((response.data.list[i].G_ea5)?response.data.list[0].G_ea5:0));
+							tot_Ea += Number(((response.data.list[i].G_ea6)?response.data.list[0].G_ea6:0));
+							tot_Ea += Number(((response.data.list[i].G_ea7)?response.data.list[0].G_ea7:0));
+							tot_Ea += Number(((response.data.list[i].G_ea8)?response.data.list[0].G_ea8:0));
+							tot_Ea += Number(((response.data.list[i].G_ea9)?response.data.list[0].G_ea9:0));
+							tot_Ea += Number(((response.data.list[i].G_ea10)?response.data.list[0].G_ea10:0));
+							response.data.list[i].tot_Ea = tot_Ea;
+						}
 						return response.data;
 					}else{
 						return $q.reject(response.data);
