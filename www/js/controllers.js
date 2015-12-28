@@ -29,6 +29,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
 	$scope.SMSData = {};
+	$scope.currentDate = new Date();
 
 	// Create the login modal that we will use later
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
@@ -213,7 +214,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
-					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+					$scope.userData.GerName = comInfo.data.list[0].GerName;
 					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
 					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
 					$scope.userData.GerCode = comInfo.data.list[0].G_Code;
