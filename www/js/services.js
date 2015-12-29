@@ -392,7 +392,6 @@ angular.module('starter.services', [])
 					return $q.reject(response.data);
 				})
 		}
-
 	}
 })
 .factory('pushInfoService', function($http, ERPiaAPI){

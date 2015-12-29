@@ -639,6 +639,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}else{
 			alarmService.select('select_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 			.then(function(data){
+				console.log('alarmData : ', data);
 				// cntList = data.list.length;
 				for(var i=0; i<cntList; i++){
 					switch(data.list[i].idx){
