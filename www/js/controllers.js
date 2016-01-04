@@ -29,6 +29,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
 	$scope.SMSData = {};
+	$scope.currentDate = new Date();
 
 	// Create the login modal that we will use later
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
@@ -130,8 +131,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.pushUserRegist = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
-		    	console.log(pushInfo)
-		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
+		    	console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
@@ -193,9 +193,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = 'lhk';
-						$scope.loginData.Pwd = 'alsdud0125!';
+						$scope.loginData.Admin_Code = 'pikachu';
+						$scope.loginData.UserId = 'khs239';
+						$scope.loginData.Pwd = '1234';
+						// $scope.loginData.Admin_Code = 'onz';
+						// $scope.loginData.UserId = 'lhk';
+						// $scope.loginData.Pwd = 'alsdud0125!';
 					break;
 				}
 			}
@@ -211,7 +214,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
-					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+					$scope.userData.GerName = comInfo.data.list[0].GerName;
 					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
 					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
 					$scope.userData.GerCode = comInfo.data.list[0].G_Code;
@@ -475,7 +478,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
 		tradeDetailService.readDetail($scope.loginData.Admin_Code, Sl_No)
 			.then(function(response){
-				console.log('readDetail', response);
 				$scope.detail_items = response.list;
 				$scope.trade_Detail_Modal.show();
 			})
@@ -639,7 +641,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}else{
 			alarmService.select('select_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 			.then(function(data){
-				console.log('alarmData : ', data);
 				// cntList = data.list.length;
 				for(var i=0; i<cntList; i++){
 					switch(data.list[i].idx){
@@ -987,17 +988,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 })
 
-.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, csInfoService, TestService){
+.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, csInfoService){
 	console.log("CsCtrl");
 	$scope.csData = {};
-
-	var ChkinterestTopic = [];
-	$scope.interestTopic1 = "";
-	$scope.interestTopic2 = "";
-	$scope.interestTopic3 = "";
-
-	var csResigtData = [];
-	$scope.interestTopicRemoveYN = "";
 
     $scope.dialNumber = function(number) {
         window.open('tel:' + number, '_system');
@@ -1026,21 +1019,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    { id: 10, value: "발주관리" },
 	    { id: 11, value: "그룹사관리" }
   	];
-	
-	var updated = 0;
-	$scope.$watch('csData.interestTopic', function(newValue, oldValue, oldValue2) {
-		if (newValue === oldValue || newValue === oldValue2 || oldValue === oldValue2) {
-				return;
-		}
-		switch(updated){
-			case 0: ChkinterestTopic[0] = $scope.csData.interestTopic; updated++; $scope.interestTopic1 = ChkinterestTopic[0]; $scope.interestTopicRemoveYN = "Y"; break;
-			case 1: ChkinterestTopic[1] = $scope.csData.interestTopic; updated++; $scope.interestTopic2 = ' /' + ChkinterestTopic[1]; break;
-			case 2: ChkinterestTopic[2] = $scope.csData.interestTopic; updated = 0; $scope.interestTopic3 = ' /' + ChkinterestTopic[2]; break;
-		}
-		console.log(ChkinterestTopic);
-		},true
-	);
-		
+
   	$scope.inflowRoutelist = [
 	    { id: 1, value: "검색엔진" },
 	    { id: 2, value: "인터넷광고" },
@@ -1053,86 +1032,37 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	
   	$scope.csRegist = function() {
   		console.log($scope.csData);
-  		var errMsg = "";
-  		csResigtData[0] = $scope.csData.comName;
-	  	csResigtData[1] = $scope.csData.writer;
-	  	csResigtData[2] = $scope.csData.subject;
-	  	csResigtData[3] = $scope.csData.tel;
-	  	csResigtData[4] = $scope.csData.sectors;
-	  	csResigtData[5] = $scope.interestTopic1;
-	  	csResigtData[6] = $scope.interestTopic2;
-	  	csResigtData[7] = $scope.interestTopic3;
-	  	csResigtData[8] = $scope.csData.inflowRoute;
-	  	csResigtData[9] = $scope.csData.contents;
-
-	  	if(!$scope.csData.comName != ''){
-	  		errMsg += "회사명";
-	  	}
-	  	if(!$scope.csData.subject != ''){
-	  		errMsg += "/제목";
-	  	}
-	  	if(!$scope.csData.tel != ''){
-	  		errMsg += "/연락처";
-	  	}
-	  	if(!$scope.csData.sectors != ''){
-	  		errMsg += "/업종"
-	  	}
-	  	if(!csResigtData[5] != ''){
-	  		errMsg += "/관심항목";
-	  	}
-	  	if(!$scope.csData.inflowRoute != ''){
-	  		errMsg += "/유입경로";
-	  	}
-	  	if(!$scope.csData.contents != ''){
-	  		errMsg += "/문의사항";
-	  	}
-	  	if(errMsg != ""){
-	  		console.log(errMsg + "쓰셈");
-	  		if(errMsg.substring(0, 1) == "/"){
-	  			errMsg = errMsg.replace("/", "");
-	  		}
-	  		alert(errMsg + " 은(는) 필수 입력 항목입니다.")
-	  	}else{
-			// Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic1,interestTopic2, interestTopic3, inflowRoute, contents
-			csInfoService.csInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, escape(csResigtData[0]),
-								 escape(csResigtData[1]), escape(csResigtData[2]), escape(csResigtData[3]), escape(csResigtData[4]), escape(csResigtData[5]),
-								 escape(csResigtData[6]), escape(csResigtData[7]), escape(csResigtData[8]), escape(csResigtData[9]))
-		    .then(function(csInfo){
-		    	alert('등록 성공');
-		    },function(){
-				alert('등록 실패')	
-			});
-		};
+		csInfoService.csInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, $scope.csData.comName,
+							 $scope.csData.writer , $scope.csData.subject, $scope.csData.tel, $scope.csData.sectors, $scope.csData.interestTopic,
+							 $scope.csData.inflowRoute, $scope.csData.contents)
+	    .then(function(csInfo){
+	    	console.log('csRegist success');
+	    	a
+	    },function(){
+			alert('csRegist fail')	
+		});
 	};
 
-	$scope.interestTopicRemove = function() {
-		$scope.interestTopic1 = "";
-		$scope.interestTopic2 = "";
-		$scope.interestTopic3 = "";
-		$scope.interestTopicRemoveYN = "N";
-		updated = 0;
-	}
+	//test 용 OT201304100001
+	// $scope.csRegist = function() {
+ 	//  		console.log($scope.csData);
+ 	//  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_Date', '','','','','','','2013-01-01','2015-01-01' )
+	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', 'OT201304100001','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
 
-	// //test 용 OT201304100001
-	// $scope.csRegist2 = function() {
- // 	 	console.log($scope.csData);
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Master', 'Select_ILNo', 'Ip201512030001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Master', 'Select_Date', '2015-11-01', '2015-12-03')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Detail', '', 'Ip201512020001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_GerName', '', 'g')
-	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_Place')
-	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_CName', '001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GoodsName', 'ra')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_G_OnCode', 'erpia:SFSELFAA0000036')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Goods', 'Select_G_Code', '9806200718567')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GI_Code', '5555')
-		
-	// 	//되는거
-	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>02474</GuMeaCom_Code><Meaip_Amt>2200000</Meaip_Amt><Sale_Place>001</Sale_Place><Remk> <![CDATA[띄어쓰기 테스트 입니다 /?!]]> </Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9808316000018</G_Code><G_name> <![CDATA[띄어쓰기 테스트 상품 ㅁ ㅁ ㅁ]]> </G_name><G_stand> <![CDATA[]]> </G_stand><G_Price>1004</G_Price><G_Qty>200</G_Qty><G_vat>1800</G_vat></item><item><seq>2</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]> </G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item><item><seq>3</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]></G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
-	// 	//안되는거 
-	// 	TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
-	// 	// erpia.net/
-	/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>99921</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>
 	//     .then(function(testInfo){
 	//     	console.log(testInfo.data);
 	//     },function(){
@@ -1573,6 +1503,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(response){
 				console.log('response', response);
 				$rootScope.kind = 'chart' + response.list[0].idx;
+				console.log('chartKind1 : ', $rootScope.kind);
 				switch (response.list[0].idx)
 				{
 					case '1' : $scope.kind = titles[1].title; break;
@@ -1592,11 +1523,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case '16' : $scope.kind = titles[15].title; break;
 					case '17' : $scope.kind = titles[16].title; break;
 				}
+				console.log('chartKind2 : ', $scope.kind);
 				if($scope.kind === "meachul_onoff"){
 					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
 							'<div class="direct-chat">'+
 								'<div class="box-header">'+
-									'<button name="btnW" class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
+									'<button name="btnW' + $scope.kind + '" class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
 									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<div class="pull-right">'+
 									'<button name="btnGrid" class="btn btn-box-tool" ><i class="fa fa-bars"></i></button>'+
@@ -1627,7 +1559,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 									'<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\''+ $scope.kind +'\',\''+$scope.gu+'\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
 									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<div class="pull-right">'+
-									'<button name="btnW" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
+									'<button name="btnW' + $scope.kind + '" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
 									'<button name="btnM" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'2\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">월간</button>'+
 									'<button name="btnY" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'3\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">년간</button>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<button name="btnGrid" class="btn btn-box-tool"><i class="fa fa-bars"></i></button>'+
@@ -1655,23 +1587,23 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				renewalDay($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
 				// makeCharts($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
 				switch(data.index){
-					case 1: $('#s1').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 2: $('#s2').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 3: $('#s3').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 4: $('#s4').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 5: $('#s5').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 6: $('#s6').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 7: $('#s7').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 8: $('#s8').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 9: $('#s9').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 10: $('#s10').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 11: $('#s11').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 12: $('#s12').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 13: $('#s13').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 14: $('#s14').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 15: $('#s15').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 16: $('#s16').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 17: $('#s17').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 1: $('#s1').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 2: $('#s2').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 3: $('#s3').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 4: $('#s4').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 5: $('#s5').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 6: $('#s6').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 7: $('#s7').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 8: $('#s8').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 9: $('#s9').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 10: $('#s10').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 11: $('#s11').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 12: $('#s12').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 13: $('#s13').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 14: $('#s14').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 15: $('#s15').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 16: $('#s16').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 17: $('#s17').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
 				}
 				// $('div[name=gridBody]').hide();
 				$("button[name=btnGrid]").click(function() {
@@ -1692,4 +1624,445 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			})
 		}
     };
-});
+})
+
+/*----------------------매출전표조회 컨트롤러--------------------*/
+.controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http) {
+
+$scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
+   $scope.lastsclick = function(index) {
+               $scope.lasts=index+5; //더보기 클릭시 $index+5
+            }
+
+
+/**
+     *--------------------------------------- 데이트피커 펑션 및 모달---------------------------
+     */
+$ionicModal.fromTemplateUrl('templates/datemodal.html', 
+        function(modal) {
+            $scope.datemodal = modal;
+        },
+        {
+        // Use our scope for the scope of the modal to keep it simple
+        scope: $scope, 
+        // The animation we want to use for the modal entrance
+        animation: 'slide-in-up'
+        }
+    );
+    $scope.opendateModal = function(datetypes) {
+      $scope.datetypes=datetypes;
+      $scope.datemodal.show();
+    };
+    $scope.closedateModal = function(modal) {
+      $scope.datemodal.hide();
+      if($scope.datetypes=='sDate'){
+      $scope.reqparams.sDate = modal;}
+      if($scope.datetypes=='eDate'){
+      $scope.reqparams.eDate = modal;}
+      else{}
+      $scope.datetypes=='';
+    };
+
+/**
+     *------------------------------------------------------------------
+     */
+
+
+$scope.dateMinus=function(days){
+
+
+    var nday = new Date();  //오늘 날짜..  
+
+    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
+
+    var yy = nday.getFullYear();
+
+    var mm = nday.getMonth()+1;
+
+    var dd = nday.getDate();
+
+
+
+
+    if( mm<10) mm="0"+mm;
+
+    if( dd<10) dd="0"+dd;
+
+
+
+    return yy + "-" + mm + "-" + dd;
+
+}
+
+
+$scope.todate=$scope.dateMinus(0);
+$scope.searchdatas='';  //filter를 위한 검색창 model 
+/*초기 접근시 바로 아래 스코프 실행으로 오늘날짜검색 기본으로 실행*/
+$scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData.Admin_Code, $scope.loginData.UserId
+      Kind : 'ERPia_Sale_Select_Master',
+      Mode : 'Select_Date',
+      Sl_No : '',
+      sDate : $scope.todate,
+      eDate : $scope.todate,
+      Kind1 : '',
+      Sl_No1 : ''
+    };
+
+
+	$scope.MCDateSearchDefault = function() {
+		console.log($scope.reqparams);
+		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
+		.then(function(ERPiaMCSearchData){
+    	console.log(ERPiaMCSearchData.data);
+    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	},function(){
+    		alert('Request fail')	
+		});
+	};
+
+/*
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Sl_No='+$scope.reqparams.Sl_No+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.junpyolists = data.list;
+/*        $state.go('app.search');*/
+     /* }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });*/
+  /*날짜검색 버튼을 클릭시 펑션 실행*/
+	$scope.searches = function() {
+		console.log($scope.reqparams);
+		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
+		.then(function(ERPiaMCSearchData){
+    	console.log(ERPiaMCSearchData.data);
+    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	},function(){
+    		alert('Request fail')	
+		});
+	};
+/*
+    $scope.searches=function(){
+      $scope.reqparams.Kind='ERPia_Sale_Select_Master';
+      $scope.reqparams.Mode='Select_Date';
+       // CORS 요청 데모
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.junpyolists = data.list;
+/*        $state.go('app.search');*/
+/*      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+    }*/
+
+
+/*function의 (agoday)가 마이너스 된 만큼 이전날짜 검색 실행*/
+	$scope.searchesday = function(agoday) {
+		$scope.reqparams.Kind='ERPia_Sale_Select_Master';
+      	$scope.reqparams.Mode='Select_Date';
+		$scope.reqparams.sDate=$scope.dateMinus(agoday);
+     	$scope.reqparams.eDate=$scope.dateMinus(0);
+		console.log($scope.reqparams);
+		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
+		.then(function(ERPiaMCSearchData){
+    	console.log(ERPiaMCSearchData.data);
+    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	},function(){
+    		alert('Request fail')	
+		});
+	};
+
+
+    /*$scope.searchesday=function(agoday){
+      $scope.reqparams.Kind='ERPia_Sale_Select_Master';
+      $scope.reqparams.Mode='Select_Date';
+      $scope.reqparams.sDate=$scope.dateMinus(agoday);
+     $scope.reqparams.eDate=$scope.dateMinus(0);
+       // CORS 요청 데모
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.junpyolists = data.list;
+
+      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+    }*/
+  /*매출전표 상세 모달*/
+  $ionicModal.fromTemplateUrl('templates/searchdetail.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $rootScope.modalsearchdetail = modal;
+  });
+  $scope.closemodalsearchdetail= function() {
+    $scope.deleteclick=false; //거래처검색모달 닫기
+    $rootScope.modalsearchdetail.hide();
+  };
+
+
+    $scope.meachulDetaildata={//매출디테일 데이터 저장소
+      Admin_Code: "",
+      Sl_No: "",
+      Subul_kind: "",
+      CName: "",
+      Sale_Place_Name: "",
+      Remk: "",
+      MeaChul_Date: "",
+      GerName: ""
+    };
+    $scope.meachulDetailGdata=[];
+    /*상세페이지 실행*/
+    $scope.searchdetail=function(SlNo){//매출전표 정보 불러오기
+     $scope.modalsearchdetail.show();
+     $scope.reqparams.Kind1='ERPia_Sale_Select_Detail';
+     $scope.reqparams.Sl_No1=SlNo;
+
+
+
+       // CORS 요청 데모Admin_Code, UserId, Kind, Mode, IL_No/Sl_No
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Sl_No='+$scope.reqparams.Sl_No1+'&Kind='+$scope.reqparams.Kind1).
+      success(function(data, status, headers, config) {
+        $scope.meachulDetailGdata=[];
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.lists = data.list;
+        $scope.meachulDetaildata.Admin_Code=$scope.lists[0].Admin_Code;
+        $scope.meachulDetaildata.Sl_No=$scope.lists[0].Sl_No;
+        $scope.meachulDetaildata.CName=$scope.lists[0].CName;
+        $scope.meachulDetaildata.Sale_Place_Name=$scope.lists[0].Sale_Place_Name;
+        $scope.meachulDetaildata.Remk=$scope.lists[0].Remk;
+        $scope.meachulDetaildata.MeaChul_Date=$scope.lists[0].MeaChul_Date;
+        $scope.meachulDetaildata.GerName=$scope.lists[0].GerName;
+        if($scope.lists[0].Subul_kind=="매출반품"){
+          $scope.meachulDetaildata.Subul_kind='212';
+        }else{
+          $scope.meachulDetaildata.Subul_kind='221';
+        }
+        for(var i=0;i<$scope.lists.length;i++){
+           $scope.meachulDetailGdata.push({
+              G_Seq: $scope.lists[i].Seq,
+              G_Name: $scope.lists[i].G_Name,
+              G_Stand: $scope.lists[i].G_Stand,
+              G_Qty: $scope.lists[i].G_Qty,
+              G_Price: $scope.lists[i].G_Price
+        });
+        }
+          console.log($scope.meachulDetaildata);
+          console.log($scope.meachulDetailGdata);
+      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+    }
+
+    
+
+    /*뒤로가기 눌렀을 시 이벤트*/
+$scope.deleteclicks=function(slno){//매출전표삭제버튼 클릭시
+    // An elaborate, custom popup
+  var myPopup = $ionicPopup.show({
+    template: '매출전표를 삭제합니다. 정말삭제하시겠습니까?',
+    title: '경고',
+    subTitle:'',
+    scope: $scope,
+    buttons: [
+      { text: '아니오' },
+      {
+        text: '<b>예</b>',
+        type: 'button-positive',
+        onTap: function(e) {
+          $scope.requestdeletecheck(slno);
+        }
+      }
+    ]
+  });
+  
+  };
+
+    $scope.requestdeletecheck = function(slno) {//매출전표삭제클릭시
+
+    $scope.reqparams.Mode='Delete_Check';
+    $scope.reqparams.Kind='ERPia_Sale_Delete_Goods';
+    $scope.reqparams.Sl_No=slno;
+       // CORS 요청 데모.Admin_Code, UserId, Kind, Mode, Sale_Place_Code
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&Sl_No='+$scope.reqparams.Sl_No).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.lists=data.list;
+        if($scope.lists.Rslt==1){
+          $ionicPopup.alert({
+
+                title: '삭제불가',
+                subTitle: '',
+                template: '이미 저장된 세금계산서가 존재합니다.'
+
+      });
+        }else if($scope.lists.Rslt==-2){
+           $ionicPopup.alert({
+
+                title: '삭제불가',
+                subTitle: '',
+                template: '배송정보가 존재합니다.'
+
+      });
+        }else if($scope.lists.Rslt==-1){
+          $ionicPopup.alert({
+
+                title: '삭제불가',
+                subTitle: '',
+                template: '이미 세금계산서와 배송정보가 존재합니다.'
+
+      });
+        }else{
+          
+        $scope.meachuldeleteclick(slno);
+      }
+      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+
+    };
+    $scope.deleteclick=false;
+    $scope.meachuldeleteclick=function(){//매출전표삭제 '예'클릭시
+        $scope.deleteclick=true;
+    };
+
+    $scope.requestdelete = function() {//전체삭제
+          $scope.reqparams.Mode='Delete_MeaChul';
+          $scope.reqparams.Kind='ERPia_Sale_Delete_Goods';
+   
+       // CORS 요청 데모.Admin_Code, UserId, Kind, Mode, Sale_Place_Code//<Sl_No>'+$scope.searchde.Sl_No+'</Sl_No><Sale_Place_Code>'+$scope.mejang.Sale_Place_Code+'</Sale_Place_Code>
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&Sl_No='+$scope.reqparams.Sl_No).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.deleteclick=false;
+        
+
+        $ionicPopup.alert({
+
+                title: '삭제완료',
+
+                template: '매출전표를 삭제했습니다.'
+
+      });
+        $scope.reqparams.Kind='ERPia_Sale_Select_Master';
+        $scope.closemodalsearchdetail();
+      
+      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+
+    };
+
+        $scope.requestTdelete = function(seqno) {//SEQ 삭제
+          $scope.reqparams.Mode='Delete_MeaChulT';
+          $scope.reqparams.Kind='ERPia_Sale_Delete_Goods';
+          
+       // CORS 요청 데모.Admin_Code, UserId, Kind, Mode, Sale_Place_Code//<Sl_No>'+$scope.searchde.Sl_No+'</Sl_No><Sale_Place_Code>'+$scope.mejang.Sale_Place_Code+'</Sale_Place_Code>
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&Sl_No='+$scope.reqparams.Sl_No+'&Tseq='+seqno).
+      success(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        $scope.deleteclick=false;
+        
+
+        $ionicPopup.alert({
+
+                title: '삭제완료',
+
+                template: seqno+'매출전표를 삭제했습니다.'
+
+      });
+        $scope.meachulDetailGdata.splice(seqno-1, 1);
+        $scope.reqparams.Kind='ERPia_Sale_Select_Master';
+      }).
+      error(function(data, status, headers, config) {
+        console.log(config);
+        console.log(status);
+        console.log(data);
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+
+    };
+
+
+
+})
+;
