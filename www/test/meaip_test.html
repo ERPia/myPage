@@ -1,0 +1,50 @@
+<ion-view title="매입전표조회">
+    <ion-nav-buttons side="right" ng-show="false">
+		<button>등록</button>
+	</ion-nav-buttons>
+<!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->	 
+	<ion-content>
+		<div align="center"> 
+			검색<hr>
+		</div>
+		<div class="list list-inset">
+			<label class="item item-input">
+				<i class="icon ion-search placeholder-icon"></i>
+				<input type="search" ng-model="listSearch" placeholder="상품명을 입력하세요">
+			</label>
+		</div>
+		<table width="100%">
+		<tr>
+	   			<td align="center">일자</td>
+	   			<td>
+					  <input type="date" size="11" style="border:1px solid #eee;">
+				</td>
+				<td>~</td>
+				<td>
+					  <input type="date" size="11" style="border:1px solid #eee;">
+				</td>
+				<td>
+	   				<button ng-click="meaip_searches()">검색</button>
+	   			</td>
+	   		</tr>
+	    </table>
+	    <div align="center">
+		    <button class="button button-calm" ng-click="searchestoday(0)">
+			  금일
+			</button>
+
+			<button class="button button-balanced" ng-click="searchestoday(1)">
+			  1주일
+			</button>
+
+			<button class="button button-energized" ng-click="searchestoday(2)">
+			  1개월
+			</button>
+		</div>
+		<hr>
+		<div align="center">
+	   		조회목록
+	   	</div>
+	   	<hr>
+	</ion-content>
+</ion-view>

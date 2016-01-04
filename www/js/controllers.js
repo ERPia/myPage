@@ -193,10 +193,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
+						$scope.loginData.Admin_Code = 'pikachu';
+						$scope.loginData.UserId = 'khs239';
+						$scope.loginData.Pwd = '1234';
+					break;
+					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
-					break;
+					break;*/
 				}
 			}
 		}
@@ -1245,7 +1250,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('chartCtrl', function($scope, $rootScope, statisticService){
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 		.then(function(data){
-			console.log('data', data);
+			//console.log('data', data);
 			$scope.charts = data;
 		})
 	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
@@ -1259,9 +1264,41 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('chartTestCtrl', function($scope, $sce, testLhkServicse){
 	testLhkServicse.test()
 		.then(function(data){
-			//console.log('test', data);
 			$scope.innerHtml = $sce.trustAsResourceUrl(data);
 		})
+
+		/* 날짜계산 */
+		$scope.dateMinus=function(days){
+
+		    var nday = new Date();  //오늘 날짜  
+		    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
+
+		    var yy = nday.getFullYear();
+		    var mm = nday.getMonth()+1;
+		    var dd = nday.getDate();
+
+		    if( mm<10 ) mm = "0" + mm;
+		    if( dd<10 ) dd = "0" + dd;
+
+		    return yy + "-" + mm + "-" + dd;
+
+		}
+
+		//오늘날짜 - 이부분은 질문
+		$scope.todate=$scope.dateMinus(0);
+
+		$scope.meaip_searches = function(){
+	    	console.log("chartTestCtrl->meaip_searches_F");
+	    	alert($scope.todate);
+    	};
+
+    	$scope.searchestoday = function(day){
+    		$scope.day = day;
+    		dayService.title($scope.day)
+			.then(function(data){
+				$scope.tabs = data;
+			})
+    	};
 })
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
 	var request = null;

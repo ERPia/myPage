@@ -95,6 +95,17 @@ angular.module('starter.services', [])
 	}
 })
 
+.factory('dayService', function($http, ERPiaAPI){
+	var ERPiaInfo = function(kind, Admin_Code, sDate, eDate){
+		var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
+		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code + '&sDate=' + sDate + '&eDate=' + eDate;
+		return $http.get(url + '?' + data);
+	}
+	return{
+		ERPiaInfo: ERPiaInfo
+	}
+})
+
 .factory('scmInfoService', function($http, ERPiaAPI){
 	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
 		var url = ERPiaAPI.url + '/JSon_Proc_Multi_Lhk.asp';
