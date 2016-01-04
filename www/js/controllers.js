@@ -1626,8 +1626,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     };
 })
 
+/*-------------------------------------------------------------*/
 /*----------------------매출전표조회 컨트롤러--------------------*/
-.controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http) {
+/*-------------------------------------------------------------*/
+.controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $window, $timeout, ERPiaAPI, ERPiaMCSearchService) {
 
 $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
    $scope.lastsclick = function(index) {
@@ -1638,7 +1640,7 @@ $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
 /**
      *--------------------------------------- 데이트피커 펑션 및 모달---------------------------
      */
-$ionicModal.fromTemplateUrl('templates/datemodal.html', 
+$ionicModal.fromTemplateUrl('erpia_meachul/datemodal.html', 
         function(modal) {
             $scope.datemodal = modal;
         },
@@ -1709,75 +1711,30 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
     };
 
 
-	$scope.MCDateSearchDefault = function() {
+/*	$scope.MCDateSearchDefault = function() {*/
 		console.log($scope.reqparams);
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
     	console.log(ERPiaMCSearchData.data);
-    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	},function(){
     		alert('Request fail')	
 		});
-	};
+/*	};*/
 
-/*
-    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Sl_No='+$scope.reqparams.Sl_No+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
-      success(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        $scope.junpyolists = data.list;
-/*        $state.go('app.search');*/
-     /* }).
-      error(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
-
-                template: 'Please check your credentials!'
-
-      });
-      });*/
   /*날짜검색 버튼을 클릭시 펑션 실행*/
 	$scope.searches = function() {
 		console.log($scope.reqparams);
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
     	console.log(ERPiaMCSearchData.data);
-    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	},function(){
     		alert('Request fail')	
 		});
 	};
-/*
-    $scope.searches=function(){
-      $scope.reqparams.Kind='ERPia_Sale_Select_Master';
-      $scope.reqparams.Mode='Select_Date';
-       // CORS 요청 데모
-    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
-      success(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        $scope.junpyolists = data.list;
-/*        $state.go('app.search');*/
-/*      }).
-      error(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
-
-                template: 'Please check your credentials!'
-
-      });
-      });
-    }*/
 
 
 /*function의 (agoday)가 마이너스 된 만큼 이전날짜 검색 실행*/
@@ -1790,42 +1747,15 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
     	console.log(ERPiaMCSearchData.data);
-    	$scope.junpyolists=ERPiaMCSearchData.data;
+    	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	},function(){
     		alert('Request fail')	
 		});
 	};
 
 
-    /*$scope.searchesday=function(agoday){
-      $scope.reqparams.Kind='ERPia_Sale_Select_Master';
-      $scope.reqparams.Mode='Select_Date';
-      $scope.reqparams.sDate=$scope.dateMinus(agoday);
-     $scope.reqparams.eDate=$scope.dateMinus(0);
-       // CORS 요청 데모
-    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate).
-      success(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        $scope.junpyolists = data.list;
-
-      }).
-      error(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        var alertPopup = $ionicPopup.alert({
-
-                title: 'Login failed!',
-
-                template: 'Please check your credentials!'
-
-      });
-      });
-    }*/
   /*매출전표 상세 모달*/
-  $ionicModal.fromTemplateUrl('templates/searchdetail.html', {
+  $ionicModal.fromTemplateUrl('erpia_meachul/searchdetail.html', {
     scope: $scope
   }).then(function(modal) {
     $rootScope.modalsearchdetail = modal;

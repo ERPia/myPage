@@ -376,8 +376,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'test/chart_test.html',
-				controller : 'testCtrl'
+				templateUrl : 'erpia_meachul/meachul_search.html',
+				controller : 'MeaChulSearchCtrl'
 			}
 		}
 	})
