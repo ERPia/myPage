@@ -578,7 +578,7 @@ angular.module('starter.services', [])
 	};
 })
 
-/*Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Sl_No='+$scope.reqparams.Sl_No+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&sDate='+$scope.reqparams.sDate+'&eDate='+$scope.reqparams.eDate*/
+/*매출전표 날짜 조회 서비스*/
 .factory('ERPiaMCSearchService', function($http, ERPiaAPI){
 	var ERPiaMCSearchData = function(Admin_Code, UserId, kind, Mode, Sl_No, sDate, eDate){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
@@ -588,5 +588,18 @@ angular.module('starter.services', [])
 	}
 	return{
 		ERPiaMCSearchData: ERPiaMCSearchData
+	}
+})
+
+/*매출전표 상세 조회 서비스*/
+
+.factory('ERPiaMCSearchDetailService', function($http, ERPiaAPI){
+	var ERPiaMCSearchDetailData = function(Admin_Code, UserId, kind, Sl_No){
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Sl_No=' + Sl_No
+		return $http.get(url + '?' + data);
+	}
+	return{
+		ERPiaMCSearchDetailData: ERPiaMCSearchDetailData
 	}
 });

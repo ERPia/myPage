@@ -1629,7 +1629,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 /*-------------------------------------------------------------*/
 /*----------------------매출전표조회 컨트롤러--------------------*/
 /*-------------------------------------------------------------*/
-.controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $window, $timeout, ERPiaAPI, ERPiaMCSearchService) {
+.controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $window, $timeout, ERPiaAPI, ERPiaMCSearchService, ERPiaMCSearchDetailService) {
 
 $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
    $scope.lastsclick = function(index) {
@@ -1777,22 +1777,21 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
       GerName: ""
     };
     $scope.meachulDetailGdata=[];
+
     /*상세페이지 실행*/
     $scope.searchdetail=function(SlNo){//매출전표 정보 불러오기
      $scope.modalsearchdetail.show();
      $scope.reqparams.Kind1='ERPia_Sale_Select_Detail';
      $scope.reqparams.Sl_No1=SlNo;
-
-
-
-       // CORS 요청 데모Admin_Code, UserId, Kind, Mode, IL_No/Sl_No
-    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Sl_No='+$scope.reqparams.Sl_No1+'&Kind='+$scope.reqparams.Kind1).
-      success(function(data, status, headers, config) {
-        $scope.meachulDetailGdata=[];
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        $scope.lists = data.list;
+	 console.log($scope.reqparams);
+	 	/*--------매출 상세 조회 -------------*/
+       // CORS 요청 데모 Admin_Code, UserId, kind1, Sl_No1
+	 ERPiaMCSearchDetailService.ERPiaMCSearchDetailData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind1, $scope.reqparams.Sl_No1)
+	.then(function(ERPiaMCSearchDetailData){
+	$scope.meachulDetailGdata=[];
+    console.log(ERPiaMCSearchDetailData.data);
+     $scope.lists=ERPiaMCSearchDetailData.data.list;
+     //0번째 배열의 정보를 기본회사정보로 가져온다.
         $scope.meachulDetaildata.Admin_Code=$scope.lists[0].Admin_Code;
         $scope.meachulDetaildata.Sl_No=$scope.lists[0].Sl_No;
         $scope.meachulDetaildata.CName=$scope.lists[0].CName;
@@ -1816,20 +1815,11 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
         }
           console.log($scope.meachulDetaildata);
           console.log($scope.meachulDetailGdata);
-      }).
-      error(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
-        console.log(data);
-        var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
-
-                template: 'Please check your credentials!'
-
-      });
-      });
-    }
+    },function(){
+    	alert('Request fail')	
+	});
+	};
 
     
 
@@ -1854,7 +1844,7 @@ $scope.deleteclicks=function(slno){//매출전표삭제버튼 클릭시
   });
   
   };
-
+//----------------------------------------------------------------------------------------------1월4일--------------------
     $scope.requestdeletecheck = function(slno) {//매출전표삭제클릭시
 
     $scope.reqparams.Mode='Delete_Check';
@@ -1863,8 +1853,6 @@ $scope.deleteclicks=function(slno){//매출전표삭제버튼 클릭시
        // CORS 요청 데모.Admin_Code, UserId, Kind, Mode, Sale_Place_Code
     $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.reqparams.Admin_Code+'&UserId='+$scope.reqparams.UserId+'&Kind='+$scope.reqparams.Kind+'&Mode='+$scope.reqparams.Mode+'&Sl_No='+$scope.reqparams.Sl_No).
       success(function(data, status, headers, config) {
-        console.log(config);
-        console.log(status);
         console.log(data);
         $scope.lists=data.list;
         if($scope.lists.Rslt==1){
