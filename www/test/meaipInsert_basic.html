@@ -1,0 +1,114 @@
+<ion-view view-title="간편매입 등록">
+	<ion-nav-bar>
+		<ion-nav-back-button ng-click="backControll()">Back</ion-nav-back-button>
+	</ion-nav-bar>
+  <ion-content>
+   <div ng-if="type=='basic'">
+   	<div align="center"> 
+	   기본 입력사항<hr>
+    </div>
+   		<label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;매입일&nbsp;</i>
+		  <input type="text" style="text-align:center;" value='{{today}}' readonly>
+		</label>
+
+		<label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;수불구분&nbsp;</i>
+		  <ion-radio ng-click="kindF(111)">입고</ion-radio>
+		  <ion-radio ng-click="kindF(122)">반품</ion-radio>
+		</label>
+
+		<label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;거래처&nbsp;</i>
+		  <input type="text" ng-model="meaipKorea.G_Name" style="text-align:center;" readonly ng-click="cusSearch()">&nbsp;
+		  <button class="button button-stable" ng-click="cusSearch()">검색</button>&nbsp;
+		</label>
+
+		<label class="item item-input item-select" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;매장지정</i>
+		  <select ng-model="maipbasiclist.Medefault" ng-change='Chango()'>
+		     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}},{{x.Sale_Place_Name}}">{{x.Sale_Place_Name}}</option>
+		  </select>
+		</label>
+
+		<label class="item item-input item-select" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;창고지정</i>
+		  <select ng-model="meaipKorea.changoKorea" ng-change='Changosave({{x.Code}})'>
+		  		 <option ng-repeat="x in changolists" value="{{x.Name}}">{{x.Name}}</option>
+		  </select>
+		</label>
+
+		<hr>
+		    <ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="meaipNext(0)">
+		    	다음단계
+		    </ion-item>
+	</div>
+	<div ng-if="type=='two'">
+
+		<div align="center"> 
+		   상품 검색<hr>
+		</div>
+		<div class="button-bar" style="align:center;">
+		&nbsp;&nbsp;
+		<table width="100%">
+        	<tr>
+	            <td>
+	          	&nbsp;<select ng-model="modedivition.mode" ng-change="modesear('',2)">
+	          		<option selected value="Select_G_Code">상품명</option>
+	                <option value="Select_G_OnCode">자체코드</option>
+	                <option value="Select_G_Code">상품코드</option>
+	            </select>&nbsp;&nbsp;
+	          	</td>
+	          	<td>
+	              	<input type="text" placeholder="상품명을 입력하세요" size="20" ng-model="mm.ser">
+	          	</td>
+	          	<td><i class="ion-search" style="font-size:30px" ng-click="modesear('Select_GoodsName',2)"></i></td>
+	          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
+          	</tr>
+        </table>
+        </div>
+
+		    <!-- <select style="width:30%" ng-model="modedivition.mode" ng-change="modesear('',1)">
+		      <option value="Select_G_OnCode">자체코드</option>
+		      <option value="Select_G_Code">상품코드</option>
+		    </select>
+			  <a class="button" ng-click="scanBarcode(1)" style="width:30%">바코드</a>&nbsp;
+			 </div>
+
+		  <div class="button-bar" style="width:100% align:center; padding:5px; border:1px solid #eee;">
+		    &nbsp;&nbsp;<i class="icon ion-search placeholder-icon" ></i>
+		    <input type="text" placeholder="상품명을 입력하세요" ng-model="mm.ser">
+		    <a class="button button-clear" ng-click="modesear('Select_GoodsName',1)">검색</a>
+		  </div> -->
+
+			<div align="center"> 
+		   		<hr>상품 등록<hr>
+		   	<table width="100%" style="text-align:center;">
+		   		<tr bgcolor="#EAEAEA">
+		   			<td width="40%">상품명</td>
+		   			<td width="10%">수 량</td>
+		   			<td width="40%">단 가</td>
+		        <td width="10%">&nbsp;</td>
+		   		</tr>
+		      <tr>
+		        <td colspan="4"><hr></td>
+		      </tr>
+		      <tr ng-repeat="y in addlists">
+		        <td>{{y.namegoods}}</td>
+		        <td><input type="number" min="1" max="999" ng-model="y.numgoods" required></td>
+		        <td>{{y.gdngoods}}</td>
+		        <td><i class="ion-android-remove-circle" ng-click="goodsDelete($index)"></i>&nbsp;</td>
+		      </tr>
+		   	</table>
+		    <br>
+		    <button class="button button-calm" ng-click="meaipNext(1)" style="margin-top:40px">
+			  이전
+			</button>
+			<button class="button button-balanced" style="margin-top:40px" ng-click='meaipDataRegist()'>
+			  등록
+			</button>
+		   </div>
+
+	</div>
+  </ion-content>
+</ion-view>

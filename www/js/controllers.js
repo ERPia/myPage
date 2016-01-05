@@ -1261,11 +1261,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         [12, 54, 23, 43, 34, 45, 65]
     ];
 })
-.controller('chartTestCtrl', function($scope, $sce, testLhkServicse){
-	testLhkServicse.test()
-		.then(function(data){
-			$scope.innerHtml = $sce.trustAsResourceUrl(data);
-		})
+//////////////////////////////////////////					매입 테스트					//////////////////////////////////////////////
+.controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService){
 
 		/* 날짜계산 */
 		$scope.dateMinus=function(days){
@@ -1283,23 +1280,203 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    return yy + "-" + mm + "-" + dd;
 
 		}
-
-		//오늘날짜 - 이부분은 질문
-		$scope.todate=$scope.dateMinus(0);
-
-		$scope.meaip_searches = function(){
-	    	console.log("chartTestCtrl->meaip_searches_F");
-	    	alert($scope.todate);
-    	};
-
+		$rootScope.today = $scope.dateMinus(0);
+    	//날짜별 검색
     	$scope.searchestoday = function(day){
-    		$scope.day = day;
-    		dayService.title($scope.day)
+    		$scope.date={
+    			sdate : '',
+    			edate : ''
+    		}
+    		if(day == 100){
+    			console.log('사용자 입력data');
+    			alert($scope.date.sdate);
+    			alert($scope.date.edate);
+    		}else if(day == 0){
+    			console.log('금일data');
+    			$scope.date.sdate = $scope.dateMinus(0);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}else if(day == 7){
+    			console.log('1주일data');
+    			$scope.date.sdate = $scope.dateMinus(7);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}else{
+    			console.log('한달data');
+    			$scope.date.sdate = $scope.dateMinus(30);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}
+    		dayService.day($scope.date.sdate, $scope.date.edate, $scope.loginData.Admin_Code, $scope.loginData.UserId)
 			.then(function(data){
-				$scope.tabs = data;
+				$scope.lists = data.list;
+				console.log("?->" , data.list);
 			})
     	};
+
+    	$scope.listSearch = ''; //상품명 검색
+		$scope.listindex = 5; //더보기 5개씩
+
+		/* 더보기 처리 */
+		 $scope.more=function(){
+		  $scope.listindex = $scope.listindex + 5;
+		 }
+
+		 /* 매입전표 조회 */
+		 $scope.meaipChitF = function(lino){
+		 	dayService.meaipChit(lino, $scope.loginData.Admin_Code, $scope.loginData.UserId)
+			.then(function(data){
+				$rootScope.meaipchitlists = data.list;
+				console.log("?->" , data.list);
+				/* 총 수량 & 가격 */
+				$rootScope.qtysum = 0;//총 수량
+		        $rootScope.pricesum = 0;//총 가격
+		        for (var i = 0; i < $rootScope.meaipchitlists.length; i++) {
+		          $rootScope.qtysum = parseInt($rootScope.qtysum) + parseInt($rootScope.meaipchitlists[i].G_Qty);
+		          $rootScope.gop = parseInt($rootScope.meaipchitlists[i].G_Qty)*parseInt($rootScope.meaipchitlists[i].G_Price);
+		          $rootScope.pricesum = parseInt($rootScope.pricesum) + parseInt($rootScope.gop);
+		      	}
+				location.href="#/app/meaipChit";
+			})
+		 }
+
 })
+.controller('meaipInsertCtrl', function($scope, $sce, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, meaipMjangService){
+	/* 매입 등록 정보*/
+	$scope.maipbasiclist={
+		Medefault : '',
+		Mejang_Code : 0,
+		subul_kind : 0,
+		Comp_no : 0,
+		ChangGo_Code : 0
+	}
+	$scope.meaipKorea={
+		subulkorea : '',
+		G_Name : '',
+		MejangKorea : '',
+		changoKorea : ''
+
+	}
+	$scope.cus = {
+	  GerName : ''
+	};
+
+	/* customerSearch modal */
+	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.customerModal = modal;
+	});
+
+	/* meaip Insert modal */
+	$ionicModal.fromTemplateUrl('test/meaipinsertM.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.modalmeaipDataRegi = modal;
+	});
+
+	/* customerSearch modal Show */
+	$scope.cusSearch = function() {
+	    $scope.customerModal.show();
+	};
+
+	/* customerSearch modal Close */
+	$scope.cussearchClose = function() {
+		$scope.customerModal.hide();
+	};
+
+    /* meaip Insert modal Show */
+	$scope.meaipDataRegist = function() {
+	    $scope.modalmeaipDataRegi.show();
+	};
+
+	/* meaip Insert modal Close */
+	$scope.closemodeInsert = function() {
+		$scope.modalmeaipDataRegi.hide();
+	};
+
+	/*기본 매장 default*/
+	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.mejanglists = data.list;
+		})
+	$scope.type='basic';
+
+	$scope.Chango=function(){
+		$scope.changos = $scope.maipbasiclist.Medefault.split(',');
+
+		$scope.maipbasiclist.Mejang_Code = $scope.changos[0];
+		$scope.meaipKorea.MejangKorea = $scope.changos[1];
+
+		meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.maipbasiclist.Mejang_Code)
+		.then(function(data){
+			$scope.changolists = data.list;
+		})
+	}
+
+	$scope.Changosave=function(chnagoName){
+		$scope.maipbasiclist.ChangGo_Code = chnagoName;
+	}
+
+	//subulkind
+    $scope.kindF=function(kindcode){
+      $scope.maipbasiclist.subul_kind = kindcode;
+      if (kindcode == 122) {
+        $scope.meaipKorea.subulkorea = "반품";
+        $scope.maipbasiclist.subul_kind = kindcode;
+      }else{
+        $scope.meaipKorea.subulkorea = "입고";
+        $scope.maipbasiclist.subul_kind = kindcode;
+      };
+      console.log("subul_kind = " , $scope.meaipKorea.subulkorea);
+    }
+
+    //거래처창고 조회후 값저장
+    $scope.customerFunc=function(gname,gcode){
+        $scope.meaipKorea.G_Name=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+      	$scope.customerModal.hide();
+    }
+
+    $scope.ss=function(){
+    	var cusname = $scope.cus.GerName;
+    	alert(cusname);
+    	meaipMjangService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+		.then(function(data){
+			$scope.customerDatas = data.list;
+		})
+    }
+
+    $scope.meaipNext=function(num){
+    	if(num == 0){
+    		$scope.type='two';
+    	}else{
+    		$scope.type='basic';
+    	}
+    }
+
+	//backcontroll
+     $scope.backControll=function(){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }},
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  $ionicHistory.goBack();
+             }
+           },
+         ]
+        })
+     }
+
+	})
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
 	var request = null;
 	var indexList = [];
