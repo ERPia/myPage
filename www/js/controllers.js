@@ -193,12 +193,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
-						$scope.loginData.Admin_Code = 'lhktest';
-						$scope.loginData.UserId = 'gyaradosz';
-						$scope.loginData.Pwd = '1234';
-						// $scope.loginData.Admin_Code = 'onz';
-						// $scope.loginData.UserId = 'lhk';
-						// $scope.loginData.Pwd = 'alsdud0125!';
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = 'lhk';
+						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
 				}
 			}
@@ -245,7 +242,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
 					$scope.ion_login = "ion-power";
 
-					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
+					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br> (' + comInfo.data.list[0].Com_Code + ')';
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
 					$scope.userData.cnt_user = comInfo.data.list[0].User_Count + ' 명';
 					$scope.userData.cnt_site = comInfo.data.list[0].Mall_ID_Count + ' 개';
