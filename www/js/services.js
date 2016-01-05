@@ -602,4 +602,36 @@ angular.module('starter.services', [])
 	return{
 		ERPiaMCSearchDetailData: ERPiaMCSearchDetailData
 	}
+})
+
+/*매출전표 삭제 서비스 ERPiaMCDeleteService*/
+//$scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No
+.factory('ERPiaMCDeleteService', function($http, ERPiaAPI){
+	var ERPiaMCDeleteResult = function(Admin_Code, UserId, kind, mode, Sl_No){
+		
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode+ '&Sl_No=' + Sl_No
+		return $http.get(url + '?' + data);
+		
+	}
+	return{
+		ERPiaMCDeleteResult: ERPiaMCDeleteResult
+	}
+})
+
+
+
+/*매출전표 삭제 서비스 ERPiaMCTDeleteService*/
+//$scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No
+.factory('ERPiaMCTDeleteService', function($http, ERPiaAPI){
+	var ERPiaMCDeleteResult = function(Admin_Code, UserId, kind, mode, Sl_No, Tseq){
+		
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode+ '&Sl_No=' + Sl_No + '&Tseq=' + Tseq
+		return $http.get(url + '?' + data);
+		
+	}
+	return{
+		ERPiaMCDeleteResult: ERPiaMCDeleteResult
+	}
 });

@@ -2,7 +2,7 @@
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
+// the 2nd parameter is an array of 'requires'['ionic', 'starter.controllers', 'ngCordova']
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
@@ -378,6 +378,18 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			'menuContent' : {
 				templateUrl : 'erpia_meachul/meachul_search.html',
 				controller : 'MeaChulSearchCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+		.state('app.mechul_page', {
+		url : '/mechul_page',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/mechul_page.html',
+				controller : 'MeaChulinsertCtrl'
 			}
 		}
 	})

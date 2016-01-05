@@ -6,7 +6,7 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <div style='width:100%' ng-if='deleteclick==false'>
+    <div style="width:100%" ng-if="deleteclick==false">
     <br>
    <div class="row" style='width:100%'>
   <div class="col col-33">업체코드</div>
@@ -58,12 +58,12 @@
   <div class="col col-33">비고</div>
   <div class="col col-33" style="width:67%">{{meachulDetaildata.Remk}}</div>
 </div>
-  <button ng-controller='MeaChulinsertCtrl' ng-click='requestupdatecheck(meachulDetaildata.Sl_No)' align='left'>매출전표수정</button>
-  <button ng-click='deleteclicks(meachulDetaildata.Sl_No)' align='right'>매출전표삭제</button>
+  <button ng-click='deleteclickbtn(meachulDetaildata.Sl_No)'>매출전표삭제</button>
+  <button ng-controller="MeaChulinsertCtrl" ng-click="requestupdatecheck(meachulDetaildata.Sl_No)">매출전표수정</button>
   </div>
 
   <!--매출전표 수정페이지-->
-    <div style='width:100%' ng-if='deleteclick==true'>
+    <div style='width:100%' ng-if="deleteclick==true">
     <br>
    <div class="row" style='width:100%'>
   <div class="col col-33">업체코드</div>
@@ -88,7 +88,7 @@
   <div class="row" style='width:100%'>
   <div class="col col-33">상품명({{meachuldetail.G_Seq}})</div>
   <div class="col col-33" style="width:67%">{{meachuldetail.G_Name}}</div>
-  <div class="col col-33"><i ng-click="requestTdelete(meachuldetail.G_Seq)" class="ion-ios-close"></i></div>
+  <div class="col col-33"><i ng-click="requestdeleteTbtn(meachuldetail.G_Seq)" class="ion-ios-close"></i></div>
 </div>
   <div class="row" style='width:100%'>
   <div class="col col-33">규격</div>
@@ -109,7 +109,7 @@
   <div class="col col-33">비고</div>
   <div class="col col-33" style="width:67%">{{meachulDetaildata.Remk}}</div>
 </div>
-  <button ng-click='requestdelete(meachulDetaildata.Sl_No)' align='right'>매출전표전체삭제</button>
+  <button ng-click="requestdeletebtn(meachulDetaildata.Sl_No)" align='right'>매출전표전체삭제</button>
   </div>
 
   </ion-content>
