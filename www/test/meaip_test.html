@@ -1,6 +1,6 @@
 <ion-view title="매입전표조회">
     <ion-nav-buttons side="right" ng-show="false">
-		<button>등록</button>
+		<any onclick="location.href='#/app/meaipInsert'">등록</any>
 	</ion-nav-buttons>
 <!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->	 
 	<ion-content>
@@ -17,14 +17,14 @@
 		<tr>
 	   			<td align="center">일자</td>
 	   			<td>
-					  <input type="date" size="11" style="border:1px solid #eee;">
+					  <input type="text" ng-model='date.sdate' size="11" style="border:1px solid #eee;">
 				</td>
 				<td>~</td>
 				<td>
-					  <input type="date" size="11" style="border:1px solid #eee;">
+					  <input type="text" ng-model='date.edate' size="11" style="border:1px solid #eee;">
 				</td>
 				<td>
-	   				<button ng-click="meaip_searches()">검색</button>
+	   				<button ng-click="searchestoday(100)">검색</button>
 	   			</td>
 	   		</tr>
 	    </table>
@@ -33,11 +33,11 @@
 			  금일
 			</button>
 
-			<button class="button button-balanced" ng-click="searchestoday(1)">
+			<button class="button button-balanced" ng-click="searchestoday(7)">
 			  1주일
 			</button>
 
-			<button class="button button-energized" ng-click="searchestoday(2)">
+			<button class="button button-energized" ng-click="searchestoday(30)">
 			  1개월
 			</button>
 		</div>
@@ -46,5 +46,29 @@
 	   		조회목록
 	   	</div>
 	   	<hr>
+	   	<any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
+	   	<a ng-click="meaipChitF(x.iL_No)">
+		<table>
+		   	<tr>
+			   	<td width="20%" align="center">품명</td>
+			   	<td width="80%" align="center">{{x.G_Name}}</td>
+			</tr>
+			<tr>
+			   	<td width="20%" align="center">매입일</td>
+			   	<td width="80%" align="center">{{x.Meaip_Date}}</td>
+			</tr>
+			<tr>
+			   	<td width="20%" align="center">거래처</td>
+			   	<td width="80%" align="center">{{x.Admin_Code}}</td>
+			</tr>
+			<tr>
+			   	<td width="20%" align="center">매출총액</td>
+			   	<td width="80%" align="center">{{x.Meaip_Amt}}</td>
+			</tr>
+		</table>
+		</a>
+			<button ng-click="more()" ng-if="$index + 1 == listindex">더보기</button>
+		<hr>
+		</any>
 	</ion-content>
 </ion-view>

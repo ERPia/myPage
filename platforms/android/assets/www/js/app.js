@@ -6,18 +6,18 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
- .constant('ERPiaAPI',{
+/* .constant('ERPiaAPI',{
  	url:'http://localhost:8100/include'
  	, imgUrl:'http://localhost:8100/erpia_update/img'
  	, toast:'N'
- })
+ })*/
 
-// 실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-// 	, toast:'Y'
-// })
+//실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, toast:'Y'
+})
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
@@ -376,11 +376,31 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'test/chart_test.html',
-				controller : 'testCtrl'
+				templateUrl : 'test/meaip_test.html',
+				controller : 'chartTestCtrl'
 			}
 		}
 	})
+	/*전표조회*/
+	.state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipChit.html',
+          controller: 'chartTestCtrl'
+        }
+      }
+    })
+    /*전표조회*/
+	.state('app.meaipInsert', {
+      url: '/meaipInsert',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipInsert_basic.html',
+          controller: 'meaipInsertCtrl'
+        }
+      }
+    });
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

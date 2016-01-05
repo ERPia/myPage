@@ -94,6 +94,84 @@ angular.module('starter.services', [])
 		ERPiaInfo: ERPiaInfo
 	}
 })
+//////////////////////////////////////////////////////////////		meaip		///////////////////////////////////////////////////////////////////////////
+.factory('dayService', function($http, $q, ERPiaAPI){
+	return{
+		day: function(sdate, edate, admin_code, userid){
+			console.log("sdate=", sdate);
+			console.log("edate=", edate);
+			console.log('er url=', ERPiaAPI.url);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Master&Mode=Select_Date&sDate=' + sdate + '&eDate=' + edate;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('dayService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, meaipChit: function(lino, admin_code, userid){
+			console.log("lino=", lino);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Detail&Mode=&IL_No=' + lino;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('dayService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}
+	};
+})
+
+.factory('meaipMjangService', function($http, ERPiaAPI){
+	return{
+		basicM: function(admin_code, userid){
+			console.log("meaipMjangService and basic");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, changoSearch: function(admin_code, userid, chango_code){
+				console.log("meaipMjangService and changoSearch");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + chango_code;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	};
+})
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .factory('scmInfoService', function($http, ERPiaAPI){
 	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){

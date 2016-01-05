@@ -1,0 +1,42 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">거래처 검색</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="cussearchClose()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+  <div align="center">
+  <table>
+  <tr>
+  <td width="90%">
+    <label class="item item-input">
+	  <i class="icon ion-search placeholder-icon"></i>
+	  <input type="search" placeholder="Search" ng-model="cus.GerName">
+	</label>
+	</td>
+	<td width="10%">
+	<button class="button button-clear" ng-click="ss()">검색</button>
+	</td>
+	</tr>
+	</table>
+   	<table>
+	   	<tr>
+		   	<td width="10%" align="center">코드</td>
+		   	<td width="80%" align="center">거래처명</td>
+		</tr>
+	</table>
+	<hr>
+	<any ng-repeat="x in customerDatas">
+		<table>
+			<tr ng-click="customerFunc(x.G_Name,x.G_Code)">
+			<td width="10%">&nbsp;</td>
+			   	<td width="10%" align="center">{{x.G_Code}}</td>
+			   	<td width="90%" align="center">{{x.G_Name}}</td>
+			</tr>
+		</table>
+		<hr>
+	</any>
+    </div>
+  </ion-content>
+</ion-modal-view>
