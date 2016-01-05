@@ -1791,7 +1791,7 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
 	$scope.meachulDetailGdata=[];
     console.log(ERPiaMCSearchDetailData.data);
      $scope.lists=ERPiaMCSearchDetailData.data.list;
-     //0번째 배열의 정보를 기본회사정보로 가져온다.
+     //0번째 배열의 정보를 기본거래처정보로 가져온다.
         $scope.meachulDetaildata.Admin_Code=$scope.lists[0].Admin_Code;
         $scope.meachulDetaildata.Sl_No=$scope.lists[0].Sl_No;
         $scope.meachulDetaildata.CName=$scope.lists[0].CName;
