@@ -2008,7 +2008,7 @@ $scope.basic_Select_fail='success';
 
     $scope.meachulupdateclick=function(SlNo){//매출업데이트 클릭시
      $rootScope.modalsearchdetail.hide();
-     location.href='#/app/submenu';
+     location.href='#/app/mechul_page';
      $scope.searchde.Kind='ERPia_Sale_Select_Detail';
      $scope.searchde.Mode='';
      $scope.searchde.Sl_No=SlNo;
