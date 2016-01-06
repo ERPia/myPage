@@ -130,7 +130,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.pushUserRegist = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
-		    	console.log('pushUserRegist success ::[' + $rootScope.token + ']');
+		    	console.log(pushInfo)
+		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
@@ -188,14 +189,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				switch($rootScope.userType){
 					case 'SCM':
 						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = '111';
-						$scope.loginData.Pwd = '111';
+						$scope.loginData.UserId = '1111';
+						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
+						$scope.loginData.Admin_Code = 'pikachu';
+						$scope.loginData.UserId = 'khs239';
+						$scope.loginData.Pwd = '1234';
+					break;
+					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
-					break;
+					break;*/
 				}
 			}
 		}
@@ -449,7 +455,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 })
 
-.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaPrinter, $cordovaToast, $ionicModal, $ionicHistory, tradeDetailService, ERPiaAPI){
+.controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
+	, tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -489,13 +496,41 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	$ionicSlideBoxDelegate.previous();
 	// }
 	$scope.print = function(){
-		if($cordovaPrinter.isAvailable()){
-			$cordovaPrinter.print('www.erpia.net/mobile/trade_Detail.asp');
-		}else{
-			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('Printing is not available on device', 'long', 'center');
-			else alert('Printing is not available on device');
-		}
+		cordova.plugins.printer.isAvailable(
+		    function (isAvailable) {
+		    	// URI for the index.html
+				//var page = 'www.erpia.net/mobile/trade_Detail.asp';
+				var page = document.getElementById('divTradeDetail_Print_Area');
+				cordova.plugins.printer.print(page, 'Document.html', function () {
+				    alert('printing finished or canceled')
+				});
+		    }
+		);
 	}
+	// create canvas object
+	// function getCanvas(form, a4){
+	// 	form.width((a4[0]*1.33333) -80).css('max-width','none');
+	// 	return html2canvas(form,{imageTimeout:2000,removeContainer:true}); 
+	// }
+	// // function createPDF(form){
+	// // 	getCanvas().then(function(canvas){
+	// // 	var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
+	// // 		doc.addImage(img, 'JPEG', 20, 20);
+	// // 		doc.save('techumber-html-to-pdf.pdf');
+	// // 		form.width(cache_width);
+	// // 	});
+	// // }
+	// $scope.createPDF = function(){
+	// 	// for a4 size paper width and height
+	// 	var form = $('.form'), cache_width = form.width(), a4  =[ 595.28,  841.89];
+	// 	$('body').scrollTop(0);
+	// 	getCanvas(form, a4).then(function(canvas){
+	// 		var img = canvas.toDataURL("image/png"), doc = new jsPDF({unit:'px', format:'a4'});     
+	// 		doc.addImage(img, 'JPEG', 20, 20);
+	// 		doc.save('techumber-html-to-pdf.pdf');
+	// 		form.width(cache_width);
+	// 	})
+	// }
 	$scope.check_Sano = function(){
 		console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
 		if($scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1) == $scope.userData.Sano){
@@ -956,9 +991,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 })
 
-.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, csInfoService){
+.controller('CsCtrl', function($rootScope, $scope, $ionicModal, $timeout, $stateParams, $location, $http, csInfoService, TestService){
 	console.log("CsCtrl");
 	$scope.csData = {};
+
+	var ChkinterestTopic = [];
+	$scope.interestTopic1 = "";
+	$scope.interestTopic2 = "";
+	$scope.interestTopic3 = "";
+
+	var csResigtData = [];
+	$scope.interestTopicRemoveYN = "";
 
     $scope.dialNumber = function(number) {
         window.open('tel:' + number, '_system');
@@ -987,7 +1030,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    { id: 10, value: "발주관리" },
 	    { id: 11, value: "그룹사관리" }
   	];
-
+	
+	var updated = 0;
+	$scope.$watch('csData.interestTopic', function(newValue, oldValue, oldValue2) {
+		if (newValue === oldValue || newValue === oldValue2 || oldValue === oldValue2) {
+				return;
+		}
+		switch(updated){
+			case 0: ChkinterestTopic[0] = $scope.csData.interestTopic; updated++; $scope.interestTopic1 = ChkinterestTopic[0]; $scope.interestTopicRemoveYN = "Y"; break;
+			case 1: ChkinterestTopic[1] = $scope.csData.interestTopic; updated++; $scope.interestTopic2 = ' /' + ChkinterestTopic[1]; break;
+			case 2: ChkinterestTopic[2] = $scope.csData.interestTopic; updated = 0; $scope.interestTopic3 = ' /' + ChkinterestTopic[2]; break;
+		}
+		console.log(ChkinterestTopic);
+		},true
+	);
+		
   	$scope.inflowRoutelist = [
 	    { id: 1, value: "검색엔진" },
 	    { id: 2, value: "인터넷광고" },
@@ -1000,37 +1057,85 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	
   	$scope.csRegist = function() {
   		console.log($scope.csData);
-		csInfoService.csInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, $scope.csData.comName,
-							 $scope.csData.writer , $scope.csData.subject, $scope.csData.tel, $scope.csData.sectors, $scope.csData.interestTopic,
-							 $scope.csData.inflowRoute, $scope.csData.contents)
-	    .then(function(csInfo){
-	    	console.log('csRegist success');
-	    	a
-	    },function(){
-			alert('csRegist fail')	
-		});
+  		var errMsg = "";
+  		csResigtData[0] = $scope.csData.comName;
+	  	csResigtData[1] = $scope.csData.writer;
+	  	csResigtData[2] = $scope.csData.subject;
+	  	csResigtData[3] = $scope.csData.tel;
+	  	csResigtData[4] = $scope.csData.sectors;
+	  	csResigtData[5] = $scope.interestTopic1;
+	  	csResigtData[6] = $scope.interestTopic2;
+	  	csResigtData[7] = $scope.interestTopic3;
+	  	csResigtData[8] = $scope.csData.inflowRoute;
+	  	csResigtData[9] = $scope.csData.contents;
+
+	  	if(!$scope.csData.comName != ''){
+	  		errMsg += "회사명";
+	  	}
+	  	if(!$scope.csData.subject != ''){
+	  		errMsg += "/제목";
+	  	}
+	  	if(!$scope.csData.tel != ''){
+	  		errMsg += "/연락처";
+	  	}
+	  	if(!$scope.csData.sectors != ''){
+	  		errMsg += "/업종"
+	  	}
+	  	if(!csResigtData[5] != ''){
+	  		errMsg += "/관심항목";
+	  	}
+	  	if(!$scope.csData.inflowRoute != ''){
+	  		errMsg += "/유입경로";
+	  	}
+	  	if(!$scope.csData.contents != ''){
+	  		errMsg += "/문의사항";
+	  	}
+	  	if(errMsg != ""){
+	  		console.log(errMsg + "쓰셈");
+	  		if(errMsg.substring(0, 1) == "/"){
+	  			errMsg = errMsg.replace("/", "");
+	  		}
+	  		alert(errMsg + " 은(는) 필수 입력 항목입니다.")
+	  	}else{
+			// Admin_Code, UserId, kind, chkAdmin, comName, writer, subject, tel, sectors, interestTopic1,interestTopic2, interestTopic3, inflowRoute, contents
+			csInfoService.csInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_CS_Save', $rootScope.loginState, escape(csResigtData[0]),
+								 escape(csResigtData[1]), escape(csResigtData[2]), escape(csResigtData[3]), escape(csResigtData[4]), escape(csResigtData[5]),
+								 escape(csResigtData[6]), escape(csResigtData[7]), escape(csResigtData[8]), escape(csResigtData[9]))
+		    .then(function(csInfo){
+		    	alert('등록 성공');
+		    },function(){
+				alert('등록 실패')	
+			});
+		};
 	};
 
-	//test 용 OT201304100001
-	// $scope.csRegist = function() {
- 	//  		console.log($scope.csData);
- 	//  		// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_SlNo', 'OT201304100001','','','','','','2013-01-01','2015-01-01' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Master', 'Select_Date', '','','','','','','2013-01-01','2015-01-01' )
-	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', 'OT201304100001','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Sale_Select_Detail', '', '','','','','','','','' )
+	$scope.interestTopicRemove = function() {
+		$scope.interestTopic1 = "";
+		$scope.interestTopic2 = "";
+		$scope.interestTopic3 = "";
+		$scope.interestTopicRemoveYN = "N";
+		updated = 0;
+	}
 
+	// //test 용 OT201304100001
+	// $scope.csRegist2 = function() {
+ // 	 	console.log($scope.csData);
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Master', 'Select_ILNo', 'Ip201512030001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Master', 'Select_Date', '2015-11-01', '2015-12-03')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Detail', '', 'Ip201512020001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_GerName', '', 'g')
+	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_Place')
+	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_CName', '001')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GoodsName', 'ra')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_G_OnCode', 'erpia:SFSELFAA0000036')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Goods', 'Select_G_Code', '9806200718567')
+	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GI_Code', '5555')
+		
+	// 	//되는거
+	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>02474</GuMeaCom_Code><Meaip_Amt>2200000</Meaip_Amt><Sale_Place>001</Sale_Place><Remk> <![CDATA[띄어쓰기 테스트 입니다 /?!]]> </Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9808316000018</G_Code><G_name> <![CDATA[띄어쓰기 테스트 상품 ㅁ ㅁ ㅁ]]> </G_name><G_stand> <![CDATA[]]> </G_stand><G_Price>1004</G_Price><G_Qty>200</G_Qty><G_vat>1800</G_vat></item><item><seq>2</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]> </G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item><item><seq>3</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]></G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
+	// 	//안되는거 
+	// 	TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
+	// 	// erpia.net/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>99921</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>
 	//     .then(function(testInfo){
 	//     	console.log(testInfo.data);
 	//     },function(){
@@ -1145,7 +1250,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('chartCtrl', function($scope, $rootScope, statisticService){
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 		.then(function(data){
-			console.log('data', data);
+			//console.log('data', data);
 			$scope.charts = data;
 		})
 	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
@@ -1156,13 +1261,222 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         [12, 54, 23, 43, 34, 45, 65]
     ];
 })
-.controller('chartTestCtrl', function($scope, $sce, testLhkServicse){
-	testLhkServicse.test()
-		.then(function(data){
-			//console.log('test', data);
-			$scope.innerHtml = $sce.trustAsResourceUrl(data);
-		})
+//////////////////////////////////////////					매입 테스트					//////////////////////////////////////////////
+.controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService){
+
+		/* 날짜계산 */
+		$scope.dateMinus=function(days){
+
+		    var nday = new Date();  //오늘 날짜  
+		    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
+
+		    var yy = nday.getFullYear();
+		    var mm = nday.getMonth()+1;
+		    var dd = nday.getDate();
+
+		    if( mm<10 ) mm = "0" + mm;
+		    if( dd<10 ) dd = "0" + dd;
+
+		    return yy + "-" + mm + "-" + dd;
+
+		}
+		$rootScope.today = $scope.dateMinus(0);
+    	//날짜별 검색
+    	$scope.searchestoday = function(day){
+    		$scope.date={
+    			sdate : '',
+    			edate : ''
+    		}
+    		if(day == 100){
+    			console.log('사용자 입력data');
+    			alert($scope.date.sdate);
+    			alert($scope.date.edate);
+    		}else if(day == 0){
+    			console.log('금일data');
+    			$scope.date.sdate = $scope.dateMinus(0);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}else if(day == 7){
+    			console.log('1주일data');
+    			$scope.date.sdate = $scope.dateMinus(7);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}else{
+    			console.log('한달data');
+    			$scope.date.sdate = $scope.dateMinus(30);
+    			$scope.date.edate = $scope.dateMinus(0);
+    		}
+    		dayService.day($scope.date.sdate, $scope.date.edate, $scope.loginData.Admin_Code, $scope.loginData.UserId)
+			.then(function(data){
+				$scope.lists = data.list;
+				console.log("?->" , data.list);
+			})
+    	};
+
+    	$scope.listSearch = ''; //상품명 검색
+		$scope.listindex = 5; //더보기 5개씩
+
+		/* 더보기 처리 */
+		 $scope.more=function(){
+		  $scope.listindex = $scope.listindex + 5;
+		 }
+
+		 /* 매입전표 조회 */
+		 $scope.meaipChitF = function(lino){
+		 	dayService.meaipChit(lino, $scope.loginData.Admin_Code, $scope.loginData.UserId)
+			.then(function(data){
+				$rootScope.meaipchitlists = data.list;
+				console.log("?->" , data.list);
+				/* 총 수량 & 가격 */
+				$rootScope.qtysum = 0;//총 수량
+		        $rootScope.pricesum = 0;//총 가격
+		        for (var i = 0; i < $rootScope.meaipchitlists.length; i++) {
+		          $rootScope.qtysum = parseInt($rootScope.qtysum) + parseInt($rootScope.meaipchitlists[i].G_Qty);
+		          $rootScope.gop = parseInt($rootScope.meaipchitlists[i].G_Qty)*parseInt($rootScope.meaipchitlists[i].G_Price);
+		          $rootScope.pricesum = parseInt($rootScope.pricesum) + parseInt($rootScope.gop);
+		      	}
+				location.href="#/app/meaipChit";
+			})
+		 }
+
 })
+.controller('meaipInsertCtrl', function($scope, $sce, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, meaipMjangService){
+	/* 매입 등록 정보*/
+	$scope.maipbasiclist={
+		Medefault : '',
+		Mejang_Code : 0,
+		subul_kind : 0,
+		Comp_no : 0,
+		ChangGo_Code : 0
+	}
+	$scope.meaipKorea={
+		subulkorea : '',
+		G_Name : '',
+		MejangKorea : '',
+		changoKorea : ''
+
+	}
+	$scope.cus = {
+	  GerName : ''
+	};
+
+	/* customerSearch modal */
+	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.customerModal = modal;
+	});
+
+	/* meaip Insert modal */
+	$ionicModal.fromTemplateUrl('test/meaipinsertM.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.modalmeaipDataRegi = modal;
+	});
+
+	/* customerSearch modal Show */
+	$scope.cusSearch = function() {
+	    $scope.customerModal.show();
+	};
+
+	/* customerSearch modal Close */
+	$scope.cussearchClose = function() {
+		$scope.customerModal.hide();
+	};
+
+    /* meaip Insert modal Show */
+	$scope.meaipDataRegist = function() {
+	    $scope.modalmeaipDataRegi.show();
+	};
+
+	/* meaip Insert modal Close */
+	$scope.closemodeInsert = function() {
+		$scope.modalmeaipDataRegi.hide();
+	};
+
+	/*기본 매장 default*/
+	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.mejanglists = data.list;
+		})
+	$scope.type='basic';
+
+	$scope.Chango=function(){
+		$scope.changos = $scope.maipbasiclist.Medefault.split(',');
+
+		$scope.maipbasiclist.Mejang_Code = $scope.changos[0];
+		$scope.meaipKorea.MejangKorea = $scope.changos[1];
+
+		meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.maipbasiclist.Mejang_Code)
+		.then(function(data){
+			$scope.changolists = data.list;
+		})
+	}
+
+	$scope.Changosave=function(chnagoName){
+		$scope.maipbasiclist.ChangGo_Code = chnagoName;
+	}
+
+	//subulkind
+    $scope.kindF=function(kindcode){
+      $scope.maipbasiclist.subul_kind = kindcode;
+      if (kindcode == 122) {
+        $scope.meaipKorea.subulkorea = "반품";
+        $scope.maipbasiclist.subul_kind = kindcode;
+      }else{
+        $scope.meaipKorea.subulkorea = "입고";
+        $scope.maipbasiclist.subul_kind = kindcode;
+      };
+      console.log("subul_kind = " , $scope.meaipKorea.subulkorea);
+    }
+
+    //거래처창고 조회후 값저장
+    $scope.customerFunc=function(gname,gcode){
+        $scope.meaipKorea.G_Name=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+      	$scope.customerModal.hide();
+    }
+
+    $scope.ss=function(){
+    	var cusname = $scope.cus.GerName;
+    	alert(cusname);
+    	meaipMjangService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+		.then(function(data){
+			$scope.customerDatas = data.list;
+		})
+    }
+
+    $scope.meaipNext=function(num){
+    	if(num == 0){
+    		$scope.type='two';
+    	}else{
+    		$scope.type='basic';
+    	}
+    }
+
+	//backcontroll
+     $scope.backControll=function(){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }},
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  $ionicHistory.goBack();
+             }
+           },
+         ]
+        })
+     }
+
+	})
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
 	var request = null;
 	var indexList = [];

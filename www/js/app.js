@@ -6,18 +6,18 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
- .constant('ERPiaAPI',{
+/* .constant('ERPiaAPI',{
  	url:'http://localhost:8100/include'
  	, imgUrl:'http://localhost:8100/erpia_update/img'
  	, toast:'N'
- })
+ })*/
 
-// 실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-// 	, toast:'Y'
-// })
+//실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, toast:'Y'
+})
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
@@ -29,8 +29,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-		console.log('Ionic Push: Registering user');
 
+		//★push regist
+		console.log('Ionic Push: Registering user');
 		var user = $ionicUser.get();
 		if(!user.user_id) {
 			// Set your user_id here, or generate a random one.
@@ -68,15 +69,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 						// alert("tab.chats");
 						//$rootScope.boardIndex = $rootScope.BoardParam
 						//$state.go("app.erpia_board-Main")
+						if(notification.payload.payload.$BoardParam === "0"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "1"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "2"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "4"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}							
 					}
-					if(notification.payload.payload.$state === "app.config-notice"){
-						// alert("tab.A");
-						//$state.go("경로") //해당 값으로 화면 이동
-					}
-					if(notification.payload.payload.$state === "tab.B"){
-						// alert("tab.B");
-					}
-					//return true;
 				}
 			}
 		});
@@ -374,11 +376,31 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'test/chart_test.html',
-				controller : 'testCtrl'
+				templateUrl : 'test/meaip_test.html',
+				controller : 'chartTestCtrl'
 			}
 		}
 	})
+	/*전표조회*/
+	.state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipChit.html',
+          controller: 'chartTestCtrl'
+        }
+      }
+    })
+    /*전표조회*/
+	.state('app.meaipInsert', {
+      url: '/meaipInsert',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipInsert_basic.html',
+          controller: 'meaipInsertCtrl'
+        }
+      }
+    });
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

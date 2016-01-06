@@ -1,0 +1,88 @@
+<ion-view title="매입전표">
+	<ion-content>
+   <div class="list list-inset">
+   <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+
+    <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;전표번호 : </i></span>
+		 <input type="text" readonly value='{{x.iL_No}}'><br>
+	  </label>
+
+    <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;일 자 : </i></span>
+		 <input type="text" readonly value='{{x.Meaip_Date}}'><br>
+	  </label>
+
+	  <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
+		 <input type="text" readonly value='{{x.Subul_kind}}'><br>
+	  </label>
+
+	  <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;거래처 : </i></span>
+		 <input type="text" readonly value='{{x.GerName}}'><br>
+	  </label>
+
+	  <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;창고지정 : </i></span>
+		 <input type="text" readonly value='{{x.CName}}'><br>
+	  </label>
+
+	  <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;매장지정 : </i></span>
+		 <input type="text" readonly value='{{x.Sale_Place_Name}}'><br>
+	  </label>
+      <hr>
+    </any>
+         <table width="100%">
+          <tr width="100%">
+            <td width="40%" align="center">상품명</td>
+            <td width="20%" align="center">수량</td>
+            <td width="40%" align="center">단가</td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr></td>
+          </tr>
+          <tr ng-repeat="y in meaipchitlists">
+            <td width="40%" align="center">
+              {{y.G_Name}}
+            </td>
+            <td width="20%" align="center">
+              {{y.G_Qty}}
+            </td>
+            <td width="40%" align="center">
+              {{y.G_Price}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table><hr>
+        <label class="item item-input">
+		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;관리비고 </i></span>
+		 <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+                {{x.Remk}}
+          </any>
+	  	</label>
+        <hr>
+        <br><br>
+        <div align="center">
+        <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+		    <button class="button button-calm" ng-click="chitDeleteF(x.iL_No)">
+			  삭제
+			</button>
+
+			<button class="button button-balanced" ng-click="chitUpdateF(meaipchitlists)">
+			  수정
+			</button>
+		</any>
+			<button class="button button-energized">
+			  거래명세서
+			</button>
+		</div>
+	 </div>
+  </ion-content>
+</ion-view>
