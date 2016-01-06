@@ -24,6 +24,25 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
+        "id": "cordova-plugin-x-toast.Toast",
+        "pluginId": "cordova-plugin-x-toast",
+        "clobbers": [
+            "window.plugins.toast"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+        "id": "cordova-plugin-x-toast.tests",
+        "pluginId": "cordova-plugin-x-toast"
+    },
+    {
+        "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+        "id": "cordova-plugin-whitelist.whitelist",
+        "pluginId": "cordova-plugin-whitelist",
+        "runs": true
     }
 ];
 module.exports.metadata = 
@@ -31,7 +50,9 @@ module.exports.metadata =
 {
     "com.phonegap.plugins.PushPlugin": "2.5.0",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "cordova-plugin-x-toast": "2.3.1",
+    "cordova-plugin-whitelist": "1.2.1-dev"
 }
 // BOTTOM OF METADATA
 });

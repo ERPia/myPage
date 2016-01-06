@@ -1435,12 +1435,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
       	$scope.customerModal.hide();
     }
 
-    $scope.ss=function(){
+    $scope.cus=function(){
     	var cusname = $scope.cus.GerName;
-    	alert(cusname);
+    	console.log('customerName=', cusname);
     	meaipMjangService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
 		.then(function(data){
 			$scope.customerDatas = data.list;
+			$scope.cus.GerName = '';
 		})
     }
 

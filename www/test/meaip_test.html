@@ -3,7 +3,7 @@
 		<any onclick="location.href='#/app/meaipInsert'">등록</any>
 	</ion-nav-buttons>
 <!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->	 
-	<ion-content>
+	<ion-content class="padding2">
 		<div align="center"> 
 			검색<hr>
 		</div>
@@ -46,9 +46,27 @@
 	   		조회목록
 	   	</div>
 	   	<hr>
-	   	<any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
-	   	<a ng-click="meaipChitF(x.iL_No)">
-		<table>
+		<body ng-app="ngAnimate">
+			<ion-list>
+				<ion-item ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex" style="padding:0px;">
+					<ui class="list" ng-click="meaipChitF(x.iL_No)">
+						<li class="item">
+							<font><b>품명</b></font> : {{x.G_Name}}</br>
+							<font><b>매입일</b></font> : {{x.Meaip_Date}}</br>
+							<font><b>거래처</b></font> : {{x.Admin_Code}}</br>
+							<font><b>매출총액</b></font> : {{x.Meaip_Amt}}</br>
+						</li>
+					</ui>
+				<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+					더보기(+5)
+				</ion-item>
+				</ion-item>
+			</ion-list>
+		</body>
+
+
+	   	<!-- <any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
+		<table ng-click="meaipChitF(x.iL_No)">
 		   	<tr>
 			   	<td width="20%" align="center">품명</td>
 			   	<td width="80%" align="center">{{x.G_Name}}</td>
@@ -66,9 +84,10 @@
 			   	<td width="80%" align="center">{{x.Meaip_Amt}}</td>
 			</tr>
 		</table>
-		</a>
-			<button ng-click="more()" ng-if="$index + 1 == listindex">더보기</button>
+			<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+			더보기
+			</ion-item>
 		<hr>
-		</any>
+		</any> -->
 	</ion-content>
 </ion-view>
