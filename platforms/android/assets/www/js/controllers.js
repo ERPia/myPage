@@ -29,6 +29,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.loginData = {};	//Admin_Code, UserId, Pwd
 	$scope.userData = {};
 	$scope.SMSData = {};
+	$scope.currentDate = new Date();
 
 	// Create the login modal that we will use later
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
@@ -216,7 +217,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
-					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
+					$scope.userData.GerName = comInfo.data.list[0].GerName;
 					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
 					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
 					$scope.userData.GerCode = comInfo.data.list[0].G_Code;
@@ -247,7 +248,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
 					$scope.ion_login = "ion-power";
 
-					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br>(' + comInfo.data.list[0].Com_Code + ')';
+					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name + '<br> (' + comInfo.data.list[0].Com_Code + ')';
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
 					$scope.userData.cnt_user = comInfo.data.list[0].User_Count + ' 명';
 					$scope.userData.cnt_site = comInfo.data.list[0].Mall_ID_Count + ' 개';
@@ -480,7 +481,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
 		tradeDetailService.readDetail($scope.loginData.Admin_Code, Sl_No)
 			.then(function(response){
-				console.log('readDetail', response);
 				$scope.detail_items = response.list;
 				$scope.trade_Detail_Modal.show();
 			})
@@ -1785,6 +1785,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(response){
 				console.log('response', response);
 				$rootScope.kind = 'chart' + response.list[0].idx;
+				console.log('chartKind1 : ', $rootScope.kind);
 				switch (response.list[0].idx)
 				{
 					case '1' : $scope.kind = titles[1].title; break;
@@ -1804,11 +1805,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case '16' : $scope.kind = titles[15].title; break;
 					case '17' : $scope.kind = titles[16].title; break;
 				}
+				console.log('chartKind2 : ', $scope.kind);
 				if($scope.kind === "meachul_onoff"){
 					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
 							'<div class="direct-chat">'+
 								'<div class="box-header">'+
-									'<button name="btnW" class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
+									'<button name="btnW' + $scope.kind + '" class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\'' + $scope.kind +'\',\'' + $scope.gu + '\',\'' + $scope.loginData.Admin_Code + '\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
 									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<div class="pull-right">'+
 									'<button name="btnGrid" class="btn btn-box-tool" ><i class="fa fa-bars"></i></button>'+
@@ -1839,7 +1841,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 									'<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="" onclick="javascript:refresh(\''+ $scope.kind +'\',\''+$scope.gu+'\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');"><i class="fa fa-refresh"></i></button>&nbsp;&nbsp;&nbsp;'+
 									'<h3 class="box-title" name="refresh_date" style="color:#fff"></h3>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<div class="pull-right">'+
-									'<button name="btnW" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
+									'<button name="btnW' + $scope.kind + '" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'1\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">주간</button>'+
 									'<button name="btnM" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'2\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">월간</button>'+
 									'<button name="btnY" class="btn bg-purple btn-xs" onclick="makeCharts(\''+ $scope.kind +'\',\'3\',\''+ $scope.loginData.Admin_Code +'\',\'' + ERPiaAPI.url + '\');">년간</button>&nbsp;&nbsp;&nbsp;&nbsp;'+
 									'<button name="btnGrid" class="btn btn-box-tool"><i class="fa fa-bars"></i></button>'+
@@ -1867,23 +1869,23 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				renewalDay($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
 				// makeCharts($scope.kind,$scope.gu,$scope.loginData.Admin_Code,ERPiaAPI.url);
 				switch(data.index){
-					case 1: $('#s1').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 2: $('#s2').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 3: $('#s3').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 4: $('#s4').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 5: $('#s5').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 6: $('#s6').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 7: $('#s7').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 8: $('#s8').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 9: $('#s9').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 10: $('#s10').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 11: $('#s11').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 12: $('#s12').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 13: $('#s13').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 14: $('#s14').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 15: $('#s15').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 16: $('#s16').html($scope.htmlCode); $('button[name=btnW]').click(); break;
-					case 17: $('#s17').html($scope.htmlCode); $('button[name=btnW]').click(); break;
+					case 1: $('#s1').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 2: $('#s2').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 3: $('#s3').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 4: $('#s4').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 5: $('#s5').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 6: $('#s6').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 7: $('#s7').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 8: $('#s8').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 9: $('#s9').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 10: $('#s10').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 11: $('#s11').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 12: $('#s12').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 13: $('#s13').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 14: $('#s14').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 15: $('#s15').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 16: $('#s16').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
+					case 17: $('#s17').html($scope.htmlCode); $('button[name=btnW' + $scope.kind + ']').click(); break;
 				}
 				// $('div[name=gridBody]').hide();
 				$("button[name=btnGrid]").click(function() {
