@@ -12,7 +12,13 @@
 				<i class="icon ion-search placeholder-icon"></i>
 				<input type="search" ng-model="listSearch" placeholder="상품명을 입력하세요">
 			</label>
-		</div>
+		
+<!-- 			<label class="item item-input">
+				<input type="date" ng-model='date.sdate' size="11">~&nbsp;
+				<input type="date" ng-model='date.edate' size="11"><br>
+				<any ng-click="searchestoday(100)"><i class="icon ion-search" style="font-size:20px"></i></any>&nbsp;
+			</label> -->
+
 		<table width="100%">
 		<tr>
 	   			<td align="center">일자</td>
@@ -28,18 +34,12 @@
 	   			</td>
 	   		</tr>
 	    </table>
-	    <div align="center">
-		    <button class="button button-calm" ng-click="searchestoday(0)">
-			  금일
-			</button>
-
-			<button class="button button-balanced" ng-click="searchestoday(7)">
-			  1주일
-			</button>
-
-			<button class="button button-energized" ng-click="searchestoday(30)">
-			  1개월
-			</button>
+	    </div>
+	    <hr>
+	    <div align="center" style="width:100%">
+		    <button class="button button-calm" ng-click="searchestoday(0)" style="width:30%">금일</button>
+			<button class="button button-balanced" ng-click="searchestoday(7)" style="width:30%">1주일</button>
+			<button class="button button-energized" ng-click="searchestoday(30)" style="width:30%">1개월</button>
 		</div>
 		<hr>
 		<div align="center">

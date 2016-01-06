@@ -1281,6 +1281,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		}
 		$rootScope.today = $scope.dateMinus(0);
+
     	//날짜별 검색
     	$scope.searchestoday = function(day){
     		$scope.date={
@@ -1333,6 +1334,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		          $rootScope.gop = parseInt($rootScope.meaipchitlists[i].G_Qty)*parseInt($rootScope.meaipchitlists[i].G_Price);
 		          $rootScope.pricesum = parseInt($rootScope.pricesum) + parseInt($rootScope.gop);
 		      	}
+		      	//즐겨찾기 부분
+		      	$scope.ion_star = "ion-android-star-outline"; // ion-android-star 
+		      	console.log('icon check=', $scope.ion_star);
 				location.href="#/app/meaipChit";
 			})
 		 }
