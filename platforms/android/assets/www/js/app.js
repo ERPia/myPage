@@ -6,11 +6,11 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
-/* .constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })*/
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ // 	, toast:'N'
+ // })
 
 //실제 사용시
 .constant('ERPiaAPI',{
@@ -98,6 +98,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			case 'ERPia': location.href = '#/app/slidingtab'; break;
 			case 'SCM' : location.href = '#/app/scmhome'; break;
 			case 'Geust': location.href = '#/app/sample/Main'; break;
+			default : location.href = '#/app/sample/Main'; break;
 		} 
 	}
 	$rootScope.goto_with_clearHistory = function(goto_Href){
@@ -128,9 +129,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
       	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		// dev_push: true // 개발테스트시
-		dev_push: false // 실적용시
+		dev_push: true // 개발테스트시
+      	//api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		//dev_push: false // 실적용시
 	});
 }])
 
@@ -322,7 +323,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/notice.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_Notice'
 			}
 		}
 	})
@@ -330,8 +331,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/config/custom',
 		views : {
 			'menuContent' : {
-				templateUrl : 'config/custom.html',
-				controller : 'configCtrl_Info'
+				templateUrl : 'config/custom.html'
 			}
 		}
 	})
@@ -368,6 +368,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'tab/tabs.html'				 
+			}
+		}
+	})
+	.state('app.ERPiaHome', {
+		url : '/ERPiaHome',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/ERPiaHome.html',
+				controller : 'ERPiaHomeCtrl'
 			}
 		}
 	})
