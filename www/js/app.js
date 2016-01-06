@@ -98,6 +98,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			case 'ERPia': location.href = '#/app/slidingtab'; break;
 			case 'SCM' : location.href = '#/app/scmhome'; break;
 			case 'Geust': location.href = '#/app/sample/Main'; break;
+			default : location.href = '#/app/sample/Main'; break;
 		} 
 	}
 	$rootScope.goto_with_clearHistory = function(goto_Href){
@@ -322,7 +323,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/notice.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_Notice'
 			}
 		}
 	})
@@ -330,8 +331,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/config/custom',
 		views : {
 			'menuContent' : {
-				templateUrl : 'config/custom.html',
-				controller : 'configCtrl_Info'
+				templateUrl : 'config/custom.html'
 			}
 		}
 	})
@@ -368,6 +368,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'tab/tabs.html'				 
+			}
+		}
+	})
+	.state('app.ERPiaHome', {
+		url : '/ERPiaHome',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/ERPiaHome.html',
+				controller : 'ERPiaHomeCtrl'
 			}
 		}
 	})

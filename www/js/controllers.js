@@ -194,9 +194,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					case 'ERPia':
-						$scope.loginData.Admin_Code = 'pikachu';
-						$scope.loginData.UserId = 'khs239';
-						$scope.loginData.Pwd = '1234';
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = 'lhk';
+						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
 					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
@@ -552,8 +552,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	if($rootScope.loginState == 'E'){
 	}
 })
-  
-.controller('configCtrl_Info', function($scope, $ionicPopup, $ionicHistory, NoticeService) {
+.controller('configCtrl_Notice', function($scope, $ionicPopup, $ionicHistory, NoticeService) {
 	$scope.myGoBack = function() {
 		// $ionicPopup.show({
 		// 	title: 'View',
@@ -584,50 +583,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(data){
 			$scope.items = data.list;
 		})
-})
-.controller('configCtrl_login', function($scope, $rootScope, uuidService){
-	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
-	else $scope.autoLogin = false;
-	$scope.autoLogin_YN = function(check){
-		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
-		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
-	}
-})
-.controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
-	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
-		.then(function(data){
-			$scope.items = data;
-		})
-	$scope.moveItem = function(item, fromIndex, toIndex) {
-		fromIdx = $scope.items[fromIndex].Idx;
-		fromTitle = $scope.items[fromIndex].title;
-		fromVisible = $scope.items[fromIndex].visible;
-
-		toIdx = $scope.items[toIndex].Idx;
-		toTitle = $scope.items[toIndex].title;
-		toVisible = $scope.items[toIndex].visible;
-
-		$scope.items[fromIndex].Idx = toIdx;
-		$scope.items[fromIndex].title = toTitle;
-		$scope.items[fromIndex].visible = toVisible;
-
-		$scope.items[toIndex].Idx = fromIdx;
-		$scope.items[toIndex].title = fromTitle;
-		$scope.items[toIndex].visible = fromVisible;
-
-		var rsltList = '';
-		for(var i = 0; i < $scope.items.length; i++){
-			rsltList += $scope.items[i].cntOrder + '^';
-			rsltList += $scope.items[i].Idx + '^';
-			rsltList += $scope.items[i].visible + '^|';
-		}
-		console.log('rsltList', rsltList);
-		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
-	};
-
-	$scope.onItemDelete = function(item) {
-		$scope.items.splice($scope.items.indexOf(item), 1);
-	};
 })
 .controller('configCtrl_alarm', function($scope, $rootScope, $location, alarmService){
 	 $scope.settingsList = [];
@@ -704,6 +659,50 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		alarmService.save('save_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, '0^U|' + rsltList)
 	}
 	$scope.fnAlarm('loadAlarm');
+})
+.controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
+	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.items = data;
+		})
+	$scope.moveItem = function(item, fromIndex, toIndex) {
+		fromIdx = $scope.items[fromIndex].Idx;
+		fromTitle = $scope.items[fromIndex].title;
+		fromVisible = $scope.items[fromIndex].visible;
+
+		toIdx = $scope.items[toIndex].Idx;
+		toTitle = $scope.items[toIndex].title;
+		toVisible = $scope.items[toIndex].visible;
+
+		$scope.items[fromIndex].Idx = toIdx;
+		$scope.items[fromIndex].title = toTitle;
+		$scope.items[fromIndex].visible = toVisible;
+
+		$scope.items[toIndex].Idx = fromIdx;
+		$scope.items[toIndex].title = fromTitle;
+		$scope.items[toIndex].visible = fromVisible;
+
+		var rsltList = '';
+		for(var i = 0; i < $scope.items.length; i++){
+			rsltList += $scope.items[i].cntOrder + '^';
+			rsltList += $scope.items[i].Idx + '^';
+			rsltList += $scope.items[i].visible + '^|';
+		}
+		console.log('rsltList', rsltList);
+		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
+	};
+
+	$scope.onItemDelete = function(item) {
+		$scope.items.splice($scope.items.indexOf(item), 1);
+	};
+})
+.controller('configCtrl_login', function($scope, $rootScope, uuidService){
+	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
+	else $scope.autoLogin = false;
+	$scope.autoLogin_YN = function(check){
+		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
+		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
+	}
 })
 .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
 	$scope.myStyle = {
@@ -1474,10 +1473,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
          ]
         })
      }
-
-	})
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+})
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
 	var request = null;
 	var indexList = [];
@@ -1906,5 +1902,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 			})
 		}
-    };
-});
+    }
+})
+.controller('ERPiaHomeCtrl', function($scope, $timeout, $ionicLoading, $sce){
+	$ionicLoading.show({template:'Value No.1 ERPia'});
+	$timeout(function(){
+		$ionicLoading.hide();
+		$scope.ERPiaUrl = $sce.trustAsResourceUrl("http://erpia.net");	
+	}, 1000);
+})
+
