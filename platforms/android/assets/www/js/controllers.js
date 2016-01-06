@@ -1341,12 +1341,22 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 .controller('meaipInsertCtrl', function($scope, $sce, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, meaipMjangService){
 	/* 매입 등록 정보*/
 	$scope.maipbasiclist={
-		Mejang_Code : '',
-		subul_kind : 0
+		Medefault : '',
+		Mejang_Code : 0,
+		subul_kind : 0,
+		Comp_no : 0,
+		ChangGo_Code : 0
 	}
 	$scope.meaipKorea={
-		subulkorea : ''
+		subulkorea : '',
+		G_Name : '',
+		MejangKorea : '',
+		changoKorea : ''
+
 	}
+	$scope.cus = {
+	  GerName : ''
+	};
 
 	/* customerSearch modal */
 	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
@@ -1362,6 +1372,26 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    $scope.modalmeaipDataRegi = modal;
 	});
 
+	/* customerSearch modal Show */
+	$scope.cusSearch = function() {
+	    $scope.customerModal.show();
+	};
+
+	/* customerSearch modal Close */
+	$scope.cussearchClose = function() {
+		$scope.customerModal.hide();
+	};
+
+    /* meaip Insert modal Show */
+	$scope.meaipDataRegist = function() {
+	    $scope.modalmeaipDataRegi.show();
+	};
+
+	/* meaip Insert modal Close */
+	$scope.closemodeInsert = function() {
+		$scope.modalmeaipDataRegi.hide();
+	};
+
 	/*기본 매장 default*/
 	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
 		.then(function(data){
@@ -1370,12 +1400,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.type='basic';
 
 	$scope.Chango=function(){
-		$scope.changos = $scope.maipbasiclist.Mejang_Code.split(',');
-		var chango_code = $scope.changos[0];
-		meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, chango_code)
+		$scope.changos = $scope.maipbasiclist.Medefault.split(',');
+
+		$scope.maipbasiclist.Mejang_Code = $scope.changos[0];
+		$scope.meaipKorea.MejangKorea = $scope.changos[1];
+
+		meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.maipbasiclist.Mejang_Code)
 		.then(function(data){
 			$scope.changolists = data.list;
 		})
+	}
+
+	$scope.Changosave=function(chnagoName){
+		$scope.maipbasiclist.ChangGo_Code = chnagoName;
 	}
 
 	//subulkind
@@ -1389,6 +1426,22 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         $scope.maipbasiclist.subul_kind = kindcode;
       };
       console.log("subul_kind = " , $scope.meaipKorea.subulkorea);
+    }
+
+    //거래처창고 조회후 값저장
+    $scope.customerFunc=function(gname,gcode){
+        $scope.meaipKorea.G_Name=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+      	$scope.customerModal.hide();
+    }
+
+    $scope.ss=function(){
+    	var cusname = $scope.cus.GerName;
+    	alert(cusname);
+    	meaipMjangService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+		.then(function(data){
+			$scope.customerDatas = data.list;
+		})
     }
 
     $scope.meaipNext=function(num){
@@ -1420,26 +1473,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
          ]
         })
      }
-
-    /* customerSearch modal Show */
-	$scope.cusSearch = function() {
-	    $scope.customerModal.show();
-	};
-
-	/* customerSearch modal Close */
-	$scope.cussearchClose = function() {
-		$scope.customerModal.hide();
-	};
-
-    /* meaip Insert modal Show */
-	$scope.meaipDataRegist = function() {
-	    $scope.modalmeaipDataRegi.show();
-	};
-
-	/* meaip Insert modal Close */
-	$scope.closemodeInsert = function() {
-		$scope.modalmeaipDataRegi.hide();
-	};
 
 	})
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

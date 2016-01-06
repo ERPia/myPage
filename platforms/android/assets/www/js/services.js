@@ -168,6 +168,22 @@ angular.module('starter.services', [])
 			}, function(response){
 				return $q.reject(response.data);
 			})
+		}, cusnameSearch: function(admin_code, userid, cusname){
+				console.log("meaipMjangService and cusnameSearch");
+				var cusname2 = escape(cusname);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
 		}
 	};
 })
