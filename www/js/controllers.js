@@ -938,8 +938,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.load_scm_chart();   
 })
 
-.controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
-	console.log($rootScope.loginState); 
+// .controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
+// 	console.log($rootScope.loginState); 
 // 	// Perform the login action when the user submits the login form
 	// $scope.ERPiaBaseData = function() {
 		 
@@ -978,7 +978,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		// };
 	// };
 	// $scope.ERPiaBaseData();
-})
+// })
 
 .controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
 	console.log("MainCtrl");
