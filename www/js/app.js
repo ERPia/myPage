@@ -134,7 +134,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		dev_push: false // 실적용시
 	});
 }])
-
+.config(function($cordovaInAppBrowserProvider) {
+	var defaultOptions = {
+		location: 'no',
+		clearcache: 'no',
+		toolbar: 'no'
+	};
+	document.addEventListener(function () {
+		$cordovaInAppBrowserProvider.setDefaultOptions(options)
+	}, false);
+})
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
 	
@@ -491,5 +500,5 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/main');
-}); 
+});
 

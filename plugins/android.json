@@ -28,6 +28,9 @@
         },
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "erpia.lhk.test"
         }
     },
     "dependent_plugins": {}

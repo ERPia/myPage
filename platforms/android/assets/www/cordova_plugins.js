@@ -60,6 +60,15 @@ module.exports = [
             "navigator.notification",
             "navigator"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -71,7 +80,8 @@ module.exports.metadata =
     "cordova-plugin-x-toast": "2.2.1",
     "de.appplant.cordova.plugin.printer": "0.7.1",
     "org.apache.cordova.device": "0.3.0",
-    "org.apache.cordova.vibration": "0.3.13"
+    "org.apache.cordova.vibration": "0.3.13",
+    "cordova-plugin-inappbrowser": "1.1.1"
 }
 // BOTTOM OF METADATA
 });

@@ -1904,11 +1904,48 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
     }
 })
-.controller('ERPiaHomeCtrl', function($scope, $timeout, $ionicLoading, $sce){
+.controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, $cordovaInAppBrowser){
 	$ionicLoading.show({template:'Value No.1 ERPia'});
+	var options = {
+		location: 'yes',
+		clearcache: 'yes',
+		toolbar: 'no'
+	};
+
+	document.addEventListener(function () {
+	$cordovaInAppBrowser.open('http://www.erpia.net', '_blank', options)
+	.then(function(event) {
+		//success
+	})
+	.catch(function(event) {
+		//error
+	});
+	$cordovaInAppBrowser.close();
+	}, false);
+	$rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
+	});
+	$rootScope.$on('$cordovaInAppBrowser:loadstop', function(e, event){
+		// insert CSS via code / file
+		$cordovaInAppBrowser.insertCSS({
+			code: 'body {background-color:blue;}'
+		});
+		// insert Javascript via code / file
+		$cordovaInAppBrowser.executeScript({
+			file: 'script.js'
+		});
+	});
+
+	$rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
+
+	});
+
+	$rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
+
+	});
+
 	$timeout(function(){
 		$ionicLoading.hide();
-		$scope.ERPiaUrl = $sce.trustAsResourceUrl("http://erpia.net");	
+		// $scope.ERPiaUrl = $sce.trustAsResourceUrl("http://erpia.net");	
 	}, 1000);
 })
 
