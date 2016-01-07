@@ -19,7 +19,7 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location, $cordovaInAppBrowser
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
@@ -185,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'Normal': userType = 'N'; break;
 			}
 			if(ERPiaAPI.toast == 'Y'){
-				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd)
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
@@ -1911,47 +1911,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 })
 .controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, $cordovaInAppBrowser){
-	$ionicLoading.show({template:'Value No.1 ERPia'});
-	var options = {
-		location: 'yes',
-		clearcache: 'yes',
-		toolbar: 'no'
-	};
+	// Wait for device API libraries to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
 
-	document.addEventListener(function () {
-	$cordovaInAppBrowser.open('http://www.erpia.net', '_blank', options)
-	.then(function(event) {
-		//success
-	})
-	.catch(function(event) {
-		//error
-	});
-	$cordovaInAppBrowser.close();
-	}, false);
-	$rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
-	});
-	$rootScope.$on('$cordovaInAppBrowser:loadstop', function(e, event){
-		// insert CSS via code / file
-		$cordovaInAppBrowser.insertCSS({
-			code: 'body {background-color:blue;}'
-		});
-		// insert Javascript via code / file
-		$cordovaInAppBrowser.executeScript({
-			file: 'script.js'
-		});
-	});
-
-	$rootScope.$on('$cordovaInAppBrowser:loaderror', function(e, event){
-
-	});
-
-	$rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
-
-	});
-
-	$timeout(function(){
-		$ionicLoading.hide();
-		// $scope.ERPiaUrl = $sce.trustAsResourceUrl("http://erpia.net");	
-	}, 1000);
+    // device APIs are available
+    //
+    function onDeviceReady() {
+         var ref = window.open('http://www.erpia.net', '_blank', 'location=yes');
+         ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+         ref.addEventListener('exit', function(event) { alert(event.type); });
+         ref.show();
+    }
 })
 

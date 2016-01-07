@@ -434,6 +434,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
+	$scope.openInAppBrowser = function(inAppUrl){
+		$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
+		//window.open(inAppUrl,'_blank'); 
+		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
+	}
+	
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -1904,11 +1910,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
     }
 })
-.controller('ERPiaHomeCtrl', function($scope, $timeout, $ionicLoading, $sce){
-	$ionicLoading.show({template:'Value No.1 ERPia'});
-	$timeout(function(){
-		$ionicLoading.hide();
-		$scope.ERPiaUrl = $sce.trustAsResourceUrl("http://erpia.net");	
-	}, 1000);
+.controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, $cordovaInAppBrowser){
+	// Wait for device API libraries to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+         var ref = window.open('http://www.erpia.net', '_blank', 'location=yes');
+         ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+         ref.addEventListener('exit', function(event) { alert(event.type); });
+    }
 })
 
