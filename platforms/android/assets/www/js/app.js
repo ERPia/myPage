@@ -391,7 +391,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
         }
       }
     })
-    /*전표조회*/
+    /*전표등록*/
 	.state('app.meaipInsert', {
       url: '/meaipInsert',
       views: {
@@ -400,7 +400,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
           controller: 'meaipInsertCtrl'
         }
       }
-    });
+    })
+    /*매입&매출 환경설정*/
+    .state('app.test-meaipmeachulsetup', {
+		url : '/test/meaipmeachulsetup',
+		views : {
+			'menuContent' : {
+				templateUrl : 'test/meaipmeachulsetup.html',
+				controller : 'meaipInsertCtrl'
+			}
+		}
+	});
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

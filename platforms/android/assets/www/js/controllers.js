@@ -1384,6 +1384,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.cus = {
 	  GerName : ''
 	};
+	
+	//단가지정배열 1. 매입가 2. 도매가 3. 인터넷가 4. 소매가 5. 권장소비자가
+    $scope.MeaipDn = [
+      { num: 1, id: '매입가' },
+      { num: 2, id: '도매가' },
+      { num: 3, id: '인터넷가' },
+      { num: 4, id: '소매가' },
+      { num: 5, id: '권장소비자가' }
+    ];
 
 	/* customerSearch modal */
 	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
@@ -1423,10 +1432,38 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
 		.then(function(data){
 			$scope.mejanglists = data.list;
+			/*환경설정 default*/
+			meaipMjangService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+				.then(function(data){
+					if(data.list.length > 0){
+						for(var i=0; i < data.list.length; i++){
+							console.log('data나와랏 -', data.list[i].UserId);
+							if('pikachu' == data.list[i].UserId){
+								console.log('같당');
+								$scope.configData = data.list[i];
+								/*console.log('힝=', data.list[i]);*/
+								console.log('환경설정 나와랏 ->', $scope.configData);
+									/*창고조회*/
+									meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
+										.then(function(data){
+											$scope.changolists = data.list;
+									})
+								break;
+							}else{
+								console('안똑같음.', data.list[i].UserId);
+							}
+						}
+					}
+				})
+			
+			console.log("매장리스트", $scope.mejanglists);
+			
 		})
+	
 	$scope.type='basic';
 
 	$scope.Chango=function(){
+		console.log('매장코드로 창코조회');
 		$scope.changos = $scope.maipbasiclist.Medefault.split(',');
 
 		$scope.maipbasiclist.Mejang_Code = $scope.changos[0];

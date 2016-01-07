@@ -138,12 +138,28 @@ angular.module('starter.services', [])
 .factory('meaipMjangService', function($http, ERPiaAPI){
 	return{
 		basicM: function(admin_code, userid){
-			console.log("meaipMjangService and basic");
+			console.log("meaipMjangService and basicM");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
 			.then(function(response){
 				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, basicSetup: function(admin_code, userid){
+			console.log("meaipMjangService and basicSetup");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Meaip_Config&Mode=select';
+		/*var data = 'Admin_Code=onz&UserId=pikapika&Kind=ERPia_Meaip_Config&Mode=select';*/
+		return $http.get(url + '?' + data)
+			.then(function(response){
 				if(typeof response == 'object'){
 					return response.data;
 				}else{
