@@ -19,7 +19,7 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location, $cordovaInAppBrowser
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
@@ -433,6 +433,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.click_home = function(){
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
+	}
+	$scope.openInAppBrowser = function(url){
+		$cordovaInAppBrowser.open(url, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
+		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
 	}
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
