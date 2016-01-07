@@ -75,10 +75,9 @@
         </any>
 	  	</label>
         <hr>
-        <br><br>
         <div align="center" style="width:100%">
           <!-- ion-android-star-outline && ion-android-star -->
-          <button class="button button-icon button-clear {{ion_star}}" menu-close ng-click="meaipStar()"></button>
+          <button class="button button-icon button-clear {{ionstar}}" menu-close ng-click="meaipStar()"  style="font-size:50px;align:left"></button>
           <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
             <button class="button button-calm" style="width:30%" ng-click="chitDeleteF(x.iL_No)">삭제</button>
             <!-- <button class="button button-balanced" style="width:30%" ng-click="chitUpdateF(meaipchitlists)">수정</button> -->

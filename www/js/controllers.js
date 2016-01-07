@@ -1262,7 +1262,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     ];
 })
 //////////////////////////////////////////					매입 테스트					//////////////////////////////////////////////
-.controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService){
+.controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService, ERPiaAPI, $cordovaToast){
 
 		/* 날짜계산 */
 		$scope.dateMinus=function(days){
@@ -1320,6 +1320,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		  $scope.listindex = $scope.listindex + 5;
 		 }
 
+		 $scope.ionstar = "ion-android-star-outline";
+
 		 /* 매입전표 조회 */
 		 $scope.meaipChitF = function(lino){
 		 	dayService.meaipChit(lino, $scope.loginData.Admin_Code, $scope.loginData.UserId)
@@ -1335,10 +1337,31 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		          $rootScope.pricesum = parseInt($rootScope.pricesum) + parseInt($rootScope.gop);
 		      	}
 		      	//즐겨찾기 부분
-		      	$scope.ion_star = "ion-android-star-outline"; // ion-android-star 
-		      	console.log('icon check=', $scope.ion_star);
+		      	$scope.ionstar = "ion-android-star-outline"; // ion-android-star 
+		      	console.log('icon check=', $scope.ionstar);
 				location.href="#/app/meaipChit";
 			})
+		 }
+
+		 $scope.meaipState=0;
+		 $scope.meaipStar = function(){
+		 	console.log('star');
+		 	if($scope.meaipState == 0){
+		 		$scope.ionstar = "ion-android-star";
+		 		$scope.meaipState = 1;
+		 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('빠른등록이 등록되었습니다.', 'long', 'center');
+				else alert('빠른등록이 등록되었습니다.');
+
+		 	}else{
+		 		$scope.ionstar = "ion-android-star-outline";
+		 		$scope.meaipState = 0;
+
+		 		if(ERPiaAPI.toast == 'Y'){
+		 			 $cordovaToast.show('빠른등록이 해제되었습니다.', 'long', 'center');
+		 		}else{
+		 			alert('빠른등록이 해제되었습니다.');
+		 		} 
+		 	}
 		 }
 
 })
