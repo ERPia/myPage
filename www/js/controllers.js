@@ -435,8 +435,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
 	$scope.openInAppBrowser = function(inAppUrl){
-		//$cordovaInAppBrowser.open(url, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
-		window.open(inAppUrl,'_blank'); 
+		$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
+		//window.open(inAppUrl,'_blank'); 
 		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
 	}
 	
