@@ -434,10 +434,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
-	$scope.openInAppBrowser = function(url){
-		$cordovaInAppBrowser.open(url, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
+	$scope.openInAppBrowser = function(inAppUrl){
+		//$cordovaInAppBrowser.open(url, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
+		window.open(inAppUrl,'_blank'); 
 		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
 	}
+	
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
