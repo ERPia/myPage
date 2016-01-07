@@ -2047,7 +2047,7 @@ console.log('Detail : ', $scope);
 
 
 
-.controller('MeaChulInsertCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $cordovaToast, $cordovaBarcodeScanner, $window, $timeout, ERPiaAPI, ERPiaSMIConfigService) {
+.controller('MeaChulInsertCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $cordovaToast, $cordovaBarcodeScanner, $window, $timeout, ERPiaAPI, ERPiaSMIConfigService, ERPiaCompsearchService) {
  $scope.nextclick=false;
  $scope.meachuloc='open';
  $scope.insert1pageopenclose=function(){
@@ -2106,21 +2106,21 @@ $scope.basic_Select_fail='success';
 
 
 /*거래처 검색 모달*/
- $ionicModal.fromTemplateUrl('templates/compsearch.html', {
+ $ionicModal.fromTemplateUrl('erpia_meachul/compsearch.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modalcompsearch = modal;
   });
 
 /*매장 검색 모달*/
-  $ionicModal.fromTemplateUrl('templates/mejangsearch.html', {
+  $ionicModal.fromTemplateUrl('erpia_meachul/mejangsearch.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modalmejangsearch = modal;
   });
 
   /*상품 검색 모달*/
-  $ionicModal.fromTemplateUrl('templates/presentsearch.html', {
+  $ionicModal.fromTemplateUrl('erpia_meachul/presentsearch.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modalpresentsearch = modal;
@@ -2276,6 +2276,66 @@ $scope.goodsresult=[];
       $scope.totalnotexsumprices=$scope.totalnotexpr;
       //alert($scope.totalsumprices);
   }
+
+/*  console.log($scope.reqparams);
+		ERPiaSMIConfigService.ERPiaSMIConfigData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode)
+		.then(function(ERPiaSMIConfigData){
+    	console.log(ERPiaSMIConfigData.data);
+    	$scope.lists=ERPiaSMIConfigData.data.list;
+    	for(var i=0; i<$scope.lists.length;i++){
+          if($scope.lists[i].UserId==$scope.UserId){
+            $scope.basicConfiglist.basic_Ch_Code = $scope.lists[i].basic_Ch_Code;
+            $scope.basicConfiglist.basic_Place_Code = $scope.lists[i].basic_Place_Code;
+            $scope.basicConfiglist.basic_Dn_Sale = $scope.lists[i].basic_Dn_Sale;
+          }else{}
+        $scope.searchde.Mode='Select_Place';
+        $scope.searchde.Kind='ERPia_Sale_Select_Place_CName';
+    	},function(){
+    		alert('Request fail')	
+		});*/
+
+
+	$scope.compsclick=function(mode){ //거래처 검색 실행 펑션
+    if(mode==1){ //처음 검색버튼을 누르면 새 모달이 띄워짐
+
+    $scope.modalcompsearch.show(); 
+    $scope.searchde.Mode='';
+    $scope.searchde.Kind='ERPia_Sale_Select_GerName';
+    $scope.gernamekr=escape($scope.Comp.Ger_Name);
+       // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName         Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_GerName&GerName=에스엠케이코스모
+		console.log($scope.reqparams);
+		ERPiaCompsearchService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
+		.then(function(ERPiaCompsearchData){
+    	console.log(ERPiaCompsearchData.data);
+    	$scope.lists=ERPiaCompsearchData.data.list;
+    	},function(){
+    		alert('Request fail')	
+		});
+    }else if(mode==2){ //모달이 띄워진 상태에서 검색버튼클릭시 이벤트
+    $scope.searchde.Mode='';
+    $scope.searchde.Kind='ERPia_Sale_Select_GerName';
+     $scope.gernamekr=escape($scope.Comp.Ger_Name);
+       // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName
+    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.searchde.Admin_Code+'&UserId='+$scope.searchde.UserId+'&Kind='+$scope.searchde.Kind+'&Mode='+$scope.searchde.Mode+'&GerName='+$scope.gernamekr).
+		console.log($scope.reqparams);
+		ERPiaCompsearchService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
+		.then(function(ERPiaCompsearchData){
+    	console.log(ERPiaCompsearchData.data);
+    	$scope.lists=ERPiaCompsearchData.data.list;
+    	},function(){
+    		alert('Request fail')	
+		});
+    }
+
+}
+  //거래처 검색에서 원하는 거래처 선택시 이벤트
+    $scope.compselect= function(indexName,indexCode) { 
+    $scope.Comp.Ger_Code=indexCode;
+    $scope.Comp.Ger_Name=indexName;
+    $scope.modalcompsearch.hide();
+    $scope.onChanggosearch();
+
+  };
 
 })
 
@@ -2752,7 +2812,7 @@ $scope.xmlMeaChulTs=function(){
 
 
 
-//------------------------------------1/7 5:47-----------------------------------------------------
+//------------------------------------1/7 5:47-붙여넣은곳----------------------------------------------------
 
 
 

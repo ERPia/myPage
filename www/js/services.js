@@ -651,4 +651,17 @@ angular.module('starter.services', [])
 	return{
 		ERPiaSMIConfigData: ERPiaSMIConfigData
 	}
+})
+
+
+.factory('ERPiaCompsearchService', function($http, ERPiaAPI){
+	var ERPiaCompsearchData = function(Admin_Code, UserId, kind, mode, gernamekr){
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode + '&Mode=' +mode + '&GerName=' + gernamekr
+		return $http.get(url + '?' + data);
+		
+	}
+	return{
+		ERPiaCompsearchData: ERPiaCompsearchData
+	}
 });
