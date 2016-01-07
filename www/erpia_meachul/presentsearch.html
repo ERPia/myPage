@@ -1,0 +1,47 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">상품검색</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closepresentsearchModals()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="item item-input-inset" >
+    <label class="item-input-wrapper" ng-switch on="searchde.Mode">
+      <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" ng-switch-when="Select_GoodsName">
+      <input type="text" ng-model='goodsparam.G_OnCode' placeholder="자체코드"  ng-switch-when="Select_G_OnCode"/>
+    <input type="text" placeholder="상품코드" ng-model='goodsparam.GoodsCode' ng-switch-when="Select_G_Code"/>
+    <input type="text" placeholder="공인바코드 번호" ng-model='goodsparam.GI_Code' ng-switch-when="Select_GI_Code"/>
+    <input type="text" placeholder="상품명" ng-model='goodsparam.GoodsName' ng-switch-default/>
+    </label>
+    <button ng-click='presentsclick(2)' class="button button-small">
+      검색
+    </button>
+  </div>
+
+      <hr>
+
+      </div>
+      <div align="center">
+        조회목록
+        <br>
+        
+      <br>
+      </div>
+      <hr>
+
+  <table>
+      <tr ng-repeat="items in lists">
+        <td width="20%" align="center">{{items.G_Code}}</td>
+        <td width="80%" align="center" ng-switch on="basicConfiglist.basic_Dn_Sale">
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn1)" ng-switch-default>{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn2)" ng-switch-when="2">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn3)" ng-switch-when="3">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn4)" ng-switch-when="4">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn5)" ng-switch-when="5">{{items.G_Name}}</a>
+        </td>
+    </tr>
+  </table>
+  <hr>
+  </ion-content>
+</ion-modal-view>

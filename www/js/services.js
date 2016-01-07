@@ -634,4 +634,21 @@ angular.module('starter.services', [])
 	return{
 		ERPiaMCDeleteResult: ERPiaMCDeleteResult
 	}
+})
+
+
+
+
+//$scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.searchde.Admin_Code+'&UserId='+$scope.searchde.UserId+'&Kind='+$scope.searchde.Kind+'&Mode='+$scope.searchde.Mode
+.factory('ERPiaSMIConfigService', function($http, ERPiaAPI){
+	var ERPiaSMIConfigData = function(Admin_Code, UserId, kind, mode){
+		
+		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode
+		return $http.get(url + '?' + data);
+		
+	}
+	return{
+		ERPiaSMIConfigData: ERPiaSMIConfigData
+	}
 });

@@ -7,9 +7,15 @@
       </ion-nav-buttons>
     </ion-nav-bar>
   <ion-content>
-  <div class='submenu' ng-if='nextclick==false'>
+  <div class='submenu'>
    	<p align="right" ng-model='todate'>오늘날짜:{{todate}}</p>
    	<center>
+<div class="card">
+  <div class="item item-divider">
+    매출정보
+    <button align="right" ng-click="insert1pageopenclose()" class="button button-small">^</button>
+  </div>
+    <div class="item item-text-wrap">
     <br>
  <div class="row row-center">
     <div class='col col-20'>구분</div>
@@ -134,15 +140,15 @@
         </td>
     </tr>
     </table> -->
-    
-    <br><br>
 
-    <button ng-click='meachulinsertnext()' class="button button-small">다음</button>
+
+      </div>
+    </div>
     </center>
     </div>
 <!--여기부터는 넥스트페이지-->
 
-    <div class='submenu2' ng-if='nextclick==true' style="width:100%">
+    <div class='submenu2'style="width:100%">
     <br>
         <hr>
     <br>

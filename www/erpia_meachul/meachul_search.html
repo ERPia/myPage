@@ -1,4 +1,72 @@
-<ion-view view-title="매출전표 조회">
+<ion-view title="매출전표조회">
+ <ion-nav-buttons side="right">
+        <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
+</ion-nav-buttons>
+<!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->  
+  <ion-content class="padding2">
+    <div align="center"> 
+      검색<hr>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="search" ng-model="searchdatas" placeholder="상품명을 입력하세요">
+      </label>
+    
+<!--      <label class="item item-input">
+        <input type="date" ng-model='date.sdate' size="11">~&nbsp;
+        <input type="date" ng-model='date.edate' size="11"><br>
+        <any ng-click="searchestoday(100)"><i class="icon ion-search" style="font-size:20px"></i></any>&nbsp;
+      </label> -->
+
+    <table width="100%">
+    <tr>
+          <td align="center">일자</td>
+          <td>
+            <input type="text" ng-model="reqparams.sDate" ng-click="opendateModal('sDate')" readonly size="11" style="border:1px solid #eee;">
+        </td>
+        <td>~</td>
+        <td>
+            <input type="text" ng-model="reqparams.eDate" ng-click="opendateModal('eDate')" readonly size="11" style="border:1px solid #eee;">
+        </td>
+        <td>
+            <button ng-click="searchestoday(100)">검색</button>
+          </td>
+        </tr>
+      </table>
+      </div>
+      <hr>
+      <div align="center" style="width:100%">
+        <button class="button button-calm" ng-click="searchesday(0)" style="width:30%">금일</button>
+      <button class="button button-balanced" ng-click="searchesday(7)" style="width:30%">1주일</button>
+      <button class="button button-energized" ng-click="searchesday(30)" style="width:30%">1개월</button>
+    </div>
+    <hr>
+    <div align="center">
+        조회목록
+      </div>
+      <hr>
+    <body ng-app="ngAnimate">
+      <ion-list>
+        <ion-item ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" style="padding:0px;">
+          <ui class="list" ng-click="searchdetailclick(x.Sl_No)">
+            <li class="item">
+              <font><b>품명</b></font> : {{x.G_Name}}</br>
+              <font><b>매출일</b></font> : {{x.MeaChul_Date}}</br>
+              <font><b>거래처</b></font> : {{x.Admin_Code}}</br>
+              <font><b>매출총액</b></font> : {{x.MeaChul_Amt}}</br>
+            </li>
+          </ui>
+        <button class="button button-block button-positive" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">
+          더보기(+5)
+        </button>
+        </ion-item>
+      </ion-list>
+
+  </ion-content>
+</ion-view>
+
+<!-- <ion-view view-title="매출전표 조회">
 <ion-nav-buttons side="right">
         <button menu-toggle="right" onclick="location.href='#/app/meachul_page'" ng-controller='MeaChulinsertCtrl' ng-click="configoption(1)">등록
         </button>
@@ -26,7 +94,7 @@
             readonly style="border:1px solid #eee;"></div>
             <div class="col col-10"><button ng-click="searches()" class="ion-ios-search-strong" style="border:0; background:white;"></button></div>
       </div>
-      <!-- <table>
+      <table>
         <tr>
           <td align="center" width="25%">일자</td>
           <td style="width:30%">
@@ -44,7 +112,7 @@
     </button>
           </td>
         </tr>
-      </table> -->
+      </table>
       <div><button style="width:20%" ng-click="searchesday(0)" class="button button-small">금일</button> <button style="width:20%" ng-click="searchesday(7)" class="button button-small">1주일</button> <button style="width:20%" ng-click="searchesday(30)" class="button button-small">1개월</button>
       </div>
       <hr>
@@ -71,3 +139,4 @@
 
   </ion-content>
 </ion-view>
+ -->

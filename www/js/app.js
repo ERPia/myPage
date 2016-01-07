@@ -382,14 +382,25 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
-	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
-	
-		.state('app.mechul_page', {
-		url : '/mechul_page',
+		////////////////////////////////sample///////////////////////////////////
+	.state('app.searchdetail', {
+		url : '/searchdetail',
 		views : {
 			'menuContent' : {
-				templateUrl : 'erpia_meachul/mechul_page.html',
-				controller : 'MeaChulinsertCtrl'
+				templateUrl : 'erpia_meachul/searchdetail.html',
+				controller : 'MeaChulSearchDetailCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+		.state('app.meachulpage', {
+		url : '/meachulpage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachulpage.html',
+				controller : 'MeaChulInsertCtrl'
 			}
 		}
 	})

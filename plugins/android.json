@@ -15,6 +15,12 @@
         },
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "erpia.lhk.test"
         }
     },
     "dependent_plugins": {}
