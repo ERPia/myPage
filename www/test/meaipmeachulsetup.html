@@ -1,7 +1,8 @@
 <ion-view title="매입매출설정">
 	<ion-nav-bar>
-		<ion-nav-back-button ng-click="configback()">이전</ion-nav-back-button>
+		<ion-nav-back-button ng-click="configback(MeaipData.configState)">이전</ion-nav-back-button>
 	</ion-nav-bar>
+
     <ion-content>
     	<div class="list list-inset">
 
@@ -23,9 +24,9 @@
 
 	  	    <label class="item item-input">
 	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매출단가 지정</i></span>
-	  		   <select style="width:50%">
-		  		  <option>
-		  		  김형석바보</option>
+	  		   <select ng-model="maipbasiclist.basic_Dn_Sale" style="width:50%">
+		  		  <option ng-repeat="x in MeaipDn" value="{{x.num}}" ng-selected="configData.basic_Dn_Sale == {{x.num}}">
+		  		  {{x.id}}</option>
 		  		</select><br>
 	  	    </label>
 
@@ -38,19 +39,18 @@
 	  	    </label>
 
 	  	    <label class="item item-input">
-	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매출단가 지정</i></span>
-	  		   <select style="width:50%">
-		  		  <option>
-		  		  김형석바보</option>
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매출수불 지정</i></span>
+	  		   <select ng-model="maipbasiclist.basic_Subul_Meaip" style="width:50%">
+		  		  <option ng-repeat="x in configbasicS" value="{{x.num}}" ng-selected="configData.basic_Subul_Sale == {{x.num}}">
+		  		  {{x.id}}</option>
 		  		</select><br>
 	  	    </label>
 
 	  	    <label class="item item-input">
-	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매입수불 지정</i></span>
-	  		   <select style="width:50%">
-		  		  <option>최근등록수불</option>
-		  		  <option>매입입고</option>
-		  		  <option>매입판품</option>
+	  		    <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매입수불 지정</i></span>
+		  		<select ng-model="maipbasiclist.basic_Subul_Meaip" style="width:50%">
+		  		  <option ng-repeat="x in configbasicM" value="{{x.num}}" ng-selected="configData.basic_Subul_Meaip == {{x.num}}">
+		  		  {{x.id}}</option>
 		  		</select><br>
 	  	    </label>
 

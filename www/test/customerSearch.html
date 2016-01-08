@@ -29,7 +29,7 @@
 	<hr>
 	<any ng-repeat="x in customerDatas">
 		<table>
-			<tr ng-click="customerFunc(x.G_Name,x.G_Code)">
+			<tr ng-click="customerFunc(x.G_Name,x.G_Code);checkup()">
 			<td width="10%">&nbsp;</td>
 			   	<td width="10%" align="center">{{x.G_Code}}</td>
 			   	<td width="90%" align="center">{{x.G_Name}}</td>

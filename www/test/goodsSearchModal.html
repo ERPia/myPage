@@ -1,0 +1,45 @@
+<ion-modal-view title="">
+  <ion-header-bar>
+    <h1 class="title">상품 검색</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closemodesear()">취소</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+  <table>
+  	<tr>
+  		<td>
+		  <label class="item item-input">
+			  <i class="icon ion-search placeholder-icon"></i>
+			  <input type="search" placeholder="상품 정보를 입력해주세요." size="30" ng-model="GoodsInfo.info">
+		  </label>
+		</td>
+		<td>
+		 <a class="button button-clear" ng-click="divisionSearch()">검색</a>
+		</td>
+	</tr>
+  </table>
+  <table width="100%">
+  <tr>
+    <td width="33%">상품코드</td>
+    <td width="33%">상품명</td>
+    <td width="33%">단  가</td>
+  </tr>
+  <tr>
+   <td colspan="3"><hr></td> 
+  </tr>
+	<tr ng-click="listadd(x.G_Name,x.G_Dn5,x.G_Code,x.G_Stand)" ng-repeat="x in goodslists" ng-if="isVisible">
+    <td>{{x.G_Code}}</td>
+    <td>{{x.G_Name}}</td>
+    <td>{{x.G_Dn5}}</td>
+  </tr>
+  <tr ng-click="listadd2(x.G_Name,x.G_Dn5,x.G_Code,x.G_Stand)" ng-repeat="x in goodslists" ng-if="isVisible2">
+    <td>{{x.G_Code}}</td>
+    <td>{{x.G_Name}}</td>
+    <td>{{x.G_Dn5}}</td>
+  </tr>
+  </table>
+  </ion-content>
+  </ion-modal-view>
+
+

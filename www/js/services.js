@@ -135,7 +135,7 @@ angular.module('starter.services', [])
 	};
 })
 
-.factory('meaipMjangService', function($http, ERPiaAPI){
+.factory('meaipMjangService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
 		basicM: function(admin_code, userid){
 			console.log("meaipMjangService and basicM");
@@ -143,7 +143,7 @@ angular.module('starter.services', [])
 		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
 			.then(function(response){
-				console.log('meaipMjangService', response);
+				console.log('meaipMjangService(basicM)=', response);
 				if(typeof response == 'object'){
 					return response.data;
 				}else{
@@ -156,10 +156,10 @@ angular.module('starter.services', [])
 		}, basicSetup: function(admin_code, userid){
 			console.log("meaipMjangService and basicSetup");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Meaip_Config&Mode=select';
-		/*var data = 'Admin_Code=onz&UserId=pikapika&Kind=ERPia_Meaip_Config&Mode=select';*/
+		var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=select';
 		return $http.get(url + '?' + data)
 			.then(function(response){
+				console.log('meaipMjangService(basicSetup)=', response);
 				if(typeof response == 'object'){
 					return response.data;
 				}else{
@@ -187,19 +187,23 @@ angular.module('starter.services', [])
 		}, cusnameSearch: function(admin_code, userid, cusname){
 				console.log("meaipMjangService and cusnameSearch");
 				var cusname2 = escape(cusname);
-		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
-		return $http.get(url + '?' + data)
-			.then(function(response){
-				console.log('meaipMjangService', response);
-				if(typeof response == 'object'){
-					return response.data;
-				}else{
-					return $q.reject(response.data);
-				}
-			}, function(response){
-				return $q.reject(response.data);
-			})
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('meaipMjangService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.');
+							return $q.reject(response);
+						}
+					}, function(response){
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.');
+							return $q.reject(response);
+					})
 		}
 	};
 })
