@@ -31,7 +31,7 @@
       <hr>
 
   <table>
-      <tr ng-repeat="items in lists">
+  <tr ng-repeat="items in itemlists">
         <td width="20%" align="center">{{items.G_Code}}</td>
         <td width="80%" align="center" ng-switch on="basicConfiglist.basic_Dn_Sale">
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn1)" ng-switch-default>{{items.G_Name}}</a>
@@ -41,6 +41,8 @@
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn5)" ng-switch-when="5">{{items.G_Name}}</a>
         </td>
     </tr>
+
+
   </table>
   <hr>
   </ion-content>

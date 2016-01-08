@@ -640,28 +640,158 @@ angular.module('starter.services', [])
 
 
 //$scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.searchde.Admin_Code+'&UserId='+$scope.searchde.UserId+'&Kind='+$scope.searchde.Kind+'&Mode='+$scope.searchde.Mode
-.factory('ERPiaSMIConfigService', function($http, ERPiaAPI){
-	var ERPiaSMIConfigData = function(Admin_Code, UserId, kind, mode){
-		
-		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode
-		return $http.get(url + '?' + data);
-		
-	}
+.factory('meaipMjangService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
-		ERPiaSMIConfigData: ERPiaSMIConfigData
-	}
+		basicM: function(admin_code, userid){
+			console.log("meaipMjangService and basicM");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService(basicM)=', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, basicSetup: function(admin_code, userid){
+			console.log("meaipMjangService and basicSetup");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=select';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService(basicSetup)=', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, changoSearch: function(admin_code, userid, chango_code){
+				console.log("meaipMjangService and changoSearch");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + chango_code;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, cusnameSearch: function(admin_code, userid, cusname){
+				console.log("meaipMjangService and cusnameSearch");
+				var cusname2 = escape(cusname);
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('meaipMjangService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.');
+							return $q.reject(response);
+						}
+					}, function(response){
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.');
+							return $q.reject(response);
+					})
+		}
+	};
+})
+
+.factory('ERPiaMeachulService', function($http, ERPiaAPI){
+	return{
+		ERPiaCompsearchData: function(Admin_Code, UserId, kind, mode, gernamekr){
+			console.log("ERPiaMeachulService and ERPiaCompsearchData");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode + '&GerName=' + gernamekr
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMeachulService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, ERPiaMejangsearchData: function(Admin_Code, UserId, kind, mode){
+			console.log("ERPiaMeachulService and ERPiaMejangsearchData");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode
+		/*var data = 'Admin_Code=onz&UserId=pikapika&Kind=ERPia_Meaip_Config&Mode=select';*/
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, ERPiaChanggosearchData: function(Admin_Code, UserId, kind, mode, Sale_Place_Code){
+				console.log("ERPiaMeachulService and ERPiaChanggosearchData");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + mode + '&Sale_Place_Code=' + Sale_Place_Code
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMeachulService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, ERPiaItemsearchData: function(Admin_Code, UserId, kind, mode, goodsnamekr, G_OnCode, GoodsCode, GI_Code){
+				console.log("ERPiaMeachulService and ERPiaItemsearchData");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + mode + '&GoodsName=' + goodsnamekr + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMeachulService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	};
 })
 
 
-.factory('ERPiaCompsearchService', function($http, ERPiaAPI){
-	var ERPiaCompsearchData = function(Admin_Code, UserId, kind, mode, gernamekr){
+/*
+
+.factory('ERPiaItemsearchService', function($http, ERPiaAPI)
+	var ERPiaItemsearchData = function(Admin_Code, UserId, kind, mode, goodsnamekr, G_OnCode, GoodsCode, GI_Code){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode + '&Mode=' +mode + '&GerName=' + gernamekr
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + mode + '&GoodsName=' + goodsnamekr + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code 
 		return $http.get(url + '?' + data);
 		
 	}
 	return{
-		ERPiaCompsearchData: ERPiaCompsearchData
+		ERPiaItemsearchData: ERPiaItemsearchData
 	}
-});
+})*/;

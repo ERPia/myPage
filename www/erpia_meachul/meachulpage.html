@@ -1,267 +1,112 @@
-<ion-view view-title="간편 매입·매출 등록">
+<ion-view title="간편매입 등록">
     <ion-nav-bar>
-    <ion-nav-back-button ng-click="mygoback()">Back</ion-nav-back-button>
-      <ion-nav-buttons side="right" >
-         <button onclick="right">매입
-        </button>
-      </ion-nav-buttons>
+        <ion-nav-back-button ng-click="mygoback()">Back</ion-nav-back-button>
     </ion-nav-bar>
-  <ion-content>
-  <div class='submenu' ng-if="nextclick==false">
-    <p align="right" ng-model='todate'>오늘날짜:{{todate}}</p>
-    <center>
-<div class="card">
-  <div class="item item-divider">
-    매출정보
-    <button align="right" ng-click="insert1pageopenclose()" class="button button-small"><i ng-if="meachuloc=='close'">v</i><i ng-if="meachuloc=='open'">^</i></button>
-  </div>
-    <div class="item item-text-wrap" ng-if="meachuloc=='open'">
-    <br>
-  <div class="row row-center">
-    <div class='col col-20'>거래처<br>{{Comp.Ger_Code}}</div>
-    <div class='col col-50 item-input-inset' style='border:0px'> 
-    <label class="item-input-wrapper">
-    <input ng-model="Comp.Ger_Name" type="text" /></label>
-    </div>    
-    <div class='col col-30'>
-        <button ng-click="compsclick(1)" class="button button-small">검색</button>
-    </div>
- </div>
-  <div class="row row-center">
-    <div class='col col-20'>수불구분</div>
-    <div class='col col-40 item-input-inset' style='border:0px'>
-        <ion-radio ng-model="searchde.meachulsubuls" ng-value="221" style="width:100%">출고</ion-radio>
+    <ion-content>
+    <div class="list list-inset">
+        <div class="list list-inset" align="left" ng-click="meaipNext()">
+            <input type="text" style="text-align:center;" value='{{todate}}' readonly>   
+            <hr>&nbsp; <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매출정보
         </div>
-    <div class='col col-40 item-input-inset' style='border:0px'>
-        <ion-radio ng-model="searchde.meachulsubuls" ng-value="212" style="width:100%">반품</ion-radio>
-    </div>
- </div>
-  <div class="row row-center">
-    <div class='col col-20'>창고지정</div>
-    <div class='col col-50 item-input-inset' style='border:0px'>
-    <SELECT ng-model="mejang.ChanggoCode" style='width:100%'>
-            <option ng-repeat='changgo in changgolist' value='{{changgo.Code}}' ng-selected='changgo.Code==basicConfiglist.basic_Ch_Code||changgo.Name==mejang.ChanggoName'>{{changgo.Name}}</option>
-        </SELECT>
-        </div>
-        <div class='col col-30'>
-            </div>
- </div>
-  <div class="row row-center">
-    <div class='col col-20'>매장지정</div>
-    <div class='col col-50 item-input-inset' style='border:0px'> <label class="item-input-wrapper"><input ng-model="mejang.Sale_Place_Name" ng-bind='mejang.Sale_Place_Name' type="text"/></label></div>
-    <div class='col col-30'>
-        <button ng-click="mejangsclick(1,'N')" class="button button-small">검색</button>
-    </div>
- </div>
-  <div class="row row-center">
-    <div class='col col-20'>주문구분</div>
-    <div class='col col-50 item-input-inset' style='border:0px'>
-    <SELECT ng-model="searchde.i_Cancel" style="width:100%">  
-            <option value='J' selected>정상</option>
-            <option value='B'>반품</option>
-            <option value='C'>취소</option>
-            <option value='T'>교환</option>
-            </SELECT>
-    </div>
-    <div class='col col-30'>
-    </div>
- </div>
-   <!--  <table>
-    <tr style="width:100%;">
-        <td align="right" style="width:15%">
-            구분
-        </td>
-        <td align="center" style="width:80%" colspan="2">
-        <b>매출</b>
-        </td>
-    </tr>
-    <tr style="width:100%;">
-        <td align="right" style="width:15%">     
-            수불구분
-        </td>
-        <td colspan="2" style="width:85%">
-        <label class="item item-input" style="border:0;">
-        <ion-radio ng-model="searchde.meachulsubuls" ng-value="221" style="width:51%">출고</ion-radio>
-        <ion-radio ng-model="searchde.meachulsubuls" ng-value="212" style="width:51%">반품</ion-radio>
-        </label>
-        </td>
-    </tr>
-        <tr style="width:100%;">
-        <td align="right" style="width:15%">
-            거래처<br>
-            {{Comp.Ger_Code}}
-        </td>
-        <td align='left' style="width:65%">
-        <input type="text" ng-model="Comp.Ger_Name" style="border:1px solid #eee; margin-left:18px; width:80%"/>
-        </td>
-        <td style="width:20%">
-       <button ng-click="compsclick(1)" class="button button-small">검색</button>
-        </td>
-    </tr>
 
-        <tr style="width:100%;">
-        <td align="right" style="width:15%">
-            매장지정
-        </td>
-        <td align='left' style="width:65%">
-        <input type="text" ng-model="mejang.Sale_Place_Name" ng-bind='mejang.Sale_Place_Name'
-        style="border:1px solid #eee; margin-left:18px; width:80%"/>
-        </td>
-        <td style="width:20%">
-       <button ng-click="mejangsclick(1,'N')" class="button button-small">검색</button>
-        </td>
-    </tr>
-        <tr style="width:100%;">
-        <td align="right" style="width:15%">
-            창고지정
-        </td>
-        <td align='left' colspan="2" style="width:85%">
-        <SELECT ng-model="mejang.ChanggoCode" style="margin-left:18px; width:65%">
-            <option ng-repeat='changgo in changgolist' value='{{changgo.Code}}' ng-selected='changgo.Code==basicConfiglist.basic_Ch_Code||changgo.Name==mejang.ChanggoName'>{{changgo.Name}}</option>
-        </SELECT>
+        <div ng-if="basictype" >
+        <div class="list list-inset">
+            <label class="item item-input" style="border:0;">
+              거래처&nbsp;&nbsp;
+              <input type="text" ng-model="Comp.Ger_Name" style="text-align:center;" readonly ng-click="compsclick(1);checkup()">&nbsp;
+              <button class="button button-stable" ng-click="compsclick(1);checkup()">검색</button>&nbsp;
+            </label>
+
+            <label class="item item-input" style="border:0;">
+              수불구분
+              <ion-radio ng-click="kindF('221');checkup()">입고</ion-radio>
+              <ion-radio ng-click="kindF('212');checkup()">반품</ion-radio>
+            </label>
+
+            <label class="item item-input item-select" style="border:0;">
+              매장지정
+              <select ng-model="mejang.Sale_Place_Code" ng-change='mejangselect();checkup()' style="width:50%">
+                 <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}},{{x.Sale_Place_Name}}" ng-selected="mejang.Sale_Place_Code==configData.basic_Place_Code||mejang.Sale_Place_Name==configData.basic_Place_Name" >
+                 {{x.Sale_Place_Name}}</option>
+                </select>
+            </label>
+
+            <label class="item item-input item-select" style="border:0;">
+              창고지정
+              <select ng-model="mejang.ChanggoCode" ng-change='onChanggoChecked();checkup()' style="width:50%">
+                  <option ng-repeat="x in changgolist" value="{{x.Name}},{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+                  {{x.Name}}</option>
+                </select>
+            </label>
+    </div>
+    </div>
+
+        <div class="list list-inset" align="left" ng-click="meaipNext2()">
+            <hr>&nbsp; <i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품
+        </div>
+
+        <div ng-if="basic2type">
+        <div class="list list-inset" style="align:center;" >
+            <table width="100%">
+                <tr>
+                    <td>
+                    &nbsp;<SELECT ng-model='searchde.Mode'>
+                            <option value='Select_GoodsName' selected>상품명</option>
+                            <option value='Select_G_OnCode'>자체코드</option>
+                            <option value='Select_G_Code'>상품코드</option>
+                            <option value='Select_GI_Code'>바코드</option>
+                    </SELECT>&nbsp;&nbsp;
+                    </td>
+                    <td>
+            <label ng-switch on="searchde.Mode" class="item-input-wrapper">
+            <input type="text" ng-model='goodsparam.GoodsName' size="20" placeholder="상품명" ng-switch-when="Select_GoodsName"/>
+            <input type="text" ng-model='goodsparam.G_OnCode' size="20" placeholder="자체코드" ng-switch-when="Select_G_OnCode"/>
+            <input type="text" ng-model='goodsparam.GoodsCode' size="20" placeholder="상품코드" ng-switch-when="Select_G_Code"/>
+            <input type="text" ng-model='goodsparam.GI_Code' size="20" placeholder="공인바코드 번호" ng-switch-when="Select_GI_Code"/>
+            <input type="text" ng-model='goodsparam.GoodsName' size="20" placeholder="상품명" ng-switch-default/>
+            </label>
+                    </td>
+                    <td><i class="ion-search" style="font-size:30px" ng-click="presentsclick(1)"></i></td>
+                    <td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
+                </tr>
+            </table><hr>
         
-        </td>
-    </tr>
-     <tr style="width:100%;">
-        <td align="right" style="width:15%">
-            주문구분
-        </td>
-        <td align='left' colspan="2" style="width:85%">
-        <SELECT ng-model="searchde.i_Cancel" style="margin-left:18px; width:65%">  
-            <option value='J' selected>정상</option>
-            <option value='B'>반품</option>
-            <option value='C'>취소</option>
-            <option value='T'>교환</option>
-            </SELECT>
-        </td>
-    </tr>
-    </table> -->
-
-
-      </div>
+            <table width="100%" style="text-align:center;">
+                <tr bgcolor="#EAEAEA">
+                    <td width="40%">상품명</td>
+                    <td width="15%">수 량</td>
+                    <td width="35%">단 가</td>
+                    <td width="10%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><hr></td>
+                </tr>
+                <tr ng-repeat="goods in goodsresult">
+                    <td>{{goodsresult[$index].goods_number}}.{{goodsresult[$index].G_Name}}</td>
+                    <td><input type="number" min="1" max="999" ng-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)"></td>
+                    <td><label class="item-input-wrapper"><input ng-model="goods.goods_price" type="text" ng-change="goods_totalprice1($index)"/></label>
+                    <input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" /></td>
+                    <td><i class="ion-android-remove-circle" ng-click="remove($index)"></i>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
     </div>
-    </center>
-    </div>
-<!--여기부터는 넥스트페이지-->
+        
+        <div class="list list-inset" align="left" ng-click="meaipNext3()">
+            <hr>&nbsp; <i class="{{upAnddown3}}"></i> &nbsp;&nbsp; 관리비고
+        </div>
+        <div ng-if="basic3type" class="list list-inset">
+            <label class="item item-input item-stacked-label">
+                <textarea placeholder="관리자비고란 입니다." rows="8" cols="10" ng-model="etc.goods_bigo"></textarea>
+            </label>
+        </div>
 
-    <div class="submenu2"style="width:100%">
-    <div class="card">
-  <div class="item item-divider">
-    <center>매출정보
-    <button align="right" ng-click="insert2pageopenclose()" class="button button-small"><i ng-if="sangpumoc=='close'">v</i><i ng-if="sangpumoc=='open'">^</i></button></center>
-  </div>
-    <div class="item item-text-wrap" ng-if="sangpumoc=='open'">
-     <div class='row'> 
-        <div class="col col-33"> 
-         <SELECT ng-model='searchde.Mode'>
-        <option value='Select_GoodsName' selected>상품명</option>
-        <option value='Select_G_OnCode'>자체코드</option>
-        <option value='Select_G_Code'>상품코드</option>
-        <option value='Select_GI_Code'>바코드</option>
-    </SELECT>
-      </div>
-           <div class="col col-48 item item-input-inset" style='border:0px'><label ng-switch on="searchde.Mode" class="item-input-wrapper">
-            <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" ng-switch-when="Select_GoodsName"/>
-            <input type="text" ng-model='goodsparam.G_OnCode' placeholder="자체코드" ng-switch-when="Select_G_OnCode"/>
-            <input type="text" ng-model='goodsparam.GoodsCode' placeholder="상품코드" ng-switch-when="Select_G_Code"/>
-            <input type="text" ng-model='goodsparam.GI_Code' placeholder="공인바코드 번호" ng-switch-when="Select_GI_Code"/>
-            <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" ng-switch-default/>
-           </label></div>
-            <div class="col col-22"><button ng-click="presentsclick(1)" class="ion-ios-search-strong" style="border:0; background:white;"></button>
-            <button ng-click="scanBarcode()" class="ion-android-expand" style="border:0; background:white;"></button></div>
-      </div>
-<!--     <table>
-    <tr>
-    <td>
-    <SELECT ng-model='searchde.Mode'>
-        <option value='Select_GoodsName' selected>상품명</option>
-        <option value='Select_G_OnCode'>자체코드</option>
-        <option value='Select_G_Code'>상품코드</option>
-        <option value='Select_GI_Code'>바코드</option>
-    </SELECT>
-    <br>
-    </td>
-    <td ng-switch on="searchde.Mode">
-    <input type="text" ng-model='goodsparam.GoodsName' style="border:1px solid #eee;" placeholder="상품명" ng-switch-when="Select_GoodsName"/>
-    <input type="text" ng-model='goodsparam.G_OnCode' style="border:1px solid #eee;" placeholder="자체코드" ng-switch-when="Select_G_OnCode"/>
-    <input type="text" ng-model='goodsparam.GoodsCode' style="border:1px solid #eee;" placeholder="상품코드" ng-switch-when="Select_G_Code"/>
-    <input type="text" ng-model='goodsparam.GI_Code' style="border:1px solid #eee;" placeholder="공인바코드 번호" ng-switch-when="Select_GI_Code"/>
-    <input type="text" ng-model='goodsparam.GoodsName' style="border:1px solid #eee; " placeholder="상품명" ng-switch-default/>
-    </td>
-    <td>
+        <div class="list list-inset" align="center">
+            <hr>
+            <button class="button button-balanced" style="margin-top:40px" ng-click='meaipDataRegist()'>다음</button>
+        </div>
+    </div>
 
     
-    </td>
-    <td>
-    <button ng-click='presentsclick(1)' class="button button-small">검색</button>
-    </td>
-    <td>
-    <button ng-click='scanBarcode()' class="button button-small">바코드</button>
-    </td>
-    </tr>
-    </table> -->
-    
-
-    <br>
-    <div class='row'>
-        <div class='col col-20'>번호</div>
-        <div class='col col-40'>상품명</div>
-        <div class='col col-20'>수량</div>
-        <div class='col col-30'>단가</div>
-    </div>
-        <div class="row row-center" ng-repeat='goods in goodsresult'>
-        <div class='col col-10'>{{goodsresult[$index].goods_number}}</div>
-        <div class='col col-45'>{{goodsresult[$index].G_Name}}</div>
-        <div class='col col-20 item-input-inset' style='border:0px'><label class="item-input-wrapper"><input ng-model="goods.goods_count" type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)"/></label></div>
-        <div class='col col-30 item-input-inset' style='border:0px'> <label class="item-input-wrapper"><input ng-model="goods.goods_price" type="text" ng-change="goods_totalprice1($index)"/></label></div><input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" />
-        <div class='col col-10'><button ng-click="remove($index)" class="ion-ios-close" style="border:0; background:white;"></button></div>
-    </div>
-    
-<!--     <table>
-    <tr style="width:100%;">
-        <td style="width:15%" align="center">번호</td>
-        <td style="width:40%" align="center">상품명</td>
-        <td style="width:20%" align="center">수량</td>
-        <td style="width:25%" colspan="2" align="center">단가</td>    
-    </tr>
-    <tr ng-repeat='goods in goodsresult' align="center" style="width:100%">
-        <td style="width:15%">
-            {{goodsresult[$index].goods_number}}
-        </td>
-        <td style="width:40%">   
-            {{goodsresult[$index].G_Name}}
-        </td>
-        <td style="width:20%">   
-            <input ng-model="goods.goods_count" type="number" min="0" max="999" style="border:1px solid #eee;"  ng-bind-html="goods_totalprice1($index)"/>
-        </td>
-         <td style="width:10%">   
-            <input ng-model="goods.goods_price" type="text" style="border:1px solid #eee;" ng-change="goods_totalprice1($index)"/>
-            <br>
-             <input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" />
-        </td>
-        <td style="width:15%">
-        <i ng-click="remove($index)" class="ion-ios-close"></i>
-        </td>
-    </tr>
-
-    </table> -->
-<hr>
-
-    <br>
-    <hr>
-    <br>
-    <div>
-    <b>관리비고</b>
-    <br>
-    <textarea ng-model="etc.goods_bigo" style="width:100%" placeholder='여기에 내용을 입력하세요'></textarea>
-    </div>
-    <br>
-     <input ng-model="etc.totalsumprices" type="hidden" />
-    <center><br><!-- <div ng-controller="MeaChulinsertCtrl"><p ng-bind-html="totalsumprices"> -->최종가격 :{{etc.totalsumprices}} 원(vat 10%포함)<br> 최종가격 :{{totalnotexsumprices}} 원(vat 10% 미포함)<!-- </p> </div>--><br>
-    <button ng-click='requestinsert()' ng-if="searchde.Sl_No==''">저장</button>
-    <button ng-click='requestupdate()' ng-if="searchde.Sl_No!==''">수정</button>
-    </center>
-    </div>
-    </div>
   </ion-content>
 </ion-view>

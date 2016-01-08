@@ -404,6 +404,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+
+	///////////////////////////// /*매입&매출 환경설정*//////////////////////////////////////
+    .state('app.test-meaipmeachulsetup', {
+		url : '/test/meaipmeachulsetup',
+		views : {
+			'menuContent' : {
+				templateUrl : 'test/meaipmeachulsetup.html',
+				controller : 'meaipInsertCtrl'
+			}
+		}
+	})
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

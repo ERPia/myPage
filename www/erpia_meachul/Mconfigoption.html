@@ -1,0 +1,63 @@
+<ion-view title="매입매출설정">
+	<ion-nav-bar>
+		<ion-nav-back-button ng-click="configback({{configState}})">이전</ion-nav-back-button>
+	</ion-nav-bar>
+
+    <ion-content>
+    	<div class="list list-inset">
+
+    		<label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매장 지정</i></span>
+	  		   <select ng-model="maipbasiclist.Medefault" ng-change='Chango()' style="width:50%">
+			     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}},{{x.Sale_Place_Name}}" ng-selected="configData.basic_Place_Code == {{x.Sale_Place_Code}}">
+			     {{x.Sale_Place_Name}}</option>
+			    </select><br>
+	  	    </label>
+
+	  	    <label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본창고 지정</i></span>
+	  		   <select ng-model="meaipKorea.changoKorea" ng-change='Changosave({{x.Code}})' style="width:50%">
+		  		  <option ng-repeat="x in changolists" value="{{x.Name}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+		  		  {{x.Name}}</option>
+		  		</select><br>
+	  	    </label>
+
+	  	    <label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매출단가 지정</i></span>
+	  		   <select style="width:50%">
+		  		  <option>
+		  		  김형석바보</option>
+		  		</select><br>
+	  	    </label>
+
+	  	    <label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매입단가 지정</i></span>
+	  		   <select ng-model="maipbasiclist.basic_Dn_Meaip" style="width:50%">
+		  		  <option ng-repeat="x in MeaipDn" value="{{x.num}}" ng-selected="configData.basic_Dn_Meaip == {{x.num}}">
+		  		  {{x.id}}</option>
+		  		</select><br>
+	  	    </label>
+
+	  	    <label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매출단가 지정</i></span>
+	  		   <select style="width:50%">
+		  		  <option>
+		  		  김형석바보</option>
+		  		</select><br>
+	  	    </label>
+
+	  	    <label class="item item-input">
+	  		   <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;기본매입수불 지정</i></span>
+	  		   <select style="width:50%">
+		  		  <option>최근등록수불</option>
+		  		  <option>매입입고</option>
+		  		  <option>매입판품</option>
+		  		</select><br>
+	  	    </label>
+
+	  	</div>
+
+
+
+    </ion-content>
+</ion-view>

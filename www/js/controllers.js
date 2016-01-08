@@ -2047,26 +2047,63 @@ console.log('Detail : ', $scope);
 
 
 
-.controller('MeaChulInsertCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $cordovaToast, $cordovaBarcodeScanner, $window, $timeout, ERPiaAPI, ERPiaSMIConfigService, ERPiaCompsearchService) {
- $scope.nextclick=false;
- $scope.meachuloc='open';
- $scope.insert1pageopenclose=function(){
- 	if( $scope.meachuloc=='open'){
- 		$scope.meachuloc='close';
- 	}else{
- 		$scope.meachuloc='open';
- 	}
- };
- $scope.sangpumoc='open';
- $scope.insert2pageopenclose=function(){
- 	if( $scope.sangpumoc=='open'){
- 		$scope.sangpumoc='close';
- 	}else{
- 		$scope.sangpumoc='open';
- 	}
- 	
- };
+.controller('MeaChulInsertCtrl', function($rootScope, $ionicModal, $scope,  $ionicHistory, $stateParams,$ionicPopup,$http, $q, $location, $cordovaToast, $cordovaBarcodeScanner, $window, $timeout, ERPiaAPI, ERPiaMeachulService) {
 
+
+//매입정보 체크$scope.MeaChulData.cusCheck
+    $scope.MeachulData = {
+    	cusCheck : 'f',
+    	subulCheck : 'f',
+    	meajangCheck :'f',
+    	changoCheck : 'f'
+    };
+
+    $scope.basictype=true;
+	$scope.basic2type=false;
+	$scope.basic3type=false;
+	$scope.upAnddown="ion-arrow-down-b";
+	$scope.upAnddown2="ion-arrow-up-b";
+	$scope.upAnddown3="ion-arrow-up-b";
+
+ 	$scope.meaipNext=function(){
+    	if($scope.basictype == true){
+    		$scope.basictype= false;
+    		$scope.upAnddown="ion-arrow-up-b";
+    	}else{
+    		$scope.basictype=true;
+    		$scope.upAnddown="ion-arrow-down-b";
+    	}
+    }
+    $scope.meaipNext2=function(){
+    	if($scope.basic2type == true){
+    		$scope.basic2type= false;
+    		$scope.upAnddown2="ion-arrow-up-b";
+    	}else{
+    		$scope.basic2type=true;
+    		$scope.upAnddown2="ion-arrow-down-b";
+    	}
+    }
+    $scope.meaipNext3=function(){
+    	if($scope.basic3type == true){
+    		$scope.basic3type= false;
+    		$scope.upAnddown3="ion-arrow-up-b";
+    	}else{
+    		$scope.basic3type=true;
+    		$scope.upAnddown3="ion-arrow-down-b";
+    	}
+    }
+
+	$scope.checkup=function(){
+   		console.log('checkup',$scope.MeachulData.meajangCheck,$scope.MeachulData.changoCheck);
+    	if($scope.MeachulData.cusCheck == 't' && $scope.MeachulData.subulCheck == 't' && $scope.MeachulData.meajangCheck == 't' && $scope.MeachulData.changoCheck == 't'){
+        	/*상품폼 열기*/
+        	$scope.basic2type=true;
+    		$scope.upAnddown2="ion-arrow-down-b";
+    		/*매입폼닫기*/
+    		$scope.basictype= false;
+    		$scope.upAnddown="ion-arrow-up-b";
+        }
+    }
  /*뒤로가기 눌렀을 시 이벤트*/
  $scope.mygoback=function(){
     $ionicPopup.show({
@@ -2084,7 +2121,7 @@ console.log('Detail : ', $scope);
         })
   };
 
- $rootScope.basicConfiglist={
+ $scope.basicConfiglist={
   basic_Ch_Code:'empty',
   basic_Ch_Name:'empty',
   basic_Place_Code:'empty',
@@ -2100,7 +2137,9 @@ $rootScope.UserId='khs239';
 $scope.basic_Select_fail='success';
 
 
-
+$scope.meaChulKorea={
+	subulkorea : ''
+};
 
 
 
@@ -2112,12 +2151,6 @@ $scope.basic_Select_fail='success';
     $scope.modalcompsearch = modal;
   });
 
-/*매장 검색 모달*/
-  $ionicModal.fromTemplateUrl('erpia_meachul/mejangsearch.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modalmejangsearch = modal;
-  });
 
   /*상품 검색 모달*/
   $ionicModal.fromTemplateUrl('erpia_meachul/presentsearch.html', {
@@ -2219,128 +2252,539 @@ $scope.goodsresult=[];
 		});
 };*/
 
-  $scope.closecompsearchModals= function() { //거래처검색모달 닫기
-    $scope.modalcompsearch.hide();
-  };
-  $scope.closemejangsearchModals= function() { //매장검색모달 닫기
-    $scope.modalmejangsearch.hide();
-  };
-  $scope.closepresentsearchModals= function() { //상품검색모달 닫기
-  $scope.modalpresentsearch.hide();
-  };
+$scope.closecompsearchModals= function() { //거래처검색모달 닫기
+$scope.modalcompsearch.hide();
+};
 
-  //거래처 검색에서 원하는 거래처 선택시 이벤트
-    $scope.compselect= function(indexName,indexCode) { 
-    $scope.Comp.Ger_Code=indexCode;
-    $scope.Comp.Ger_Name=indexName;
-    $scope.modalcompsearch.hide();
-    $scope.onChanggosearch();
+$scope.closepresentsearchModals= function() { //상품검색모달 닫기
+$scope.modalpresentsearch.hide();
+};
 
-  };
-  //매장 검색에서 원하는 매장 선택시 이벤트
-    $scope.mejangselect= function(Name,Code) {
-      if($scope.PlacegibonYN=='Y'){
-          $rootScope.basicConfiglist.basic_Place_Code=Code;
-          $rootScope.basicConfiglist.basic_Place_Name=Name;
-          $scope.modalmejangsearch.hide();
-          $scope.onChanggosearch(1);
+
+/*상품별 가격합계 구하기*/
+$scope.goods_totalprice1=function(indexnum){
+  $scope.goodsresult[indexnum].goods_totalprice=parseInt($scope.goodsresult[indexnum].goods_price) * parseInt($scope.goodsresult[indexnum].goods_count);
+  $scope.goodsresult[indexnum].goods_panmedanga=parseInt($scope.goodsresult[indexnum].goods_price)*0.9;
+};
+
+
+
+/*상품 종합 합계 가격 구하기*/
+$scope.goods_totalsumprice=function(){
+   $scope.totalpr=0;//종합가격 초기화(세금포함가)
+   $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)
+  for(var count=0;count<$scope.goodsresult.length;count++){
+    $scope.totalpr += parseInt($scope.goodsresult[count].goods_totalprice);
+    $scope.totalnotexpr += parseInt($scope.goodsresult[count].goods_panmedanga)* parseInt($scope.goodsresult[count].goods_count);
+  }
+  $scope.etc.totalsumprices=$scope.totalpr;
+  $scope.totalnotexsumprices=$scope.totalnotexpr;
+  //alert($scope.totalsumprices);
+}
+//----------------------------------수정해야됨 1/8퇴근전 ------------------------------
+	/*기본 매장 default*/
+	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.mejanglists = data.list;
+			/*환경설정 default*/
+			meaipMjangService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+				.then(function(data){
+					console.log('datalist==', data.list);
+					if(data.list.length > 0){
+						for(var i=0; i < data.list.length; i++){
+							console.log('data.Id ==', data.list[i].UserId);
+								if($scope.loginData.UserId == data.list[i].UserId){
+									console.log('same');	
+									$scope.Meachuldata.meajangCheck = 't';
+									$scope.Meachuldata.changoCheck = 't';
+									$scope.configData = data.list[i];
+									console.log('config showData ->', $scope.configData);
+										/*창고조회*/
+										meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
+											.then(function(data){
+												$scope.changolists = data.list;
+												$scope.configState = 1;
+										})
+									break;
+								}else{
+									console.log('안똑같음.', data.list[i].UserId);
+
+								}
+						}
+					}
+				})
+			
+			console.log("매장리스트", $scope.mejanglists);
+			
+		})
+//----------------------------------수정해야됨 1/8퇴근전 ------------------------------
+
+$scope.compsclick=function(mode){ //거래처 검색 실행 펑션
+if(mode==1){ //처음 검색버튼을 누르면 새 모달이 띄워짐
+
+$scope.modalcompsearch.show(); 
+$scope.searchde.Mode='';
+$scope.searchde.Kind='ERPia_Sale_Select_GerName';
+$scope.gernamekr=escape($scope.Comp.Ger_Name);
+   // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName         Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_GerName&GerName=에스엠케이코스모
+	console.log($scope.reqparams);
+	ERPiaMeachulService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
+	.then(function(data){
+	console.log(data);
+	$scope.lists=data.list;
+	},function(){
+		alert('Request fail')	
+	});
+}else if(mode==2){ //모달이 띄워진 상태에서 검색버튼클릭시 이벤트
+$scope.searchde.Mode='';
+$scope.searchde.Kind='ERPia_Sale_Select_GerName';
+ $scope.gernamekr=escape($scope.Comp.Ger_Name);
+   // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName
+	console.log($scope.reqparams);
+	ERPiaMeachulService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
+	.then(function(data){
+	console.log(data);
+	$scope.lists=data.list;
+	},function(){
+		alert('Request fail')	
+	});
+}
+
+}	
+
+//subulkind
+    $scope.kindF=function(kindcode){
+      $scope.searchde.meachulsubuls = kindcode;
+      if (kindcode == 212) {
+        $scope.meaChulKorea.subulkorea = "반품";
+        $scope.searchde.meachulsubuls = kindcode;
+        $scope.MeachulData.subulCheck = 't';
+
       }else{
-          $rootScope.mejang.Sale_Place_Code=Code;
-          $rootScope.mejang.Sale_Place_Name=Name;
-          $scope.modalmejangsearch.hide();
-          $scope.onChanggosearch(2);
-    } //매장검색이 끝나면 창고검색펑션 실행
+        $scope.meaChulKorea.subulkorea = "입고";
+        $scope.searchde.meachulsubuls = kindcode;
+        $scope.MeachulData.subulCheck = 't';
+      };
+      console.log("subul_kind = " , $scope.meaChulKorea.subulkorea);
+    }
 
+//거래처 검색에서 원하는 거래처 선택시 이벤트
+$scope.compselect= function(indexName,indexCode) { 
+$scope.Comp.Ger_Code=indexCode;
+$scope.Comp.Ger_Name=indexName;
+$scope.modalcompsearch.hide();
+$scope.MeachulData.cusCheck = 't';
+$scope.mejangsclick();
 
+};
 
+$scope.mejangsclick=function(mode,gibonYN){ //매장검색 실행 펑션
+ //검색버튼클릭시 매장검색
+$scope.searchde.Mode='Select_Place';
+$scope.searchde.Kind='ERPia_Sale_Select_Place_CName';
+$scope.PlacegibonYN=gibonYN;
 
-  };
+   // CORS 요청 데모TestProject.asp?Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_Place
+	console.log($scope.reqparams);
+	ERPiaMeachulService.ERPiaMejangsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode)
+	.then(function(data){
+	console.log(data);
+	$scope.mejanglists=data.list;
+	},function(){
+		alert('Request fail')	
+	});
 
-  /*상품별 가격합계 구하기*/
-  $scope.goods_totalprice1=function(indexnum){
-      $scope.goodsresult[indexnum].goods_totalprice=parseInt($scope.goodsresult[indexnum].goods_price) * parseInt($scope.goodsresult[indexnum].goods_count);
-      $scope.goodsresult[indexnum].goods_panmedanga=parseInt($scope.goodsresult[indexnum].goods_price)*0.9;
-  };
+};
 
+//매장 검색에서 원하는 매장 선택시 이벤트
+$scope.mejangselect= function() {
+  if($scope.PlacegibonYN=='Y'){
+  	  $scope.MeachulData.meajangCheck='t';
+      $scope.onChanggosearch(1);
+  }else{
+  	  $scope.MeachulData.meajangCheck='t';
+      $scope.onChanggosearch(2);
+} //매장검색이 끝나면 창고검색펑션 실행
+};
 
-  
-  /*상품 종합 합계 가격 구하기*/
-   $scope.goods_totalsumprice=function(){
-       $scope.totalpr=0;//종합가격 초기화(세금포함가)
-       $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)
-      for(var count=0;count<$scope.goodsresult.length;count++){
-        $scope.totalpr += parseInt($scope.goodsresult[count].goods_totalprice);
-        $scope.totalnotexpr += parseInt($scope.goodsresult[count].goods_panmedanga)* parseInt($scope.goodsresult[count].goods_count);
-      }
-      $rootScope.etc.totalsumprices=$scope.totalpr;
-      $scope.totalnotexsumprices=$scope.totalnotexpr;
-      //alert($scope.totalsumprices);
+    $scope.onChanggosearch=function(mode){ //창고 검색 펑션
+    
+    if(mode==1){
+    $scope.searchde.Mode='Select_CName';
+    $scope.searchde.Kind='ERPia_Sale_Select_Place_CName';
+   	
+
+    // CORS 요청 데모TestProject.asp?Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_Place
+	console.log($scope.reqparams);
+	ERPiaMeachulService.ERPiaChanggosearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.basicConfiglist.basic_Place_Code)
+	.then(function(data){
+	console.log(data);
+	$scope.changgolist=data.list;
+	},function(){
+		alert('Request fail')	
+	});
+    }else{
+    $scope.searchde.Mode='Select_CName';
+    $scope.searchde.Kind='ERPia_Sale_Select_Place_CName';
+   
+    // CORS 요청 데모TestProject.asp?Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_Place
+	console.log($scope.reqparams);
+	ERPiaMeachulService.ERPiaChanggosearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.mejang.Sale_Place_Code)
+	.then(function(data){
+	console.log(data);
+	$scope.changgolist=data.list;
+	},function(){
+		alert('Request fail')	
+	});
+    }
   }
 
-/*  console.log($scope.reqparams);
-		ERPiaSMIConfigService.ERPiaSMIConfigData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode)
-		.then(function(ERPiaSMIConfigData){
-    	console.log(ERPiaSMIConfigData.data);
-    	$scope.lists=ERPiaSMIConfigData.data.list;
-    	for(var i=0; i<$scope.lists.length;i++){
-          if($scope.lists[i].UserId==$scope.UserId){
-            $scope.basicConfiglist.basic_Ch_Code = $scope.lists[i].basic_Ch_Code;
-            $scope.basicConfiglist.basic_Place_Code = $scope.lists[i].basic_Place_Code;
-            $scope.basicConfiglist.basic_Dn_Sale = $scope.lists[i].basic_Dn_Sale;
-          }else{}
-        $scope.searchde.Mode='Select_Place';
-        $scope.searchde.Kind='ERPia_Sale_Select_Place_CName';
-    	},function(){
-    		alert('Request fail')	
-		});*/
-
-
-	$scope.compsclick=function(mode){ //거래처 검색 실행 펑션
+  $scope.onChanggoChecked=function(){
+  	$scope.MeachulData.changoCheck='t';
+  }
+  $scope.presentsclick=function(mode){ //상품검색 실행 펑션
     if(mode==1){ //처음 검색버튼을 누르면 새 모달이 띄워짐
 
-    $scope.modalcompsearch.show(); 
-    $scope.searchde.Mode='';
-    $scope.searchde.Kind='ERPia_Sale_Select_GerName';
-    $scope.gernamekr=escape($scope.Comp.Ger_Name);
-       // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName         Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_GerName&GerName=에스엠케이코스모
-		console.log($scope.reqparams);
-		ERPiaCompsearchService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
-		.then(function(ERPiaCompsearchData){
-    	console.log(ERPiaCompsearchData.data);
-    	$scope.lists=ERPiaCompsearchData.data.list;
-    	},function(){
-    		alert('Request fail')	
-		});
+    $scope.modalpresentsearch.show(); 
+    $scope.goodsnamekr=escape($scope.goodsparam.GoodsName);
+    /*if($scope.goodsparam.GoodsName!=null){*/
+    $scope.searchde.Kind='ERPia_Sale_Select_Goods';
+
+    console.log($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.goodsnamekr, $scope.goodsparam.G_OnCode, $scope.goodsparam.GoodsCode, $scope.goodsparam.GI_Code);  
+	ERPiaMeachulService.ERPiaItemsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.goodsnamekr, $scope.goodsparam.G_OnCode, $scope.goodsparam.GoodsCode, $scope.goodsparam.GI_Code)
+	.then(function(data){
+	console.log(data);
+	$scope.itemlists=data.list;
+	},function(){
+		alert('Request fail')	
+	});
+
     }else if(mode==2){ //모달이 띄워진 상태에서 검색버튼클릭시 이벤트
-    $scope.searchde.Mode='';
-    $scope.searchde.Kind='ERPia_Sale_Select_GerName';
-     $scope.gernamekr=escape($scope.Comp.Ger_Name);
+    $scope.goodsnamekr=escape($scope.goodsparam.GoodsName);
+    $scope.searchde.Kind='ERPia_Sale_Select_Goods';
        // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName
-    $http.get($scope.windowrequestUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code='+$scope.searchde.Admin_Code+'&UserId='+$scope.searchde.UserId+'&Kind='+$scope.searchde.Kind+'&Mode='+$scope.searchde.Mode+'&GerName='+$scope.gernamekr).
-		console.log($scope.reqparams);
-		ERPiaCompsearchService.ERPiaCompsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.gernamekr)
-		.then(function(ERPiaCompsearchData){
-    	console.log(ERPiaCompsearchData.data);
-    	$scope.lists=ERPiaCompsearchData.data.list;
-    	},function(){
-    		alert('Request fail')	
-		});
+    console.log($scope.reqparams);  
+	ERPiaMeachulService.ERPiaItemsearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.searchde.Kind, $scope.searchde.Mode, $scope.goodsnamekr, $scope.goodsparam.G_OnCode, $scope.goodsparam.GoodsCode, $scope.goodsparam.GI_Code)
+	.then(function(data){
+	console.log(data);
+	$scope.itemlists=data.list;
+	},function(){
+		alert('Request fail')	
+	});
     }
 
 }
-  //거래처 검색에서 원하는 거래처 선택시 이벤트
-    $scope.compselect= function(indexName,indexCode) { 
-    $scope.Comp.Ger_Code=indexCode;
-    $scope.Comp.Ger_Name=indexName;
-    $scope.modalcompsearch.hide();
-    $scope.onChanggosearch();
-
-  };
+    $scope.remove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
+      $scope.goodsresult.splice(index, 1);
+      for(var goodslength=index; goodslength<$scope.goodsresult.length; goodslength++){
+        $scope.goodsresult[goodslength].goods_number=goodslength+1;
+      }
+    }
 
 })
 
-//----------------1.5 오늘까지한거 ---------------------------------(매출전표 (ALL, Tseq)삭제)
+//----------------경민씨가한거 ---------------------------------(매출전표 (ALL, Tseq)삭제)
+.controller('meaipInsertCtrl', function($scope, $sce, $cordovaToast, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, meaipMjangService, ERPiaAPI){
+	/* 매입 등록 정보*/
+	$scope.maipbasiclist={
+		Medefault : '', // 수정인지 저장인지 구별
+		Mejang_Code : 0, // 매장코드
+		subul_kind : 0, // 매입수불구분
+		Comp_no : 0,  // 거래처 번호
+		ChangGo_Code : 0, // 창고코드
+		basic_Dn_Meaip : 1, // 매입단가지정
+		basic_Dn_Sale : 1, // 매출단가지정
+		basic_Subul_Meaip : 2 //기본매입수불
+	}
+	$scope.meaipKorea={
+		subulkorea : '',
+		G_Name : '',
+		MejangKorea : '',
+		changoKorea : ''
 
+	}
+	$scope.cus = {
+	  GerName : ''
+	};
+
+	//단가지정배열 1. 매입가 2. 도매가 3. 인터넷가 4. 소매가 5. 권장소비자가
+    $scope.MeaipDn = [
+      { num: 1, id: '매입가' },
+      { num: 2, id: '도매가' },
+      { num: 3, id: '인터넷가' },
+      { num: 4, id: '소매가' },
+      { num: 5, id: '권장소비자가' }
+    ];
+    //기본매출최근등록수불 1. 최근등록수불 2. 매출출고 3. 매출반품
+    $scope.configbasicS = [
+      { id: '최근등록수불', num: 1 },
+      { id: '매출출고', num: 2 },
+      { id: '매출반품', num: 3 }
+    ];
+    //기본매입최근등록수불 1. 최근등록수불 2. 매입입고 3. 매입반품
+    $scope.configbasicM = [
+      { id: '최근등록수불', num: 1 },
+      { id: '매입입고', num: 2 },
+      { id: '매입반품', num: 3 }
+    ];
+    //매입정보 체크
+    $scope.MeaipData = {
+    	cusCheck : 'f',
+    	subulCheck : 'f',
+    	meajangCheck :'f',
+    	changoCheck : 'f'
+    };
+
+    $scope.basictype=true;
+	$scope.basic2type=false;
+	$scope.basic3type=false;
+	$scope.upAnddown="ion-arrow-down-b";
+	$scope.upAnddown2="ion-arrow-up-b";
+	$scope.upAnddown3="ion-arrow-up-b";
+
+    $scope.GoodsInfo = {
+      info : ''
+    };
+
+	/* customerSearch modal */
+	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.customerModal = modal;
+	});
+
+	/* meaip Insert modal */
+	$ionicModal.fromTemplateUrl('test/meaipinsertM.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.modalmeaipDataRegi = modal;
+	});
+
+	/* goods Search modal */
+    $ionicModal.fromTemplateUrl('test/goodsSearchModal.html', {
+    scope: $scope
+    }).then(function(modal) {
+    $scope.goodsSearchmodesear = modal;
+    });
+
+	/* customerSearch modal Show */
+	$scope.cusSearch = function() {
+	    $scope.customerModal.show();
+	};
+
+	/* customerSearch modal Close */
+	$scope.cussearchClose = function() {
+		$scope.customerModal.hide();
+	};
+
+    /* meaip Insert modal Show */
+	$scope.meaipDataRegist = function() {
+	    $scope.modalmeaipDataRegi.show();
+	};
+
+	/* meaip Insert modal Close */
+	$scope.closemodeInsert = function() {
+		$scope.modalmeaipDataRegi.hide();
+	};
+
+	/* goods Search modal Close */
+    $scope.closemodesear = function() {
+    $scope.goodsSearchmodesear.hide();
+    };
+
+    /* page up And down */
+    $scope.meaipNext=function(){
+    	if($scope.basictype == true){
+    		$scope.basictype= false;
+    		$scope.upAnddown="ion-arrow-up-b";
+    	}else{
+    		$scope.basictype=true;
+    		$scope.upAnddown="ion-arrow-down-b";
+    	}
+    }
+    $scope.meaipNext2=function(){
+    	if($scope.basic2type == true){
+    		$scope.basic2type= false;
+    		$scope.upAnddown2="ion-arrow-up-b";
+    	}else{
+    		$scope.basic2type=true;
+    		$scope.upAnddown2="ion-arrow-down-b";
+    	}
+    }
+    $scope.meaipNext3=function(){
+    	if($scope.basic3type == true){
+    		$scope.basic3type= false;
+    		$scope.upAnddown3="ion-arrow-up-b";
+    	}else{
+    		$scope.basic3type=true;
+    		$scope.upAnddown3="ion-arrow-down-b";
+    	}
+    }
+
+
+
+	/*기본 매장 default*/
+	meaipMjangService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.mejanglists = data.list;
+			/*환경설정 default*/
+			meaipMjangService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+				.then(function(data){
+					console.log('datalist==', data.list);
+					if(data.list.length > 0){
+						for(var i=0; i < data.list.length; i++){
+							console.log('data.Id ==', data.list[i].UserId);
+								if($scope.loginData.UserId == data.list[i].UserId){
+									console.log('same');	
+									$scope.MeaipData.meajangCheck = 't';
+									$scope.MeaipData.changoCheck = 't';
+									$scope.configData = data.list[i];
+									console.log('config showData ->', $scope.configData);
+										/*창고조회*/
+										meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
+											.then(function(data){
+												$scope.changolists = data.list;
+												$scope.configState = 1;
+										})
+									break;
+								}else{
+									console.log('안똑같음.', data.list[i].UserId);
+
+								}
+						}
+					}
+				})
+			
+			console.log("매장리스트", $scope.mejanglists);
+			
+		})
+
+	$scope.Chango=function(){
+		console.log('매장코드로 창코조회');
+		$scope.changos = $scope.maipbasiclist.Medefault.split(',');
+
+		$scope.maipbasiclist.Mejang_Code = $scope.changos[0];
+		$scope.meaipKorea.MejangKorea = $scope.changos[1];
+		$scope.MeaipData.meajangCheck = 't';
+
+		meaipMjangService.changoSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.maipbasiclist.Mejang_Code)
+		.then(function(data){
+			$scope.changolists = data.list;
+		})
+	}
+
+	$scope.Changosave=function(chnagoName){
+		$scope.maipbasiclist.ChangGo_Code = chnagoName;
+		$scope.MeaipData.changoCheck = 't';
+	}
+
+	$scope.kindlist={
+
+	}
+	//subulkind
+    $scope.kindF=function(kindcode){
+      $scope.maipbasiclist.subul_kind = kindcode;
+      if (kindcode == 122) {
+        $scope.meaipKorea.subulkorea = "반품";
+        $scope.maipbasiclist.subul_kind = kindcode;
+        $scope.MeaipData.subulCheck = 't';
+
+      }else{
+        $scope.meaipKorea.subulkorea = "입고";
+        $scope.maipbasiclist.subul_kind = kindcode;
+        $scope.MeaipData.subulCheck = 't';
+      };
+      console.log("subul_kind = " , $scope.meaipKorea.subulkorea);
+    }
+
+    $scope.checkup=function(){
+   		console.log('checkup',$scope.MeaipData.meajangCheck,$scope.MeaipData.changoCheck);
+    	if($scope.MeaipData.cusCheck == 't' && $scope.MeaipData.subulCheck == 't' && $scope.MeaipData.meajangCheck == 't' && $scope.MeaipData.changoCheck == 't'){
+        	/*상품폼 열기*/
+        	$scope.basic2type=true;
+    		$scope.upAnddown2="ion-arrow-down-b";
+    		/*매입폼닫기*/
+    		$scope.basictype= false;
+    		$scope.upAnddown="ion-arrow-up-b";
+        }
+    }
+    //거래처조회
+    $scope.cus=function(){
+    	var cusname = $scope.cus.GerName;
+    	console.log('customerName=', cusname);
+    	meaipMjangService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+		.then(function(data){
+			$scope.customerDatas = data.list;
+			$scope.cus.GerName = '';
+		})
+    }
+    //거래처창고 조회후 값저장
+    $scope.customerFunc=function(gname,gcode){
+    	$scope.customerDatas = ''; // data배열 초기화
+        $scope.meaipKorea.G_Name=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+        $scope.MeaipData.cusCheck = 't';
+        console.log('$scope.MeaipData == ', $scope.MeaipData);
+      	$scope.customerModal.hide();
+    }
+
+    $scope.goodsSearch=function(){
+    	console.log('goodsSearchF');
+    	console.log('GoodsInfo.info=', $scope.GoodsInfo.info);
+    	$scope.goodsSearchmodesear.show();
+
+    }
+
+	//backcontroll
+     $scope.backControll=function(){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }},
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  $ionicHistory.goBack();
+             }
+           },
+         ]
+        })
+     }
+
+     //Meaip&Meachul Contrl
+     $scope.configback=function(check){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '저장하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              $ionicHistory.goBack();
+            }
+           },
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  if(check == 1){
+                  	console.log('저장할꺼야', check);
+                  }else{
+                  	console.log('수정할꺼야', check);
+                  }
+             }
+           },
+         ]
+        })
+     }
+
+	})
 
 /*------------------------------------------------------*/
 /*-----------------매출 등록 컨트롤러-----------------*/
@@ -2674,10 +3118,10 @@ $scope.dateMinus=function(days){
 }
 
 
-$rootScope.todate=$scope.dateMinus(0); //오늘날짜 스코프
+$scope.todate=$scope.dateMinus(0); //오늘날짜 스코프
 
 
-$rootScope.searchde={ //기본 정보 Model
+$sScope.searchde={ //기본 정보 Model
       Admin_Code : 'pikachu',
       UserId : 'khs239',
       Kind : '',
@@ -2687,19 +3131,19 @@ $rootScope.searchde={ //기본 정보 Model
       Sl_No : ''
 };
 
-$rootScope.Comp={   //거래처 정보 Model
+$scope.Comp={   //거래처 정보 Model
     Ger_Code:'',
     Ger_Name:''
 };
 
-$rootScope.mejang={   //매장정보/창고정보 Model
+$scope.mejang={   //매장정보/창고정보 Model
     Sale_Place_Code:'',
     Sale_Place_Name:'',
     ChanggoCode:'',
     ChanggoName:''
 };
 
-$rootScope.goodsparam={   //상품검색파라미터정보 Model
+$scope.goodsparam={   //상품검색파라미터정보 Model
     GoodsName:'',
     G_OnCode:'',
     GoodsCode:'',
@@ -2707,7 +3151,7 @@ $rootScope.goodsparam={   //상품검색파라미터정보 Model
 };
 
 
-$rootScope.etc={
+$scope.etc={
     goods_bigo : '',
     totalsumprices : 0, //상품 종합합계 가격
     MeaChul_Date : ''
