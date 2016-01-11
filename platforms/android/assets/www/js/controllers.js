@@ -198,11 +198,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
-					/*case 'ERPia':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = 'lhk';
-						$scope.loginData.Pwd = 'alsdud0125!';
-					break;*/
 				}
 			}
 		}
