@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
  // .constant('ERPiaAPI',{
@@ -124,14 +124,15 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	// if none of the above states are matched, use this as the fallback
 // 	$urlRouterProvider.otherwise('/app/slidingtab');
 // });
+// device token(iPhone6 plus) : 1d1070d82459a34181921255227fca4d55d87692f68e498e6e0d1e5d953a8abb
 
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
-      	app_id: 'b94db7cd', //app id
-		api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-		dev_push: true // 개발테스트시
-		// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		// dev_push: false // 실적용시
+      	app_id: '750a31d2', //app id
+		// api_key:'1199ac9f39a147362aebeba9c808875cd426768306e744a4',		// public key 개발테스트시 
+		// dev_push: true // 개발테스트시
+		api_key:'43b319a4ea158299f81e028cc3e218e71e992ede9e4204a8', 	// private key 실적용시
+		dev_push: false // 실적용시
 	});
 }])
 .config(function($cordovaInAppBrowserProvider) {
@@ -418,7 +419,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
           controller: 'meaipInsertCtrl'
         }
       }
-    });
+    })
+    .state('app.pushTest', {
+    	url: '/pushTest',
+    	views:{
+    		'menuContent': {
+    			templateUrl: 'test/pushTesh.html',
+    			controller: 'PushCtrl'
+    		}
+    	}
+    })
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
