@@ -287,7 +287,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	})
 	.state('app.config-custom', {
 		url : '/config/custom',
-		views : {
+		views : { 
 			'menuContent' : {
 				templateUrl : 'config/custom.html',
 				controller : 'configCtrl_Info'
