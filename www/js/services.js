@@ -546,12 +546,120 @@ angular.module('starter.services', [])
 		}
 	}
 })
+.factory('BoardService', function($http, $q, ERPiaAPI){
+	// return{
+		//http://erpia2.godohosting.com/erpia_update/img
+		// getList: function(){
+	var BoardInfo = function(Admin_Code, UserId, kind){
+		var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+		var data = 'kind=' + kind + '&Admin_Code=' + Admin_Code;
+
+		console.log(url + '?' + data)
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				if(typeof response.data == 'object'){
+					for(var i=0; i<response.data.list.length; i++){
+						oldContent = response.data.list[i].content;
+						response.data.list[i].content = oldContent
+							.replace(/http:\/\/erpia2.godohosting.com\/erpia_update\/img\/notice\/phj/g, ERPiaAPI.imgUrl + '/notice/phj')
+							.replace(/&quot;/g,'')
+							.replace(/<img src=/g, '<img width=100% src=');	
+					}
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+		return{
+			BoardInfo: BoardInfo
+		}
+	// };
+})
+.factory('PushSelectService', function($http, $q, ERPiaAPI){
+	var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm_Manage.asp';
+	var PushList = [];
+	return{
+		select : function(Kind, Mode, Admin_Code, ChkAdmin, UserId){
+			var data = 'Value_Kind=list&Kind=' + Kind + '&Mode=' + Mode + '&Admin_Code=' + Admin_Code + '&ChkAdmin=' + ChkAdmin + '&UserId=' + UserId;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log('response', response);
+					if(typeof response.data == 'object'){
+						PushList = response.data
+						return PushList;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}, save : function(Kind, Mode, Admin_Code, ChkAdmin, UserId, alarm){
+			var data = 'Value_Kind=list&Kind=' + Kind + '&Mode=' + Mode + '&Admin_Code=' + Admin_Code + '&ChkAdmin=' + ChkAdmin + '&UserId=' + UserId + '&alarm=' + alarm;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+			})
+		}, view : function(Kind, Mode, Admin_Code, ChkAdmin, UserId, idx){
+			var data = 'Value_Kind=list&Kind=' + Kind + '&Mode=' + Mode + '&Admin_Code=' + Admin_Code + '&ChkAdmin=' + ChkAdmin + '&UserId=' + UserId + '&idx=' + idx;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+			})
+		}, delete : function(Kind, Mode, Admin_Code, ChkAdmin, UserId, idx){
+			var data = 'Value_Kind=list&Kind=' + Kind + '&Mode=' + Mode + '&Admin_Code=' + Admin_Code + '&ChkAdmin=' + ChkAdmin + '&UserId=' + UserId + '&idx=' + idx;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+			})
+		},getData : function(Seq) {
+			var data = 'Value_Kind=list&Kind=' + Kind + '&Mode=' + Mode + '&Admin_Code=' + Admin_Code + '&ChkAdmin=' + ChkAdmin + '&UserId=' + UserId;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log('response', response);
+					if(typeof response.data == 'object'){
+						PushList = response.data;
+						for (var i = 0; i < PushList.length; i++) {
+							if (PushList[i+1].Seq === parseInt(Seq)) {
+								return PushList[i+1];
+							}
+						}
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+			})
+		}
+	}
+})
 .factory('TestService', function($http, ERPiaAPI){
-	var testInfo = function(Admin_Code, UserId, kind, Mode, RequestXml){
+	var testInfo = function(Admin_Code, UserId, kind, Mode, basic_Subul_Sale_Before, basic_Subul_Meaip_Before){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode + '&RequestXml=' + RequestXml
-		// data += '&GerName=' + GerName + '&GoodsName=' + GoodsName + '&G_OnCode=' + G_OnCode + '&GoodsCode=' + GoodsCode + '&GI_Code=' + GI_Code
-		// data += '&sDate=' + sDate + '&eDate=' + eDate 
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&kind=' + kind + '&Mode=' + Mode
+			// data += '&basic_Ch_Code=' + basic_Ch_Code + '&basic_Place_Code=' + basic_Place_Code + '&basic_Dn_Sale=' + basic_Dn_Sale + '&basic_Dn_Meaip=' + basic_Dn_Meaip
+			// data += '&basic_Subul_Sale=' + basic_Subul_Sale + '&basic_Subul_Sale_Before=' + basic_Subul_Sale_Before + '&basic_Subul_Meaip=' + basic_Subul_Meaip + '&basic_Subul_Meaip_Before=' + basic_Subul_Meaip_Before
+			data += '&basic_Subul_Sale_Before=' + basic_Subul_Sale_Before + '&basic_Subul_Meaip_Before=' + basic_Subul_Meaip_Before
 		console.log(url + '?' + data)
 		return $http.get(url + '?' + data);
 	}
