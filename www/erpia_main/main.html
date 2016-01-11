@@ -1,4 +1,8 @@
 <ion-view view-title="ERPia Application">
+	<ion-nav-buttons side="right" ng-show="false">
+		<button class="button button-icon button-clear {{ion_login}}" menu-close ng-click="login()">
+		</button>
+	</ion-nav-buttons>
 	<ion-content class="padding">
 		<div>
 			<img src="./img/erpia_banner.jpg" width="100%">
@@ -9,7 +13,7 @@
 		</div>
 
 		<div>
-			<img src="./img/erpia_join.jpg" width="100%">
+			<img src="./img/erpia_join.jpg" width="100%" ng-click='ERPiaCS_Link()'>
 		</div>
 
         <div><a href="http://cafe.naver.com/erpia10" target="blank"><img src="./img/erpia_cafe.jpg" width="100%"></a></div>

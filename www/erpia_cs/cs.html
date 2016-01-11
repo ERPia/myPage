@@ -1,4 +1,8 @@
 <ion-view view-title="상담하기">
+	<ion-nav-back-button></ion-nav-back-button>
+	<ion-nav-buttons side="right" ng-show="false">
+		<button class="button button-icon button-clear {{icon_home}}" menu-close ng-click="goHome()"></button>
+	</ion-nav-buttons>
 	<ion-content class="padding2">
 		<!-- <a href="tel:070-7012-3071" class="button button-positive"> call me</a> -->
 
@@ -15,7 +19,7 @@
 			<label class="item item-input">
 				<span class="input-label psm_sang_01">*제목 : </span>
 				<input type="text" placeholder="제목" ng-model="csData.subject"><br>
-			</label>   
+			</label>
 			<label class="item item-input">
 				<span class="input-label psm_sang_01">*연락처 : </span>
 				<input type="tel" placeholder="-제외 입력하세요" ng-model="csData.tel"><br>

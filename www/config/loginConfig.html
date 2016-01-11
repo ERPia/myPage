@@ -1,17 +1,13 @@
 <ion-view view-title="로그인 설정">
 	<ion-nav-bar>
-		<ion-nav-back-button></ion-nav-back-button>
+		<ion-nav-back-button ng-click="goBack_with_clearHistory()">설정</ion-nav-back-button>
+		<ion-nav-buttons side="right" ng-show="false">
+			<button class="button button-icon button-clear ion-home" menu-close ng-click="goHome()"></button>
+		</ion-nav-buttons>
 	</ion-nav-bar>
 	<ion-content class="padding2">
-		<body>
-			<li class="item item-toggle">
-				자동로그인
-				<label class="toggle toggle-assertive"><input type="checkbox">
-					<div class="track">
-						<div class="handle"></div>
-					</div>
-				</label>
-			</li>
-		</body>
+		<ion-toggle ng-model="autoLogin" ng-change='autoLogin_YN(autoLogin)'>
+          	자동로그인
+        </ion-toggle>
 	</ion-content>
 </ion-view>

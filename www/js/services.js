@@ -531,7 +531,7 @@ angular.module('starter.services', [])
 			return $http.get(url + '?' + data)
 				.then(function(response){
 					if(typeof response.data == 'object'){
-						return response.data; 
+						return response.data;
 					}else{
 						return $q.reject(response.data);
 					}

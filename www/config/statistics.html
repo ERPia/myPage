@@ -1,12 +1,15 @@
 <ion-view view-title="통계 리포트 설정">
 	<ion-nav-bar>
-		<ion-nav-back-button></ion-nav-back-button>
+		<ion-nav-back-button ng-click="goBack_with_clearHistory()">설정</ion-nav-back-button>
+		<ion-nav-buttons side="right" ng-show="false">
+			<button class="button button-icon button-clear ion-home" menu-close ng-click="goHome()"></button>
+		</ion-nav-buttons>
 	</ion-nav-bar>
 	<ion-content class="padding2">
 		<body>
 			<ion-header-bar class="bar-positive">
 				<div class="buttons">
-					<button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button>
+					<!-- <button class="button button-icon icon ion-ios-minus-outline" ng-click="data.showDelete = !data.showDelete; data.showReorder = false"></button> -->
 				</div>
 				<h1 class="title">메인리포트 순서/노출여부</h1>
 				<div class="buttons">
