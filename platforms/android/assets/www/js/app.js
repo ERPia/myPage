@@ -6,16 +6,16 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
-/* .constant('ERPiaAPI',{
-	 url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })*/
+ //.constant('ERPiaAPI',{
+//	 url:'http://localhost:8100/include'
+// 	, imgUrl:'http://localhost:8100/erpia_update/img'
+// 	, toast:'N'
+// })
 
 // 실제 사용시
  .constant('ERPiaAPI',{
  	url:'http://www.erpia.net/include'
- 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
  	, toast:'Y'
  })
 
@@ -382,14 +382,36 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
-	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
-	
-		.state('app.mechul_page', {
-		url : '/mechul_page',
+		////////////////////////////////sample///////////////////////////////////
+	.state('app.searchdetail', {
+		url : '/searchdetail',
 		views : {
 			'menuContent' : {
-				templateUrl : 'erpia_meachul/mechul_page.html',
-				controller : 'MeaChulinsertCtrl'
+				templateUrl : 'erpia_meachul/searchdetail.html',
+				controller : 'MeaChulSearchDetailCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+		.state('app.meachulpage', {
+		url : '/meachulpage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachulpage.html',
+				controller : 'MeaChulInsertCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// /*매입&매출 환경설정*//////////////////////////////////////
+    .state('app.test-meaipmeachulsetup', {
+		url : '/test/meaipmeachulsetup',
+		views : {
+			'menuContent' : {
+				templateUrl : 'test/meaipmeachulsetup.html',
+				controller : 'meaipInsertCtrl'
 			}
 		}
 	})

@@ -23,14 +23,14 @@
     <tr>
           <td align="center">일자</td>
           <td>
-            <input type="text" ng-model="reqparams.sDate" ng-click="opendateModal('sDate')" readonly size="11" style="border:1px solid #eee;">
+            <input type="date" ng-model="reqparams.sDate1" ng-change="mydate1()" size="11" placeholder="{{reqparams.sDate}}" style="border:1px solid #eee;">
         </td>
         <td>~</td>
         <td>
-            <input type="text" ng-model="reqparams.eDate" ng-click="opendateModal('eDate')" readonly size="11" style="border:1px solid #eee;">
+            <input type="date" ng-model="reqparams.eDate1" ng-change="mydate2()"  size="11" placeholder="{{reqparams.eDate}}" style="border:1px solid #eee;">
         </td>
         <td>
-            <button ng-click="searchestoday(100)">검색</button>
+            <button ng-click="searches()">검색</button>
           </td>
         </tr>
       </table>
@@ -54,7 +54,7 @@
               <font><b>품명</b></font> : {{x.G_Name}}</br>
               <font><b>매출일</b></font> : {{x.MeaChul_Date}}</br>
               <font><b>거래처</b></font> : {{x.Admin_Code}}</br>
-              <font><b>매출총액</b></font> : {{x.MeaChul_Amt}}</br>
+              <font><b>매출총액</b></font> : {{x.MeaChul_Amt| number:0}}</br>
             </li>
           </ui>
         <button class="button button-block button-positive" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">

@@ -56,14 +56,14 @@
             {{meachuldetail.G_Qty}}
           </td>
           <td width="40%" align="center">
-            {{meachuldetail.G_Price}}
+            ￦{{meachuldetail.G_Price | number:0}}
           </td>
         </tr>
         <tr>
           <td colspan="3"><hr></td>
         </tr>
         <tr>
-          <td colspan="3" align="right"><b>총 {{meachulDetaildata.SumQty}}개 / {{meachulDetaildata.SumG_Price}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td colspan="3" align="right"><b>총 {{meachulDetaildata.SumQty}}개 / {{meachulDetaildata.SumG_Price | number:0}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
         </tr>
       </table>
       <hr>
