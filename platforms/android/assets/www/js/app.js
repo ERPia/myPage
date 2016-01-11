@@ -12,7 +12,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
  // 	, toast:'N'
  // })
 
-// 실제 사용시
+//실제 사용시
 .constant('ERPiaAPI',{
 	url:'http://www.erpia.net/include'
 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
@@ -29,8 +29,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-		console.log('Ionic Push: Registering user');
 
+		//★push regist
+		console.log('Ionic Push: Registering user');
 		var user = $ionicUser.get();
 		if(!user.user_id) {
 			// Set your user_id here, or generate a random one.
@@ -68,15 +69,16 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 						// alert("tab.chats");
 						//$rootScope.boardIndex = $rootScope.BoardParam
 						//$state.go("app.erpia_board-Main")
+						if(notification.payload.payload.$BoardParam === "0"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "1"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "2"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}else if(notification.payload.payload.$BoardParam === "4"){
+							$rootScope.boardIndex = notification.payload.payload.$BoardParam
+						}							
 					}
-					if(notification.payload.payload.$state === "app.config-notice"){
-						// alert("tab.A");
-						//$state.go("경로") //해당 값으로 화면 이동
-					}
-					if(notification.payload.payload.$state === "tab.B"){
-						// alert("tab.B");
-					}
-					//return true;
 				}
 			}
 		});
@@ -96,6 +98,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			case 'ERPia': location.href = '#/app/slidingtab'; break;
 			case 'SCM' : location.href = '#/app/scmhome'; break;
 			case 'Geust': location.href = '#/app/sample/Main'; break;
+			default : location.href = '#/app/sample/Main'; break;
 		} 
 	}
 	$rootScope.goto_with_clearHistory = function(goto_Href){
@@ -104,17 +107,17 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		location.href = goto_Href;
 	}
-	$rootScope.goto_with_bachButton = function(goto_Href){
+	$rootScope.goto_with_backButton = function(goto_Href){
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		location.href = goto_Href;	
 	}
-	$rootScope.goBack_witd_clearHistory = function() {
-		// $ionicHistory.goBack();
+	$rootScope.goBack_with_clearHistory = function() {
+		$ionicHistory.goBack();
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-		location.href = '#app/config';
+		//location.href = '#app/config';
 	};
 })
 
@@ -125,13 +128,22 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
 		// dev_push: true // 개발테스트시
+		api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
 		dev_push: false // 실적용시
 	});
 }])
-
+.config(function($cordovaInAppBrowserProvider) {
+	var defaultOptions = {
+		location: 'no',
+		clearcache: 'no',
+		toolbar: 'no'
+	};
+	document.addEventListener(function () {
+		$cordovaInAppBrowserProvider.setDefaultOptions(options)
+	}, false);
+})
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
 	
@@ -320,7 +332,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/notice.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_Notice'
 			}
 		}
 	})
@@ -328,8 +340,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/config/custom',
 		views : {
 			'menuContent' : {
-				templateUrl : 'config/custom.html',
-				controller : 'configCtrl_Info'
+				templateUrl : 'config/custom.html'
 			}
 		}
 	})
@@ -369,16 +380,45 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+	.state('app.ERPiaHome', {
+		url : '/ERPiaHome',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/ERPiaHome.html',
+				controller : 'ERPiaHomeCtrl'
+			}
+		}
+	})
 	////////////////////////////////sample///////////////////////////////////
 	.state('app.chart_test', {
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'test/chart_test.html',
-				controller : 'testCtrl'
+				templateUrl : 'test/meaip_test.html',
+				controller : 'chartTestCtrl'
 			}
 		}
 	})
+	/*전표조회*/
+	.state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipChit.html',
+          controller: 'chartTestCtrl'
+        }
+      }
+    })
+    /*전표조회*/
+	.state('app.meaipInsert', {
+      url: '/meaipInsert',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipInsert_basic.html',
+          controller: 'meaipInsertCtrl'
+        }
+      }
+    });
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
@@ -460,5 +500,5 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/main');
-}); 
+});
 

@@ -27,19 +27,28 @@
 			<label class="item item-input">
 				<span class="input-label psm_sang_01">*업종 : </span>
 				<select ng-model="csData.sectors" class="psm_sang_02">
-					<option ng-repeat="item in sectorslist" ng-value="item.id">{{item.value}}</option>
+					<option ng-repeat="item in sectorslist" ng-value="item.value">{{item.value}}</option>
 				</select>
 			</label>
 			<label class="item item-input">
 				<span class="input-label psm_sang_01">*관심항목 : </span>
 				<select ng-model="csData.interestTopic" class="psm_sang_02">
-					<option ng-repeat="item in interestTopiclist" ng-value="item.id">{{item.value}}</option>
+					<option ng-repeat="item in interestTopiclist" ng-value="item.value">{{item.value}}</option>
 				</select>
+				<br>
 			</label>
+			<div ng-switch="interestTopicRemoveYN">
+				<span ng-bind-html="interestTopic1"></span>
+				<span ng-bind-html="interestTopic2"></span>
+				<span ng-bind-html="interestTopic3"></span>
+				<span ng-switch-when="Y">
+					<button ng-click="interestTopicRemove()" style="width: 5px; height: 20px"></button>
+				</span>
+			</div>
 			<label class="item item-input">
 				<span class="input-label psm_sang_01">*유입경로 : </span>
 				<select ng-model="csData.inflowRoute" class="psm_sang_02">
-					<option ng-repeat="item in inflowRoutelist" ng-value="item.id">{{item.value}}</option>
+					<option ng-repeat="item in inflowRoutelist" ng-value="item.value">{{item.value}}</option>
 				</select>
 			</label>
 			<label class="item item-input">
