@@ -18,28 +18,28 @@
    		<div class="list list-inset">
    			<label class="item item-input" style="border:0;">
 			  거래처&nbsp;&nbsp;
-			  <input type="text" ng-model="meaipKorea.G_Name" style="text-align:center;" readonly ng-click="cusSearch()">&nbsp;
+			  <input type="text" ng-model="compo.GerName" style="text-align:center;" readonly ng-click="cusSearch()">&nbsp;
 			  <button class="button button-stable" ng-click="cusSearch()">검색</button>&nbsp;
 			</label>
 
 			<label class="item item-input" style="border:0;">
 			  수불구분
-			  <ion-radio ng-click="kindF(111);checkup()">입고</ion-radio>
-			  <ion-radio ng-click="kindF(122);checkup()">반품</ion-radio>
+  				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="111">입고</ion-radio>
+				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="122">반품</ion-radio>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
 			  매장지정
-			  <select ng-model="maipbasiclist.Medefault" ng-change='Chango();checkup()' style="width:50%">
-			     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}},{{x.Sale_Place_Name}}" ng-selected="configData.basic_Place_Code == {{x.Sale_Place_Code}}">
+			  <select ng-model="configData.basic_Place_Code" ng-change='Chango();checkup()' style="width:50%">
+			     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="configData.basic_Place_Code == {{x.Sale_Place_Code}}">
 			     {{x.Sale_Place_Name}}</option>
 			    </select>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
 			  창고지정
-			  <select ng-model="meaipKorea.changoKorea" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
-		  		  <option ng-repeat="x in changolists" value="{{x.Name}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+			  <select ng-model="configData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
+		  		  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
 		  		  {{x.Name}}</option>
 		  		</select>
 			</label>
@@ -62,7 +62,7 @@
 		            </select>&nbsp;&nbsp;
 		          	</td> -->
 		          	<td>
-		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="GoodsInfo.info">
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="Meaipgoods.userGoodsName">
 		          	</td>
 		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch()"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>

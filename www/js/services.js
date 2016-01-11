@@ -135,63 +135,16 @@ angular.module('starter.services', [])
 	};
 })
 
-.factory('meaipMjangService', function($http, ERPiaAPI, $q, $cordovaToast){
+.factory('meaipService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
-		basicM: function(admin_code, userid){
-			console.log("meaipMjangService and basicM");
-		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
-		return $http.get(url + '?' + data)
-			.then(function(response){
-				console.log('meaipMjangService(basicM)=', response);
-				if(typeof response == 'object'){
-					return response.data;
-				}else{
-					return $q.reject(response.data);
-				}
-			}, function(response){
-				return $q.reject(response.data);
-			})
-
-		}, basicSetup: function(admin_code, userid){
-			console.log("meaipMjangService and basicSetup");
-		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=select';
-		return $http.get(url + '?' + data)
-			.then(function(response){
-				console.log('meaipMjangService(basicSetup)=', response);
-				if(typeof response == 'object'){
-					return response.data;
-				}else{
-					return $q.reject(response.data);
-				}
-			}, function(response){
-				return $q.reject(response.data);
-			})
-
-		}, changoSearch: function(admin_code, userid, chango_code){
-				console.log("meaipMjangService and changoSearch");
-		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + chango_code;
-		return $http.get(url + '?' + data)
-			.then(function(response){
-				console.log('meaipMjangService', response);
-				if(typeof response == 'object'){
-					return response.data;
-				}else{
-					return $q.reject(response.data);
-				}
-			}, function(response){
-				return $q.reject(response.data);
-			})
-		}, cusnameSearch: function(admin_code, userid, cusname){
-				console.log("meaipMjangService and cusnameSearch");
+		cusnameSearch : function(admin_code, userid, cusname){
+				console.log("meaipService and cusnameSearch");
 				var cusname2 = escape(cusname);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
 				return $http.get(url + '?' + data)
 					.then(function(response){
-						console.log('meaipMjangService', response);
+						console.log('meaipService', response);
 						if(typeof response == 'object'){
 							return response.data;
 						}else{
@@ -204,9 +157,143 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.');
 							return $q.reject(response);
 					})
+		}, goodsSearch : function(admin_code, userid, goodsinfo){
+				console.log("meaipService and goodsSearch");
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Meaip_Select_Goods&Mode=Select_GoodsName&GoodsName=' + goodsinfo;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('meaipService', response);
+						if(typeof response == 'object'){
+							console.log('일루왔넹',response.data.list.length);
+							return response.data;
+						}else{
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.1');
+							return $q.reject(response);
+						}
+					}, function(response){
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+							else alert('일치하는 정보가 없습니다.2');
+							return $q.reject(response);
+					})
 		}
 	};
 })
+.factory('mconfigService', function($http, ERPiaAPI, $q, $cordovaToast){
+	return{
+		basicM: function(admin_code, userid){
+			console.log("mconfigService and basicM");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('mconfigService(basicM)=', response);
+				if(typeof response == 'object'){
+					console.log('매장리스트=', response.data);
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, basicSetup: function(admin_code, userid){
+			console.log("mconfigService and basicSetup");
+			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+			var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=select';
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					console.log('mconfigService(basicSetup)=', response);
+					if(typeof response == 'object'){
+						//조회된 환경설정 리스트중에 아이디에 맞는 리스트 조회
+						if(response.data.list.length > 0){
+							console.log('리스트 여러개 =>', response.data);
+							for(var i=0; i < response.data.list.length; i++){
+								console.log('data.Id =', response.data.list[i].UserId);
+								if(userid == response.data.list[i].UserId){
+									console.log('same',response.data.list[i]);	
+									return response.data.list[i];
+									break;
+								}
+							}
+						}else{
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+							else console.log('저장되어있는 초기값이 없습니다.');
+							return response.data;
+						}
+
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+					else console.log('저장되어있는 초기값이 없습니다.');
+					var data = {
+						state : 1,
+						basic_Place_Code : 0,
+						basic_Ch_Code : 0,
+						basic_Dn_Sale : 1,
+						basic_Dn_Meaip : 1,
+						basic_Subul_Sale : 1,
+						basic_Subul_Meaip : 1
+					};
+					console.log('확인=>', data);
+					return data;
+				})
+
+		}, basicC: function(admin_code, userid, meajang_code){
+				console.log("mconfigService and changoSearch");
+				console.log('매장코드=>', meajang_code);
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + meajang_code;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, configUpdate: function(admin_code, userid, configdata){
+				console.log("mconfigService and changoSearch");
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=update&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before='+ configdata.basic_Subul_Sale_Before  +'&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before='+ configdata.basic_Subul_Meaip_Before;
+				console.log('수정데이터확인 ->', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, configInsert: function(admin_code, userid, configdata){
+				console.log("mconfigService and configInsert");
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=insert&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before=N&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before=N';
+				console.log('저장할데이터확인 ->', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}
+	};
+})
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .factory('scmInfoService', function($http, ERPiaAPI){

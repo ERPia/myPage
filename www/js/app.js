@@ -407,7 +407,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'test/meaipmeachulsetup.html',
-				controller : 'meaipInsertCtrl'
+				controller : 'mconfigCtrl'
 			}
 		}
 	});
