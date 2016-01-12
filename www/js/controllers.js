@@ -1264,6 +1264,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 //////////////////////////////////////////					매입 테스트					//////////////////////////////////////////////
 .controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService, ERPiaAPI, $cordovaToast){
 
+//////////////////////////////////////////////////////////////////////////////////////////////		
+		$scope.date={
+			sdate : '',
+			edate : ''
+		}
 		/* 날짜계산 */
 		$scope.dateMinus=function(days){
 
@@ -1284,14 +1289,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
     	//날짜별 검색
     	$scope.searchestoday = function(day){
-    		$scope.date={
-    			sdate : '',
-    			edate : ''
-    		}
+
     		if(day == 100){
     			console.log('사용자 입력data');
     			alert($scope.date.sdate);
     			alert($scope.date.edate);
+    			$scope.sdate1=new Date($scope.date.sdate);
+    			$scope.edate1=new Date($scope.date.edate);
     		}else if(day == 0){
     			console.log('금일data');
     			$scope.date.sdate = $scope.dateMinus(0);
@@ -1311,7 +1315,37 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				console.log("?->" , data.list);
 			})
     	};
+//////////////////////////////////////////////////////////////////////////
 
+$scope.sDate1= new Date();
+$scope.eDate1= new Date();
+	$scope.mydate1=function(sdate1){
+	    var nday = new Date(sdate1);  //선택1 날짜..  
+	    var yy = nday.getFullYear();
+	    var mm = nday.getMonth()+1;
+	    var dd = nday.getDate();
+    	if( mm<10) mm="0"+mm;
+		if( dd<10) dd="0"+dd;
+
+	    $scope.date.sdate = yy + "-" + mm + "-" + dd;
+	    $scope.sDate1=new Date(sdate1);
+	 	console.log('선택날짜:'+$scope.date.sdate + $scope.sDate1);
+	};
+
+	$scope.mydate2=function(edate1){
+	    var nday = new Date(edate1);  //선택2 날짜..  
+	    var yy = nday.getFullYear();
+	    var mm = nday.getMonth()+1;
+	    var dd = nday.getDate();
+
+	    if( mm<10) mm="0"+mm;
+	    if( dd<10) dd="0"+dd;
+
+	    $scope.date.edate = yy + "-" + mm + "-" + dd;
+	    $scope.sDate1=new Date(edate1);
+	 	console.log('선택날짜2:'+$scope.date.edate);
+	};
+////////////////////////////////////////////////////////////////////////
     	$scope.listSearch = ''; //상품명 검색
 		$scope.listindex = 5; //더보기 5개씩
 
@@ -1387,7 +1421,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
     /*매입 상품정보*/
     $scope.Meaipgoods={
-    	userGoodsName : ''
+    	userGoodsName : '',
+    	userMode : 'Select_GoodsName'
     };
 
     /*자동슬라이드*/
@@ -1398,9 +1433,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.upAnddown2="ion-arrow-up-b";
 	$scope.upAnddown3="ion-arrow-up-b";
 
-    /*$scope.GoodsInfo = {
-      info : ''
-    };*/
+	/*체크된상품 확인데이터*/
+    $scope.checkedDatas=[];
+
+    /*상품검색 selectBoxList*/
+    $scope.modeselectlist=[
+    { Name: '상품명', Code: 'Select_GoodsName' },
+    { Name: '자체코드', Code: 'Select_G_OnCode' },
+    { Name: '상품코드', Code: 'Select_G_Code' },
+    { Name: '공인바코드', Code: 'Select_GI_Code' }
+    ];
 
     /* customerSearch modal */
 	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
@@ -1427,18 +1469,59 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     $scope.goodsSearchmodesear = modal;
     });
 
-    /* goods Search modal Show */
-    $scope.goodsSearch=function(){
+    /* goods Search modal Show && Search */
+    $scope.goodsSearch=function(division_num){
     	console.log('$scope.Meaipgoods.userGoodsName=', $scope.Meaipgoods.userGoodsName);
-    	$scope.goodsSearchmodesear.show();
+    	console.log('$scope.Meaipgoods.userMode=', $scope.Meaipgoods.userMode);
+    	if(division_num == 1){
+    		console.log('1', division_num);
+    		if($scope.Meaipgoods.userGoodsName.length > 0){
+	    		meaipService.goodS($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.Meaipgoods.userMode, $scope.Meaipgoods.userGoodsName)
+				.then(function(data){
+					console.log('상품검색정보 확인->', data);
+					$scope.goodslists = data.list;
+				})
+    		}
+    		$scope.goodsSearchmodesear.show();
+    	}else{
+    		console.log('2', division_num);
+    		if($scope.Meaipgoods.userGoodsName.length > 0){
+	    		meaipService.goodS($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.Meaipgoods.userMode, $scope.Meaipgoods.userGoodsName)
+				.then(function(data){
+					console.log('상품검색정보 확인->', data);
+					$scope.goodslists = data.list;
+				})
+	    	}else{
+	    		console.log('상품정보를 입력해 주세요.');
+	    	}
+    	}	
     }
 
     /* goods Search modal Close */
     $scope.closemodesear = function() {
-    $scope.goodsSearchmodesear.hide();
+    	$scope.Meaipgoods.userGoodsName = '';
+    	//체크확인 배열 초기화
+    	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
+    	$scope.goodslists = '';
+    	$scope.goodsSearchmodesear.hide();
     };
 
+    /* meaip Insert modal */
+	$ionicModal.fromTemplateUrl('test/meaipinsertM.html', {
+	    scope: $scope
+	}).then(function(modal) {
+	    $scope.modalmeaipDataRegi = modal;
+	});
 
+    /* meaip Insert modal Show */
+	$scope.meaipDataRegist = function() {
+	    $scope.modalmeaipDataRegi.show();
+	};
+
+	/* meaip Insert modal Close */
+	$scope.closemodeInsert = function() {
+		$scope.modalmeaipDataRegi.hide();
+	};
 
 	//기본설정데이터
 	mconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
@@ -1510,38 +1593,60 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         console.log('scope.MeaipData == ', $scope.MeaipData);
       	$scope.customerModal.hide();
     }
+    /*상품체크박스*/
+    $scope.goodsCheck=function(goodsdata){
+    	/*console.log('체크박스=', goodsdata);*/
+    	$scope.checkcaught='no';
+    	console.log($scope.checkedDatas);
 
-    /*상품조회*/
-    $scope.goodsSearchF = function(){
-    	console.log('상품정보=>', $scope.Meaipgoods.userGoodsName);
-    	meaipService.goodsSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.Meaipgoods.userGoodsName)
-		.then(function(data){
-			console.log('상품정보 잘받았나?=>', data);
-		})
+    	for(var i=0; i<$scope.checkedDatas.length; i++){
+    		if($scope.checkedDatas[i] == goodsdata){
+    			console.log('들왔다.',i);
+    			$scope.checkedDatas.splice(i, 1);
+    			$scope.checkcaught='yes';
+    			break;
+    		}
+    	}
+    	if($scope.checkcaught != 'yes'){
+    		$scope.checkedDatas.push(goodsdata);
+    	}
+    	console.log('막데이터=>',$scope.checkedDatas);
+    	
+
+
+    	 /*$ionicPopup.show({
+         template: '<input type = "text" ng-model = "data.model">',
+         title: 'Title',
+         subTitle: 'Subtitle',
+         scope: $scope,
+			
+         buttons: [
+            { text: 'Cancel' }, {
+               text: '<b>Save</b>',
+               type: 'button-positive',
+                  onTap: function(e) {
+						
+                     if (!$scope.data.model) {
+                        //don't allow the user to close unless he enters model...
+                           e.preventDefault();
+                     } else {
+                        return $scope.data.model;
+                     }
+                  }
+            }
+         ]
+      });*/
     }
+
+    $scope.checkdataSave=function(){
+    	console.log('체크박스로 선택된 데이터 뷰로보내라.');
+    }
+
+
 ////////////////////////////////////////////////////////////
 	
 
-	/* meaip Insert modal */
-	$ionicModal.fromTemplateUrl('test/meaipinsertM.html', {
-	    scope: $scope
-	}).then(function(modal) {
-	    $scope.modalmeaipDataRegi = modal;
-	});
-
 	
-
-	
-
-    /* meaip Insert modal Show */
-	$scope.meaipDataRegist = function() {
-	    $scope.modalmeaipDataRegi.show();
-	};
-
-	/* meaip Insert modal Close */
-	$scope.closemodeInsert = function() {
-		$scope.modalmeaipDataRegi.hide();
-	};
 
 	
 

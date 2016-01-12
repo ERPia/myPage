@@ -157,15 +157,40 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.');
 							return $q.reject(response);
 					})
-		}, goodsSearch : function(admin_code, userid, goodsinfo){
-				console.log("meaipService and goodsSearch");
+		}, goodS : function(admin_code, userid, Mode, goodsinfo){
+				console.log("meaipService and goodS");
+				console.log('Mode=', Mode, 'goodsinfo', goodsinfo);
+				var goods = escape(goodsinfo);
+				switch (Mode) {
+						    case 'Select_GoodsName' : console.log('Select_GoodsName'); var dataDetail = '&GoodsName='+goods; break;
+						    case 'Select_G_OnCode' : console.log('Select_G_OnCode'); var dataDetail = '&G_OnCode='+goods; break;
+						    case 'Select_G_Code' : console.log('Select_G_Code'); var dataDetail = '&GoodsCode='+goods; break;
+						    case 'Select_GI_Code' : console.log('Select_GI_Code'); var dataDetail = '&GI_Code='+goods; break;
+
+						    default : console.log('셀렉트 된 것이 없습니다.'); break;
+						  }
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Meaip_Select_Goods&Mode=Select_GoodsName&GoodsName=' + goodsinfo;
-				return $http.get(url + '?' + data)
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Goods&Mode='+ Mode;
+				console.log('data 확인=>', data+dataDetail);
+				return $http.get(url + '?' + data + dataDetail)
 					.then(function(response){
 						console.log('meaipService', response);
 						if(typeof response == 'object'){
-							console.log('일루왔넹',response.data.list.length);
+							console.log('일루왔넹',response.data);
+							if(response.data == '<!--Parameter Check-->'){
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+								else alert('일치하는 정보가 없습니다.1');
+							}else{
+/*								console.log('일루왔넹2',response.data.list.length);
+								console.log('요기요기 ============>', response.data.list[0]);
+								for(var i =0; i < response.data.list.length; i++){
+									console.log('for문안 =>', i);
+									response.data.list[i].push({
+										checked : false
+									});
+								}
+								console.log('일루왔넹3',response.data);*/
+							}
 							return response.data;
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');

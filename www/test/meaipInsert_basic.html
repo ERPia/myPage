@@ -54,17 +54,15 @@
 		<div class="list list-inset" style="align:center;" >
 			<table width="100%">
 	        	<tr>
-<!-- 		            <td>
-		          	&nbsp;<select ng-model="modedivition.mode" ng-change="modesear('',2)">
-		          		<option selected value="Select_G_Code">상품명</option>
-		                <option value="Select_G_OnCode">자체코드</option>
-		                <option value="Select_G_Code">상품코드</option>
-		            </select>&nbsp;&nbsp;
-		          	</td> -->
+		            <td>
+		          &nbsp;<select ng-model="Meaipgoods.userMode" ng-change="modeselect()">
+		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="Meaipgoods.userMode == {{x.Code}}">{{x.Name}}</option>
+		            	</select>&nbsp;&nbsp;
+		          	</td>
 		          	<td>
 		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="Meaipgoods.userGoodsName">
 		          	</td>
-		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch()"></i></td>
+		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
 	          	</tr>
 	        </table><hr>

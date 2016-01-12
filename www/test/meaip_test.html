@@ -24,15 +24,12 @@
 		<tr>
 	   			<td align="center">일자</td>
 	   			<td>
-					  <input type="text" ng-model='date.sdate' size="11" style="border:1px solid #eee;">
+					  <input type="date" ng-model='sDate1' ng-change='mydate1(sDate1)' size="11" style="border:1px solid #eee;">
 				</td>
 				<td>~</td>
 				<td>
-					  <input type="text" ng-model='date.edate' size="11" style="border:1px solid #eee;">
+					  <input type="date" ng-model='eDate1' ng-change='mydate2(eDate1)' size="11" style="border:1px solid #eee;">
 				</td>
-				<td>
-	   				<button ng-click="searchestoday(100)">검색</button>
-	   			</td>
 	   		</tr>
 	    </table>
 	    </div>
