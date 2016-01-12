@@ -35,8 +35,8 @@ angular.module('tabSlideBox', []).directive('onFinishRender', function($timeout)
 			}
 		}
 	}
-}).directive('tabSlideBox', ['$timeout', '$window', '$ionicSlideBoxDelegate', '$ionicScrollDelegate',
-function($timeout, $window, $ionicSlideBoxDelegate, $ionicScrollDelegate) {
+}).directive('tabSlideBox', ['$timeout', '$window', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$rootScope',
+function($timeout, $window, $ionicSlideBoxDelegate, $ionicScrollDelegate, $rootScope) {
 	'use strict';
 
 	return {
@@ -85,7 +85,11 @@ function($timeout, $window, $ionicSlideBoxDelegate, $ionicScrollDelegate) {
 				var initialIndex = attrs.tab;
 				//Initializing the middle tab
 				if ( typeof attrs.tab === 'undefined' || (totalTabs <= initialIndex) || initialIndex < 0) {
-					initialIndex = Math.floor(0);	//수정했었음..
+					if($rootScope.useBoardCtrl == "Y"){
+						initialIndex = Math.floor($rootScope.boardIndex);	//수정했었음..
+					}else{
+						initialIndex = Math.floor(0);
+					}
 				}
 
 				//If initial element is 0, set position of the tab to 0th tab

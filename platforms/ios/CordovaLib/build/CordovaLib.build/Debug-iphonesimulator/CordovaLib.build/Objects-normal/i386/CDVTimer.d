@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/ho-kyounglee/GitHub/myPage/platforms/ios/CordovaLib/Classes/CDVTimer.m \
-  /Users/ho-kyounglee/GitHub/myPage/platforms/ios/CordovaLib/Classes/CDVTimer.h
+  /Users/ho-kyounglee/myPage/platforms/ios/CordovaLib/Classes/CDVTimer.m \
+  /Users/ho-kyounglee/myPage/platforms/ios/CordovaLib/Classes/CDVTimer.h

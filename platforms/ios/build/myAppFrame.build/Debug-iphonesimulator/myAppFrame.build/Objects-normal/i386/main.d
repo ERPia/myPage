@@ -1,2 +1,1 @@
-dependencies: \
-  /Users/ho-kyounglee/GitHub/myPage/platforms/ios/myAppFrame/main.m
+dependencies: /Users/ho-kyounglee/myPage/platforms/ios/myAppFrame/main.m
