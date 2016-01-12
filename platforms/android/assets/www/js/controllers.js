@@ -198,19 +198,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
-					/*case 'ERPia':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = 'lhk';
-						$scope.loginData.Pwd = 'alsdud0125!';
-					break;*/
 				}
 			}
 		}
-		// console.log('autoLogin : ', $rootScope.autologin_YN);
-		// if($rootScope.autologin_YN) {
-		// 	var userType = '';
-			
-		// }
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
