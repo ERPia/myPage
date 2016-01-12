@@ -105,6 +105,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
+		$scope.pushUserRegist = function() {
+			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
+		    .then(function(pushInfo){
+		    	console.log(pushInfo)
+		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
+		    },function(){
+				console.log('pushUserRegist fail');
+			});
+		};
 		$scope.pushUserCheck = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
 		    .then(function(pushInfo){
@@ -127,18 +136,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				alert('pushUserCheck fail')	
 			});
 		};
-
-		$scope.pushUserRegist = function() {
-			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
-		    .then(function(pushInfo){
-		    	console.log(pushInfo)
-		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
-		    },function(){
-				alert('pushUserRegist fail')	
-			});
-		};
 		$scope.pushUserCheck();
-		// };
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
@@ -1232,10 +1230,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.settings = {
 		enableFriends : true
 	}
-})
-
-.controller('LoginCtrl', function($scope){
-
 })
 .controller('chartCtrl', function($scope, $rootScope, statisticService){
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
