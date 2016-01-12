@@ -429,15 +429,6 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
         }
       }
     })
-    .state('app.pushTest', {
-    	url: '/pushTest',
-    	views:{
-    		'menuContent': {
-    			templateUrl: 'test/pushTesh.html',
-    			controller: 'PushCtrl'
-    		}
-    	}
-    })
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
