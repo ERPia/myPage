@@ -32,13 +32,16 @@
 
   <table>
   <tr ng-repeat="items in itemlists">
+        <td width="10%" align="center"><input type="checkbox" ng-model="itemlists[i].checked"></td>
         <td width="20%" align="center">{{items.G_Code}}</td>
-        <td width="80%" align="center" ng-switch on="basicConfiglist.basic_Dn_Sale">
+        <td width="50%" align="center" ng-switch on="basicConfiglist.basic_Dn_Sale">
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn1)" ng-switch-default>{{items.G_Name}}</a>
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn2)" ng-switch-when="2">{{items.G_Name}}</a>
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn3)" ng-switch-when="3">{{items.G_Name}}</a>
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn4)" ng-switch-when="4">{{items.G_Name}}</a>
         <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn5)" ng-switch-when="5">{{items.G_Name}}</a>
+        </td>
+        <td width="20%" align="center">
         </td>
     </tr>
 

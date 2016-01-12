@@ -1,0 +1,68 @@
+<ion-modal-view>
+  <ion-header-bar>
+      <div class="buttons">
+      <button class="button button-clear" ng-click="finalbackbtn()" align="left">뒤로가기</button>
+    </div>
+    <h1 class="title">매입등록</h1>
+  </ion-header-bar>
+
+
+  <ion-content>
+    <div class="item item-input-inset">
+      <table style="width:100%">
+        <tr>
+          <td align="right" style="width:30%">
+            매입액
+          </td>
+          <td align="right" style="width:70%">
+            <b>총 3개 / 3,000원</b>
+          </td>
+        </tr>
+      </table>
+      </div>
+      <hr>
+    <div class="item item-input-inset">
+     <b>지급정보</b><br>
+     </div>
+     <div class="item item-input-inset">
+     <table style="width:100%">
+        <tr>
+          <td align="right" style="width:30%">
+           
+          </td>
+          <td align="right" style="width:70%" colspan="2">
+          </td>
+        </tr>
+         <tr>
+          <td align="right" style="width:30%">
+            <b>지급일</b>
+          </td>
+          <td align="right" style="width:70%" colspan="2">
+          2015-10-22  달력
+          </td>
+        </tr>
+        <tr>
+          <td align="right" style="width:30%" rowspan="2">
+            <b>지급구분</b>
+          </td>
+          <td align="right" style="width:35%">
+              <ion-radio ng-model="searchde.meachulsubuls" >현금결제</ion-radio>
+          </td>
+          <td align="right" style="width:35%">
+             <ion-radio ng-model="searchde.meachulsubuls" >통장결제</ion-radio> 
+          </td>
+        </tr>
+          <td align="right" style="width:35%">
+              <ion-radio ng-model="searchde.meachulsubuls" >어음결제</ion-radio>
+          </td>
+          <td align="right" style="width:35%">
+              <ion-radio ng-model="searchde.meachulsubuls" >카드결제</ion-radio>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+
+  </ion-content>
+</ion-modal-view>

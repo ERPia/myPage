@@ -57,7 +57,7 @@
                     </SELECT>&nbsp;&nbsp;
                     </td>
                     <td>
-            <label ng-switch on="searchde.Mode" class="item-input-wrapper">
+            <label ng-switch on="searchde.Mode" class="item-input-wrapper item item-input" style="border:0;">
             <input type="text" ng-model='goodsparam.GoodsName' size="20" placeholder="상품명" ng-switch-when="Select_GoodsName"/>
             <input type="text" ng-model='goodsparam.G_OnCode' size="20" placeholder="자체코드" ng-switch-when="Select_G_OnCode"/>
             <input type="text" ng-model='goodsparam.GoodsCode' size="20" placeholder="상품코드" ng-switch-when="Select_G_Code"/>
@@ -82,10 +82,10 @@
                 </tr>
                 <tr ng-repeat="goods in goodsresult">
                     <td>{{goodsresult[$index].goods_number}}.{{goodsresult[$index].G_Name}}</td>
-                    <td><input type="number" min="1" max="999" ng-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)"></td>
+                    <td><label class="item-input-wrapper"><input type="number" min="1" max="999" ng-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)"></label></td>
                     <td><label class="item-input-wrapper"><input ng-model="goods.goods_price | number:0" type="text" ng-change="goods_totalprice1($index)"/></label>
                     <input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" /></td>
-                    <td><i class="ion-android-remove-circle" ng-click="remove($index)"></i>&nbsp;</td>
+                    <td><i class="ion-android-remove-circle" ng-click="itemremove($index)"></i>&nbsp;</td>
                 </tr>
             </table>
         </div>
@@ -102,7 +102,7 @@
 
         <div class="list list-inset" align="center">
             <hr>
-            <button class="button button-balanced" style="margin-top:40px" ng-click='meaipDataRegist()'>다음</button>
+            <button class="button button-balanced" style="margin-top:40px" ng-click='Meachulnextbtn()'>다음</button>
         </div>
     </div>
 

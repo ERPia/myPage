@@ -1631,22 +1631,65 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 /*-------------------------------------------------------------*/
 .controller('MeaChulSearchCtrl', function($rootScope, $ionicModal, $scope, $stateParams,$ionicPopup,$http, $q, $location, $window, $timeout, ERPiaAPI, ERPiaMCSearchService, ERPiaMCSearchDetailService, ERPiaMCDeleteService, ERPiaMCTDeleteService) {
 
-$scope.sDate1;
-$scope.eDate1;
+
+$scope.dateMinus=function(days){
+
+
+    var nday = new Date();  //오늘 날짜..  
+
+    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
+
+    var yy = nday.getFullYear();
+
+    var mm = nday.getMonth()+1;
+
+    var dd = nday.getDate();
+
+
+
+
+    if( mm<10) mm="0"+mm;
+
+    if( dd<10) dd="0"+dd;
+
+
+
+    return yy + "-" + mm + "-" + dd;
+
+}
+
+
+
+$scope.searchdatas='';  //filter를 위한 검색창 model 
+/*초기 접근시 바로 아래 스코프 실행으로 오늘날짜검색 기본으로 실행*/
+$scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData.Admin_Code, $scope.loginData.UserId
+      Kind : 'ERPia_Sale_Select_Master',
+      Mode : 'Select_Date',
+      Sl_No : '',
+      sDate : '',
+      eDate : '',
+      Kind1 : '',
+      Sl_No1 : ''
+    };
+$scope.sDate1= new Date();
+$scope.eDate1= new Date();
+$scope.reqparams.sDate= new Date();
+$scope.reqparams.eDate= new Date();
 
 $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
    $scope.lastsclick = function(index) {
                $scope.lasts=index+5; //더보기 클릭시 $index+5
             }
 
-
+$scope.todate=$scope.dateMinus(0);
 /**
      *--------------------------------------- 데이트피커 펑션 및 모달---------------------------
      */
 
 
-$scope.mydate1=function(){
-    var nday = new Date($scope.reqparams.sDate);  //오늘 날짜..  
+$scope.mydate1=function(sdate1){
+	
+    var nday = new Date(sdate1);  //선택1 날짜..  
 
     var yy = nday.getFullYear();
 
@@ -1665,12 +1708,13 @@ $scope.mydate1=function(){
 
     $scope.reqparams.sDate = yy + "-" + mm + "-" + dd;
 
-
- console.log('선택날짜:'+$scope.sDate1);
+    $scope.sDate1=new Date(sdate1);
+ 	console.log('선택날짜:'+$scope.reqparams.sDate + $scope.sDate1);
 };
 
-$scope.mydate2=function(){
-    var nday = new Date($scope.reqparams.eDate);  //오늘 날짜..  
+$scope.mydate2=function(edate1){
+
+    var nday = new Date(edate1);  //선택2 날짜..  
 
     var yy = nday.getFullYear();
 
@@ -1688,9 +1732,8 @@ $scope.mydate2=function(){
 
 
     $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
-
-
- console.log('선택날짜2:'+$scope.eDate1);
+    $scope.sDate1=new Date(edate1);
+ 	console.log('선택날짜2:'+$scope.reqparams.eDate);
 };
 /*$ionicModal.fromTemplateUrl('erpia_meachul/datemodal.html', 
         function(modal) {
@@ -1722,45 +1765,7 @@ $scope.mydate2=function(){
      */
 
 
-$scope.dateMinus=function(days){
 
-
-    var nday = new Date();  //오늘 날짜..  
-
-    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
-
-    var yy = nday.getFullYear();
-
-    var mm = nday.getMonth()+1;
-
-    var dd = nday.getDate();
-
-
-
-
-    if( mm<10) mm="0"+mm;
-
-    if( dd<10) dd="0"+dd;
-
-
-
-    return yy + "-" + mm + "-" + dd;
-
-}
-
-
-$scope.todate=$scope.dateMinus(0);
-$scope.searchdatas='';  //filter를 위한 검색창 model 
-/*초기 접근시 바로 아래 스코프 실행으로 오늘날짜검색 기본으로 실행*/
-$scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData.Admin_Code, $scope.loginData.UserId
-      Kind : 'ERPia_Sale_Select_Master',
-      Mode : 'Select_Date',
-      Sl_No : '',
-      sDate : $scope.todate,
-      eDate : $scope.todate,
-      Kind1 : '',
-      Sl_No1 : ''
-    };
 
 
 /*	$scope.MCDateSearchDefault = function() {*/
@@ -1769,6 +1774,7 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
 		.then(function(ERPiaMCSearchData){
     	console.log(ERPiaMCSearchData.data);
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
+
     	},function(){
     		alert('Request fail')	
 		});
@@ -1795,12 +1801,16 @@ $scope.reqparams={  //날짜검색에 필요한 파라미터    $scope.loginData
       	$scope.reqparams.Mode='Select_Date';
 		$scope.reqparams.sDate=$scope.dateMinus(agoday);
      	$scope.reqparams.eDate=$scope.dateMinus(0);
+
 		console.log($scope.reqparams);
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
+
     	console.log(ERPiaMCSearchData.data);
-
-
+		$scope.mydate1($scope.reqparams.sDate);
+		$scope.mydate2($scope.reqparams.eDate);
+		$scope.sDate1=new Date($scope.reqparams.sDate);
+		$scope.eDate1=new Date($scope.reqparams.eDate);
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	},function(){
     		alert('Request fail')	
@@ -2160,7 +2170,8 @@ console.log('Detail : ', $scope);
     }
  /*뒤로가기 눌렀을 시 이벤트*/
  $scope.mygoback=function(){
-    $ionicPopup.show({
+ 	if($scope.MeachulData.cusCheck == 't' && $scope.MeachulData.subulCheck == 't' && $scope.MeachulData.meajangCheck == 't' && $scope.MeachulData.changoCheck == 't'){
+ 	$ionicPopup.show({
       title: 'View',
       subTitle: '',
       content: '입력한 정보가 초기화됩니다. 정말 뒤로가시겠습니까?',
@@ -2173,7 +2184,10 @@ console.log('Detail : ', $scope);
       },
     ]
         })
-  };
+  }else{
+    $ionicHistory.goBack();
+	}
+};
 
  $scope.basicConfiglist={
   basic_Ch_Code:'empty',
@@ -2208,6 +2222,14 @@ $scope.basic_Select_fail='success';
     scope: $scope
   }).then(function(modal) {
     $scope.modalpresentsearch = modal;
+  });
+
+
+    /*마지막페이지 모달*/
+  $ionicModal.fromTemplateUrl('erpia_meachul/meachulpage2.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.meachulpage2modal = modal;
   });
 
 /*오늘날짜생성*/
@@ -2295,12 +2317,16 @@ $scope.goodsresult=[];
 
 $scope.closecompsearchModals= function() { //거래처검색모달 닫기
 $scope.modalcompsearch.hide();
+location.href='#/app/chart_test';
 };
 
 $scope.closepresentsearchModals= function() { //상품검색모달 닫기
 $scope.modalpresentsearch.hide();
 };
 
+$scope.closemeachulpage2Modals= function() { //매출등록 마지막페이지모달 닫기
+$scope.meachulpage2modal.hide();
+};
 
 /*상품별 가격합계 구하기*/
 $scope.goods_totalprice1=function(indexnum){
@@ -2513,6 +2539,8 @@ $scope.mejangselect= function() {
       }
     }
 
+
+
     //상품 검색에서 원하는 상품 선택시 이벤트
     $scope.presentselect= function(GName,GCode,GStand,goodsprice) {
       $scope.goodsresult.push({
@@ -2528,6 +2556,27 @@ $scope.mejangselect= function() {
     $scope.modalpresentsearch.hide();
   };  
 
+/*매출등록 다음페이지 눌렀을때 이동 */
+ $scope.Meachulnextbtn=function(){
+ 	$scope.meachulpage2modal.show();
+  };
+
+/*매출등록 마지막페이지에서 뒤로가기 눌렀을 시 이벤트*/
+ $scope.finalbackbtn=function(){
+ 	$ionicPopup.show({
+      title: 'View',
+      subTitle: '',
+      content: '정말 뒤로가시겠습니까?',
+      buttons:[
+      { text: 'No', onTap: function(e){}},
+      { text: 'Yes', type: 'button-positive',
+        onTap: function(e){
+         	$scope.closemeachulpage2Modals();
+        }
+      },
+    ]
+        })
+  };
 
 
 })
@@ -3324,7 +3373,7 @@ $scope.presentsclick=function(mode){ //상품검색 실행 펑션
     }
 
 }
-    $scope.remove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
+    $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
       $scope.goodsresult.splice(index, 1);
       for(var goodslength=index; goodslength<$scope.goodsresult.length; goodslength++){
         $scope.goodsresult[goodslength].goods_number=goodslength+1;
