@@ -27,7 +27,7 @@ module.exports = [
         "id": "cordova-plugin-x-toast.Toast",
         "pluginId": "cordova-plugin-x-toast",
         "clobbers": [
-            "window.plugins.toast"
+            "device"
         ]
     },
     {
@@ -49,7 +49,7 @@ module.exports = [
         "id": "org.apache.cordova.device.device",
         "pluginId": "org.apache.cordova.device",
         "clobbers": [
-            "device"
+            "window.plugins.toast"
         ]
     },
     {
@@ -77,8 +77,6 @@ module.exports.metadata =
     "com.gnustory.kakaolink": "0.0.1",
     "com.phonegap.plugins.PushPlugin": "2.5.0",
     "cordova-plugin-whitelist": "1.1.1-dev",
-    "cordova-plugin-x-toast": "2.2.1",
-    "de.appplant.cordova.plugin.printer": "0.7.1",
     "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.vibration": "0.3.13",
     "cordova-plugin-inappbrowser": "1.1.1"

@@ -29,7 +29,6 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-
 		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
 		    // alert("Successfully registered token " + data.token);
 		    console.log('Ionic Push: Got token ', data.token, data.platform);
@@ -283,7 +282,18 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		url : '/push',
 		views : {
 			'menuContent' : {
-				templateUrl : 'erpia_push/push.html'
+				templateUrl : 'erpia_push/push.html',
+				controller : 'PushCtrl'
+			}
+		}
+	})
+
+	.state('app.erpia_push.push-detail', {
+		url : '/PushList/:Seq',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_push/push-detail.html',
+				controller : 'PushDetailCtrl'
 			}
 		}
 	})
@@ -418,15 +428,6 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
           controller: 'meaipInsertCtrl'
         }
       }
-    })
-    .state('app.pushTest', {
-    	url: '/pushTest',
-    	views:{
-    		'menuContent': {
-    			templateUrl: 'test/pushTesh.html',
-    			controller: 'PushCtrl'
-    		}
-    	}
     })
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',

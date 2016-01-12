@@ -185,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'Normal': userType = 'N'; break;
 			}
 			if(ERPiaAPI.toast == 'Y'){
-				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd)
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
@@ -247,7 +247,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				if(comInfo.data.list[0].Result=='1'){
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
 					$scope.ion_login = "ion-power";
-
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name;
 					$scope.userData.Com_Code = comInfo.data.list[0].Com_Code;
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
@@ -436,8 +435,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.openInAppBrowser = function(inAppUrl){
 		$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
-		//window.open(inAppUrl,'_blank'); 
-		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
 	}
 	
 	document.addEventListener("deviceready", function () {
@@ -460,7 +457,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.doLogin($scope.loginData.Admin_Code, $scope.loginData.loginType, $scope.loginData.User_Id, $scope.loginData.User_PW, $scope.loginData.autologin_YN);
 			}
 		})
-
 		Ionic.io();
 
 		var push = new Ionic.Push({});
@@ -718,83 +714,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
 	}
 })
-// .controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
-// 	$scope.myStyle = {
-// 	    "width" : "100%",
-// 	    "height" : "100%"
-// 	};
-// 	$scope.dashBoard = {};
-// 	var indexList = [];
-// 	// 날짜
-// 	var d= new Date();
-// 	var month = d.getMonth() + 1;
-// 	var day = d.getDate();
-// 	//일주일전
-// 	var w = new Date(Date.parse(d) -7 * 1000 * 60 * 60 * 24)
-// 	var wMonth = w.getMonth() + 1;
-// 	var wDay = w.getDate();
-
-// 	var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
-// 	var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
-
-// 	IndexService.dashBoard('erpia_dashBoard', $scope.loginData.Admin_Code, aWeekAgo, nowday)
-// 	.then(function(processInfo){
-// 		console.log('erpia_dashBoard', processInfo);
-// 		$scope.dashBoard.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
-// 		$scope.dashBoard.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
-// 		$scope.dashBoard.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
-// 		$scope.dashBoard.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
-// 		$scope.dashBoard.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
-// 	},
-// 	function(){
-// 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('IndexService Error', 'long', 'center');
-// 		else alert('IndexService Error');
-// 	});
-
-// 	// $scope.dashBoard.G_Expire_Date = $scope.userData.management_day;
-// 	// $scope.dashBoard.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
-// 	// $scope.dashBoard.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
-
-// 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
-// 	.then(function(data){
-// 		$scope.tabs = data;
-// 	})
-// 	$scope.onSlideMove = function(data) {
-// 		if(indexList.indexOf(data.index) < 0){
-// 			indexList.push(data.index);
-// 			if (data.index > 0){
-// 				statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, data.index)
-// 				.then(function(response){
-// 					var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $scope.loginData.Admin_Code;
-// 					strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
-// 					switch(data.index){
-// 						case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 4: $scope.chart_url5 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 5: $scope.chart_url6 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 6: $scope.chart_url7 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 7: $scope.chart_url8 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 8: $scope.chart_url9 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 9: $scope.chart_url10 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 10: $scope.chart_url11 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 11: $scope.chart_url12 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 12: $scope.chart_url13 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 13: $scope.chart_url14 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 14: $scope.chart_url15 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 15: $scope.chart_url16 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
-// 						default : 
-// 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('chart Error', 'long', 'center');
-// 							else alert('chart Error'); 
-// 						break;
-// 					}
-// 				})
-// 			}
-// 		}
-// 	};
-
-// })
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
 	$scope.ScmBaseData = function() {
 		if($rootScope.loginState == "S") {
@@ -953,50 +872,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.load_scm_chart();   
 })
 
-// .controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
-// 	console.log($rootScope.loginState); 
-// 	// Perform the login action when the user submits the login form
-	// $scope.ERPiaBaseData = function() {
-		 
-	// 	$scope.Kind = "scm_login";
-	// 	$scope.loginData.Admin_Code = $scope.loginData.Admin_Code;
-	// 	$scope.loginData.UserId = $scope.loginData.UserId;
-	// 	$scope.G_Pass = $scope.loginData.Pwd;
-	// 	$scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
-	// 	$scope.Auto_Login = $scope.loginData.Auto_Login
-
-		// if($rootScope.loginState == "E") {
-		// 	$http({
-		// 		method: 'POST',
-		// 		url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm.asp',
-		// 		data: 	"kind=" + "erpia_dashBoard"
-		// 				+ "&Admin_Code=" + $scope.loginData.Admin_Code
-		// 				+ "&sDate=" + "2015-07-01"
-		// 				+ "&eDate=" + "2015-09-31",
-		// 		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
-		// 	})
-		// 	  .success(function (response) {
-		// 		console.log(response);
-		// 		$scope.E_NewOrder = response.list[0].Cnt
-		// 		$scope.E_BsComplete = response.list[1].Cnt
-		// 		$scope.E_InputMno = response.list[2].Cnt
-		// 		$scope.E_CgComplete = response.list[3].Cnt
-		// 		$scope.E_RegistMno = response.list[4].Cnt
-
-		// 		$scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
-		// 	})
-		// 	  .error(function(data, status, headers, config){
-		// 		console.log("Fail");
-		// 	})
-		// }else{
-		// 	// alert(response.list[0].ResultMsg);
-		// };
-	// };
-	// $scope.ERPiaBaseData();
-// })
-
 .controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
 	console.log("MainCtrl");
+	
+	$scope.ERPiaCS_Link = function() {
+        $state.go('app.erpia_cs');
+        // $location.href = '#/app/erpia_main';
+    }
+
     $scope.ERPiaCafe_Link = function() {
         window.open('http://cafe.naver.com/erpia10');
     }
@@ -1144,12 +1027,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GoodsName', 'ra')
 	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_G_OnCode', 'erpia:SFSELFAA0000036')
 	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Goods', 'Select_G_Code', '9806200718567')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GI_Code', '5555')
-		
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'select')
+	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'update', '102','002','5','1','2','N','2','N')
+	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'update_subul_before', 'C', 'B')
+
 	// 	//되는거
 	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>02474</GuMeaCom_Code><Meaip_Amt>2200000</Meaip_Amt><Sale_Place>001</Sale_Place><Remk> <![CDATA[띄어쓰기 테스트 입니다 /?!]]> </Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9808316000018</G_Code><G_name> <![CDATA[띄어쓰기 테스트 상품 ㅁ ㅁ ㅁ]]> </G_name><G_stand> <![CDATA[]]> </G_stand><G_Price>1004</G_Price><G_Qty>200</G_Qty><G_vat>1800</G_vat></item><item><seq>2</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]> </G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item><item><seq>3</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]></G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
 	// 	//안되는거 
-	// 	TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
+	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
 	// 	// erpia.net/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>99921</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>
 	//     .then(function(testInfo){
 	//     	console.log(testInfo.data);
@@ -1184,7 +1069,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
-.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, ERPiaAPI){
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, ERPiaAPI, BoardService){
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -1200,33 +1085,127 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		"text" : "업체문의 Q&A"
 	}];
 
-	$rootScope.urlData = [{
-		"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=notice"
-	}, {
-		"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=erpup"
-	}, {
-		"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=faq"
-	}, {
-		"url" : "http://www.erpia.net/scm2/brdProc.asp?Admin_Code=" + $rootScope.Admin_Code + "&user_id=" + $rootScope.G_id + "&modeKinds=Mobile&brdKinds=mobile_request"
-	}];
-
+	// $rootScope.urlData = [{
+	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=notice"
+	// }, {
+	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=erpup"
+	// }, {
+	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=faq"
+	// }, {
+	// 	"url" : "http://www.erpia.net/scm2/brdProc.asp?Admin_Code=" + $rootScope.Admin_Code + "&user_id=" + $rootScope.G_id + "&modeKinds=Mobile&brdKinds=mobile_request"
+	// }];
+	// 
+	// $rootScope.urlData = [{
+	// 	"url" : "#/app/board/Notice"
+	// }, {
+	// 	"url" : "#/app/board/Update"
+	// }, {
+	// 	"url" : "#/app/board/Knowledge"
+	// }, {
+	// 	"url" : "#/app/board/Admin"
+	// }];
+	// 
+	// switch(idx){
+	// 	case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
+	// 	case 1: $scope.BoardUrl2 = $sce.trustAsResourceUrl($rootScope.urlData[1].url); break;
+	// 	case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
+	// 	case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
+	// }
 	switch(idx){
-		case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
-		case 1: $scope.BoardUrl2 = $sce.trustAsResourceUrl($rootScope.urlData[1].url); break;
-		case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
-		case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
-	}
+			case 0: 
+				$scope.BoardUrl1 =	BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_notice')
+										.then(function(data){
+											$scope.items = data.list;
+											console.log(data);
+										}
+									); 
+									break;
+			case 1: $scope.BoardUrl2 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_erpup').then(function(data){$scope.items = data.list;}); break;
+			case 2: $scope.BoardUrl3 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_FAQ').then(function(data){$scope.items = data.list;}); break;
+			case 3: $scope.BoardUrl4 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_Request').then(function(data){$scope.items = data.list;}); break;
+		}
 	$scope.onSlideMove = function(data) {	 	
 		switch(data.index){
-			case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
-			case 1: $scope.BoardUrl2 = $sce.trustAsResourceUrl($rootScope.urlData[1].url); break;
-			case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
-			case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
+			case 0: $scope.BoardUrl1 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_notice').then(function(data){$scope.items = data.list;}); break;
+			case 1: $scope.BoardUrl2 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_erpup').then(function(data){$scope.items = data.list;}); break;
+			case 2: $scope.BoardUrl3 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_FAQ').then(function(data){$scope.items = data.list;}); break;
+			case 3: $scope.BoardUrl4 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_Request').then(function(data){$scope.items = data.list;}); break;
 		}
 		$rootScope.useBoardCtrl = "N";
-		console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
+		// console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
 	};
 })
+
+.controller('PushCtrl', function($rootScope, $scope, $state, PushSelectService){
+	console.log("PushCtrl");
+	// Kind, Mode, Admin_Code, ChkAdmin, UserId
+	$scope.PushList = function() {
+		if($scope.loginData.Admin_Code != undefined){
+			PushSelectService.select('Mobile_Push_Log', 'SELECT', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
+			.then(function(data){
+				$scope.items = data.list;
+				console.log($scope.items);
+			})
+		} else {
+			// alert('로그인 후 실행해주세요.');
+			// $ionicHistory.nextViewOptions({
+			// 	disableBack: true
+			// });
+			// $state.go("app.erpia_main");
+		}
+	}
+	$scope.PushList();
+
+	$scope.onItemDelete = function(item) {
+    	$scope.items.splice($scope.items.indexOf(item), 1);
+    	$scope.listSeq = item.idx;
+    	PushSelectService.delete('Mobile_Push_Log', 'DELETE', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.listSeq)
+  	};
+
+  	$scope.data = {
+    	showDelete: false
+  	};
+
+  	// $scope.PushDetail = function() {
+  	// 	$state.go('app.erpia_push.push-detail');
+  	// };
+
+})
+.controller('PushDetailCtrl', function($scope, $stateParams, PushSelectService) {
+	// $scope.myGoBack = function() {
+	// 	$ionicHistory.goBack();
+	// 	$ionicHistory.clearCache();
+	// 	$ionicHistory.clearHistory();
+	// 	$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+	// };
+	$scope.pList = PushSelectService.get($stateParams.Seq)
+})
+	// $scope.data = {
+ //    	showDelete: false
+ //  	};
+  
+	// $scope.edit = function(item) {
+	// 	alert('Edit Item: ' + item.id);
+	// };
+	
+	// $scope.share = function(item) {
+	// 	alert('Share Item: ' + item.id);
+	// };
+
+	// $scope.moveItem = function(item, fromIndex, toIndex) {
+	// 	$scope.items.splice(fromIndex, 1);
+	// 	$scope.items.splice(toIndex, 0, item);
+	// };
+
+	// $scope.onItemDelete = function(item) {
+	// 	$scope.items.splice($scope.items.indexOf(item), 1);
+	// };
+  
+	// $scope.items = [
+ //    	{ id: 0 },
+ //    	{ id: 1 },
+ //  	];
+// })
 
 .controller('PlaylistsCtrl', function($scope) {
 	console.log("PlaylistsCtrl");
@@ -1831,7 +1810,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(response){
 				console.log('response', response);
 				$rootScope.kind = 'chart' + response.list[0].idx;
-				console.log('chartKind1 : ', $rootScope.kind);
 				switch (response.list[0].idx)
 				{
 					case '1' : $scope.kind = titles[1].title; break;
@@ -1851,7 +1829,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case '16' : $scope.kind = titles[15].title; break;
 					case '17' : $scope.kind = titles[16].title; break;
 				}
-				console.log('chartKind2 : ', $scope.kind);
 				if($scope.kind === "meachul_onoff"){
 					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
 							'<div class="direct-chat">'+
@@ -2012,4 +1989,3 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		});
 	};
 })
-
