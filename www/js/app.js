@@ -6,18 +6,18 @@
 angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
- .constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ // 	, toast:'N'
+ // })
 
 //실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-// 	, toast:'Y'
-// })
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, toast:'Y'
+})
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
@@ -133,16 +133,16 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		// dev_push: false // 실적용시
 	});
 }])
-.config(function($cordovaInAppBrowserProvider) {
-	var defaultOptions = {
-		location: 'no',
-		clearcache: 'no',
-		toolbar: 'no'
-	};
-	document.addEventListener(function () {
-		$cordovaInAppBrowserProvider.setDefaultOptions(options)
-	}, false);
-})
+// .config(function($cordovaInAppBrowserProvider) {
+// 	var defaultOptions = {
+// 		location: 'no',
+// 		clearcache: 'no',
+// 		toolbar: 'no'
+// 	};
+// 	document.addEventListener(function () {
+// 		$cordovaInAppBrowserProvider.setDefaultOptions(options)
+// 	}, false);
+// })
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
 	
@@ -387,15 +387,6 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		views : {
 			'menuContent' : {
 				templateUrl : 'tab/tabs.html'				 
-			}
-		}
-	})
-	.state('app.ERPiaHome', {
-		url : '/ERPiaHome',
-		views : {
-			'menuContent' : {
-				templateUrl : 'side/ERPiaHome.html',
-				controller : 'ERPiaHomeCtrl'
 			}
 		}
 	})

@@ -394,8 +394,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
-			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
-			alert('약관에 동의해!!');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해 주시기 바랍니다.', 'long', 'center');
+			alert('약관에 동의해 주시기 바랍니다.');
 		}
 	}
 
@@ -424,12 +424,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
-	$scope.openInAppBrowser = function(inAppUrl){
-		$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
-		//window.open(inAppUrl,'_blank'); 
-		//cordova.InAppBrowser.open($url, "_blank", "location=no", "clearcache: no", "toolbar: no");
-	}
-	
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -1900,20 +1894,3 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
     }
 })
-.controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, $cordovaInAppBrowser){
-	// Wait for device API libraries to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    // device APIs are available
-    //
-    function onDeviceReady() {
-         var ref = window.open('http://www.erpia.net', '_blank', 'location=yes');
-         ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
-         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
-         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-         ref.addEventListener('exit', function(event) { alert(event.type); });
-         ref.show();
-    }
-})
-
