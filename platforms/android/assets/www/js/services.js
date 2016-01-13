@@ -198,7 +198,7 @@ angular.module('starter.services', [])
 .factory('mconfigService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
 		basicM: function(admin_code, userid){
-			console.log("mconfigService and basicM");
+		console.log("mconfigService and basicM");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
@@ -227,18 +227,43 @@ angular.module('starter.services', [])
 							console.log('리스트 여러개 =>', response.data);
 							for(var i=0; i < response.data.list.length; i++){
 								console.log('data.Id =', response.data.list[i].UserId);
-								if(userid == response.data.list[i].UserId){
+								if(i+1 < response.data.list.length && userid == response.data.list[i].UserId){
 									console.log('same',response.data.list[i]);	
 									return response.data.list[i];
 									break;
+								}else if(i+1 == response.data.list.length && userid != response.data.list[i].UserId){
+									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+									else console.log('저장되어있는 초기값이 없습니다.');
+										var data = {
+											state : 1,
+											basic_Place_Code : 0,
+											basic_Ch_Code : 0,
+											basic_Dn_Sale : 1,
+											basic_Dn_Meaip : 1,
+											basic_Subul_Sale : 2,
+											basic_Subul_Meaip : 2
+										};
+										console.log('확인=>', data);
+										return data;
+								}else{
+									console.log('안뇽');
 								}
 							}
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
 							else console.log('저장되어있는 초기값이 없습니다.');
-							return response.data;
+								var data = {
+									state : 1,
+									basic_Place_Code : 0,
+									basic_Ch_Code : 0,
+									basic_Dn_Sale : 1,
+									basic_Dn_Meaip : 1,
+									basic_Subul_Sale : 2,
+									basic_Subul_Meaip : 2
+								};
+								console.log('확인=>', data);
+								return data;
 						}
-
 					}else{
 						return $q.reject(response.data);
 					}
@@ -251,8 +276,8 @@ angular.module('starter.services', [])
 						basic_Ch_Code : 0,
 						basic_Dn_Sale : 1,
 						basic_Dn_Meaip : 1,
-						basic_Subul_Sale : 1,
-						basic_Subul_Meaip : 1
+						basic_Subul_Sale : 2,
+						basic_Subul_Meaip : 2
 					};
 					console.log('확인=>', data);
 					return data;

@@ -198,6 +198,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					/*case 'ERPia':
+						$scope.loginData.Admin_Code = 'pikachu';
+						$scope.loginData.UserId = 'test';
+						$scope.loginData.Pwd = '1234lkm!';
+					break;*/
+					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
@@ -1405,10 +1410,11 @@ $scope.eDate1= new Date();
 
 	/*거래처명 && 수불구분*/
 	$scope.compo={
-		userGerName : '',
-		GerName : '',
-		GerCode : 0,
-		subulkind : 0
+		userGerName : '', //user가 입력한 상품정보 (검색할때 사용)
+		GerName : '', // 거래처검색명
+		GerCode : 0, //거래처코드(매입등록 시 필요)
+		subulkind : 0, // 수불지정 es) 111,122
+		remk : '' // 관리비고
 	};
 
 	/*매입정보 체크*/
@@ -1443,6 +1449,52 @@ $scope.eDate1= new Date();
     { Name: '상품코드', Code: 'Select_G_Code' },
     { Name: '공인바코드', Code: 'Select_GI_Code' }
     ];
+
+    /*상품등록 리스트*/
+    $scope.goodsaddlists=[];
+
+    /*지급타입*/
+    $scope.paytype = false;
+
+    //기본설정데이터
+	mconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+	.then(function(data){
+		$scope.mejanglists = data.list;// admin_code에 맞는 매장리스트저장.
+			/*환경설정조회*/
+			mconfigService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+			.then(function(data){
+				$scope.configData = data; // 아이디에 저장된 환경설정 리스트 저장
+				console.log('초기값?= ', $scope.configData.state);
+					if($scope.configData.state == 1){
+						console.log('저장환경설정이 없네요.');
+					}else{
+						/*환경설정 조회된 매장코드로 창고리스트 조회*/
+						mconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
+						.then(function(data){
+							$scope.changolists = data.list;
+							$scope.MeaipData.meajangCheck = 't';
+							$scope.MeaipData.changoCheck = 't';
+							$scope.MeaipData.subulCheck = 't';
+						})
+						//매입 수불구분확인
+						var i = $scope.configData.basic_Subul_Meaip;
+						switch (i) {
+						    case '1' : console.log('1'); 
+						    		   switch($scope.configData.basic_Subul_Meaip_Before){
+						    		   		case 'N' : console.log('N'); $scope.compo.subulkind=111; break;
+						    		   		case 'I' : console.log('I'); $scope.compo.subulkind=111; break;
+						    		   		case 'B' : console.log('B'); $scope.compo.subulkind=122; break;
+						    		   }
+						    		   break;
+						    case '2' : console.log('2'); $scope.compo.subulkind=111; break;
+						    case '3' : console.log('3'); $scope.compo.subulkind=122; break;
+
+						    default : console.log('수불카인드 오류'); break;
+						  }
+
+					}
+			})
+	})
 
     /* customerSearch modal */
 	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
@@ -1515,6 +1567,7 @@ $scope.eDate1= new Date();
 
     /* meaip Insert modal Show */
 	$scope.meaipDataRegist = function() {
+		$scope.disState = true;
 	    $scope.modalmeaipDataRegi.show();
 	};
 
@@ -1522,46 +1575,6 @@ $scope.eDate1= new Date();
 	$scope.closemodeInsert = function() {
 		$scope.modalmeaipDataRegi.hide();
 	};
-
-	//기본설정데이터
-	mconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
-	.then(function(data){
-		$scope.mejanglists = data.list;// admin_code에 맞는 매장리스트저장.
-			/*환경설정조회*/
-			mconfigService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
-			.then(function(data){
-				$scope.configData = data; // 아이디에 저장된 환경설정 리스트 저장
-				console.log('초기값?= ', $scope.configData.state);
-					if($scope.configData.state == 1){
-						console.log('저장환경설정이 없네요.');
-					}else{
-						/*환경설정 조회된 매장코드로 창고리스트 조회*/
-						mconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
-						.then(function(data){
-							$scope.changolists = data.list;
-							$scope.MeaipData.meajangCheck = 't';
-							$scope.MeaipData.changoCheck = 't';
-							$scope.MeaipData.subulCheck = 't';
-						})
-						//매입 수불구분확인
-						var i = $scope.configData.basic_Subul_Meaip;
-						switch (i) {
-						    case '1' : console.log('1'); 
-						    		   switch($scope.configData.basic_Subul_Meaip_Before){
-						    		   		case 'N' : console.log('N'); $scope.compo.subulkind=111; break;
-						    		   		case 'I' : console.log('I'); $scope.compo.subulkind=111; break;
-						    		   		case 'B' : console.log('B'); $scope.compo.subulkind=122; break;
-						    		   }
-						    		   break;
-						    case '2' : console.log('2'); $scope.compo.subulkind=111; break;
-						    case '3' : console.log('3'); $scope.compo.subulkind=122; break;
-
-						    default : console.log('수불카인드 오류'); break;
-						  }
-
-					}
-			})
-	})
 
 	/*매장코드로 창고조회*/
 	$scope.Chango=function(){
@@ -1593,62 +1606,6 @@ $scope.eDate1= new Date();
         console.log('scope.MeaipData == ', $scope.MeaipData);
       	$scope.customerModal.hide();
     }
-    /*상품체크박스*/
-    $scope.goodsCheck=function(goodsdata){
-    	/*console.log('체크박스=', goodsdata);*/
-    	$scope.checkcaught='no';
-    	console.log($scope.checkedDatas);
-
-    	for(var i=0; i<$scope.checkedDatas.length; i++){
-    		if($scope.checkedDatas[i] == goodsdata){
-    			console.log('들왔다.',i);
-    			$scope.checkedDatas.splice(i, 1);
-    			$scope.checkcaught='yes';
-    			break;
-    		}
-    	}
-    	if($scope.checkcaught != 'yes'){
-    		$scope.checkedDatas.push(goodsdata);
-    	}
-    	console.log('막데이터=>',$scope.checkedDatas);
-    	
-
-
-    	 /*$ionicPopup.show({
-         template: '<input type = "text" ng-model = "data.model">',
-         title: 'Title',
-         subTitle: 'Subtitle',
-         scope: $scope,
-			
-         buttons: [
-            { text: 'Cancel' }, {
-               text: '<b>Save</b>',
-               type: 'button-positive',
-                  onTap: function(e) {
-						
-                     if (!$scope.data.model) {
-                        //don't allow the user to close unless he enters model...
-                           e.preventDefault();
-                     } else {
-                        return $scope.data.model;
-                     }
-                  }
-            }
-         ]
-      });*/
-    }
-
-    $scope.checkdataSave=function(){
-    	console.log('체크박스로 선택된 데이터 뷰로보내라.');
-    }
-
-
-////////////////////////////////////////////////////////////
-	
-
-	
-
-	
 
     /* page up And down */
     $scope.meaipNext=function(){
@@ -1694,9 +1651,138 @@ $scope.eDate1= new Date();
     		$scope.upAnddown="ion-arrow-up-b";
         }
     }
-    
 
-    
+    /*상품체크박스*/
+    $scope.goodsCheck=function(goodsdata){
+    	/*console.log('체크박스=', goodsdata);*/
+    	$scope.checkcaught='no';
+    	console.log($scope.checkedDatas);
+
+    	for(var i=0; i<$scope.checkedDatas.length; i++){
+    		if($scope.checkedDatas[i] == goodsdata){
+    			console.log('들왔다.',i);
+    			$scope.checkedDatas.splice(i, 1);
+    			$scope.checkcaught='yes';
+    			break;
+    		}
+    	}
+    	if($scope.checkcaught != 'yes'){
+    		$scope.checkedDatas.push(goodsdata);
+    	}
+    	console.log('막데이터=>',$scope.checkedDatas);
+
+    	 /*$ionicPopup.show({
+         template: '<input type = "text" ng-model = "data.model">',
+         title: 'Title',
+         subTitle: 'Subtitle',
+         scope: $scope,
+			
+         buttons: [
+            { text: 'Cancel' }, {
+               text: '<b>Save</b>',
+               type: 'button-positive',
+                  onTap: function(e) {
+						
+                     if (!$scope.data.model) {
+                        //don't allow the user to close unless he enters model...
+                           e.preventDefault();
+                     } else {
+                        return $scope.data.model;
+                     }
+                  }
+            }
+         ]
+      });*/
+    }
+	/*선택된 상품들을 등록리스트에 저장*/
+    $scope.checkdataSave=function(){
+		if($scope.goodsaddlists.length > 0){
+			console.log('상품검색배열확인');
+			for(var j=0; j < $scope.goodsaddlists.length; j++){
+				for(var o=0; $scope.checkedDatas.length; o++){
+					if($scope.goodsaddlists[j].code == $scope.checkedDatas[o].G_Code){
+						console.log('같은상품이 상품등록 리스트에 존재합니다.');
+
+						$ionicPopup.alert({
+						     title: '('+ $scope.goodsaddlists[j].code +')<br>' + $scope.goodsaddlists[j].name,
+						     template: '같은상품이 상품등록 리스트에 이미 존재합니다.'
+						   });
+
+						$scope.checkedDatas.splice(o, 1);
+						break;
+					}
+				}
+			}
+		}
+		for(var i=0; i < $scope.checkedDatas.length; i++){
+			switch($scope.configData.basic_Dn_Meaip){
+	    		case '1': console.log('매입가'); var price = $scope.checkedDatas[i].G_Dn1; break;
+	    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
+	    		case '3': console.log('인터넷가'); var price = $scope.checkedDatas[i].G_Dn3; break;
+	    		case '4': console.log('소매가'); var price = $scope.checkedDatas[i].G_Dn4; break;
+	    		case '5': console.log('권장소비자가'); var price = $scope.checkedDatas[i].G_Dn5; break;
+
+	    		default : console.log('설정안되있습니다.'); break;
+	    	}
+			$scope.goodsaddlists.push({
+				name : $scope.checkedDatas[i].G_Name,
+				num : 1,
+				goodsprice : price,
+				code : $scope.checkedDatas[i].G_Code
+			});
+		}
+    	$scope.goodsSearchmodesear.hide();
+    	$scope.Meaipgoods.userGoodsName = '';
+    	//체크확인 배열 초기화
+    	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
+    	$scope.goodslists = '';
+    	$scope.goodsSearchmodesear.hide();
+    }
+    /* 해당 상품리스트항목 삭제 */
+     $scope.goodsDelete=function(index){
+        $scope.goodsaddlists.splice(index,1);
+     }
+
+     /*지급구분*/
+     $scope.Payments_division=function(num){
+     	console.log('번호=', num);
+     	$scope.disState = false;
+     	if(num == 2){
+     		console.log('통장');
+     		$scope.paytype = true;
+     		$scope.payname = '지급은행';
+     		var kind = 'ERPia_Bank_Card_Select';
+     		var mode = 'Select_Bank';
+     		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
+			.then(function(data){
+				console.log('매입 인설트 서비스 실행후 ->',data);
+				$scope.paydatalist = data.list;
+			})
+
+     	}else if(num == 4){
+     		console.log('카드');
+     		$scope.paytype = true;
+     		$scope.payname = '지급카드';
+     		var kind = 'ERPia_Bank_Card_Select';
+     		var mode = 'Select_Card';
+     		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
+			.then(function(data){
+				console.log('매입 인설트 서비스 실행후 ->',data);
+				$scope.paydatalist = data.list;
+			})
+     	}
+     }
+
+     /*매입전표 저장*/
+     $scope.insertGoodsF=function(){
+     	console.log('상품정보=',$scope.goodsaddlists);
+     	console.log('매입정보=',$scope.configData);
+     	console.log('따로저장=',$scope.compo);
+     	meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo)
+		.then(function(data){
+			console.log('매입 인설트 서비스 실행후 ->',data);
+		})
+     }
 
 	//backcontroll
      $scope.backControll=function(){
@@ -1707,7 +1793,6 @@ $scope.eDate1= new Date();
          buttons: [
            { text: 'No',
             onTap: function(e){
-              
             }},
            {
              text: 'Yes',
@@ -1719,7 +1804,6 @@ $scope.eDate1= new Date();
          ]
         })
      }
-
 	})
 
 .controller('mconfigCtrl', function($scope, $sce, $cordovaToast, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, mconfigService, ERPiaAPI){

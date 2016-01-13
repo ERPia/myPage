@@ -60,7 +60,7 @@
 		            	</select>&nbsp;&nbsp;
 		          	</td>
 		          	<td>
-		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="Meaipgoods.userGoodsName">
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="15" ng-model="Meaipgoods.userGoodsName">
 		          	</td>
 		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
@@ -71,16 +71,16 @@
 		   		<tr bgcolor="#EAEAEA">
 		   			<td width="40%">상품명</td>
 		   			<td width="15%">수 량</td>
-		   			<td width="35%">단 가</td>
+		   			<td width="25%">단 가</td>
 		        	<td width="10%">&nbsp;</td>
 		   		</tr>
 		      	<tr>
 		        	<td colspan="4"><hr></td>
 		      	</tr>
-		      	<tr ng-repeat="y in addlists">
-		        	<td>{{y.namegoods}}</td>
-		        	<td><input type="number" min="1" max="999" ng-model="y.numgoods" required></td>
-		        	<td>{{y.gdngoods}}</td>
+		      	<tr ng-repeat="y in goodsaddlists">
+		        	<td>{{y.name}}</td>
+		        	<td><input type="number" min="1" max="999" style="text-align:right" ng-model="y.num" required></td>
+		        	<td><center><input type="number" min="1" max="9999999" style="text-align:right" ng-model="y.goodsprice" required></center></td>
 		        	<td><i class="ion-android-remove-circle" ng-click="goodsDelete($index)"></i>&nbsp;</td>
 		      	</tr>
 	   		</table>
@@ -92,7 +92,7 @@
   		</div>
   		<div ng-if="basic3type" class="list list-inset">
 	  		<label class="item item-input item-stacked-label">
-		        <textarea placeholder="관리자비고란 입니다." rows="8" cols="10" ng-model="maipbasiclist.remk"></textarea>
+		        <textarea placeholder="관리자비고란 입니다." rows="8" cols="10" ng-model="compo.remk"></textarea>
       		</label>
       	</div>
 

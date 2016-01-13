@@ -180,16 +180,6 @@ angular.module('starter.services', [])
 							if(response.data == '<!--Parameter Check-->'){
 								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
 								else alert('일치하는 정보가 없습니다.1');
-							}else{
-/*								console.log('일루왔넹2',response.data.list.length);
-								console.log('요기요기 ============>', response.data.list[0]);
-								for(var i =0; i < response.data.list.length; i++){
-									console.log('for문안 =>', i);
-									response.data.list[i].push({
-										checked : false
-									});
-								}
-								console.log('일루왔넹3',response.data);*/
 							}
 							return response.data;
 						}else{
@@ -202,13 +192,50 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
+		}, insertm : function(meaipdata, goodsdata, atc){
+				console.log("meaipService and insertm");
+				console.log('매입---------------------->',meaipdata.Admin_Code);
+				console.log('상품---------------------->',goodsdata[0].name);
+				console.log('등등---------------------->',atc);
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService(basicM)=', response);
+						if(typeof response == 'object'){
+							console.log('매장리스트=', response.data);
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, paysearch : function(admin_code, userid, kind, mode){
+				console.log("meaipService and paysearch");
+				console.log('kind---------------------->',kind);
+				console.log('mode------------------->',mode);
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=' + kind + '&Mode=' + mode;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService(paysearch)=', response);
+						if(typeof response == 'object'){
+							console.log('카드 & 통장 정보=', response.data);
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
 	};
 })
 .factory('mconfigService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
 		basicM: function(admin_code, userid){
-			console.log("mconfigService and basicM");
+		console.log("mconfigService and basicM");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
@@ -237,18 +264,43 @@ angular.module('starter.services', [])
 							console.log('리스트 여러개 =>', response.data);
 							for(var i=0; i < response.data.list.length; i++){
 								console.log('data.Id =', response.data.list[i].UserId);
-								if(userid == response.data.list[i].UserId){
+								if(i+1 < response.data.list.length && userid == response.data.list[i].UserId){
 									console.log('same',response.data.list[i]);	
 									return response.data.list[i];
 									break;
+								}else if(i+1 == response.data.list.length && userid != response.data.list[i].UserId){
+									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+									else console.log('저장되어있는 초기값이 없습니다.');
+										var data = {
+											state : 1,
+											basic_Place_Code : 0,
+											basic_Ch_Code : 0,
+											basic_Dn_Sale : 1,
+											basic_Dn_Meaip : 1,
+											basic_Subul_Sale : 2,
+											basic_Subul_Meaip : 2
+										};
+										console.log('확인=>', data);
+										return data;
+								}else{
+									console.log('안뇽');
 								}
 							}
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
 							else console.log('저장되어있는 초기값이 없습니다.');
-							return response.data;
+								var data = {
+									state : 1,
+									basic_Place_Code : 0,
+									basic_Ch_Code : 0,
+									basic_Dn_Sale : 1,
+									basic_Dn_Meaip : 1,
+									basic_Subul_Sale : 2,
+									basic_Subul_Meaip : 2
+								};
+								console.log('확인=>', data);
+								return data;
 						}
-
 					}else{
 						return $q.reject(response.data);
 					}
@@ -261,8 +313,8 @@ angular.module('starter.services', [])
 						basic_Ch_Code : 0,
 						basic_Dn_Sale : 1,
 						basic_Dn_Meaip : 1,
-						basic_Subul_Sale : 1,
-						basic_Subul_Meaip : 1
+						basic_Subul_Sale : 2,
+						basic_Subul_Meaip : 2
 					};
 					console.log('확인=>', data);
 					return data;
