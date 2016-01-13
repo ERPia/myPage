@@ -127,22 +127,12 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: '256d0feb', //app id
-		api_key:'8d60e2043f9eb247083a7479d1865a5020c9478458051c06',		// public key 개발테스트시 
-		dev_push: true // 개발테스트시
-		// api_key:'5c142d3b4c0bc012c7bcd2f45b6b0019a78e0693617d04ca', 	// private key 실적용시
-		// dev_push: false // 실적용시
+		// api_key:'8d60e2043f9eb247083a7479d1865a5020c9478458051c06',		// public key 개발테스트시 
+		// dev_push: true // 개발테스트시
+		api_key:'5c142d3b4c0bc012c7bcd2f45b6b0019a78e0693617d04ca', 	// private key 실적용시
+		dev_push: false // 실적용시
 	});
 }])
-// .config(function($cordovaInAppBrowserProvider) {
-// 	var defaultOptions = {
-// 		location: 'no',
-// 		clearcache: 'no',
-// 		toolbar: 'no'
-// 	};
-// 	document.addEventListener(function () {
-// 		$cordovaInAppBrowserProvider.setDefaultOptions(options)
-// 	}, false);
-// })
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
 	
