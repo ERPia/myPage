@@ -2282,7 +2282,8 @@ $scope.searchde={ //기본 정보 Model
       Mode : '',
       meachulsubuls:'',
       i_Cancel : 'J',
-      Sl_No : ''
+      Sl_No : '',
+      accountKind : ''
 };
 
 $scope.Comp={   //거래처 정보 Model
@@ -2308,7 +2309,8 @@ $scope.goodsparam={   //상품검색파라미터정보 Model
 $scope.etc={
     goods_bigo : '',
     totalsumprices : 0, //상품 종합합계 가격
-    MeaChul_Date : ''
+    MeaChul_Date : '',
+    receivedprice : 0
 }
 
 $scope.goodsresult=[];
@@ -2532,17 +2534,91 @@ $scope.mejangselect= function() {
     }
 
 }
-    $scope.remove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
+    $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
       $scope.goodsresult.splice(index, 1);
       for(var goodslength=index; goodslength<$scope.goodsresult.length; goodslength++){
         $scope.goodsresult[goodslength].goods_number=goodslength+1;
       }
     }
+/*----------------------------2016/01/13 내일 해야되는곳!!!!!!!!!!!-----------------------------*/
 
+/*체크된상품 확인데이터*/
+    $scope.checkedDatas=[];
+
+/*상품등록 리스트*/
+    $scope.goodsaddlists=[];
+
+/*상품체크박스*/
+    $scope.goodsCheck=function(goodsdata){
+    	/*console.log('체크박스=', goodsdata);*/
+    	$scope.checkcaught='no';
+    	console.log($scope.checkedDatas);
+
+    	for(var i=0; i<$scope.checkedDatas.length; i++){
+    		if($scope.checkedDatas[i] == goodsdata){
+    			console.log('들왔다.',i);
+    			$scope.checkedDatas.splice(i, 1);
+    			$scope.checkcaught='yes';
+    			break;
+    		}
+    	}
+    	if($scope.checkcaught != 'yes'){
+    		$scope.checkedDatas.push(goodsdata);
+    	}
+    	console.log('막데이터=>',$scope.checkedDatas);
+    }
+
+
+/*선택된 상품들을 등록리스트에 저장*/
+    $scope.checkdataSave=function(){
+		if($scope.goodsaddlists.length > 0){
+			console.log('상품검색배열확인');
+			for(var j=0; j < $scope.goodsaddlists.length; j++){
+				for(var o=0; $scope.checkedDatas.length; o++){
+					if($scope.goodsaddlists[j].code == $scope.checkedDatas[o].G_Code){
+						console.log('같은상품이 상품등록 리스트에 존재합니다.');
+
+						$ionicPopup.alert({
+						     title: '('+ $scope.goodsaddlists[j].code +')<br>' + $scope.goodsaddlists[j].name,
+						     template: '같은상품이 상품등록 리스트에 이미 존재합니다.'
+						   });
+
+						$scope.checkedDatas.splice(o, 1);
+						break;
+					}
+				}
+			}
+		}
+		for(var i=0; i < $scope.checkedDatas.length; i++){
+			switch($scope.basicConfiglist.basic_Dn_Sale){
+	    		case '1': console.log('매입가'); var price = $scope.checkedDatas[i].G_Dn1; break;
+	    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
+	    		case '3': console.log('인터넷가'); var price = $scope.checkedDatas[i].G_Dn3; break;
+	    		case '4': console.log('소매가'); var price = $scope.checkedDatas[i].G_Dn4; break;
+	    		case '5': console.log('권장소비자가'); var price = $scope.checkedDatas[i].G_Dn5; break;
+
+	    		default : console.log('설정안되있습니다.'); break;
+	    	}
+			$scope.goodsaddlists.push({
+				name : $scope.checkedDatas[i].G_Name,
+				num : 1,
+				goodsprice : price,
+				code : $scope.checkedDatas[i].G_Code
+			});
+		}
+    	$scope.modalpresentsearch.hide();
+    	$scope.Meaipgoods.userGoodsName = '';
+    	//체크확인 배열 초기화
+    	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
+    	$scope.goodslists = '';
+    	$scope.modalpresentsearch.hide();
+    }
+
+/*----------------------------2016/01/13 내일 해야되는곳!!!!!!!!!!!-----------------------------*/
 
 
     //상품 검색에서 원하는 상품 선택시 이벤트
-    $scope.presentselect= function(GName,GCode,GStand,goodsprice) {
+/*    $scope.presentselect= function(GName,GCode,GStand,goodsprice) {
       $scope.goodsresult.push({
             goods_number: $scope.goodsresult.length+1,
             G_Name: GName,
@@ -2554,7 +2630,7 @@ $scope.mejangselect= function() {
             goods_panmedanga: goodsprice*0.9
         });
     $scope.modalpresentsearch.hide();
-  };  
+  };  */
 
 /*매출등록 다음페이지 눌렀을때 이동 */
  $scope.Meachulnextbtn=function(){
@@ -2579,6 +2655,60 @@ $scope.mejangselect= function() {
   };
 
 
+  $scope.selectedBankAccountData={
+  		BankAccountData:''
+  };
+  $scope.selectedCardAccountData={
+  		CardAccountData:''
+  };
+
+  $scope.accountCardData=[];
+  $scope.accountBankData=[];
+  
+  $scope.Select_Bank=function(){ 
+		mconfigService.Select_Bank($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+		console.log(data);
+		$scope.accountBankList=data.list;
+		},function(){
+			alert('Request fail')	
+		});
+	};
+
+  $scope.Select_Card=function(){
+		mconfigService.Select_Card($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+		console.log(data);
+		$scope.accountCardList=data.list;
+		console.log('카드조회값 확인 : '+$scope.accountCardList);
+		},function(){
+			alert('Request fail')	
+		});
+	};
+
+	$scope.BankSelected=function(){
+		$scope.accountBankData=[];
+		console.log('----------------------->', $scope.selectedBankAccountData.BankAccountData);
+		$scope.list = $scope.selectedBankAccountData.BankAccountData.split(',');  
+			$scope.accountBankData.push({
+				Bank_Code : $scope.list[0].toString(),
+				Bank_Name : $scope.list[1],
+				Bank_Account : $scope.list[2]
+			});
+			console.log('확인 ->', $scope.accountBankData);
+	};
+
+	$scope.CardSelected=function(){
+		$scope.accountCardData=[];
+		$scope.list = $scope.selectedCardAccountData.CardAccountData.split(',');  
+
+			$scope.accountCardData.push({
+				Card_Name : $scope.list[0],
+				Card_Code : $scope.list[1],
+				Card_Num : $scope.list[2]
+			});
+			console.log('확인 ->', $scope.accountCardData);
+	};
 })
 
 //----------------경민씨가한거 ---------------------------------(매출전표 (ALL, Tseq)삭제)

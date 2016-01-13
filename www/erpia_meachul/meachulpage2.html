@@ -3,7 +3,7 @@
       <div class="buttons">
       <button class="button button-clear" ng-click="finalbackbtn()" align="left">뒤로가기</button>
     </div>
-    <h1 class="title">매입등록</h1>
+    <h1 class="title">매출등록</h1>
   </ion-header-bar>
 
 
@@ -12,7 +12,7 @@
       <table style="width:100%">
         <tr>
           <td align="right" style="width:30%">
-            매입액
+            매출액
           </td>
           <td align="right" style="width:70%">
             <b>총 3개 / 3,000원</b>
@@ -20,7 +20,6 @@
         </tr>
       </table>
       </div>
-      <hr>
     <div class="item item-input-inset">
      <b>지급정보</b><br>
      </div>
@@ -45,20 +44,54 @@
           <td align="right" style="width:30%" rowspan="2">
             <b>지급구분</b>
           </td>
-          <td align="right" style="width:35%">
-              <ion-radio ng-model="searchde.meachulsubuls" >현금결제</ion-radio>
+          <td align="right" style="width:30%; padding-left:10%">
+              <ion-radio ng-model="searchde.accountKind" value="money"  style="font-size:12px; margin-top:20px">현금입금</ion-radio>
           </td>
-          <td align="right" style="width:35%">
-             <ion-radio ng-model="searchde.meachulsubuls" >통장결제</ion-radio> 
-          </td>
-        </tr>
-          <td align="right" style="width:35%">
-              <ion-radio ng-model="searchde.meachulsubuls" >어음결제</ion-radio>
-          </td>
-          <td align="right" style="width:35%">
-              <ion-radio ng-model="searchde.meachulsubuls" >카드결제</ion-radio>
+          <td align="right" style="width:30%">
+             <ion-radio ng-model="searchde.accountKind" value="bank" ng-click="Select_Bank()" style="font-size:12px; margin-top:20px">통장입금</ion-radio> 
           </td>
         </tr>
+        <tr>
+          <td align="right" style="width:30%; padding-left:10%">
+              <ion-radio ng-model="searchde.accountKind" value="um" style="font-size:12px">어음입금</ion-radio>
+          </td>
+          <td align="right" style="width:30%">
+              <ion-radio ng-model="searchde.accountKind" value="card" ng-click="Select_Card()" style="font-size:12px">카드입금</ion-radio>
+          </td>
+        </tr>
+        <tbody ng-if="searchde.accountKind=='bank'">
+        <tr >
+          <td align="right" style="width:30%; padding-top:30px">
+            <b>입금은행</b>
+          </td>
+          <td align="right" style="width:60%; vertical-align:middle" colspan="2">
+          <select ng-model="selectedBankAccountData.BankAccountData" ng-change='BankSelected()' style="width:70%; border: 1px solid silver; margin-top:20px">
+            <option ng-repeat="bank in accountBankList" value="{{bank.Bank_Name}},{{bank.Bank_Code}},{{bank.Bank_Account}}">{{bank.Bank_Name}}</option>
+          </select>
+          </td>
+          </tr>
+        </tbody>
+        <tbody ng-if="searchde.accountKind=='card'">
+         <tr >
+          <td align="right" style="width:30%; padding-top:30px">
+            <b>입금카드</b>
+          </td>
+          <td align="right" style="width:60%; vertical-align:middle" colspan="2">
+          <select ng-model="selectedCardAccountData.CardAccountData" ng-change='CardSelected()' style="width:70%; border: 1px solid silver; margin-top:20px">
+            <option ng-repeat="card in accountCardList" value="{{card.Card_Name}},{{card.Card_Code}},{{card.Card_Num}}">{{card.Card_Name}}</option>
+          </select>
+          </td>
+          </tr>
+        </tbody>
+        <tbody ng-if="searchde.accountKind!==''">
+        <tr>
+          <td align="right" style="width:30%; padding-top:30px">
+            <b>입금액</b>
+          </td>
+          <td align="right" style="width:60%; vertical-align:middle" colspan="2">
+          <input type="number" ng-model="etc.receivedprice" style="width:70%; border: 1px solid silver; margin-top:20px; text-align:right">원</td>
+          </tr>
+      </tbody>
       </table>
     </div>
 

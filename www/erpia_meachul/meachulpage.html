@@ -25,7 +25,7 @@
             <label class="item item-input item-select" style="border:0;">
               매장지정
               <select ng-model="mejang.Sale_Place_Code" ng-change="mejangselect();checkup()" style="width:50%">
-                 <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}},{{x.Sale_Place_Name}}" ng-selected="configData.basic_Place_Code==x.Sale_Place_Code||configData.basic_Place_Code==x.Sale_Place_Name" >
+                 <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="configData.basic_Place_Code==x.Sale_Place_Code||configData.basic_Place_Code==x.Sale_Place_Name" >
                  {{x.Sale_Place_Name}}</option>
                 </select>
             </label>
@@ -33,7 +33,7 @@
             <label class="item item-input item-select" style="border:0;">
               창고지정
               <select ng-model="mejang.ChanggoCode" ng-change='onChanggoChecked();checkup()' style="width:50%">
-                  <option ng-repeat="x in changolists" value="{{x.Name}},{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+                  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
                   {{x.Name}}</option>
                 </select>
             </label>
@@ -80,10 +80,12 @@
                 <tr>
                     <td colspan="4"><hr></td>
                 </tr>
-                <tr ng-repeat="goods in goodsresult">
-                    <td>{{goodsresult[$index].goods_number}}.{{goodsresult[$index].G_Name}}</td>
-                    <td><label class="item-input-wrapper"><input type="number" min="1" max="999" ng-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)"></label></td>
-                    <td><label class="item-input-wrapper"><input ng-model="goods.goods_price | number:0" type="text" ng-change="goods_totalprice1($index)"/></label>
+                <tr ng-repeat="goods in goodsaddlists">
+                    <td style="vertical-align:middle">{{goodsaddlists[$index].goods_number}}.{{goodsaddlists[$index].name
+                    }}</td>
+                    <td><input type="number" min="1" max="999" n
+                    g-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)" style="border: 1px solid silver; margin-top:20px; text-align:right"></td>
+                    <td align="right"><input ng-model="goods.goods_price" type="text" ng-change="goods_totalprice1($index)" style="width:80%; border: 1px solid silver; margin-top:20px; text-align:right"/>
                     <input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" /></td>
                     <td><i class="ion-android-remove-circle" ng-click="itemremove($index)"></i>&nbsp;</td>
                 </tr>

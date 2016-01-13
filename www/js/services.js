@@ -671,18 +671,43 @@ angular.module('starter.services', [])
 							console.log('리스트 여러개 =>', response.data);
 							for(var i=0; i < response.data.list.length; i++){
 								console.log('data.Id =', response.data.list[i].UserId);
-								if(userid == response.data.list[i].UserId){
+								if(i+1 < response.data.list.length && userid == response.data.list[i].UserId){
 									console.log('same',response.data.list[i]);	
 									return response.data.list[i];
 									break;
+								}else if(i+1 == response.data.list.length && userid != response.data.list[i].UserId){
+									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+									else console.log('저장되어있는 초기값이 없습니다.');
+										var data = {
+											state : 1,
+											basic_Place_Code : 0,
+											basic_Ch_Code : 0,
+											basic_Dn_Sale : 1,
+											basic_Dn_Meaip : 1,
+											basic_Subul_Sale : 1,
+											basic_Subul_Meaip : 1
+										};
+										console.log('확인=>', data);
+										return data;
+								}else{
+									console.log('안뇽');
 								}
 							}
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
 							else console.log('저장되어있는 초기값이 없습니다.');
-							return response.data;
+								var data = {
+									state : 1,
+									basic_Place_Code : 0,
+									basic_Ch_Code : 0,
+									basic_Dn_Sale : 1,
+									basic_Dn_Meaip : 1,
+									basic_Subul_Sale : 1,
+									basic_Subul_Meaip : 1
+								};
+								console.log('확인=>', data);
+								return data;
 						}
-
 					}else{
 						return $q.reject(response.data);
 					}
@@ -738,6 +763,38 @@ angular.module('starter.services', [])
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=insert&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before=N&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before=N';
 				console.log('저장할데이터확인 ->', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, Select_Bank: function(admin_code, userid){
+				console.log("mconfigService and Select_Bank");
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Bank_Card_Select&Mode=Select_Bank';
+				console.log('날릴 데이터확인 ->', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('mconfigService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, Select_Card: function(admin_code, userid){
+				console.log("mconfigService and Select_Card");
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Bank_Card_Select&Mode=Select_Card';
+				console.log('날릴 데이터확인 ->', data);
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('mconfigService', response);
