@@ -94,6 +94,100 @@ angular.module('starter.services', [])
 		ERPiaInfo: ERPiaInfo
 	}
 })
+//////////////////////////////////////////////////////////////		meaip		///////////////////////////////////////////////////////////////////////////
+.factory('dayService', function($http, $q, ERPiaAPI){
+	return{
+		day: function(sdate, edate, admin_code, userid){
+			console.log("sdate=", sdate);
+			console.log("edate=", edate);
+			console.log('er url=', ERPiaAPI.url);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Master&Mode=Select_Date&sDate=' + sdate + '&eDate=' + edate;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('dayService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, meaipChit: function(lino, admin_code, userid){
+			console.log("lino=", lino);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Detail&Mode=&IL_No=' + lino;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('dayService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}
+	};
+})
+
+.factory('meaipMjangService', function($http, ERPiaAPI){
+	return{
+		basicM: function(admin_code, userid){
+			console.log("meaipMjangService and basic");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		}, changoSearch: function(admin_code, userid, chango_code){
+				console.log("meaipMjangService and changoSearch");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + chango_code;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}, cusnameSearch: function(admin_code, userid, cusname){
+				console.log("meaipMjangService and cusnameSearch");
+				var cusname2 = escape(cusname);
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('meaipMjangService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		}
+	};
+})
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .factory('scmInfoService', function($http, ERPiaAPI){
 	var scmInfo = function(kind, BaljuMode, Admin_Code, GerCode, FDate, TDate){
@@ -197,10 +291,9 @@ angular.module('starter.services', [])
 			var data = 'Kind=select_Trade_Detail' + '&Admin_Code=' + Admin_Code + '&Sl_No=' + Sl_No;
 			return $http.get(url + '?' + data)
 				.then(function(response){
-					console.log('readDetail_Service : ', response.data.list[0].G_ea1);
 					if(typeof response.data == 'object'){
 						var tot_Ea = 0;
-						for(var i=0; i<response.data.length; i++){
+						for(var i=0; i<response.data.list.length; i++){
 							tot_Ea += Number(((response.data.list[i].G_ea1)?response.data.list[0].G_ea1:0));
 							tot_Ea += Number(((response.data.list[i].G_ea2)?response.data.list[0].G_ea2:0));
 							tot_Ea += Number(((response.data.list[i].G_ea3)?response.data.list[0].G_ea3:0));
@@ -211,8 +304,9 @@ angular.module('starter.services', [])
 							tot_Ea += Number(((response.data.list[i].G_ea8)?response.data.list[0].G_ea8:0));
 							tot_Ea += Number(((response.data.list[i].G_ea9)?response.data.list[0].G_ea9:0));
 							tot_Ea += Number(((response.data.list[i].G_ea10)?response.data.list[0].G_ea10:0));
-							response.data.list[i].tot_Ea = tot_Ea;
+							response.data.list[i].G_tot_Ea = tot_Ea;
 						}
+						console.log(response.data);
 						return response.data;
 					}else{
 						return $q.reject(response.data);

@@ -90,26 +90,30 @@
         }
     },
     "installed_plugins": {
+        "com.gnustory.kakaolink": {
+            "APP_KEY": "e8aa9b80eb803ab5ca55a22b2d0ff46b",
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
         "com.phonegap.plugins.PushPlugin": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
-        },
-        "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
-        },
-        "org.apache.cordova.inappbrowser": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
-        },
-        "org.apache.cordova.vibration": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
-        },
-        "de.appplant.cordova.plugin.printer": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
         },
         "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "com.ionicframework.myappframe188486"
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "de.appplant.cordova.plugin.printer": {
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "org.apache.cordova.vibration": {
+            "PACKAGE_NAME": "erpia.lhk.test"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "erpia.lhk.test"
         }
     },
     "dependent_plugins": {}

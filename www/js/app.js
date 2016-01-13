@@ -3,21 +3,21 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
- .constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ // 	, toast:'N'
+ // })
 
-// 실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-// 	, toast:'Y'
-// })
+//실제 사용시
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, toast:'Y'
+})
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
@@ -29,7 +29,12 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		if(window.StatusBar) {
 			StatusBar.styleDefault();
 		}
-
+		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
+		    // alert("Successfully registered token " + data.token);
+		    console.log('Ionic Push: Got token ', data.token, data.platform);
+		    $rootScope.token = data.token;
+		    //디바이스 토큰 값 받는곳
+		});
 		//★push regist
 		console.log('Ionic Push: Registering user');
 		var user = $ionicUser.get();
@@ -82,13 +87,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 				}
 			}
 		});
-
-		$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-		    // alert("Successfully registered token " + data.token);
-		    console.log('Ionic Push: Got token ', data.token, data.platform);
-		    $rootScope.token = data.token;
-		    //디바이스 토큰 값 받는곳
-		});
 	});
 	$rootScope.goHome = function(userType){
 		$ionicHistory.clearCache();
@@ -98,6 +96,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			case 'ERPia': location.href = '#/app/slidingtab'; break;
 			case 'SCM' : location.href = '#/app/scmhome'; break;
 			case 'Geust': location.href = '#/app/sample/Main'; break;
+			default : location.href = '#/app/sample/Main'; break;
 		} 
 	}
 	$rootScope.goto_with_clearHistory = function(goto_Href){
@@ -123,17 +122,27 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	// if none of the above states are matched, use this as the fallback
 // 	$urlRouterProvider.otherwise('/app/slidingtab');
 // });
+// device token(iPhone6 plus) : 1d1070d82459a34181921255227fca4d55d87692f68e498e6e0d1e5d953a8abb
 
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		// api_key:'8d60e2043f9eb247083a7479d1865a5020c9478458051c06',		// public key 개발테스트시 
 		// dev_push: true // 개발테스트시
+		api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150', 	// private key 실적용시
 		dev_push: false // 실적용시
 	});
 }])
-
+.config(function($cordovaInAppBrowserProvider) {
+	var defaultOptions = {
+		location: 'no',
+		clearcache: 'no',
+		toolbar: 'no'
+	};
+	document.addEventListener(function () {
+		$cordovaInAppBrowserProvider.setDefaultOptions(options)
+	}, false);
+})
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
 	
@@ -333,7 +342,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		views : {
 			'menuContent' : {
 				templateUrl : 'config/notice.html',
-				controller : 'configCtrl_Info'
+				controller : 'configCtrl_Notice'
 			}
 		}
 	})
@@ -341,8 +350,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/config/custom',
 		views : {
 			'menuContent' : {
-				templateUrl : 'config/custom.html',
-				controller : 'configCtrl_Info'
+				templateUrl : 'config/custom.html'
 			}
 		}
 	})
@@ -382,16 +390,54 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			}
 		}
 	})
+	.state('app.ERPiaHome', {
+		url : '/ERPiaHome',
+		views : {
+			'menuContent' : {
+				templateUrl : 'side/ERPiaHome.html',
+				controller : 'ERPiaHomeCtrl'
+			}
+		}
+	})
 	////////////////////////////////sample///////////////////////////////////
 	.state('app.chart_test', {
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
-				templateUrl : 'test/chart_test.html',
-				controller : 'testCtrl'
+				templateUrl : 'test/meaip_test.html',
+				controller : 'chartTestCtrl'
 			}
 		}
 	})
+	/*전표조회*/
+	.state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipChit.html',
+          controller: 'chartTestCtrl'
+        }
+      }
+    })
+    /*전표조회*/
+	.state('app.meaipInsert', {
+      url: '/meaipInsert',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipInsert_basic.html',
+          controller: 'meaipInsertCtrl'
+        }
+      }
+    })
+    .state('app.pushTest', {
+    	url: '/pushTest',
+    	views:{
+    		'menuContent': {
+    			templateUrl: 'test/pushTesh.html',
+    			controller: 'PushCtrl'
+    		}
+    	}
+    })
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
@@ -473,5 +519,5 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/main');
-}); 
+});
 
