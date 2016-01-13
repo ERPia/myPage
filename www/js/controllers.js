@@ -37,7 +37,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal) {
 		$scope.loginModal = modal;
 	});
-
+	//수정중
 	$ionicModal.fromTemplateUrl('side/agreement.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -185,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'Normal': userType = 'N'; break;
 			}
 			if(ERPiaAPI.toast == 'Y'){
-				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd));
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
@@ -193,16 +193,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.UserId = '1111';
 						$scope.loginData.Pwd = '1234';
 					break;
+					// case 'ERPia':
+					// 	$scope.loginData.Admin_Code = 'onz';
+					// 	$scope.loginData.UserId = 'lhk';
+					// 	$scope.loginData.Pwd = 'alsdud0125!';
+					// break;
 					case 'ERPia':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = 'lhk';
+						$scope.loginData.Admin_Code = 'lhktest';
+						$scope.loginData.UserId = 'lhktest';
 						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
-					/*case 'ERPia':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = 'lhk';
-						$scope.loginData.Pwd = 'alsdud0125!';
-					break;*/
 				}
 			}
 		}
@@ -213,7 +213,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		// }
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
-			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
@@ -241,7 +241,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			});
 		}else if ($rootScope.userType == 'ERPia'){
 			//ERPia 로그인
-			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
@@ -352,7 +352,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				else alert('comInfo error');
 			});
 		}else if($rootScope.userType == 'Normal'){
-			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				if(comInfo.data.list[0].result == '0'){ 
 					$scope.loginData.UserId = comInfo.data.list[0].G_ID;
@@ -467,6 +467,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 })
 
+.controller('agreeCtrl', function($scope){
+
+})
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
 	, tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
@@ -710,8 +713,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
 	else $scope.autoLogin = false;
 	$scope.autoLogin_YN = function(check){
-		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
-		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
+		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y')
+		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'N')
 	}
 })
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
