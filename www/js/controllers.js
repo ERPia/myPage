@@ -457,13 +457,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.doLogin($scope.loginData.Admin_Code, $scope.loginData.loginType, $scope.loginData.User_Id, $scope.loginData.User_PW, $scope.loginData.autologin_YN);
 			}
 		})
-		Ionic.io();
-
-		var push = new Ionic.Push({});
-
-		push.register(function(token){
-			alert(token.token);
-		})
 	}, false);
 })
 
