@@ -37,7 +37,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal) {
 		$scope.loginModal = modal;
 	});
-
+	//수정중
 	$ionicModal.fromTemplateUrl('side/agreement.html',{
 		scope : $scope
 	}).then(function(modal){
@@ -124,7 +124,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					};
 		    	}
 		    },function(){
-				alert('pushUserCheck fail')	
+				// alert('pushUserCheck fail')	
 			});
 		};
 
@@ -134,7 +134,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    	console.log(pushInfo)
 		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
-				alert('pushUserRegist fail')	
+				// alert('pushUserRegist fail')	
 			});
 		};
 		$scope.pushUserCheck();
@@ -185,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'Normal': userType = 'N'; break;
 			}
 			if(ERPiaAPI.toast == 'Y'){
-				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd));
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
@@ -213,7 +213,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		// }
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
-			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
@@ -241,7 +241,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			});
 		}else if ($rootScope.userType == 'ERPia'){
 			//ERPia 로그인
-			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
@@ -352,7 +352,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				else alert('comInfo error');
 			});
 		}else if($rootScope.userType == 'Normal'){
-			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
+			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				if(comInfo.data.list[0].result == '0'){ 
 					$scope.loginData.UserId = comInfo.data.list[0].G_ID;
@@ -432,11 +432,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.click_home = function(){
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
-	}
-	// $scope.openInAppBrowser = function(inAppUrl){
-	// 	$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
-	// }
-	
+	}	
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -467,6 +463,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 })
 
+.controller('agreeCtrl', function($scope){
+
+})
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
 	, tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
@@ -710,8 +709,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
 	else $scope.autoLogin = false;
 	$scope.autoLogin_YN = function(check){
-		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
-		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
+		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y')
+		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'N')
 	}
 })
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
@@ -1930,62 +1929,3 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
     }
 })
-.controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading){
-	// Wait for device API libraries to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    // device APIs are available
-    //
-    function onDeviceReady() {
-         var ref = window.open('http://www.erpia.net', '_blank', 'location=yes');
-         ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
-         ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
-         ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-         ref.addEventListener('exit', function(event) { alert(event.type); });
-         ref.show();
-    }
-})
-// .controller('PushCtrl', function($scope, $rootScope, $ionicUser, $ionicPush) {
-// 	$rootScope.$on('$cordovaPush:tokenReceived', function(event, data) {
-// 		alert("Successfully registered token " + data.token);
-// 		console.log('Ionic Push: Got token ', data.token, data.platform);
-// 		$scope.token = data.token;
-// 	});
-// 	$scope.identifyUser = function() {
-// 		var user = $ionicUser.get();
-// 		if(!user.user_id) {
-// 			// Set your user_id here, or generate a random one.
-// 			user.user_id = $ionicUser.generateGUID();
-// 		};
-	 
-// 		// Metadata
-// 		angular.extend(user, {
-// 			name: 'Simon',
-// 			bio: 'Author of Devdactic'
-// 		});
-	 
-// 		// Identify your user with the Ionic User Service
-// 		$ionicUser.identify(user).then(function(){
-// 			$scope.identified = true;
-// 			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-// 		});
-// 	};
-
-// 	// Registers a device for push notifications
-// 	$scope.pushRegister = function() {
-// 		console.log('Ionic Push: Registering user');
-
-// 		// Register with the Ionic Push service.  All parameters are optional.
-// 		$ionicPush.register({
-// 			canShowAlert: true, //Can pushes show an alert on your screen?
-// 			canSetBadge: true, //Can pushes update app icon badges?
-// 			canPlaySound: true, //Can notifications play a sound?
-// 			canRunActionsOnWake: true, //Can run actions outside the app,
-// 			onNotification: function(notification) {
-// 				// Handle new push notifications here
-// 				return true;
-// 			}
-// 		});
-// 	};
-// })

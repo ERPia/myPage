@@ -546,6 +546,7 @@ angular.module('starter.services', [])
 		}
 	}
 })
+<<<<<<< HEAD
 .factory('BoardService', function($http, $q, ERPiaAPI){
 	// return{
 		//http://erpia2.godohosting.com/erpia_update/img
@@ -653,6 +654,8 @@ angular.module('starter.services', [])
 		}
 	}
 })
+=======
+>>>>>>> refs/remotes/origin/master
 .factory('TestService', function($http, ERPiaAPI){
 	var testInfo = function(Admin_Code, UserId, kind, Mode, basic_Subul_Sale_Before, basic_Subul_Meaip_Before){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';

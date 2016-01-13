@@ -3,7 +3,11 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
+<<<<<<< HEAD
 angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+=======
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+>>>>>>> refs/remotes/origin/master
 	, 'starter.services'])
 
  // .constant('ERPiaAPI',{
@@ -127,9 +131,15 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
+<<<<<<< HEAD
 		// api_key:'8d60e2043f9eb247083a7479d1865a5020c9478458051c06',		// public key 개발테스트시 
 		// dev_push: true // 개발테스트시
 		api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150', 	// private key 실적용시
+=======
+		// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+		// dev_push: true // 개발테스트시
+		api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+>>>>>>> refs/remotes/origin/master
 		dev_push: false // 실적용시
 	});
 }])
@@ -282,6 +292,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		url : '/push',
 		views : {
 			'menuContent' : {
+<<<<<<< HEAD
 				templateUrl : 'erpia_push/push.html',
 				controller : 'PushCtrl'
 			}
@@ -294,6 +305,9 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 			'menuContent' : {
 				templateUrl : 'erpia_push/push-detail.html',
 				controller : 'PushDetailCtrl'
+=======
+				templateUrl : 'erpia_push/push.html'
+>>>>>>> refs/remotes/origin/master
 			}
 		}
 	})
@@ -428,6 +442,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
           controller: 'meaipInsertCtrl'
         }
       }
+<<<<<<< HEAD
     })
     .state('app.pushTest', {
     	url: '/pushTest',
@@ -438,6 +453,9 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
     		}
     	}
     })
+=======
+    });
+>>>>>>> refs/remotes/origin/master
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

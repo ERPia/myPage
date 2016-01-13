@@ -3,6 +3,10 @@ module.exports = [
     {
         "file": "plugins/com.gnustory.kakaolink/www/js/KakaoLinkPlugin.js",
         "id": "com.gnustory.kakaolink.KakaoLinkPlugin",
+<<<<<<< HEAD
+=======
+        "pluginId": "com.gnustory.kakaolink",
+>>>>>>> refs/remotes/origin/master
         "clobbers": [
             "KakaoLinkPlugin"
         ]
@@ -10,6 +14,7 @@ module.exports = [
     {
         "file": "plugins/com.phonegap.plugins.PushPlugin/www/PushNotification.js",
         "id": "com.phonegap.plugins.PushPlugin.PushNotification",
+        "pluginId": "com.phonegap.plugins.PushPlugin",
         "clobbers": [
             "PushNotification"
         ]
@@ -17,22 +22,35 @@ module.exports = [
     {
         "file": "plugins/cordova-plugin-whitelist/whitelist.js",
         "id": "cordova-plugin-whitelist.whitelist",
+        "pluginId": "cordova-plugin-whitelist",
         "runs": true
     },
     {
         "file": "plugins/cordova-plugin-x-toast/www/Toast.js",
         "id": "cordova-plugin-x-toast.Toast",
+<<<<<<< HEAD
         "clobbers": [
             "window.plugins.toast"
+=======
+        "pluginId": "cordova-plugin-x-toast",
+        "clobbers": [
+            "device"
+>>>>>>> refs/remotes/origin/master
         ]
     },
     {
         "file": "plugins/cordova-plugin-x-toast/test/tests.js",
+<<<<<<< HEAD
         "id": "cordova-plugin-x-toast.tests"
+=======
+        "id": "cordova-plugin-x-toast.tests",
+        "pluginId": "cordova-plugin-x-toast"
+>>>>>>> refs/remotes/origin/master
     },
     {
         "file": "plugins/de.appplant.cordova.plugin.printer/www/printer.js",
         "id": "de.appplant.cordova.plugin.printer.Printer",
+        "pluginId": "de.appplant.cordova.plugin.printer",
         "clobbers": [
             "plugin.printer",
             "cordova.plugins.printer"
@@ -41,6 +59,10 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "id": "org.apache.cordova.device.device",
+<<<<<<< HEAD
+=======
+        "pluginId": "org.apache.cordova.device",
+>>>>>>> refs/remotes/origin/master
         "clobbers": [
             "device"
         ]
@@ -48,6 +70,10 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.vibration/www/vibration.js",
         "id": "org.apache.cordova.vibration.notification",
+<<<<<<< HEAD
+=======
+        "pluginId": "org.apache.cordova.vibration",
+>>>>>>> refs/remotes/origin/master
         "merges": [
             "navigator.notification",
             "navigator"
@@ -56,6 +82,10 @@ module.exports = [
     {
         "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
         "id": "cordova-plugin-inappbrowser.inappbrowser",
+<<<<<<< HEAD
+=======
+        "pluginId": "cordova-plugin-inappbrowser",
+>>>>>>> refs/remotes/origin/master
         "clobbers": [
             "cordova.InAppBrowser.open",
             "window.open"

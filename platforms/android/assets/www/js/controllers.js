@@ -105,6 +105,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		var PushInsertCheck = "";
 		var PushInsertCheck2 = "";
 
+		$scope.pushUserRegist = function() {
+			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
+		    .then(function(pushInfo){
+		    	console.log(pushInfo)
+		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
+		    },function(){
+				console.log('pushUserRegist fail');
+			});
+		};
 		$scope.pushUserCheck = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
 		    .then(function(pushInfo){
@@ -127,6 +136,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				alert('pushUserCheck fail')	
 			});
 		};
+<<<<<<< HEAD
 
 		$scope.pushUserRegist = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
@@ -137,8 +147,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				alert('pushUserRegist fail')	
 			});
 		};
+=======
+>>>>>>> refs/remotes/origin/master
 		$scope.pushUserCheck();
-		// };
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
@@ -185,7 +196,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				case 'Normal': userType = 'N'; break;
 			}
 			if(ERPiaAPI.toast == 'Y'){
+<<<<<<< HEAD
 				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
+=======
+				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd)
+>>>>>>> refs/remotes/origin/master
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
@@ -194,23 +209,36 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					// case 'ERPia':
+<<<<<<< HEAD
 					// 	$scope.loginData.Admin_Code = 'onz';
+=======
+					// 	$scope.loginData.Admin_Code = 'onz'
+>>>>>>> refs/remotes/origin/master
 					// 	$scope.loginData.UserId = 'lhk';
 					// 	$scope.loginData.Pwd = 'alsdud0125!';
 					// break;
 					case 'ERPia':
+<<<<<<< HEAD
 						$scope.loginData.Admin_Code = 'pikachu';
 						$scope.loginData.UserId = 'pikachu';
 						$scope.loginData.Pwd = '1234';
+=======
+						$scope.loginData.Admin_Code = 'lhktest';
+						$scope.loginData.UserId = 'lhktest';
+						$scope.loginData.Pwd = 'alsdud0125!';
+>>>>>>> refs/remotes/origin/master
 					break;
 				}
 			}
 		}
+<<<<<<< HEAD
 		// console.log('autoLogin : ', $rootScope.autologin_YN);
 		// if($rootScope.autologin_YN) {
 		// 	var userType = '';
 			
 		// }
+=======
+>>>>>>> refs/remotes/origin/master
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.loginData.Pwd)
@@ -247,6 +275,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				if(comInfo.data.list[0].Result=='1'){
 					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
 					$scope.ion_login = "ion-power";
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/master
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name;
 					$scope.userData.Com_Code = comInfo.data.list[0].Com_Code;
 					$scope.userData.package = comInfo.data.list[0].Pack_Name;
@@ -403,8 +435,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
-			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
-			alert('약관에 동의해!!');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해 주시기 바랍니다.', 'long', 'center');
+			alert('약관에 동의해 주시기 바랍니다.');
 		}
 	}
 
@@ -433,10 +465,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
+<<<<<<< HEAD
 	// $scope.openInAppBrowser = function(inAppUrl){
 	// 	$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
 	// }
 	
+=======
+>>>>>>> refs/remotes/origin/master
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -457,6 +492,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.doLogin($scope.loginData.Admin_Code, $scope.loginData.loginType, $scope.loginData.User_Id, $scope.loginData.User_PW, $scope.loginData.autologin_YN);
 			}
 		})
+<<<<<<< HEAD
 		Ionic.io();
 
 		var push = new Ionic.Push({});
@@ -464,6 +500,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		push.register(function(token){
 			alert(token.token);
 		})
+=======
+>>>>>>> refs/remotes/origin/master
 	}, false);
 })
 
@@ -714,6 +752,85 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
 	}
 })
+<<<<<<< HEAD
+=======
+.controller("IndexCtrl", function($rootScope, $scope, $timeout, $http, $sce, IndexService, statisticService) {
+	$scope.myStyle = {
+	    "width" : "100%",
+	    "height" : "100%"
+	};
+	$scope.dashBoard = {};
+	var indexList = [];
+	// 날짜
+	var d= new Date();
+	var month = d.getMonth() + 1;
+	var day = d.getDate();
+	//일주일전
+	var w = new Date(Date.parse(d) -7 * 1000 * 60 * 60 * 24)
+	var wMonth = w.getMonth() + 1;
+	var wDay = w.getDate();
+
+	var nowday = d.getFullYear() + '-' + (month<10 ? '0':'') + month + '-' + (day<10 ? '0' : '') + day;
+	var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
+
+	IndexService.dashBoard('erpia_dashBoard', $scope.loginData.Admin_Code, aWeekAgo, nowday)
+	.then(function(processInfo){
+		$scope.dashBoard.E_NewOrder = processInfo.data.list[0].CNT_JuMun_New;
+		$scope.dashBoard.E_BsComplete = processInfo.data.list[0].CNT_BS_NO;
+		$scope.dashBoard.E_InputMno = processInfo.data.list[0].CNT_BS_No_M_No;
+		$scope.dashBoard.E_CgComplete = processInfo.data.list[0].CNT_BS_Before_ChulGo;
+		$scope.dashBoard.E_RegistMno = processInfo.data.list[0].CNT_BS_After_ChulGo_No_Upload;
+	},
+	function(){
+		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('IndexService Error', 'long', 'center');
+		else alert('IndexService Error');
+	});
+
+	// $scope.dashBoard.G_Expire_Date = $scope.userData.management_day;
+	// $scope.dashBoard.G_Expire_Days = $rootScope.ComInfo.G_Expire_Days;
+	// $scope.dashBoard.CNT_Tax_No_Read = $rootScope.ComInfo.CNT_Tax_No_Read;
+
+	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
+	.then(function(data){
+		$scope.tabs = data;
+	})
+	$scope.onSlideMove = function(data) {
+		if(indexList.indexOf(data.index) < 0){
+			indexList.push(data.index);
+			if (data.index > 0){
+				statisticService.chart('myPage_Config_Stat', 'select_Chart', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, data.index)
+				.then(function(response){
+					var strChartUrl = 'http://www.erpia.net/psm/02/html/Graph.asp?Admin_Code=' + $scope.loginData.Admin_Code;
+					strChartUrl += '&swm_gu=1&kind=chart' + response.list[0].idx;
+					switch(data.index){
+						case 1: $scope.chart_url1 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 2: $scope.chart_url2 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 3: $scope.chart_url3 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 4: $scope.chart_url5 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 5: $scope.chart_url6 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 6: $scope.chart_url7 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 7: $scope.chart_url8 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 8: $scope.chart_url9 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 9: $scope.chart_url10 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 10: $scope.chart_url11 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 11: $scope.chart_url12 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 12: $scope.chart_url13 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 13: $scope.chart_url14 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 14: $scope.chart_url15 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 15: $scope.chart_url16 = $sce.trustAsResourceUrl(strChartUrl); break;
+						case 16: $scope.chart_url17 = $sce.trustAsResourceUrl(strChartUrl); break;
+						default : 
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('chart Error', 'long', 'center');
+							else alert('chart Error'); 
+						break;
+					}
+				})
+			}
+		}
+	};
+
+})
+>>>>>>> refs/remotes/origin/master
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
 	$scope.ScmBaseData = function() {
 		if($rootScope.loginState == "S") {
@@ -872,6 +989,51 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.load_scm_chart();   
 })
 
+<<<<<<< HEAD
+=======
+// .controller('ERPiaUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
+// 	console.log($rootScope.loginState); 
+// 	// Perform the login action when the user submits the login form
+	// $scope.ERPiaBaseData = function() {
+		 
+	// 	$scope.Kind = "scm_login";
+	// 	$scope.loginData.Admin_Code = $scope.loginData.Admin_Code;
+	// 	$scope.loginData.UserId = $scope.loginData.UserId;
+	// 	$scope.G_Pass = $scope.loginData.Pwd;
+	// 	$scope.SCM_Use_YN = $scope.loginData.SCM_Use_YN
+	// 	$scope.Auto_Login = $scope.loginData.Auto_Login
+
+		// if($rootScope.loginState == "E") {
+		// 	$http({
+		// 		method: 'POST',
+		// 		url: 'https://www.erpia.net/include/JSon_Proc_MyPage_Scm.asp',
+		// 		data: 	"kind=" + "erpia_dashBoard"
+		// 				+ "&Admin_Code=" + $scope.loginData.Admin_Code
+		// 				+ "&sDate=" + "2015-07-01"
+		// 				+ "&eDate=" + "2015-09-31",
+		// 		headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=euc-kr'} //헤더
+		// 	})
+		// 	  .success(function (response) {
+		// 		console.log(response);
+		// 		$scope.E_NewOrder = response.list[0].Cnt
+		// 		$scope.E_BsComplete = response.list[1].Cnt
+		// 		$scope.E_InputMno = response.list[2].Cnt
+		// 		$scope.E_CgComplete = response.list[3].Cnt
+		// 		$scope.E_RegistMno = response.list[4].Cnt
+
+		// 		$scope.E_TOT = $scope.E_NewOrder + $scope.E_BsComplete + $scope.E_InputMno + $scope.E_CgComplete + $scope.E_RegistMno
+		// 	})
+		// 	  .error(function(data, status, headers, config){
+		// 		console.log("Fail");
+		// 	})
+		// }else{
+		// 	// alert(response.list[0].ResultMsg);
+		// };
+	// };
+	// $scope.ERPiaBaseData();
+// })
+
+>>>>>>> refs/remotes/origin/master
 .controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
 	console.log("MainCtrl");
 	
@@ -1069,7 +1231,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	};
 })
 
+<<<<<<< HEAD
 .controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, ERPiaAPI, BoardService){
+=======
+.controller('BoardMainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, ERPiaAPI){
+>>>>>>> refs/remotes/origin/master
 	console.log("BoardMainCtrl");
 
 	$rootScope.useBoardCtrl = "Y";
@@ -1236,10 +1402,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.settings = {
 		enableFriends : true
 	}
-})
-
-.controller('LoginCtrl', function($scope){
-
 })
 .controller('chartCtrl', function($scope, $rootScope, statisticService){
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
@@ -1468,6 +1630,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
         })
      }
 })
+<<<<<<< HEAD
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService, IndexService) {
 	$scope.myStyle = {
 	    "width" : "100%",
@@ -1503,6 +1666,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	$scope.ERPiaBaseData();
 
+=======
+.controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService) {
+>>>>>>> refs/remotes/origin/master
 	var request = null;
 	var indexList = [];
 	$scope.gu = 1;
@@ -1810,6 +1976,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(response){
 				console.log('response', response);
 				$rootScope.kind = 'chart' + response.list[0].idx;
+<<<<<<< HEAD
+=======
+				console.log('chartKind1 : ', $rootScope.kind);
+>>>>>>> refs/remotes/origin/master
 				switch (response.list[0].idx)
 				{
 					case '1' : $scope.kind = titles[1].title; break;
@@ -1829,6 +1999,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case '16' : $scope.kind = titles[15].title; break;
 					case '17' : $scope.kind = titles[16].title; break;
 				}
+<<<<<<< HEAD
+=======
+				console.log('chartKind2 : ', $scope.kind);
+>>>>>>> refs/remotes/origin/master
 				if($scope.kind === "meachul_onoff"){
 					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
 							'<div class="direct-chat">'+
@@ -1847,7 +2021,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 										'<ul class="contacts-list">'+
 											'<li>'+
 												'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
+<<<<<<< HEAD
 												'<table name="tbGrid" class="table table-bordered" style="color:rgb(100, 100, 100); width:100%; font-size:12pt; margin-bottom:10px;">'+
+=======
+												'<table name="tbGrid" class="table table-bordered" style="color:rgb(208, 208, 212); width:100%; font-size:12pt; margin-bottom:10px;">'+
+>>>>>>> refs/remotes/origin/master
 												'</table>'+
 												'<div style="width:100%; text-align:center;">'+
 													'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
@@ -1878,7 +2056,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 										'<ul class="contacts-list">'+
 											'<li>'+
 												'<div name="gridSubject" class="callout callout-info" style="padding:5px; text-align:center;"><font style="color:#000000; font-weight:bold;"></font></div>'+
+<<<<<<< HEAD
 												'<table name="tbGrid" class="table table-bordered" style="color:rgb(100, 100, 100); width:100%; font-size:12pt; margin-bottom:10px;">'+
+=======
+												'<table name="tbGrid" class="table table-bordered" style="color:rgb(208, 208, 212); width:100%; font-size:12pt; margin-bottom:10px;">'+
+>>>>>>> refs/remotes/origin/master
 												'</table>'+
 												'<div style="width:100%; text-align:center;">'+
 													'<button name="btnGridClose" class="btn bg-orange margin">닫기</button>'+
@@ -1929,6 +2111,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			})
 		}
     }
+<<<<<<< HEAD
 })
 .controller('ERPiaHomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading){
 	// Wait for device API libraries to load
@@ -1989,3 +2172,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 // 		});
 // 	};
 // })
+=======
+})
+>>>>>>> refs/remotes/origin/master
