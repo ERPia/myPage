@@ -31,6 +31,9 @@
         },
         "org.apache.cordova.vibration": {
             "PACKAGE_NAME": "com.ERPia.MyPage"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.ERPia.MyPage"
         }
     },
     "dependent_plugins": {}
