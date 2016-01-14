@@ -101,17 +101,6 @@
         "is_top_level": true,
         "variables": {}
     },
-<<<<<<< HEAD
-    "org.apache.cordova.statusbar": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.statusbar"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-=======
->>>>>>> origin/lhk
     "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
