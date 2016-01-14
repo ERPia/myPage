@@ -192,11 +192,12 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
-		}, insertm : function(meaipdata, goodsdata, atc){
+		}, insertm : function(meaipdata, goodsdata, atc, paycardbank){
 				console.log("meaipService and insertm");
 				console.log('매입---------------------->',meaipdata.Admin_Code);
-				console.log('상품---------------------->',goodsdata[0].name);
-				console.log('등등---------------------->',atc);
+/*				console.log('상품---------------------->',goodsdata[0].name);*/
+				console.log('등등2---------------------->',atc);
+				console.log('카드/은행 정보 ->', paycardbank[0].code);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 				return $http.get(url + '?' + data)
