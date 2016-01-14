@@ -119,6 +119,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		//location.href = '#app/config';
 	};
+	$rootScope.rndNum = 0;
 })
 
 // 	// if none of the above states are matched, use this as the fallback

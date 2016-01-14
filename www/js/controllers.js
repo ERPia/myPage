@@ -411,17 +411,25 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.click_cancel = function(){
 		$scope.agreeModal.hide();
 		$scope.init('logout');
-		// $state.go('app.erpia_main');
 	}
 	// $rootScope.CertificationSwitch = 'firstPage';
 	$scope.click_Certification = function(){
 		CertifyService.certify($scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
+		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증번호를 발송했습니다.', 'long', 'center');
+		else alert('인증번호를 발송했습니다.');
 	}
 	$scope.click_responseText = function(){
-		CertifyService.check($scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.SMSData.rspnText)
-		.then(function(response){
-			$scope.certificationModal.hide();
-		})
+		if($rootScope.rndNum == $scope.SMSData.rspnText){
+			CertifyService.check($scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.SMSData.rspnText)
+			.then(function(response){
+				console.log('rspnText : ', response);
+				$scope.certificationModal.hide();
+			})	
+		}else{
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증번호가 일치하지 않습니다.', 'long', 'center');
+			else alert('인증번호가 일치하지 않습니다.');
+			return false;
+		}
 	}
 	$scope.showCheckSano = function(){
 		$scope.check_sano_Modal.show();
@@ -433,10 +441,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
-	$scope.openInAppBrowser = function(inAppUrl){
-		$cordovaInAppBrowser.open(inAppUrl, '_blank', 'location=no', 'clearcache: no', 'toolbar: no')
-	}
-	
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -458,6 +462,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 		})
 	}, false);
+	$scope.close_cert = function(){
+		$scope.certificationModal.hide();
+		$scope.init('logout');
+	}
 })
 
 .controller('agreeCtrl', function($scope){
