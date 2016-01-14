@@ -48,6 +48,13 @@ module.exports = [
             "cordova.InAppBrowser.open",
             "window.open"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "id": "cordova-plugin-statusbar.statusbar",
+        "clobbers": [
+            "window.StatusBar"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -59,7 +66,8 @@ module.exports.metadata =
     "org.apache.cordova.vibration": "0.3.13",
     "cordova-plugin-whitelist": "1.0.0",
     "de.appplant.cordova.plugin.printer": "0.6.2",
-    "cordova-plugin-inappbrowser": "1.1.2-dev"
+    "cordova-plugin-inappbrowser": "1.1.2-dev",
+    "cordova-plugin-statusbar": "2.0.0"
 }
 // BOTTOM OF METADATA
 });

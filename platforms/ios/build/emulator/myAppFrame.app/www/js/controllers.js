@@ -403,8 +403,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.agreeModal.hide();
 			$scope.certificationModal.show();
 		}else{
-			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해!!', 'long', 'center');
-			alert('약관에 동의해!!');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('약관에 동의해 주시기 바랍니다.', 'long', 'center');
+			else alert('약관에 동의해 주시기 바랍니다.');
 		}
 	}
 
