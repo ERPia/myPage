@@ -49,11 +49,8 @@
             <table width="100%">
                 <tr>
                     <td>
-                    &nbsp;<SELECT ng-model='searchde.Mode'>
-                            <option value='Select_GoodsName' selected>상품명</option>
-                            <option value='Select_G_OnCode'>자체코드</option>
-                            <option value='Select_G_Code'>상품코드</option>
-                            <option value='Select_GI_Code'>바코드</option>
+                    &nbsp;<SELECT ng-model='searchde.itemselectMode' >
+                            <option ng-repeat="x in itemSelectMode" value="{{x.id}}" ng-selected="searchde.itemselectMode=={{x.id}}">{{x.name}}</option>
                     </SELECT>&nbsp;&nbsp;
                     </td>
                     <td>
@@ -72,22 +69,24 @@
         
             <table width="100%" style="text-align:center;">
                 <tr bgcolor="#EAEAEA">
-                    <td width="40%">상품명</td>
-                    <td width="15%">수 량</td>
-                    <td width="35%">단 가</td>
-                    <td width="10%">&nbsp;</td>
+                    <td width="10%" style="font-size:12px">번호</td>
+                    <td width="40%" style="font-size:12px">상품명</td>
+                    <td width="10%" style="font-size:12px">수 량</td>
+                    <td width="40%" style="font-size:12px" colspan='2'>단 가</td>
+                    
                 </tr>
                 <tr>
-                    <td colspan="4"><hr></td>
+                    <td colspan="5"><hr></td>
                 </tr>
-                <tr ng-repeat="goods in goodsaddlists">
-                    <td style="vertical-align:middle">{{goodsaddlists[$index].goods_number}}.{{goodsaddlists[$index].name
-                    }}</td>
-                    <td><input type="number" min="1" max="999" n
-                    g-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)" style="border: 1px solid silver; margin-top:20px; text-align:right"></td>
-                    <td align="right"><input ng-model="goods.goods_price" type="text" ng-change="goods_totalprice1($index)" style="width:80%; border: 1px solid silver; margin-top:20px; text-align:right"/>
-                    <input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" /></td>
-                    <td><i class="ion-android-remove-circle" ng-click="itemremove($index)"></i>&nbsp;</td>
+                <tr ng-repeat="goods in goodsresult">
+                    <td style="vertical-align:middle; width:10%">{{goodsresult[$index].goods_number}}.</td>
+                    <td style="vertical-align:middle; width:30%" align="left">{{goods.G_Name}}
+                    </td>
+                    <td style="width:20%">
+                    <input type="number" min="1" max="999" ng-model="goods.goods_count" required ng-bind-html="goods_totalprice1($index)"style="border: 1px solid silver; width:80%"></td>
+                    <td align="right" style="width:28%; padding-left:1%; padding-right:1%"><input ng-model="goods.goods_price" type="number" ng-change="goods_totalprice1($index)" style="width:100%; border: 1px solid silver; text-align:right"/>
+                    </td>
+                    <td style="width:10%"><i class="ion-android-remove-circle" ng-click="itemremove($index)" style="vertical-align:middle;"></i>&nbsp;</td><input ng-model="goodsresult[$index].goods_totalprice" ng-bind-html="goods_totalsumprice()" type="hidden" />
                 </tr>
             </table>
         </div>
@@ -104,10 +103,18 @@
 
         <div class="list list-inset" align="center">
             <hr>
-            <button class="button button-balanced" style="margin-top:40px" ng-click='Meachulnextbtn()'>다음</button>
+            <button class="button button-balanced" ng-click='Meachulnextbtn()'>다음</button>
+            <br><br>
         </div>
     </div>
 
     
   </ion-content>
+   <ion-footer-bar align-title="left" class="bar-stable" >
+    <div style="width:20%; BORDER-RIGHT: #BDBDBD 2px solid;"><center>현재<br>총 가격</center></div>
+    <div style="width:5%;">&nbsp;</div>
+    <div style="width:75%">     
+    <input ng-model="etc.totalsumprices" type="hidden" />
+    <center>최종가격 :{{etc.totalsumprices | number:0}} 원(vat 10%포함)<br> 최종가격 :{{totalnotexsumprices | number:0}} 원(vat 10% 미포함)</center></div>
+  </ion-footer-bar>
 </ion-view>
