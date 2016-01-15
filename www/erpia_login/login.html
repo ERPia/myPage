@@ -26,18 +26,18 @@
 
 
 					<div name='selectUserType' ng-switch-when='User' >
-						<label class="item item-input psm_login_pci1"> 
+						<!-- <label class="item item-input psm_login_pci1"> 
 							<span class="input-label psm_login_pci3">업체코드</span>
 							<input type="text" ng-model="loginData.Admin_Code" style="color:#fff; background:#331632; padding:0 10px">
 						</label>
 						<label class="item item-input psm_login_pci2"> 
 							<span class="input-label psm_login_pci3">아이디</span>
 							<input type="text" ng-model="loginData.UserId" style="color:#fff; background:#331632; padding:0 10px">
-						</label> <!-- #22242c // #6f747a-->
+						</label>
 						<label class="item item-input psm_login_pci2"> 
 							<span class="input-label psm_login_pci3">비밀번호</span>
 							<input type="password" ng-model="loginData.Pwd" style="color:#fff; background:#331632; padding:0 10px">
-						</label>
+						</label> -->
 		 
 						<!-- <div>
 					    	<label class="checkbox c"> 
@@ -58,9 +58,25 @@
 								</div>
 					     </label>
 						</div> -->
-						<label class="item psm_login_pci4">
+						<div class="list list-inset" style="margin:0px 10% 0px 10%">
+							<label class="item item-input">
+								<input style="font-size:100%" type="text" ng-model="loginData.Admin_Code" placeholder="업체코드">
+							</label>
+							<label class="item item-input">
+								<input style="font-size:100%" type="text" ng-model="loginData.UserId" placeholder="아이디">
+							</label>
+							<label class="item item-input">
+								<input style="font-size:100%" type="password" ng-model="loginData.Pwd" placeholder="비밀번호">
+							</label>
+							<div class="item item-text-wrap">
+								<input type="checkbox" id="loginData.chkAutoLogin" class="checkbox-style" ng-model='loginData.chkAutoLogin'/>
+								<label for="loginData.chkAutoLogin" style="font-size:100%;">자동로그인</label>
+							</div>
+							<button class="button button-block button-balanced" type="submit">Log in</button>
+						</div>
+						<!-- <label class="item psm_login_pci4">
 							<button class="button button-block psm_login_ink" type="submit">Log in</button> 
-						</label>
+						</label> -->
 					</div>
 				</div>
 			</div>

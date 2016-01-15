@@ -85,7 +85,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			disableBack: true
 		});
 		$scope.loginModal.hide();
-		console.log('hideModal', $scope.loginModal);
 		if($rootScope.mobile_Certify_YN == 'Y'){
 			if($rootScope.loginState == "S"){
 		        $state.go("app.erpia_scmhome");
@@ -108,8 +107,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.pushUserCheck = function() {
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SELECT_InsertCheck', $rootScope.UserKey, $rootScope.token, '', '', '', '')
 		    .then(function(pushInfo){
-		    	console.log('pushinfo::', pushInfo);
-		    	
 		    	if(pushInfo.data.list.length != 0){
 		    		PushInsertCheck = pushInfo.data.list[0].token;
 		    	}
@@ -132,18 +129,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			pushInfoService.pushInfo($scope.loginData.Admin_Code, $scope.loginData.UserId, 'Mobile_Push_Token', 'SAVE', $rootScope.UserKey, $rootScope.token, $rootScope.loginState, 'A', '', '')
 		    .then(function(pushInfo){
 		    	console.log(pushInfo)
-		    	// console.log('pushUserRegist success ::[' + $rootScope.token + ']');
 		    },function(){
 				alert('pushUserRegist fail')	
 			});
 		};
 		$scope.pushUserCheck();
-		// };
 	};
 
 	$rootScope.loginMenu = "selectUser";	//사용자 선택화면
 	$scope.selectType = function(userType){
-		console.log('userType', userType);
 		switch(userType){
 			case 'ERPia': $rootScope.loginMenu = 'User'; $rootScope.userType = 'ERPia'; $scope.footer_menu = 'U'; break;
 			case 'SCM': $rootScope.loginMenu = 'User'; $rootScope.userType = 'SCM'; $scope.footer_menu = 'U'; break;
@@ -209,11 +203,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				}
 			}
 		}
-		// console.log('autoLogin : ', $rootScope.autologin_YN);
-		// if($rootScope.autologin_YN) {
-		// 	var userType = '';
-			
-		// }
 		//SCM 로그인
 		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
@@ -250,7 +239,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(comInfo){
 				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
-					$scope.loginHTML = "로그아웃"; //<br>(" + comInfo.data.list[0].Com_Code + ")";
+					$scope.loginHTML = "로그아웃";
 					$scope.ion_login = "ion-power";
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name;
 					$scope.userData.Com_Code = comInfo.data.list[0].Com_Code;
