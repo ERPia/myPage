@@ -1683,6 +1683,8 @@ $scope.eDate1= new Date();
 $scope.reqparams.sDate= new Date();
 $scope.reqparams.eDate= new Date();
 
+
+
 $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
    $scope.lastsclick = function(index) {
                $scope.lasts=index+5; //더보기 클릭시 $index+5
@@ -1716,7 +1718,7 @@ $scope.mydate1=function(sdate1){
     $scope.reqparams.sDate = yy + "-" + mm + "-" + dd;
 
     $scope.sDate1=new Date(sdate1);
- 	console.log('선택날짜:'+$scope.reqparams.sDate + $scope.sDate1);
+ 	console.log('선택날짜:'+$scope.reqparams.sDate);
 };
 
 $scope.mydate2=function(edate1){
@@ -1739,7 +1741,7 @@ $scope.mydate2=function(edate1){
 
 
     $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
-    $scope.sDate1=new Date(edate1);
+    $scope.eDate1=new Date(edate1);
  	console.log('선택날짜2:'+$scope.reqparams.eDate);
 };
 /*$ionicModal.fromTemplateUrl('erpia_meachul/datemodal.html', 
@@ -1770,19 +1772,25 @@ $scope.mydate2=function(edate1){
 /**
      *------------------------------------------------------------------
      */
+$scope.mydate1($scope.sDate1);
+$scope.mydate2($scope.eDate1);
 
-
-
+$scope.junpyolists=[];
 
 
 /*	$scope.MCDateSearchDefault = function() {*/
-		console.log($scope.reqparams);
+		console.log($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate);
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
     	console.log(ERPiaMCSearchData.data);
+
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
-    	for(var i; i<$scope.junpyolists.length; i++){
+    	console.log($scope.junpyolists);
+    	if($scope.junpyolists==undefined){	
+		}else{
+			for(var i; i<$scope.junpyolists.length; i++){
     		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
+    		}
 		}
     	},function(){
     		alert('Request fail')	
@@ -1802,9 +1810,11 @@ $scope.mydate2=function(edate1){
 			meachulEwoljaneck:0
 		};
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
-
-    	for(var i; i<$scope.junpyolists.length; i++){
+    	if($scope.junpyolists==undefined){	
+		}else{
+			for(var i; i<$scope.junpyolists.length; i++){
     		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
+    		}
 		}
     	},function(){
     		alert('Request fail')	
@@ -1819,7 +1829,7 @@ $scope.mydate2=function(edate1){
       	$scope.reqparams.Mode='Select_Date';
 		$scope.reqparams.sDate=$scope.dateMinus(agoday);
      	$scope.reqparams.eDate=$scope.dateMinus(0);
-		console.log($scope.reqparams);
+		console.log($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate);
 		ERPiaMCSearchService.ERPiaMCSearchData($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams.Kind, $scope.reqparams.Mode, $scope.reqparams.Sl_No, $scope.reqparams.sDate, $scope.reqparams.eDate)
 		.then(function(ERPiaMCSearchData){
 		$scope.giganhyunhwang={ //매출기간현황 초기화
@@ -1833,9 +1843,11 @@ $scope.mydate2=function(edate1){
 		$scope.sDate1=new Date($scope.reqparams.sDate);
 		$scope.eDate1=new Date($scope.reqparams.eDate);
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
-    		
-		for(var i; i<$scope.junpyolists.length; i++){
+    	if($scope.junpyolists==undefined){	
+		}else{
+			for(var i; i<$scope.junpyolists.length; i++){
     		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
+    		}
 		}
     	},function(){
     		alert('Request fail')	
@@ -2358,27 +2370,7 @@ $scope.meachulpage2modal.hide();
 
 
 
-/*상품별 가격합계 구하기*/
-  $scope.goods_totalprice1=function(indexnum){
-      $scope.goodsresult[indexnum].goods_totalprice=parseInt($scope.goodsresult[indexnum].goods_price) * parseInt($scope.goodsresult[indexnum].goods_count);
-      $scope.goodsresult[indexnum].goods_panmedanga=parseInt($scope.goodsresult[indexnum].goods_price)*0.9;
-  };
 
-
-  
-  /*상품 종합 합계 가격 구하기*/
-   $scope.goods_totalsumprice=function(){
-       $scope.totalpr=0;//종합가격 초기화(세금포함가)
-       $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)
-      for(var count=0;count<$scope.goodsresult.length;count++){
-        $scope.totalpr += parseInt($scope.goodsresult[count].goods_totalprice);
-        $scope.totalnotexpr += parseInt($scope.goodsresult[count].goods_panmedanga)* parseInt($scope.goodsresult[count].goods_count);
-      }
-      $scope.etc.totalsumprices=$scope.totalpr;
-      $scope.totalnotexsumprices=$scope.totalnotexpr;
-
-      //alert($scope.totalsumprices);
-  }
 
 	/*기본 매장 default*/
 		/*기본매장조회 --> 등록페이지에 값불러올때 이거 가져다 쓰셈.*/ 
@@ -2644,6 +2636,7 @@ $scope.goodskindcnt=0;
 				goods_totalprice : 0,
 				goods_panmedanga: price*0.9				
 			});
+
 		}
     	$scope.goodsparam={   //상품검색파라미터정보 Model
     		GoodsName:'',
@@ -2651,7 +2644,7 @@ $scope.goodskindcnt=0;
     		GoodsCode:'',
     		GI_Code:''
 		};
-		$scope.goodskindcnt=$scope.goodsresult.length;
+		
     	$scope.modalpresentsearch.hide();
     	//체크확인 배열 초기화
     	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
@@ -2661,12 +2654,39 @@ $scope.goodskindcnt=0;
     };
 
 
+/*상품별 가격합계 구하기*/
+  $scope.goods_totalprice1=function(indexnum){
+      $scope.goodsresult[indexnum].goods_totalprice=parseInt($scope.goodsresult[indexnum].goods_price) * parseInt($scope.goodsresult[indexnum].goods_count);
+      $scope.goodsresult[indexnum].goods_panmedanga=parseInt($scope.goodsresult[indexnum].goods_price)*0.9;
 
+      console.log("가격합계구하기 : ", $scope.goodsresult[indexnum].goods_totalprice,  $scope.goodsresult[indexnum].goods_panmedanga);
+  };
+
+
+  
+  /*상품 종합 합계 가격 구하기*/
+   $scope.goods_totalsumprice=function(){
+       $scope.totalpr=0;//종합가격 초기화(세금포함가)
+       $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)
+      for(var count=0;count<$scope.goodsresult.length;count++){
+        $scope.totalpr += parseInt($scope.goodsresult[count].goods_totalprice);
+        $scope.totalnotexpr += parseInt($scope.goodsresult[count].goods_panmedanga)* parseInt($scope.goodsresult[count].goods_count);
+      }
+      $scope.etc.totalsumprices=$scope.totalpr;
+      $scope.totalnotexsumprices=$scope.totalnotexpr;
+      console.log("가격합계구하기2 : ",  $scope.etc.totalsumprices,  $scope.totalnotexsumprices);
+      //alert($scope.totalsumprices);
+  }
 
 
 
 /*매출등록 다음페이지 눌렀을때 이동 */
  $scope.Meachulnextbtn=function(){
+ 	$scope.goodskindcnt=0;
+ 	for(var cnt=0; cnt<$scope.goodsresult.length; cnt++){
+ 		$scope.goodskindcnt+=parseInt($scope.goodsresult[cnt].goods_count);
+ 	}
+
  	$scope.meachulpage2modal.show();
   };
 
@@ -2688,10 +2708,10 @@ $scope.goodskindcnt=0;
   };
 
 
-  /////////////////////////////////////////////////////
+  //////////////////////결제정보///////////////////////////////
   $scope.paytype = false;
-
-
+  $scope.paydatalist =[];
+  $scope.compo={paysubul:0};
   $scope.pay={
      	use : false,
      	useN : true
@@ -2758,10 +2778,13 @@ $scope.goodskindcnt=0;
      		$scope.compo.paysubul = 702;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Bank';
-     		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
+     		mconfigService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){
 				$scope.paydatalist = data.list;
-			})
+				console.log("통장조회: ", data.list);
+			},function(){
+				alert('Request fail')	
+			});
 
 		}else if(num == 3 && $scope.payment.th == true){
 			$scope.payment.one = false;
@@ -2783,13 +2806,67 @@ $scope.goodskindcnt=0;
      		$scope.compo.paysubul = 703;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Card';
-     		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
+     		mconfigService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){
 				$scope.paydatalist = data.list;
-			})
+			},function(){
+				alert('Request fail')	
+			});
 
-		}	
+		}else if(num > 0 && num <= 4 && $scope.pay.use == true && $scope.pay.useN == false && $scope.payment.one == false || $scope.payment.two == false || $scope.payment.th == false || $scope.payment.fo == false ){
+     			$scope.pay.use = false;
+			    $scope.pay.useN = true;
+			    $scope.paytype = false;
+     			$scope.payment={
+			     	one : false,
+			     	two : false,
+			     	th : false,
+			     	fo : false
+			     };
+     		$scope.compo.paysubul = 0;
+
+     }else if(num > 0 && num <= 4 && $scope.pay.use == false && $scope.pay.useN == true && $scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true ){
+     			$scope.pay.use = true;
+			    $scope.pay.useN = false;
+			    $scope.paytype = true;
+			    $scope.compo.paysubul = 0;
+			    switch(num){
+     			 case 1: 
+     			 $scope.payment={
+			     	one : true,
+			     	two : false,
+			     	th : false,
+			     	fo : false
+			     	};
+			     	break;
+			     case 2: 
+			      $scope.payment={
+			     	one : false,
+			     	two : true,
+			     	th : false,
+			     	fo : false
+			     	};
+			     	break;
+			     case 3: 
+			      $scope.payment={
+			     	one : false,
+			     	two : false,
+			     	th : true,
+			     	fo : false
+			     	};
+			     	break;
+			     case 4: 
+			      $scope.payment={
+			     	one : false,
+			     	two : false,
+			     	th : false,
+			     	fo : true
+			     	};
+			     	break;
+			     }
+
      }
+ };
   /////////////////////////////////////////////////
 
 /*
