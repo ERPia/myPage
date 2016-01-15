@@ -20,9 +20,6 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.ERPia.MyPage"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ERPia.MyPage"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.ERPia.MyPage"
         },
@@ -33,6 +30,9 @@
             "PACKAGE_NAME": "com.ERPia.MyPage"
         },
         "org.apache.cordova.vibration": {
+            "PACKAGE_NAME": "com.ERPia.MyPage"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ERPia.MyPage"
         }
     },

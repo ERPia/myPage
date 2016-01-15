@@ -19,7 +19,7 @@ var g_playlists = [{
 }];
 
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location, $ionicPlatform
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
@@ -37,17 +37,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}).then(function(modal) {
 		$scope.loginModal = modal;
 	});
-	//수정중
 	$ionicModal.fromTemplateUrl('side/agreement.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.agreeModal = modal;
+		$scope.agreeModal.hardwareBackButtonClose = false;
 	});
-
 	$ionicModal.fromTemplateUrl('side/certification.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.certificationModal = modal;
+		$scope.certificationModal.hardwareBackButtonClose = false;
 	});
 
 	$ionicModal.fromTemplateUrl('side/check_Sano.html',{
@@ -57,7 +57,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	});
 	$scope.init = function(loginType){
 		if(loginType == 'logout') {
-			$ionicLoading.show({template:'Logging out...'});
+			$ionicLoading.show({template:'Value No.1 ERPia'});
 			$rootScope.loginState = "R";
 			$scope.loginHTML = "로그인";
 			$scope.ion_login = "ion-power active";
@@ -77,7 +77,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			// $ionicHistory.clearHistory();
 			// $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 			$state.go('app.erpia_main');
-		}, 500);
+		}, 1000);
 	}
 	// Triggered in the login modal to close it
 	$scope.closeLogin = function() {
@@ -189,9 +189,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}else{
 				switch($rootScope.userType){
 					case 'SCM':
-						$scope.loginData.Admin_Code = 'onz';
-						$scope.loginData.UserId = '1111';
-						$scope.loginData.Pwd = '1234';
+						// $scope.loginData.Admin_Code = 'onz';
+						// $scope.loginData.UserId = '1111';
+						// $scope.loginData.Pwd = '1234';
+						$scope.loginData.Admin_Code = 'phj9775';
+						$scope.loginData.UserId = 'scmtest';
+						$scope.loginData.Pwd = 'scmtest';
 					break;
 					// case 'ERPia':
 					// 	$scope.loginData.Admin_Code = 'onz';
@@ -228,6 +231,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$rootScope.loginState = "S";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
+					$scope.loginData.isLogin = 'Y';
+
 					$timeout(function() {
 						$scope.closeLogin();
 					}, 500);
@@ -254,6 +259,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$scope.userData.cnt_site = comInfo.data.list[0].Mall_ID_Count + ' 개';
 					
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN;
+
+					$scope.loginData.isLogin = 'Y';
 
 					loginService.comInfo('erpia_ComInfo', $scope.loginData.Admin_Code)
 					.then(function(comTax){
@@ -368,6 +375,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$rootScope.loginState = "N";
 					$rootScope.mobile_Certify_YN = comInfo.data.list[0].mobile_CertifyYN; 
 
+					$scope.loginData.isLogin = 'Y';
+
 					$timeout(function() {
 						$scope.closeLogin();
 					}, 500);
@@ -383,6 +392,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.userData.Com_Name = 'ERPia' + '<br>(' + 'onz' + ')';
 			$scope.loginData.Admin_Code = 'ERPia';
 			$scope.loginData.UserId = 'Guest';
+			$scope.loginData.isLogin = 'Y';
 
 			$scope.userData.package = 'Professional';
 			$scope.userData.cnt_user = '5 명';
@@ -393,7 +403,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.userData.expire_days = 50;
 			$state.go('app.sample_Main');
 		}
-		//}
 	};
 
   	$scope.loginHTML = "로그인";
@@ -441,6 +450,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
+	$scope.close_cert = function(){
+		$scope.certificationModal.hide();
+		$scope.init('logout');
+	}
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -462,14 +475,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 		})
 	}, false);
-	$scope.close_cert = function(){
-		$scope.certificationModal.hide();
-		$scope.init('logout');
-	}
-})
-
-.controller('agreeCtrl', function($scope){
-
+	 
 })
 .controller('tradeCtrl', function($scope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
 	, tradeDetailService, ERPiaAPI){
