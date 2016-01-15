@@ -1431,7 +1431,9 @@ $scope.eDate1= new Date();
     /*매입 상품정보*/
     $scope.Meaipgoods={
     	userGoodsName : '',
-    	userMode : 'Select_GoodsName'
+    	userMode : 'Select_GoodsName',
+    	totalsumprices : 0,
+    	totalnum : 0
     };
 
     /*자동슬라이드*/
@@ -1741,6 +1743,7 @@ $scope.eDate1= new Date();
     	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
     	$scope.goodslists = '';
     	$scope.goodsSearchmodesear.hide();
+    	return goods_totalprice1();
     }
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
@@ -1842,8 +1845,23 @@ $scope.eDate1= new Date();
 				$scope.paydatalist = data.list;
 			})
 
-		}	
+		}else{
+				$scope.paytype = false;
+			 }
+
      }
+
+     /*상품 종합 합계 가격 구하기*/
+    $scope.goods_totalprice1=function(){
+    	console.log('gd');
+     	$scope.Meaipgoods.totalsumprices = 0;
+     	for(var count=0;count<$scope.goodsaddlists.length;count++){
+     		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
+     		$scope.Meaipgoods.totalsumprices = $scope.Meaipgoods.totalsumprices + sum;
+     	}
+     	
+    };
+
      $scope.paycardbank=[];
      /*은행/카드 정보*/
      $scope.paydataF=function(){

@@ -1431,7 +1431,9 @@ $scope.eDate1= new Date();
     /*매입 상품정보*/
     $scope.Meaipgoods={
     	userGoodsName : '',
-    	userMode : 'Select_GoodsName'
+    	userMode : 'Select_GoodsName',
+    	totalsumprices : 0,
+    	totalnum : 0
     };
 
     /*자동슬라이드*/
@@ -1570,6 +1572,14 @@ $scope.eDate1= new Date();
 
     /* meaip Insert modal Show */
 	$scope.meaipDataRegist = function() {
+		$scope.Meaipgoods.totalnum = 0;
+		/*for(var count=0;count<$scope.goodsaddlists.length;count++){
+     		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
+     		$scope.Meaipgoods.totalsumprices = $scope.Meaipgoods.totalsumprices + sum;
+     	}*/
+		for(var i=0; i<$scope.goodsaddlists.length; i++){
+			$scope.Meaipgoods.totalnum = parseInt($scope.Meaipgoods.totalnum) + parseInt($scope.goodsaddlists[i].num);
+		}
 		$scope.disState = true;
 	    $scope.modalmeaipDataRegi.show();
 	};
@@ -1741,6 +1751,7 @@ $scope.eDate1= new Date();
     	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
     	$scope.goodslists = '';
     	$scope.goodsSearchmodesear.hide();
+    	return goods_totalprice1();
     }
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
@@ -1748,8 +1759,7 @@ $scope.eDate1= new Date();
      }
 
 	$scope.pay={
-     	use : false,
-     	useN : true
+     	use : true
      };
      $scope.payment={
      	one : false,
@@ -1757,37 +1767,6 @@ $scope.eDate1= new Date();
      	th : false,
      	fo : false
      };
-
-     /*지급액 입력/ 안입력*/
-     $scope.usepayF=function(num){
-     	if(num == 1){
-     		if($scope.pay.useN == true){
-     			$scope.pay.useN = false;
-     		}else{// 미입력 클릭
-     			$scope.pay.useN = true;
-     			$scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     };
-			    $scope.paytype = false;
-     		}
-     	}else { 
-     		if($scope.pay.use == true){// 미입력 클릭 
-     			$scope.pay.use = false;
-     			$scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     };
-			    $scope.paytype = false;
-     		}else{
-     			$scope.pay.use = true;
-     		}
-     	}
-     }
 
      /*지급구분*/
      $scope.Payments_division=function(num){
@@ -1799,6 +1778,7 @@ $scope.eDate1= new Date();
 			$scope.payment.th = false;
 			$scope.payment.fo = false;
 			$scope.paytype = false;
+			$scope.pay.use = false;
 
 		}else if(num == 2 && $scope.payment.two == true){
 			$scope.payment.one = false;
@@ -1810,6 +1790,7 @@ $scope.eDate1= new Date();
      		$scope.paytype_card = false;
      		$scope.payname = '지급은행';
      		$scope.compo.paysubul = 702;
+     		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Bank';
      		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
@@ -1824,6 +1805,7 @@ $scope.eDate1= new Date();
 			console.log('어음');
 		    $scope.compo.paysubul = 704;
 		    $scope.paytype = false;
+		    $scope.pay.use = false;
 
 		}else if(num == 4 && $scope.payment.fo == true){
 			$scope.payment.one = false;
@@ -1835,6 +1817,7 @@ $scope.eDate1= new Date();
      		$scope.paytype_card = true;
      		$scope.payname = '지급카드';
      		$scope.compo.paysubul = 703;
+     		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Card';
      		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
@@ -1844,9 +1827,23 @@ $scope.eDate1= new Date();
 
 		}else{
 				$scope.paytype = false;
+				$scope.pay.use = true;
+				$scope.compo.payprice = 0;
 			 }
 
      }
+
+     /*상품 종합 합계 가격 구하기*/
+    $scope.goods_totalprice1=function(){
+    	console.log('gd');
+     	$scope.Meaipgoods.totalsumprices = 0;
+     	for(var count=0;count<$scope.goodsaddlists.length;count++){
+     		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
+     		$scope.Meaipgoods.totalsumprices = $scope.Meaipgoods.totalsumprices + sum;
+     	}
+     	
+    };
+
      $scope.paycardbank=[];
      /*은행/카드 정보*/
      $scope.paydataF=function(){
@@ -1861,15 +1858,77 @@ $scope.eDate1= new Date();
      	});
      }
      /*매입전표 저장*/
-     $scope.insertGoodsF=function(){
+     /*$scope.insertGoodsF=function(){
      	console.log('상품정보=',$scope.goodsaddlists);
      	console.log('매입정보=',$scope.configData);
      	console.log('따로저장=',$scope.compo);
+     	if($scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true){
+     		console.log('하나라도 true');
+     		if($scope.payment.one == true || $scope.payment.th == true && $scope.Meaipgoods.totalsumprices <= 0){
+     			console.log('지급액 0이에요!');
+     		}else{
+     			$ionicPopup.show({
+			         title: '매입등록',
+			         subTitle: '',
+			         content: '매입전표를 등록하시겠습니까?',
+			         buttons: [
+			           { text: 'No',
+			            onTap: function(e){
+			            	console.log('no');
+			            }},
+			           {
+			             text: 'Yes',
+			             type: 'button-positive',
+			             onTap: function(e) {
+			                  console.log('yes');
+			             }
+			           },
+			         ]
+			        })
+     		}
+
+     		if($scope.payment.two == true || $scope.payment.fo == true){
+     			console.log('현금/카드 선택');
+     			if($scope.compo.paycardbank.length < 0){
+     				$ionicPopup.alert({
+					    title: '경고.',
+					    template: '지급카드를 선택 해주세요.'
+					});
+     			}else{
+
+     			}
+     		}else if(){
+
+     		}
+     		
+     			
+
+     	}else{
+     		console.log('nono');
+     			$ionicPopup.show({
+			         title: '매입등록',
+			         subTitle: '',
+			         content: '지급정보가 입력되지 않았습니다. <br> 매입전표를 등록하시겠습니까??',
+			         buttons: [
+			           { text: 'No',
+			            onTap: function(e){
+			            	console.log('no');
+			            }},
+			           {
+			             text: 'Yes',
+			             type: 'button-positive',
+			             onTap: function(e) {
+			                  console.log('yes');
+			             }
+			           },
+			         ]
+			        })
+     	}
      	meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo,$scope.paycardbank)
 		.then(function(data){
 			console.log('매입 인설트 서비스 실행후 ->',data);
 		})
-     }
+     }*/
 
 	//backcontroll
      $scope.backControll=function(){

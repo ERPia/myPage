@@ -9,7 +9,7 @@
    <div class="list list-inset">
       <label class="item item-input">
         <span class="input-label psm_sang_01">&nbsp;&nbsp;매입액</span>
-        <input type="text" style="text-align:right" readonly value='총 3개 / 3,000원'><br>
+        <input type="text" style="text-align:right" readonly value='총 {{Meaipgoods.totalnum}}개 / {{Meaipgoods.totalsumprices}}원'><br>
       </label><br>
    </div>
 
@@ -20,30 +20,22 @@
           2015-01-21일&nbsp;&nbsp;<i class="ion-ios-calendar-outline" style="font-size:25px"></i><br>
         </label><br>
         <label class="item">
-          <span class="input-label psm_sang_01">
-            <table>
-              <tr>
-                <td>지급구분&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td><input type='checkbox' ng-click='usepayF(1)' ng-model='pay.use' checked="pay.use">입력&nbsp;&nbsp;</td>
-                <td><input type='checkbox' ng-click='usepayF(2)'ng-model='pay.useN' checked="pay.useN">미입력</td>
-              </tr>
-            </table>
-          </span>
+          <span class="input-label psm_sang_01">지급구분</span>
           <table>
             <tr>
               <td>
-                <ion-checkbox style="font-size:12px;" ng-disabled="pay.useN" ng-click='Payments_division(1)' checked='payment.one' ng-model='payment.one'>현금결제</ion-checkbox>
+                <ion-checkbox style="font-size:12px;" ng-click='Payments_division(1)' checked='payment.one' ng-model='payment.one'>현금결제</ion-checkbox>
               </td>
               <td>
-                <ion-checkbox style="font-size:12px;" ng-disabled="pay.useN" ng-click='Payments_division(2)' checked='payment.two' ng-model='payment.two'>통장결제</ion-checkbox>
+                <ion-checkbox style="font-size:12px;" ng-click='Payments_division(2)' checked='payment.two' ng-model='payment.two'>통장결제</ion-checkbox>
               </td>
             </tr>
             <tr>
               <td>
-                <ion-checkbox style="font-size:12px;" ng-disabled="pay.useN" ng-click='Payments_division(3)' checked='payment.th' ng-model='payment.th'>어음결제</ion-checkbox>
+                <ion-checkbox style="font-size:12px;" ng-click='Payments_division(3)' checked='payment.th' ng-model='payment.th'>어음결제</ion-checkbox>
               </td>
               <td>
-                <ion-checkbox style="font-size:12px;" ng-disabled="pay.useN" ng-click='Payments_division(4)' checked='payment.fo' ng-model='payment.fo'>카드결제</ion-checkbox>
+                <ion-checkbox style="font-size:12px;" ng-click='Payments_division(4)' checked='payment.fo' ng-model='payment.fo'>카드결제</ion-checkbox>
               </td>
             </tr>
           </table>
@@ -64,7 +56,7 @@
       </label><br>
       <label class="item item-input">
         <span class="input-label psm_sang_01">&nbsp;&nbsp;지급액</span>
-        <input type="number" ng-disabled="pay.useN" style="text-align:right" min='0' value='0' ng-model='compo.payprice'><span class="input-label psm_sang_01">원</span><br>
+        <input type="number" ng-disabled="pay.use" style="text-align:right" min='0' value='0' ng-model='compo.payprice'><span class="input-label psm_sang_01">원</span><br>
       </label><br>
    </div>
   </ion-content>

@@ -4,7 +4,6 @@
 	</ion-nav-buttons>
 	<div>
 	<ion-content class="padding2">
-
 		<div align="center"> 
 			검색<hr>
 		</div>
@@ -13,12 +12,6 @@
 				<i class="icon ion-search placeholder-icon"></i>
 				<input type="search" ng-model="listSearch" placeholder="상품명을 입력하세요">
 			</label>
-		
-<!-- 			<label class="item item-input">
-				<input type="date" ng-model='date.sdate' size="11">~&nbsp;
-				<input type="date" ng-model='date.edate' size="11"><br>
-				<any ng-click="searchestoday(100)"><i class="icon ion-search" style="font-size:20px"></i></any>&nbsp;
-			</label> -->
 
 		<table width="100%">
 		<tr>
@@ -44,54 +37,52 @@
 	   		조회목록
 	   	</div>
 	   	<hr>
-		<body ng-app="ngAnimate">
-			<ion-list>
-				<ion-item ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex" style="padding:0px;">
-					<ui class="list" ng-click="meaipChitF(x.iL_No)">
-						<li class="item">
-							<font><b>품명</b></font> : {{x.G_Name}}</br>
-							<font><b>매입일</b></font> : {{x.Meaip_Date}}</br>
-							<font><b>거래처</b></font> : {{x.Admin_Code}}</br>
-							<font><b>매출총액</b></font> : {{x.Meaip_Amt}}</br>
-						</li>
-					</ui>
-				<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
-					더보기(+5)
-				</ion-item>
-				</ion-item>
-			</ion-list>
-		</body>
-
-
-	   	<!-- <any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
-		<table ng-click="meaipChitF(x.iL_No)">
-		   	<tr>
-			   	<td width="20%" align="center">품명</td>
-			   	<td width="80%" align="center">{{x.G_Name}}</td>
-			</tr>
-			<tr>
-			   	<td width="20%" align="center">매입일</td>
-			   	<td width="80%" align="center">{{x.Meaip_Date}}</td>
-			</tr>
-			<tr>
-			   	<td width="20%" align="center">거래처</td>
-			   	<td width="80%" align="center">{{x.Admin_Code}}</td>
-			</tr>
-			<tr>
-			   	<td width="20%" align="center">매출총액</td>
-			   	<td width="80%" align="center">{{x.Meaip_Amt}}</td>
-			</tr>
-		</table>
-			<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
-			더보기
+		<table style="width:100%">
+		    <thead>
+		      <th style="width:10%" align="center">순번</th>
+		      <th style="width:30%" align="center">매입일</th>
+		      <th style="width:30%" align="center">업체명</th>
+		      <th style="width:30%" align="center">금액</th>
+		    </thead>
+	    </table>
+	    <hr>
+	    <table style="width:100%">
+	       <tbody ng-repeat="x in lists | filter: listSearch track by $index"  ng-if="$index < listindex" style="padding:0px;"  style="width:100%" ng-click="meaipChitF(x.iL_No)">
+	        <tr>
+	        <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
+	        <td style="width:25%" align="left" style="padding-left:5px;">{{x.Meaip_Date}}</td>
+	        <td style="width:30%" align="center"><b>{{x.Admin_Code}}</b></td>
+	        <td rowspan="2" style="width:30%; padding-right:15px; border-bottom:1px solid black" align="right">{{x.Meaip_Amt}}원</td>
+	        </tr>
+	        <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}</td></tr>
+	    </tbody>
+	    	<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+				더보기(+5)
 			</ion-item>
-		<hr>
-		</any> -->
-
-	</ion-content></div>
-<div style="margin-top:90%" align="right">
-  		<button>빠른등록</button>
-</div>
+	    </table>
+				<!-- <table style="text-align:center" class="list list-inset">
+					<tr>
+						<td width="10%">번호</td>
+	                    <td width="30%">상품명</td>
+	                    <td width="30%">거래처</td>
+	                    <td width="30%">매입액</td>
+					</tr>
+					<tr ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex" style="padding:0px;" ng-click="meaipChitF(x.iL_No)">
+						<td width="10%">{{$index+1}}.</td>
+	                    <td width="30%">{{x.G_Name}}</td>
+	                    <td width="30%">{{x.Admin_Code}}</td>
+	                    <td width="30%">{{x.Meaip_Amt}}</td>
+					</tr>
+				</table>
+					</ui>
+			<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+				더보기(+5)
+			</ion-item> -->
+	</ion-content>
+	</div>
+<div style="margin-top:600px" align="right">
+      <button style="position:relative; z-index:1000;">빠른등록</button>
+  </div>
 	<ion-footer-bar align-title="left" class="bar-stable">
 		<div style="width:10%; BORDER-RIGHT: #BDBDBD 2px solid;">기간현황</div>
 		<div style="width:5%;">&nbsp;</div>
