@@ -1788,9 +1788,10 @@ $scope.junpyolists=[];
     	console.log($scope.junpyolists);
     	if($scope.junpyolists==undefined){	
 		}else{
-			for(var i; i<$scope.junpyolists.length; i++){
+			for(var i=0; i<$scope.junpyolists.length; i++){
     		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
     		}
+    		console.log($scope.giganhyunhwang.meachulTotalPrice);
 		}
     	},function(){
     		alert('Request fail')	
@@ -1812,9 +1813,10 @@ $scope.junpyolists=[];
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	if($scope.junpyolists==undefined){	
 		}else{
-			for(var i; i<$scope.junpyolists.length; i++){
+			for(var i=0; i<$scope.junpyolists.length; i++){
     		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
     		}
+    		console.log($scope.giganhyunhwang.meachulTotalPrice);
 		}
     	},function(){
     		alert('Request fail')	
@@ -1845,9 +1847,11 @@ $scope.junpyolists=[];
     	$scope.junpyolists=ERPiaMCSearchData.data.list;
     	if($scope.junpyolists==undefined){	
 		}else{
-			for(var i; i<$scope.junpyolists.length; i++){
-    		$scope.giganhyunhwang.meachulTotalPrice+=parseInt($scope.junpyolists[i].MeaChul_Amt);
+			$scope.junpyolists[0].MeaChul_Amt;
+			for(var i=0; i<$scope.junpyolists.length; i++){
+    		$scope.giganhyunhwang.meachulTotalPrice+=$scope.junpyolists[i].MeaChul_Amt;
     		}
+    		console.log($scope.giganhyunhwang.meachulTotalPrice);
 		}
     	},function(){
     		alert('Request fail')	
@@ -2712,9 +2716,8 @@ $scope.goodskindcnt=0;
   $scope.paytype = false;
   $scope.paydatalist =[];
   $scope.compo={paysubul:0};
-  $scope.pay={
-     	use : false,
-     	useN : true
+$scope.pay={
+     	use : true
      };
      $scope.payment={
      	one : false,
@@ -2722,38 +2725,6 @@ $scope.goodskindcnt=0;
      	th : false,
      	fo : false
      };
-
-     /*지급액 입력/ 안입력*/
-     $scope.usepayF=function(num){
-     	if(num == 1){
-     		if($scope.pay.useN == true){
-     			$scope.pay.useN = false;
-     		}else{// 미입력 클릭
-     			$scope.pay.useN = true;
-     			$scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     };
-			    $scope.paytype = false;
-     		}
-     	}else { 
-     		if($scope.pay.use == true){// 미입력 클릭 
-     			$scope.pay.use = false;
-     			$scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     };
-			    $scope.paytype = false;
-     		}else{
-     			$scope.pay.use = true;
-     		}
-     	}
-     }
-
 
      /*지급구분*/
      $scope.Payments_division=function(num){
@@ -2765,6 +2736,7 @@ $scope.goodskindcnt=0;
 			$scope.payment.th = false;
 			$scope.payment.fo = false;
 			$scope.paytype = false;
+			$scope.pay.use = false;
 
 		}else if(num == 2 && $scope.payment.two == true){
 			$scope.payment.one = false;
@@ -2776,15 +2748,13 @@ $scope.goodskindcnt=0;
      		$scope.paytype_card = false;
      		$scope.payname = '지급은행';
      		$scope.compo.paysubul = 702;
+     		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Bank';
      		mconfigService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){
 				$scope.paydatalist = data.list;
-				console.log("통장조회: ", data.list);
-			},function(){
-				alert('Request fail')	
-			});
+			})
 
 		}else if(num == 3 && $scope.payment.th == true){
 			$scope.payment.one = false;
@@ -2793,6 +2763,7 @@ $scope.goodskindcnt=0;
 			console.log('어음');
 		    $scope.compo.paysubul = 704;
 		    $scope.paytype = false;
+		    $scope.pay.use = false;
 
 		}else if(num == 4 && $scope.payment.fo == true){
 			$scope.payment.one = false;
@@ -2804,69 +2775,20 @@ $scope.goodskindcnt=0;
      		$scope.paytype_card = true;
      		$scope.payname = '지급카드';
      		$scope.compo.paysubul = 703;
+     		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
      		var mode = 'Select_Card';
      		mconfigService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){
 				$scope.paydatalist = data.list;
-			},function(){
-				alert('Request fail')	
-			});
+			})
 
-		}else if(num > 0 && num <= 4 && $scope.pay.use == true && $scope.pay.useN == false && $scope.payment.one == false || $scope.payment.two == false || $scope.payment.th == false || $scope.payment.fo == false ){
-     			$scope.pay.use = false;
-			    $scope.pay.useN = true;
-			    $scope.paytype = false;
-     			$scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     };
-     		$scope.compo.paysubul = 0;
-
-     }else if(num > 0 && num <= 4 && $scope.pay.use == false && $scope.pay.useN == true && $scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true ){
-     			$scope.pay.use = true;
-			    $scope.pay.useN = false;
-			    $scope.paytype = true;
-			    $scope.compo.paysubul = 0;
-			    switch(num){
-     			 case 1: 
-     			 $scope.payment={
-			     	one : true,
-			     	two : false,
-			     	th : false,
-			     	fo : false
-			     	};
-			     	break;
-			     case 2: 
-			      $scope.payment={
-			     	one : false,
-			     	two : true,
-			     	th : false,
-			     	fo : false
-			     	};
-			     	break;
-			     case 3: 
-			      $scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : true,
-			     	fo : false
-			     	};
-			     	break;
-			     case 4: 
-			      $scope.payment={
-			     	one : false,
-			     	two : false,
-			     	th : false,
-			     	fo : true
-			     	};
-			     	break;
-			     }
+		}else{
+				$scope.paytype = false;
+				$scope.pay.use = true;
+			 }
 
      }
- };
   /////////////////////////////////////////////////
 
 /*
@@ -3494,8 +3416,8 @@ $scope.xmlMeaChulTs=function(){
   
   /*상품 종합 합계 가격 구하기*/
    $scope.goods_totalsumprice=function(){
-       $scope.totalpr=0;//종합가격 초기화(세금포함가)
-       $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)
+       $scope.totalpr=0;//종합가격 초기화(세금포함가)-판매가
+       $scope.totalnotexpr=0;//종합가격 초기화(세금 미포함가)-공급가
       for(var count=0;count<$scope.goodsresult.length;count++){
         $scope.totalpr += parseInt($scope.goodsresult[count].goods_totalprice);
         $scope.totalnotexpr += parseInt($scope.goodsresult[count].goods_panmedanga)* parseInt($scope.goodsresult[count].goods_count);
