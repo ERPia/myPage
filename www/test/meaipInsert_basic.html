@@ -4,10 +4,10 @@
 	</ion-nav-bar>
   	<ion-content>
   	<div class="list list-inset">
-  		<div align="right">
+  		<div>
   			<label class="item item-input" style="border:0;">
-			  <input type="text" style="text-align:right;" value='{{today}}' readonly>&nbsp;
-			  <i class="ion-ios-calendar-outline" style="font-size:25px"></i>&nbsp;
+			  <input type="text" style="text-align:right;" value='{{date.todate}}' ng-model='date.todate' ng-click="opendateModal('meaipdate')" readonly>&nbsp;
+			  <button class="ion-ios-calendar-outline" style="font-size:25px; border:0; background:white;" ></button>&nbsp;
 			</label>
   		</div>
   		<div class="list list-inset" align="left" ng-click="meaipNext()">
@@ -82,7 +82,7 @@
 		      		<td style="vertical-align:middle;">{{$index+1}}.</td>
 		        	<td style="vertical-align:middle; text-align:left">{{y.name}}</td>
 		        	<td style="width:20%">
-		        		<input type="number" min="1" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
+		        		<input type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
 		        	</td>
 		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
 		        		<input type="number" min="1" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>

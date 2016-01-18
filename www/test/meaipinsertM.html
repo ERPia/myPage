@@ -14,11 +14,12 @@
    </div>
 
     <div class="list list-inset">
-        &nbsp;<b>지급정보</b>
+         &nbsp;<b>지급정보</b>
         <label class="item item-input">
           <span class="input-label psm_sang_01">&nbsp;&nbsp;지급일</span>
-          2015-01-21일&nbsp;&nbsp;<i class="ion-ios-calendar-outline" style="font-size:25px"></i><br>
-        </label><br>
+         {{date.payday}}&nbsp;&nbsp;
+         <button class="ion-ios-calendar-outline" style="font-size:25px; border:0; background:white;" ng-click="opendateModal('payday')"></button><br>
+        </label>
         <label class="item">
           <span class="input-label psm_sang_01">지급구분</span>
           <table>

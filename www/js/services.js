@@ -192,12 +192,30 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
-		}, insertm : function(meaipdata, goodsdata, atc, paycardbank){
+		}, insertm : function(meaipdata, goodsdata, atc, paycardbank, date, meaiptotal){
 				console.log("meaipService and insertm");
-				console.log('매입---------------------->',meaipdata.Admin_Code);
-/*				console.log('상품---------------------->',goodsdata[0].name);*/
+				console.log('매입---------------------->',meaipdata);
+				console.log('상품---------------------->',goodsdata);
 				console.log('등등2---------------------->',atc);
-				console.log('카드/은행 정보 ->', paycardbank[0].code);
+				console.log('카드/은행 정보 ->', paycardbank);
+				console.log('매입일=', date.todate);
+				console.log('지급일=', date.payday);
+				console.log('토탈 =', meaiptotal);
+
+				///////////////////////////////////////
+				console.log('=================================================');
+				console.log('업테코드=', meaipdata.Admin_Code);
+				console.log('매입일=', date.todate);
+				console.log('거래처코드=', atc.GerCode);
+				console.log('총매입액=', meaiptotal.totalsumprices);
+				console.log('매장코드=', meaipdata.basic_Place_Code);
+				console.log('관리비고=', atc.remk);
+				//상품 순번돌릴것.
+				console.log('창고코드=', meaipdata.basic_Ch_Code);
+				console.log('=================================================');
+				///////////////////////////////////////
+
+
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 				return $http.get(url + '?' + data)

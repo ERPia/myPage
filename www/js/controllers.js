@@ -18,7 +18,7 @@ var g_playlists = [{
 	id : 6
 }];
 
-angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox'])
+angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox', 'pickadate'])
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
@@ -1501,6 +1501,57 @@ $scope.eDate1= new Date();
 			})
 	})
 
+	$scope.dateMinus=function(days){
+
+	    var nday = new Date();  //오늘 날짜..  
+	    nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
+	    var yy = nday.getFullYear();
+	    var mm = nday.getMonth()+1;
+	    var dd = nday.getDate();
+
+	    if( mm<10) mm="0"+mm;
+	    if( dd<10) dd="0"+dd;
+
+	    return yy + "-" + mm + "-" + dd;
+	}
+	$scope.date={
+		todate : '',
+		payday : ''
+	}
+	$scope.datetypes='';
+	$scope.date.todate=$scope.dateMinus(0); //오늘날짜 스코프
+	$scope.date.payday=$scope.dateMinus(0);
+	//데이트피커(캘린더)----------------------------------------------------------
+	$ionicModal.fromTemplateUrl('test/datemodal.html', 
+	        function(modal) {
+	            $scope.datemodal = modal;
+	        },
+	        {
+	        scope: $scope, 
+	        animation: 'slide-in-up'
+	        }
+	    );
+	    $scope.opendateModal = function(datetypes) {
+	    	console.log('달력 =>', datetypes);
+	      $scope.datetypes=datetypes;
+	      if(datetypes == 'payday'){
+	      	$scope.modalmeaipDataRegi.hide();
+	      }
+	      $scope.datemodal.show();
+	    };
+	    $scope.closedateModal = function(modal) {
+	      $scope.datemodal.hide();
+	      if($scope.datetypes=='payday'){
+	      $scope.date.payday = modal;
+	      console.log("payday: ", $scope.date.payday);
+	      $scope.modalmeaipDataRegi.show();
+	     }else if($scope.datetypes=='meaipdate'){
+	      $scope.date.todate = modal;
+	     }
+	      $scope.datetypes='';
+	      console.log("선택한 날짜: ", $scope.date.payday, "선택날짜 2(투데이트):", $scope.date.todate)
+	    };
+
     /* customerSearch modal */
 	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
 	    scope: $scope
@@ -1573,15 +1624,20 @@ $scope.eDate1= new Date();
     /* meaip Insert modal Show */
 	$scope.meaipDataRegist = function() {
 		$scope.Meaipgoods.totalnum = 0;
-		/*for(var count=0;count<$scope.goodsaddlists.length;count++){
-     		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
-     		$scope.Meaipgoods.totalsumprices = $scope.Meaipgoods.totalsumprices + sum;
-     	}*/
 		for(var i=0; i<$scope.goodsaddlists.length; i++){
 			$scope.Meaipgoods.totalnum = parseInt($scope.Meaipgoods.totalnum) + parseInt($scope.goodsaddlists[i].num);
 		}
-		$scope.disState = true;
-	    $scope.modalmeaipDataRegi.show();
+		//매입/상품정보 확인
+		if($scope.compo.GerCode == 0 || $scope.compo.subulkind == 0 || $scope.MeaipData.meajangCheck == 'f' || $scope.MeaipData.changoCheck == 'f'){
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('매입정보가 바르게 입력되었는지 확인해주세요.', 'long', 'center');
+			else alert('매입정보가 바르게 입력되었는지 확인해주세요.');
+		}else if($scope.goodsaddlists.length == 0 ){
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('상품정보가 바르게 입력되었는지 확인해주세요.', 'long', 'center');
+			else alert('상품정보가 바르게 입력되었는지 확인해주세요.');
+		}else{
+			console.log('바르게 입력됬네.');
+			$scope.modalmeaipDataRegi.show();
+		}
 	};
 
 	/* meaip Insert modal Close */
@@ -1683,29 +1739,6 @@ $scope.eDate1= new Date();
     		$scope.checkedDatas.push(goodsdata);
     	}
     	console.log('막데이터=>',$scope.checkedDatas);
-
-    	 /*$ionicPopup.show({
-         template: '<input type = "text" ng-model = "data.model">',
-         title: 'Title',
-         subTitle: 'Subtitle',
-         scope: $scope,
-			
-         buttons: [
-            { text: 'Cancel' }, {
-               text: '<b>Save</b>',
-               type: 'button-positive',
-                  onTap: function(e) {
-						
-                     if (!$scope.data.model) {
-                        //don't allow the user to close unless he enters model...
-                           e.preventDefault();
-                     } else {
-                        return $scope.data.model;
-                     }
-                  }
-            }
-         ]
-      });*/
     }
 	/*선택된 상품들을 등록리스트에 저장*/
     $scope.checkdataSave=function(){
@@ -1751,7 +1784,7 @@ $scope.eDate1= new Date();
     	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
     	$scope.goodslists = '';
     	$scope.goodsSearchmodesear.hide();
-    	return goods_totalprice1();
+    	return goods_totalprice1;
     }
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
@@ -1770,7 +1803,8 @@ $scope.eDate1= new Date();
 
      /*지급구분*/
      $scope.Payments_division=function(num){
-
+     	$scope.paycardbank.splice(0,1);
+     	console.log('카드 은행 데이터 확인=>', $scope.paydatalist);
 		if(num == 1 && $scope.payment.one == true){
 			console.log('현금');
 		    $scope.compo.paysubul = 701;
@@ -1858,57 +1892,46 @@ $scope.eDate1= new Date();
      	});
      }
      /*매입전표 저장*/
-     /*$scope.insertGoodsF=function(){
+     $scope.insertGoodsF=function(){
      	console.log('상품정보=',$scope.goodsaddlists);
      	console.log('매입정보=',$scope.configData);
      	console.log('따로저장=',$scope.compo);
      	if($scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true){
      		console.log('하나라도 true');
-     		if($scope.payment.one == true || $scope.payment.th == true && $scope.Meaipgoods.totalsumprices <= 0){
+     		if($scope.compo.payprice == 0){
      			console.log('지급액 0이에요!');
-     		}else{
-     			$ionicPopup.show({
-			         title: '매입등록',
-			         subTitle: '',
-			         content: '매입전표를 등록하시겠습니까?',
-			         buttons: [
-			           { text: 'No',
-			            onTap: function(e){
-			            	console.log('no');
-			            }},
-			           {
-			             text: 'Yes',
-			             type: 'button-positive',
-			             onTap: function(e) {
-			                  console.log('yes');
-			             }
-			           },
-			         ]
-			        })
-     		}
-
-     		if($scope.payment.two == true || $scope.payment.fo == true){
-     			console.log('현금/카드 선택');
-     			if($scope.compo.paycardbank.length < 0){
-     				$ionicPopup.alert({
-					    title: '경고.',
-					    template: '지급카드를 선택 해주세요.'
-					});
-     			}else{
-
-     			}
-     		}else if(){
-
-     		}
-     		
-     			
-
+     			var answer = '지급액을 입력해주세요.';
+     		}else if($scope.compo.payprice > $scope.Meaipgoods.totalsumprices){
+     			console.log('매입액보다 지급액이 많을 경우 ');
+     			var answer = '지급액이 매입액보다 많습니다.';
+     			}else if($scope.payment.two == true || $scope.payment.fo == true){
+	     			console.log('카드&통장');
+	     			if($scope.paycardbank.length < 1){
+	     				console.log('카드&통장 셀랙스박스 미선택일시에.=',$scope.paycardbank.length);
+	     				var answer = '지급 카드 & 은행을 선택해주세요.';
+	     			}else{
+	     				console.log('지급 카드 & 은행도 선택잘했네요.');
+	     				var answer = '매입전표를 등록하시겠습니까?';
+	     				var distinction = 'ok';
+	     			}
+	     		}else{
+	     			console.log('지급액 입력후 매입등록.');
+	     			var answer = '매입전표를 등록하시겠습니까?';
+	     			var distinction = 'ok';
+	     		}
      	}else{
+     		var answer = '지급정보가 입력되지 않았습니다. <br> 매입전표를 등록하시겠습니까?';
+     		var distinction = 'ok';
      		console.log('nono');
-     			$ionicPopup.show({
+     			
+     	}
+		
+		if(distinction == 'ok'){
+			console.log('ok');
+			$ionicPopup.show({
 			         title: '매입등록',
 			         subTitle: '',
-			         content: '지급정보가 입력되지 않았습니다. <br> 매입전표를 등록하시겠습니까??',
+			         content: answer,
 			         buttons: [
 			           { text: 'No',
 			            onTap: function(e){
@@ -1918,17 +1941,22 @@ $scope.eDate1= new Date();
 			             text: 'Yes',
 			             type: 'button-positive',
 			             onTap: function(e) {
-			                  console.log('yes');
+			                 console.log('yes');
+			                 meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo,$scope.paycardbank, $scope.date, $scope.Meaipgoods)
+							.then(function(data){
+								console.log('매입 인설트 서비스 실행후 ->',data);
+							})
 			             }
 			           },
 			         ]
-			        })
-     	}
-     	meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo,$scope.paycardbank)
-		.then(function(data){
-			console.log('매입 인설트 서비스 실행후 ->',data);
-		})
-     }*/
+			    })
+		}else{
+			console.log('no');
+			if(ERPiaAPI.toast == 'Y') $cordovaToast.show(answer, 'long', 'center');
+			else alert(answer);
+		}
+				
+     }
 
 	//backcontroll
      $scope.backControll=function(){
