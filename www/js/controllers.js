@@ -163,6 +163,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	// Perform the login action when the user submits the login form
 	$scope.doLogin = function(admin_code, loginType, id, pwd, autologin_YN) {
+		
 		if (autologin_YN == 'Y') {
 			switch(loginType){
 				case 'E' : $rootScope.userType = 'ERPia'; $rootScope.loginMenu = 'User'; $scope.footer_menu = 'U'; break;
@@ -190,16 +191,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.UserId = 'scmtest';
 						$scope.loginData.Pwd = 'scmtest';
 					break;
-					// case 'ERPia':
-					// 	$scope.loginData.Admin_Code = 'onz';
-					// 	$scope.loginData.UserId = 'lhk';
-					// 	$scope.loginData.Pwd = 'alsdud0125!';
-					// break;
 					case 'ERPia':
-						$scope.loginData.Admin_Code = 'lhktest';
-						$scope.loginData.UserId = 'lhktest';
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
+					// case 'ERPia':
+					// 	$scope.loginData.Admin_Code = 'lhktest';
+					// 	$scope.loginData.UserId = 'lhktest';
+					// 	$scope.loginData.Pwd = 'alsdud0125!';
+					// break;
 				}
 			}
 		}
@@ -207,8 +208,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		if ($rootScope.userType == 'SCM') {
 			loginService.comInfo('scm_login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
-				console.log('comInfo', comInfo);
 				if (comInfo.data.list[0].ResultCk == '1'){
+					$ionicLoading.show({template:'Value No.1 ERPia'});
 					$scope.userData.GerName = comInfo.data.list[0].GerName;
 					$scope.userData.G_Code = comInfo.data.list[0].G_Code;
 					$scope.userData.G_Sano = comInfo.data.list[0].Sano;
@@ -222,9 +223,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 					$scope.loginData.isLogin = 'Y';
 
+					if($scope.loginData.chkAutoLogin == true){
+						if(ERPiaAPI.toast == 'Y'){
+							uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+						}else{
+							uuidService.saveUUID('webTest', $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+						}
+					}
+
 					$timeout(function() {
+						$ionicLoading.hide();
 						$scope.closeLogin();
-					}, 500);
+					}, 1000);
 				}else{
 					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].ResultMsg, 'long', 'center');
 					else alert(comInfo.data.list[0].ResultMsg);
@@ -237,8 +247,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			//ERPia 로그인
 			loginService.comInfo('ERPiaLogin', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
-				console.log('comInfo', comInfo);
 				if(comInfo.data.list[0].Result=='1'){
+					$ionicLoading.show({template:'Value No.1 ERPia'});
 					$scope.loginHTML = "로그아웃";
 					$scope.ion_login = "ion-power";
 					$scope.userData.Com_Name = comInfo.data.list[0].Com_Name;
@@ -328,12 +338,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.tax = "150 개<br><small>(건당 165원)</small>";
 						$scope.e_money = "30,000원<br><small>(자동이체 사용중)</small>";
 						$scope.every = "10,000 P";
-						
 
 						$rootScope.loginState = "E";
+
+						if($scope.loginData.chkAutoLogin == true){
+							if(ERPiaAPI.toast == 'Y'){
+								uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+							}else{
+								uuidService.saveUUID('webTest', $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+							}
+						}
+
 						$timeout(function() {
+							$ionicLoading.hide();
 							$scope.closeLogin();
-						}, 500);
+						}, 1000);
 					},
 					function(){
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show('comTax error', 'long', 'center');
@@ -351,6 +370,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			loginService.comInfo('ERPia_Ger_Login', $scope.loginData.Admin_Code, $scope.loginData.UserId, escape($scope.loginData.Pwd))
 			.then(function(comInfo){
 				if(comInfo.data.list[0].result == '0'){ 
+					$ionicLoading.show({template:'Value No.1 ERPia'});
 					$scope.loginData.UserId = comInfo.data.list[0].G_ID;
 
 					$scope.userData.GerName = comInfo.data.list[0].GerName + '<br>(' + comInfo.data.list[0].G_Code + ')';
@@ -366,9 +386,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 					$scope.loginData.isLogin = 'Y';
 
+					if($scope.loginData.chkAutoLogin == true){
+						if(ERPiaAPI.toast == 'Y'){
+							uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+						}else{
+							uuidService.saveUUID('webTest', $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'Y');
+						}
+					}
+					
 					$timeout(function() {
+						$ionicLoading.hide();
 						$scope.closeLogin();
-					}, 500);
+					}, 1000);
 				}else{
 					if(ERPiaAPI.toast == 'Y') $cordovaToast.show(comInfo.data.list[0].comment, 'long', 'center');
 					else alert(comInfo.data.list[0].comment);	
@@ -559,6 +588,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 .controller('configCtrl', function($scope, $rootScope) {
 	if($rootScope.loginState == 'E'){
+	}
+})
+.controller('configCtrl_Info', function($scope, $rootScope) {
+	$scope.AppInfo = {currentVer:"1.0.0", deviceInfo:"webView"};
+	console.log(ionic.Platform);
+	if(ionic.Platform.length > 0){
+		$scope.AppInfo.currentVer = ionic.Platform.version();
+		$scope.AppInfo.deviceInfo = ionic.Platform.device();	
 	}
 })
 .controller('configCtrl_Notice', function($scope, $ionicPopup, $ionicHistory, NoticeService) {

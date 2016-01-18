@@ -17,7 +17,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 	url:'http://www.erpia.net/include'
 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
 	, toast:'Y'
-})
+}) 
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {

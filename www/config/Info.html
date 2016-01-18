@@ -6,12 +6,35 @@
 		</ion-nav-buttons>
 	</ion-nav-bar>
 	<ion-content class="padding2">
-		<body>
-			이알피아 로고
-			현재 버전 1.1.0
-			최신 버전 1.2.0
+		<div class="card">
+			<div class="item item-image" style="background-color:#aaa;">
+				<img src="img/ERPia_logo2.png" style="width:127px;">
+			</div>
+		</div>
+		<div class="list card">
 
-			<button>최신 버전 업데이트</button>
-		</body>
+			<a class="item item-icon-left">
+				<i class="icon ion-information-circled"></i>
+				현재버전
+				<font style="margin-left:20%;">{{AppInfo.currentVer}}</font>
+			</a>
+
+			<a class="item item-icon-left">
+				<i class="icon ion-iphone"></i>
+				기기정보
+				<font style="margin-left:20%;">{{AppInfo.deviceInfo}}</font>
+			</a>
+
+			<!-- <a class="item item-icon-left">
+			<i class="icon ion-wifi"></i>
+			Enter wireless password
+			</a>
+
+			<a class="item item-icon-left">
+			<i class="icon ion-card"></i>
+			Enter card information
+			</a> -->
+
+		</div>
 	</ion-content>
 </ion-view>
