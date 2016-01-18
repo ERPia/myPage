@@ -2294,7 +2294,7 @@ $scope.dateMinus=function(days){
 }
 
 
-$scope.todate=$scope.dateMinus(0); //오늘날짜 스코프
+
 
 //단가지정배열(매출) 1. 매입가 2. 도매가 3. 인터넷가 4. 소매가 5. 권장소비자가
 $scope.MeaipDn = [
@@ -2318,7 +2318,8 @@ $scope.searchde={ //기본 정보 Model
       meachulsubuls:'',
       i_Cancel : 'J',
       Sl_No : '',
-      accountKind : ''
+      accountKind : '',
+      payday : ''
 };
 
 $scope.itemSelectMode=[
@@ -2373,6 +2374,33 @@ $scope.meachulpage2modal.hide();
 };
 
 
+$scope.datetypes='';
+$scope.todate=$scope.dateMinus(0); //오늘날짜 스코프
+$scope.searchde.payday=$scope.dateMinus(0);
+//데이트피커(캘린더)----------------------------------------------------------
+$ionicModal.fromTemplateUrl('erpia_meachul/datemodal.html', 
+        function(modal) {
+            $scope.datemodal = modal;
+        },
+        {
+        // Use our scope for the scope of the modal to keep it simple
+        scope: $scope, 
+        // The animation we want to use for the modal entrance
+        animation: 'slide-in-up'
+        }
+    );
+    $scope.opendateModal = function(datetypes) {
+      $scope.datetypes=datetypes;
+      $scope.datemodal.show();
+    };
+    $scope.closedateModal = function(modal) {
+      $scope.datemodal.hide();
+      if($scope.datetypes=='payday'){
+      $scope.searchde.payday = modal;
+     }
+      else{}
+      $scope.datetypes=='';
+    };
 
 
 
@@ -2683,17 +2711,30 @@ $scope.goodskindcnt=0;
   }
 
 
-
+//--------------------------------------1/18 내일 해야되!!!!!!----------------------------------
 /*매출등록 다음페이지 눌렀을때 이동 */
  $scope.Meachulnextbtn=function(){
  	$scope.goodskindcnt=0;
  	for(var cnt=0; cnt<$scope.goodsresult.length; cnt++){
  		$scope.goodskindcnt+=parseInt($scope.goodsresult[cnt].goods_count);
  	}
-
- 	$scope.meachulpage2modal.show();
+ 	if($scope.goodskindcnt==0||$scope.MeachulData.cusCheck == 'f' || $scope.MeachulData.subulCheck == 'f' || $scope.MeachulData.meajangCheck == 'f' || $scope.MeachulData.changoCheck == 'f'){
+ 		$ionicPopup.show({
+	      title: 'View',
+	      subTitle: '',
+	      content: '필수값이 모두 입력되지 않았습니다.',
+	      buttons:[
+	      { text: 'No', onTap: function(e){}},
+	      { text: 'Yes', type: 'button-positive',
+	        onTap: function(e){
+	         	$scope.closemeachulpage2Modals();
+        }
+      },
+    ]
+        })
+ 	}
   };
-
+//--------------------------------------1/18----------------------------------
 /*매출등록 마지막페이지에서 뒤로가기 눌렀을 시 이벤트*/
  $scope.finalbackbtn=function(){
  	$ionicPopup.show({
@@ -2715,22 +2756,42 @@ $scope.goodskindcnt=0;
   //////////////////////결제정보///////////////////////////////
   $scope.paytype = false;
   $scope.paydatalist =[];
-  $scope.compo={paysubul:0};
-$scope.pay={
+  $scope.compo={
+  	paysubul:0,
+  	paycardbank:'',
+  	payprice:0,
+  };
+  $scope.pay={
      	use : true
      };
-     $scope.payment={
+  $scope.payment={
      	one : false,
      	two : false,
      	th : false,
      	fo : false
-     };
+  };
+
+     $scope.paycardbank=[];
+     //---------결제정보를 배열에 담음--------
+     $scope.paydataF = function(){
+     	$scope.paycardbank=[];// 계좌정보 초기화
+     	if($scope.paycardbank)
+     	$scope.paycardbank.push({
+              paysubul: $scope.compo.paysubul,
+              paycardbank: $scope.compo.paycardbank,
+              payprice: $scope.compo.payprice
+        });
+     }
 
      /*지급구분*/
      $scope.Payments_division=function(num){
 
 		if(num == 1 && $scope.payment.one == true){
-			console.log('현금');
+			console.log('현금결제');
+			$scope.paycardbank=[];// 계좌정보 초기화
+			$scope.payname = '';
+			$scope.paytype_bank = false;
+     		$scope.paytype_card = false;
 		    $scope.compo.paysubul = 701;
 			$scope.payment.two = false;
 			$scope.payment.th = false;
@@ -2739,14 +2800,15 @@ $scope.pay={
 			$scope.pay.use = false;
 
 		}else if(num == 2 && $scope.payment.two == true){
+			$scope.paycardbank=[];// 계좌정보 초기화
 			$scope.payment.one = false;
 			$scope.payment.th = false;
 			$scope.payment.fo = false;
-			console.log('통장');
+			console.log('통장결제');
      		$scope.paytype = true;
      		$scope.paytype_bank = true;
      		$scope.paytype_card = false;
-     		$scope.payname = '지급은행';
+     		$scope.payname = '통장결제';
      		$scope.compo.paysubul = 702;
      		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
@@ -2757,23 +2819,27 @@ $scope.pay={
 			})
 
 		}else if(num == 3 && $scope.payment.th == true){
+			$scope.paycardbank=[];// 계좌정보 초기화
+			$scope.paytype_bank = false;
+     		$scope.paytype_card = false;
 			$scope.payment.one = false;
 			$scope.payment.two = false;
 			$scope.payment.fo = false;
-			console.log('어음');
+			console.log('어음결제');
 		    $scope.compo.paysubul = 704;
 		    $scope.paytype = false;
 		    $scope.pay.use = false;
 
 		}else if(num == 4 && $scope.payment.fo == true){
+			$scope.paycardbank=[];// 계좌정보 초기화
 			$scope.payment.one = false;
 			$scope.payment.two = false;
 			$scope.payment.th = false;
-			console.log('카드');
+			console.log('카드결제');
      		$scope.paytype = true;
      		$scope.paytype_bank = false;
      		$scope.paytype_card = true;
-     		$scope.payname = '지급카드';
+     		$scope.payname = '카드결제';
      		$scope.compo.paysubul = 703;
      		$scope.pay.use = false;
      		var kind = 'ERPia_Bank_Card_Select';
@@ -2786,70 +2852,98 @@ $scope.pay={
 		}else{
 				$scope.paytype = false;
 				$scope.pay.use = true;
+				$scope.compo.payprice = 0;
 			 }
 
      }
-  /////////////////////////////////////////////////
 
-/*
-  $scope.selectedBankAccountData={
-  		BankAccountData:''
-  };
-  $scope.selectedCardAccountData={
-  		CardAccountData:''
-  };
 
-  $scope.accountCardData=[];
-  $scope.accountBankData=[];
-  
-  $scope.Select_Bank=function(){ 
-		mconfigService.Select_Bank($scope.loginData.Admin_Code, $scope.loginData.UserId)
+  //-------------------등록하기 버튼 클릭시 -----------------------------------------
+  $scope.MeachulInsertClick=function(){
+     	console.log('상품정보=',$scope.goodsresult);
+     	console.log('매출정보=',$scope.searchde);
+     	console.log('따로저장=',$scope.compo);
+     	if($scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true){
+     		console.log('하나라도 true');
+     		if($scope.compo.payprice == 0){
+     			console.log('결제액 0이에요!');
+     			var answer = '결제액을 입력해주세요.';
+     		}else if($scope.payment.two == true || $scope.payment.fo == true){
+     			console.log('카드&통장');
+     			if($scope.paycardbank.length < 1){
+     				console.log('카드&통장 셀랙스박스 미선택일시에.=',$scope.paycardbank.length);
+     				var answer = '결제 카드 & 은행을 선택해주세요.';
+     			}else{
+     				if($scope.compo.payprice>$scope.etc.totalsumprices){
+     					console.log('결재액이 총가격보다 클 때');
+     					var answer = '결재액이 총가격보다 큽니다.';
+     				}else{
+     					console.log('결제 카드 & 은행도 선택잘했네요.');
+     					var answer = '매출전표를 등록하시겠습니까?';
+     					var distinction = 'ok';
+     				}
+     			}
+     		}else{
+     			if($scope.compo.payprice>$scope.etc.totalsumprices){
+     					console.log('결재액이 총가격보다 클 때');
+     					var answer = '결재액이 총가격보다 큽니다.';
+     				}else{
+		     			console.log('결제액 입력후 매입등록.');
+		     			var answer = '매출전표를 등록하시겠습니까?';
+		     			var distinction = 'ok';
+     				}
+     			}
+     		}else{
+     			var answer = '결제정보가 입력되지 않았습니다. <br> 매출전표를 등록하시겠습니까?';
+     			var distinction = 'ok';
+     			console.log('nono');
+     			
+
+     	/*
+		if($scope.compo.payprice>$scope.etc.totalsumprices){
+     					console.log('결재액이 총가격보다 클 때');
+     					var answer = '결재액이 총가격보다 큽니다.';
+     				}else{
+     					console.log('결제 카드 & 은행도 선택잘했네요.');
+     					var answer = '매출전표를 등록하시겠습니까?';
+     					var distinction = 'ok';
+     				}
+     	*/
+     	}
+/*     	meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo,$scope.paycardbank)
 		.then(function(data){
-		console.log(data);
-		$scope.accountBankList=data.list;
-		},function(){
-			alert('Request fail')	
-		});
-	};
-
-  $scope.Select_Card=function(){
-		mconfigService.Select_Card($scope.loginData.Admin_Code, $scope.loginData.UserId)
-		.then(function(data){
-		console.log(data);
-		$scope.accountCardList=data.list;
-		console.log('카드조회값 확인 : '+$scope.accountCardList);
-		},function(){
-			alert('Request fail')	
-		});
-	};
-
-	$scope.BankSelected=function(){
-		$scope.accountBankData=[];
-		console.log('----------------------->', $scope.selectedBankAccountData.BankAccountData);
-		$scope.list = $scope.selectedBankAccountData.BankAccountData.split(',');  
-			$scope.accountBankData.push({
-				Bank_Code : $scope.list[0].toString(),
-				Bank_Name : $scope.list[1],
-				Bank_Account : $scope.list[2]
+			console.log('매입 인설트 서비스 실행후 ->',data);
+		})*/
+		
+		if(distinction == 'ok'){
+			console.log('ok');
+			$ionicPopup.show({
+			         title: '매출등록',
+			         subTitle: '',
+			         content: answer,
+			         buttons: [
+			           { text: 'No',
+			            onTap: function(e){
+			            	console.log('no');
+			            }},
+			           {
+			             text: 'Yes',
+			             type: 'button-positive',
+			             onTap: function(e) {
+			                  console.log('yes');
+			             }
+			           },
+			         ]
+			    })
+		}else{
+			console.log('no');
+			$ionicPopup.alert({
+			    title: '경고.',
+			    template: answer
 			});
-			console.log('확인 ->', $scope.accountBankData);
-	};
-
-	$scope.CardSelected=function(){
-		$scope.accountCardData=[];
-		$scope.list = $scope.selectedCardAccountData.CardAccountData.split(',');  
-
-			$scope.accountCardData.push({
-				Card_Name : $scope.list[0],
-				Card_Code : $scope.list[1],
-				Card_Num : $scope.list[2]
-			});
-			console.log('확인 ->', $scope.accountCardData);
-	};
-
-
-
-	*/
+		}
+				
+     }
 })
 
 //----------------경민씨가한거 ---------------------------------(매출전표 (ALL, Tseq)삭제)

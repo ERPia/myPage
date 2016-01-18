@@ -54,11 +54,11 @@
           '<div class="pickadate">' +
             '<div class="pickadate-header">' +
               '<div class="pickadate-controls">' +
-                '<a href="" class="pickadate-prev" ng-click="changeMonth(-1)" ng-show="allowPrevMonth">prev</a>' +
-                '<a href="" class="pickadate-next" ng-click="changeMonth(1)" ng-show="allowNextMonth">next</a>' +
+                '<a href="" class="pickadate-prev" ng-click="changeMonth(-1)" ng-show="allowPrevMonth">이전 월</a>' +
+                '<a href="" class="pickadate-next" ng-click="changeMonth(1)" ng-show="allowNextMonth">다음 월</a>' +
               '</div>'+
               '<h3 class="pickadate-centered-heading">' +
-                '{{currentDate | date:"MMMM yyyy"}}' +
+                '<b>{{currentDate | date:"yyyy"}}년&nbsp;&nbsp;{{currentDate | date:"MM"}}월</b>' +
               '</h3>' +
             '</div>' +
             '<div class="pickadate-body">' +
@@ -78,12 +78,14 @@
           '</div>',
 
         link: function(scope, element, attrs, ngModel)  {
-          var minDate       = scope.minDate && dateUtils.stringToDate(scope.minDate),
+              var minDate       = scope.minDate && dateUtils.stringToDate(scope.minDate),
               maxDate       = scope.maxDate && dateUtils.stringToDate(scope.maxDate),
               disabledDates = scope.disabledDates || [],
               currentDate   = new Date();
 
           scope.dayNames    = $locale.DATETIME_FORMATS['SHORTDAY'];
+          scope.dayNames    = '일,월,화,수,목,금,토'.split(',');
+
           scope.currentDate = currentDate;
 
           scope.render = function(initialDate) {
