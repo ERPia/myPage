@@ -54,7 +54,7 @@
                     </SELECT>&nbsp;&nbsp;
                     </td>
                     <td>
-            <label ng-switch on="searchde.Mode" class="item-input-wrapper item item-input" style="border:0;">
+            <label ng-switch on="searchde.itemselectMode" class="item-input-wrapper item item-input" style="border:0;">
             <input type="text" ng-model='goodsparam.GoodsName' size="20" placeholder="상품명" ng-switch-when="Select_GoodsName"/>
             <input type="text" ng-model='goodsparam.G_OnCode' size="20" placeholder="자체코드" ng-switch-when="Select_G_OnCode"/>
             <input type="text" ng-model='goodsparam.GoodsCode' size="20" placeholder="상품코드" ng-switch-when="Select_G_Code"/>
@@ -63,7 +63,7 @@
             </label>
                     </td>
                     <td><i class="ion-search" style="font-size:30px" ng-click="presentsclick(1)"></i></td>
-                    <td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
+                    <td><button class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcodeBtn()"></button></td>
                 </tr>
             </table><hr>
         

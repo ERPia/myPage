@@ -774,31 +774,17 @@ angular.module('starter.services', [])
 					}, function(response){
 						return $q.reject(response.data);
 					})
-		}, Select_Bank: function(admin_code, userid){
-				console.log("mconfigService and Select_Bank");
+		}, paysearch : function(admin_code, userid, kind, mode){
+				console.log("mconfigService and paysearch");
+				console.log('kind---------------------->',kind);
+				console.log('mode------------------->',mode);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Bank_Card_Select&Mode=Select_Bank';
-				console.log('날릴 데이터확인 ->', data);
+				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=' + kind + '&Mode=' + mode;
 				return $http.get(url + '?' + data)
 					.then(function(response){
-						console.log('mconfigService', response);
+						console.log('mconfigService(paysearch)=', response);
 						if(typeof response == 'object'){
-							return response.data;
-						}else{
-							return $q.reject(response.data);
-						}
-					}, function(response){
-						return $q.reject(response.data);
-					})
-		}, Select_Card: function(admin_code, userid){
-				console.log("mconfigService and Select_Card");
-				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Bank_Card_Select&Mode=Select_Card';
-				console.log('날릴 데이터확인 ->', data);
-				return $http.get(url + '?' + data)
-					.then(function(response){
-						console.log('mconfigService', response);
-						if(typeof response == 'object'){
+							console.log('카드 & 통장 정보=', response.data);
 							return response.data;
 						}else{
 							return $q.reject(response.data);

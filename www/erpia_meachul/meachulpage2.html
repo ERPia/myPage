@@ -46,11 +46,13 @@
       <label class="item item-input" ng-if="paytype">
         <span class="input-label psm_sang_01">&nbsp;&nbsp;{{payname}}</span>
 
-        <select ng-if="paytype_card" ng-model="compo.paycardbank" ng-change="paydataF()">
+        <select ng-if="paytype_card" ng-model="compo.paycardbank" ng-change="paydataF()" ng-selected="compo.paycardbank==''">
+          <option value=''>카드를 선택해주세요</option>
           <option ng-repeat='x in paydatalist' value='{{x.Card_Code}},{{x.Card_Name}},{{x.Card_Num}}'>{{x.Card_Name}}</option>
         </select>
 
-        <select ng-if="paytype_bank" ng-model="compo.paycardbank" ng-change="paydataF()">
+        <select ng-if="paytype_bank" ng-model="compo.paycardbank" ng-change="paydataF()" ng-selected="compo.paycardbank==''">
+          <option value=''>통장을 선택해주세요</option>
           <option ng-repeat='x in paydatalist' value='{{x.Bank_Code}},{{x.Bank_Name}},{{x.Bank_Account}}'>{{x.Bank_Name}}</option>
         </select><br>
 

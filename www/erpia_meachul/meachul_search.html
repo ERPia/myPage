@@ -3,7 +3,7 @@
         <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
 </ion-nav-buttons>
 <!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->  
-  <ion-content>
+  <ion-content >
 <div class="item item-input-inset">
     <table>
     <tr style="width:100%">
@@ -47,19 +47,22 @@
        </thead>
        </table>
        <hr>
-       <table style="width:100%">
-          <tbody ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" style="padding:0px;"  style="width:100%" ng-click="searchdetailclick(x.Sl_No)">
+       <table style="width:100%" ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" on-drag-up="lastsclick($index)" ng-model="lasts">
+          <tbody style="width:100%" ng-click="searchdetailclick(x.Sl_No)">
             <tr>
               <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
               <td style="width:25%" align="left" style="padding-left:5px;">{{x.MeaChul_Date}}</td>
               <td style="width:30%" align="center"><b>{{x.Admin_Code}}</b></td>
               <td rowspan="2" style="width:30%; padding-right:15px; border-bottom:1px solid black" align="right">{{x.MeaChul_Amt| number:0}}원</td>
             </tr>
-            <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}</td></tr>
+            <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}<br></td></tr>
           </tbody>
-          <button class="button button-block button-positive" on-drag-up="lastsclick($index)" ng-model="lasts"  ng-if="$index == lasts-1 && $index!=$last">더보기(+5)  </button>
+          <tr>
+            <td colspan="4">
+                <div ng-if="$index == lasts-1 && $index!=$last"  align="center"><br><b>『더보기』를 하시려면 위로올려주세요.</b></div>
+            </td>
+          </tr>
       </table>
-
   </ion-content>
     <div style="margin-top:600px" align="right">
       <button style="position:relative; z-index:1000;">빠른등록</button>
