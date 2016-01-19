@@ -56,28 +56,13 @@
 	        </tr>
 	        <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}</td></tr>
 	    </tbody>
-	    	<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
-				더보기(+5)
-			</ion-item>
 	    </table>
-				<!-- <table style="text-align:center" class="list list-inset">
-					<tr>
-						<td width="10%">번호</td>
-	                    <td width="30%">상품명</td>
-	                    <td width="30%">거래처</td>
-	                    <td width="30%">매입액</td>
-					</tr>
-					<tr ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex" style="padding:0px;" ng-click="meaipChitF(x.iL_No)">
-						<td width="10%">{{$index+1}}.</td>
-	                    <td width="30%">{{x.G_Name}}</td>
-	                    <td width="30%">{{x.Admin_Code}}</td>
-	                    <td width="30%">{{x.Meaip_Amt}}</td>
-					</tr>
-				</table>
-					</ui>
-			<ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+	   	<any ng-repeat="x in lists | filter: listSearch track by $index">
+	    <!-- <ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
 				더보기(+5)
-			</ion-item> -->
+		</ion-item> -->
+		<button class="button button-small" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">더보기</button>
+		</any>
 	</ion-content>
 	</div>
 <div style="margin-top:600px" align="right">

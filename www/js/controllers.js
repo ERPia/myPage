@@ -200,7 +200,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'pikachu';
 						$scope.loginData.UserId = 'test';
-						$scope.loginData.Pwd = '1234lkm!';
+						$scope.loginData.Pwd = '1234';
 					break;*/
 					/*case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
@@ -1381,8 +1381,46 @@ $scope.eDate1= new Date();
 				location.href="#/app/meaipChit";
 			})
 		 }
-
+		 $rootScope.testtest = function(){
+		 	alert('1234');
+		 }
 		 $scope.meaipState=0;
+		 /*더보기버튼*/
+		 /*$scope.lastsclick = function(index) {
+               
+	            $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
+
+	            $timeout(function(){
+	         $ionicLoading.hide();
+	         $scope.loginData = {};
+	         $scope.userData = {};
+	         $scope.dashBoard = {};
+
+
+	         $scope.lasts=index+5;
+	      }, 1000); //더보기 클릭시 $index+5
+
+	            
+	    }*/
+	    $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
+		  $scope.lastsclick = function(index) {
+		               
+		  		$scope.loadingani();
+
+		        $scope.lasts=index+5; //더보기 클릭시 $index+5
+		    };
+	    /*---------로딩화면-----------*/
+		$rootScope.loadingani=function(){
+		        $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
+
+		         $timeout(function(){
+		         $ionicLoading.hide();
+
+
+		         
+		      }, 500); 
+		}
+
 		 $scope.meaipStar = function(){
 		 	console.log('star');
 		 	if($scope.meaipState == 0){
@@ -1532,7 +1570,6 @@ $scope.eDate1= new Date();
 	        }
 	    );
 	    $scope.opendateModal = function(datetypes) {
-	    	console.log('달력 =>', datetypes);
 	      $scope.datetypes=datetypes;
 	      if(datetypes == 'payday'){
 	      	$scope.modalmeaipDataRegi.hide();
@@ -1542,14 +1579,12 @@ $scope.eDate1= new Date();
 	    $scope.closedateModal = function(modal) {
 	      $scope.datemodal.hide();
 	      if($scope.datetypes=='payday'){
-	      $scope.date.payday = modal;
-	      console.log("payday: ", $scope.date.payday);
-	      $scope.modalmeaipDataRegi.show();
-	     }else if($scope.datetypes=='meaipdate'){
-	      $scope.date.todate = modal;
-	     }
+		      $scope.date.payday = modal;
+		      $scope.modalmeaipDataRegi.show();
+		     }else if($scope.datetypes=='meaipdate'){
+		      	$scope.date.todate = modal;
+		     }
 	      $scope.datetypes='';
-	      console.log("선택한 날짜: ", $scope.date.payday, "선택날짜 2(투데이트):", $scope.date.todate)
 	    };
 
     /* customerSearch modal */
@@ -1582,25 +1617,22 @@ $scope.eDate1= new Date();
     	console.log('$scope.Meaipgoods.userGoodsName=', $scope.Meaipgoods.userGoodsName);
     	console.log('$scope.Meaipgoods.userMode=', $scope.Meaipgoods.userMode);
     	if(division_num == 1){
-    		console.log('1', division_num);
     		if($scope.Meaipgoods.userGoodsName.length > 0){
 	    		meaipService.goodS($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.Meaipgoods.userMode, $scope.Meaipgoods.userGoodsName)
 				.then(function(data){
-					console.log('상품검색정보 확인->', data);
 					$scope.goodslists = data.list;
 				})
     		}
     		$scope.goodsSearchmodesear.show();
     	}else{
-    		console.log('2', division_num);
     		if($scope.Meaipgoods.userGoodsName.length > 0){
 	    		meaipService.goodS($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.Meaipgoods.userMode, $scope.Meaipgoods.userGoodsName)
 				.then(function(data){
-					console.log('상품검색정보 확인->', data);
 					$scope.goodslists = data.list;
 				})
 	    	}else{
-	    		console.log('상품정보를 입력해 주세요.');
+	    		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('상품정보를 입력해 주세요.', 'long', 'center');
+				else alert('상품정보를 입력해 주세요.');
 	    	}
     	}	
     }
@@ -1635,7 +1667,7 @@ $scope.eDate1= new Date();
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('상품정보가 바르게 입력되었는지 확인해주세요.', 'long', 'center');
 			else alert('상품정보가 바르게 입력되었는지 확인해주세요.');
 		}else{
-			console.log('바르게 입력됬네.');
+			console.log('매입정보, 상품정보 모두 바르게 입력.');
 			$scope.modalmeaipDataRegi.show();
 		}
 	};
@@ -1647,8 +1679,8 @@ $scope.eDate1= new Date();
 
 	/*매장코드로 창고조회*/
 	$scope.Chango=function(){
-		console.log('매장코드로 창코조회');
 		$scope.MeaipData.meajangCheck = 't';
+		console.log('확인=>', $scope.configData);
 		mconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
 		.then(function(data){
 			$scope.changolists = data.list;
@@ -1658,7 +1690,6 @@ $scope.eDate1= new Date();
 	/*거래처조회*/
     $scope.cus=function(){
     	var cusname = $scope.compo.userGerName;
-    	console.log('customerName=', cusname);
     	meaipService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
 		.then(function(data){
 			$scope.customerDatas = data.list;
@@ -1668,11 +1699,9 @@ $scope.eDate1= new Date();
     /*거래처창고 조회후 값저장*/
     $scope.customerFunc=function(gname,gcode){
     	$scope.customerDatas = ''; // data배열 초기화
-    	console.log('ghkrdls=>',gname,gcode);
         $scope.compo.GerName=gname;
 		$scope.compo.GerCode=gcode;
         $scope.MeaipData.cusCheck = 't';
-        console.log('scope.MeaipData == ', $scope.MeaipData);
       	$scope.customerModal.hide();
     }
 
@@ -1729,7 +1758,6 @@ $scope.eDate1= new Date();
 
     	for(var i=0; i<$scope.checkedDatas.length; i++){
     		if($scope.checkedDatas[i] == goodsdata){
-    			console.log('들왔다.',i);
     			$scope.checkedDatas.splice(i, 1);
     			$scope.checkcaught='yes';
     			break;
@@ -1738,18 +1766,13 @@ $scope.eDate1= new Date();
     	if($scope.checkcaught != 'yes'){
     		$scope.checkedDatas.push(goodsdata);
     	}
-    	console.log('막데이터=>',$scope.checkedDatas);
     }
 	/*선택된 상품들을 등록리스트에 저장*/
     $scope.checkdataSave=function(){
 		if($scope.goodsaddlists.length > 0){
-			console.log('상품검색배열확인1',$scope.checkedDatas );
 			for(var j=0; j < $scope.goodsaddlists.length; j++){
 				for(var o=0; o < $scope.checkedDatas.length; o++){
-					console.log('상품검색배열확인2',$scope.goodsaddlists );
 					if($scope.goodsaddlists[j].code == $scope.checkedDatas[o].G_Code){
-						console.log('같은상품이 상품등록 리스트에 존재합니다.');
-
 						$ionicPopup.alert({
 						     title: '('+ $scope.goodsaddlists[j].code +')<br>' + $scope.goodsaddlists[j].name,
 						     template: '같은상품이 상품등록 리스트에 이미 존재합니다.'
@@ -1784,7 +1807,7 @@ $scope.eDate1= new Date();
     	$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
     	$scope.goodslists = '';
     	$scope.goodsSearchmodesear.hide();
-    	return goods_totalprice1;
+    	$scope.goods_totalprice1();
     }
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
@@ -1804,21 +1827,28 @@ $scope.eDate1= new Date();
      /*지급구분*/
      $scope.Payments_division=function(num){
      	$scope.paycardbank.splice(0,1);
-     	console.log('카드 은행 데이터 확인=>', $scope.paydatalist);
+     	$scope.compo.paycardbank = '';
 		if(num == 1 && $scope.payment.one == true){
-			console.log('현금');
 		    $scope.compo.paysubul = 701;
 			$scope.payment.two = false;
 			$scope.payment.th = false;
 			$scope.payment.fo = false;
 			$scope.paytype = false;
 			$scope.pay.use = false;
+			$scope.paycardbank.push({
+	     		code : '',
+	     		name : '',
+	     		num : ''
+	     	});$scope.paycardbank.push({
+	     		code : '',
+	     		name : '',
+	     		num : ''
+	     	});
 
 		}else if(num == 2 && $scope.payment.two == true){
 			$scope.payment.one = false;
 			$scope.payment.th = false;
 			$scope.payment.fo = false;
-			console.log('통장');
      		$scope.paytype = true;
      		$scope.paytype_bank = true;
      		$scope.paytype_card = false;
@@ -1836,16 +1866,24 @@ $scope.eDate1= new Date();
 			$scope.payment.one = false;
 			$scope.payment.two = false;
 			$scope.payment.fo = false;
-			console.log('어음');
 		    $scope.compo.paysubul = 704;
 		    $scope.paytype = false;
 		    $scope.pay.use = false;
+		    $scope.paycardbank.push({
+	     		code : '',
+	     		name : '',
+	     		num : ''
+	     	});
+	     	$scope.paycardbank.push({
+	     		code : '',
+	     		name : '',
+	     		num : ''
+	     	});
 
 		}else if(num == 4 && $scope.payment.fo == true){
 			$scope.payment.one = false;
 			$scope.payment.two = false;
 			$scope.payment.th = false;
-			console.log('카드');
      		$scope.paytype = true;
      		$scope.paytype_bank = false;
      		$scope.paytype_card = true;
@@ -1869,13 +1907,11 @@ $scope.eDate1= new Date();
 
      /*상품 종합 합계 가격 구하기*/
     $scope.goods_totalprice1=function(){
-    	console.log('gd');
      	$scope.Meaipgoods.totalsumprices = 0;
      	for(var count=0;count<$scope.goodsaddlists.length;count++){
      		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
      		$scope.Meaipgoods.totalsumprices = $scope.Meaipgoods.totalsumprices + sum;
      	}
-     	
     };
 
      $scope.paycardbank=[];
@@ -1884,60 +1920,68 @@ $scope.eDate1= new Date();
      	console.log('--------------------->', $scope.compo.paycardbank);
      	var cblist = $scope.compo.paycardbank.split(',');
     	$scope.paycardbank.splice(0,1);
-
-     	$scope.paycardbank.push({
-     		code : cblist[0],
-     		name : cblist[1],
-     		num : cblist[2]
-     	});
+    	if($scope.compo.paysubul == 702){
+	     	$scope.paycardbank.push({
+	     		code : cblist[0],
+	     		name : cblist[1],
+	     		num : cblist[2]
+	     	});
+	     	$scope.paycardbank.push({
+	     		code : '',
+	     		name : '',
+	     		num : ''
+	     	});
+	     }else{
+	     		$scope.paycardbank.push({
+		     		code : '',
+		     		name : '',
+		     		num : ''
+	     		});
+		     	$scope.paycardbank.push({
+		     		code : cblist[0],
+		     		name : cblist[1],
+		     		num : cblist[2]
+		     	});
+	     }
      }
      /*매입전표 저장*/
      $scope.insertGoodsF=function(){
-     	console.log('상품정보=',$scope.goodsaddlists);
+/*     	console.log('상품정보=',$scope.goodsaddlists);
      	console.log('매입정보=',$scope.configData);
-     	console.log('따로저장=',$scope.compo);
+     	console.log('따로저장=',$scope.compo);*/
      	if($scope.payment.one == true || $scope.payment.two == true || $scope.payment.th == true || $scope.payment.fo == true){
      		console.log('하나라도 true');
      		if($scope.compo.payprice == 0){
-     			console.log('지급액 0이에요!');
      			var answer = '지급액을 입력해주세요.';
      		}else if($scope.compo.payprice > $scope.Meaipgoods.totalsumprices){
-     			console.log('매입액보다 지급액이 많을 경우 ');
      			var answer = '지급액이 매입액보다 많습니다.';
      			}else if($scope.payment.two == true || $scope.payment.fo == true){
-	     			console.log('카드&통장');
 	     			if($scope.paycardbank.length < 1){
 	     				console.log('카드&통장 셀랙스박스 미선택일시에.=',$scope.paycardbank.length);
 	     				var answer = '지급 카드 & 은행을 선택해주세요.';
 	     			}else{
-	     				console.log('지급 카드 & 은행도 선택잘했네요.');
 	     				var answer = '매입전표를 등록하시겠습니까?';
 	     				var distinction = 'ok';
 	     			}
 	     		}else{
-	     			console.log('지급액 입력후 매입등록.');
 	     			var answer = '매입전표를 등록하시겠습니까?';
 	     			var distinction = 'ok';
 	     		}
      	}else{
      		var answer = '지급정보가 입력되지 않았습니다. <br> 매입전표를 등록하시겠습니까?';
      		var distinction = 'ok';
-     		console.log('nono');
-     			
      	}
 		
 		if(distinction == 'ok'){
 			console.log('ok');
 			$ionicPopup.show({
 			         title: '매입등록',
-			         subTitle: '',
 			         content: answer,
 			         buttons: [
 			           { text: 'No',
 			            onTap: function(e){
 			            	console.log('no');
-			            }},
-			           {
+			            }},{
 			             text: 'Yes',
 			             type: 'button-positive',
 			             onTap: function(e) {
@@ -1945,18 +1989,38 @@ $scope.eDate1= new Date();
 			                 meaipService.insertm($scope.configData, $scope.goodsaddlists, $scope.compo,$scope.paycardbank, $scope.date, $scope.Meaipgoods)
 							.then(function(data){
 								console.log('매입 인설트 서비스 실행후 ->',data);
+								if(data.list[0].Rslt=='Y'){
+									meaipService.subulup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.compo.subulkind)
+									.then(function(data2){
+									})
+										$ionicPopup.show({
+									         content: '저장완료 되었습니다.<br>내역을 확인하시겠습니까?',
+									         buttons: [
+									           { text: 'No',
+									            onTap: function(e){
+									            	console.log('no->매입매출전표페이지');
+									            	$scope.modalmeaipDataRegi.hide();
+									            	$ionicHistory.goBack();
+									            }},{
+									             text: 'Yes',
+									             type: 'button-positive',
+									             onTap: function(e) {
+									                 console.log('yes->해당전표페이지');
+									                 $scope.modalmeaipDataRegi.hide();
+									            	 $ionicHistory.goBack();
+													 $rootScope.testtest();
+										}},]})
+								}
 							})
-			             }
-			           },
-			         ]
-			    })
+			}},]})
 		}else{
-			console.log('no');
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show(answer, 'long', 'center');
 			else alert(answer);
 		}
 				
      }
+
+     
 
 	//backcontroll
      $scope.backControll=function(){
@@ -2020,7 +2084,7 @@ $scope.eDate1= new Date();
 				$scope.configData = data; // 아이디에 저장된 환경설정 리스트 저장
 				console.log('초기값?= ', $scope.configData.state);
 					if($scope.configData.state == 1){
-						console.log('저장환경설정이 없네요.');
+						console.log('초기값 없을때.');
 					}else{
 						/*환경설정 조회된 매장코드로 창고리스트 조회*/
 						mconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData.basic_Place_Code)
@@ -2060,8 +2124,6 @@ $scope.eDate1= new Date();
              onTap: function(e) {
              	console.log(check);
                   if(check == 0){
-                  	console.log('insert', check);
-                  	console.log($scope.configData);
                   	//환경설정 저장 (insert)
 					mconfigService.configInsert($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.configData)
 					.then(function(data){
@@ -2070,7 +2132,9 @@ $scope.eDate1= new Date();
 							$ionicHistory.goBack();
 						}else{
 							alert('수정에 성공하지 못하였습니다');
-							console.log('수정에 성공되지 못하였습니다.');
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('수정에 성공하지 못하였습니다', 'long', 'center');
+							else alert('수정에 성공하지 못하였습니다');
+
 						}
 						
 					})
@@ -2084,8 +2148,8 @@ $scope.eDate1= new Date();
 						if(data.list[0].rslt == 'Y'){
 							$ionicHistory.goBack();
 						}else{
-							alert('수정에 성공하지 못하였습니다');
-							console.log('수정에 성공되지 못하였습니다.');
+							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('수정에 성공하지 못하였습니다', 'long', 'center');
+							else alert('수정에 성공하지 못하였습니다');
 						}
 						
 					})
