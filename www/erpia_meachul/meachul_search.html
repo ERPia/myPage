@@ -47,7 +47,7 @@
        </thead>
        </table>
        <hr>
-       <table style="width:100%" ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" on-drag-up="lastsclick($index)" ng-model="lasts">
+       <table style="width:100%" ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" >
           <tbody style="width:100%" ng-click="searchdetailclick(x.Sl_No)">
             <tr>
               <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
@@ -58,7 +58,7 @@
             <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}<br></td></tr>
           </tbody>
           <tr>
-            <td colspan="4">
+            <td colspan="4" on-drag-up="lastsclick($index)" ng-model="lasts">
                 <div ng-if="$index == lasts-1 && $index!=$last"  align="center"><br><b>『더보기』를 하시려면 위로올려주세요.</b></div>
             </td>
           </tr>
