@@ -58,20 +58,20 @@
 	    </tbody>
 	    </table>
 	   	<any ng-repeat="x in lists | filter: listSearch track by $index">
-	    <!-- <ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
+	    <ion-item class="button button-block psm_login_ink" style="margin-top:20px" ng-click="more()" ng-if="$index + 1 == listindex">
 				더보기(+5)
-		</ion-item> -->
-		<button class="button button-small" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">더보기</button>
+		</ion-item>
+		<!-- <button class="button button-small" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">더보기</button> -->
 		</any>
 	</ion-content>
 	</div>
-<div style="margin-top:600px" align="right">
-      <button style="position:relative; z-index:1000;">빠른등록</button>
+<div style="margin-top:140%" align="right">
+      <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;"></i>&nbsp;
   </div>
 	<ion-footer-bar align-title="left" class="bar-stable">
 		<div style="width:10%; BORDER-RIGHT: #BDBDBD 2px solid;">기간현황</div>
 		<div style="width:5%;">&nbsp;</div>
-		<div style="width:55%">매입액 3,04,000원<br>지급액 1,900,000원</div>
+		<div style="width:55%">매입액 {{meaipPricesum}}원<br>지급액 1,900,000원</div>
 		<div style="width:30%">이월잔액 0원</div>
 	</ion-footer-bar>
 </ion-view>

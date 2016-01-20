@@ -156,6 +156,64 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.');
 							return $q.reject(response);
 					})
+		}, barcode : function(admin_code, userid, barnum){
+				console.log("meaipService and barcode");
+				console.log('코드, 아이디, 바코드 넘버==>', admin_code, userid, barnum);
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Goods&Mode=';
+				var mode1 = 'Select_GI_Code&GI_Code=';
+				var mode2 = 'Select_G_OnCode&G_OnCode=';
+				var mode3 = 'Select_G_Code&GoodsCode=';
+				/*공인 바코드 조회*/
+				return $http.get(url + '?' + data + mode1 + barnum).then(function(response){
+						console.log('공인바코드');
+						if(typeof response == 'object'){
+								if(response.data == '<!--Parameter Check-->'){
+									/*자체코드 조회*/
+									return $http.get(url + '?' + data + mode2 + barnum).then(function(response){
+											console.log('자체코드');
+											if(typeof response == 'object'){
+													if(response.data == '<!--Parameter Check-->'){
+															/*상품코드*/
+															return $http.get(url + '?' + data + mode3 + barnum).then(function(response){
+																	console.log('상품코드');
+																	if(typeof response == 'object'){
+																			if(response.data == '<!--Parameter Check-->'){
+																				console.log('일치하는 상품 없음.');
+																			}else{
+																				console.log('상품코드 일때 ', response.data);
+																				return response.data;
+																			}
+																	}else{
+																		return $q.reject(response.data);
+																	}
+																}, function(response){
+																	return $q.reject(response.data);
+																})
+														//////////////////////////////////////////////
+													}else{
+														console.log('자체코드 일때 ', response.data);
+														return response.data;
+													}
+											}else{
+												return $q.reject(response.data);
+											}
+										}, function(response){
+											return $q.reject(response.data);
+										})
+									//////////////////////////////////////////////
+
+								}else{
+									console.log('공인바코드 일때 ', response.data);
+									return response.data;
+								}
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}, goodS : function(admin_code, userid, Mode, goodsinfo){
 				console.log("meaipService and goodS");
 				var goods = escape(goodsinfo);
@@ -188,10 +246,10 @@ angular.module('starter.services', [])
 							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
-		}, insertm : function(meaipdata, goodsdata, atc, paycardbank, date, meaiptotal){
+		}, insertm : function(code, id, meaipdata, goodsdata, atc, paycardbank, date, meaiptotal){
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var basicdata = 'Admin_Code='+ meaipdata.Admin_Code +'&User_id='+ meaipdata.UserId +'&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=';
-				var meaip = '<root><MeaipM><Admin_Code>'+ meaipdata.Admin_Code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ atc.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ meaiptotal.totalsumprices +'</Meaip_Amt><Sale_Place>'+ meaipdata.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(atc.remk) +']]></Remk></MeaipM><MeaipT>';
+				var basicdata = 'Admin_Code='+ code +'&User_id='+ id +'&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=';
+				var meaip = '<root><MeaipM><Admin_Code>'+ code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ atc.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ meaiptotal.totalsumprices +'</Meaip_Amt><Sale_Place>'+ meaipdata.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(atc.remk) +']]></Remk></MeaipM><MeaipT>';
 				var goods = '';
 				for(var i=0; i < goodsdata.length; i++){
 					var ii = i+1;
@@ -199,9 +257,16 @@ angular.module('starter.services', [])
 					var goods = goods + goodstemporary;
 				}
 				var middel = '</MeaipT><IpJi>';
-				var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.payday +'</ij_Date><Comp_No>'+ atc.GerCode +'</Comp_No><Subul_kind>'+ atc.paysubul +'</Subul_kind><Bank_Code>'+ paycardbank[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paycardbank[0].name) +']]> </Bank_Name><Bank_Account>'+ paycardbank[0].num +'</Bank_Account><Card_Code>'+ paycardbank[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paycardbank[1].name) +']]></Card_Name><Card_Num>'+ paycardbank[1].num +'</Card_Num><Hap_Amt>'+ atc.payprice +'</Hap_Amt></item>';
-				var end = '</IpJi></root>';
-				return $http.get(url + '?' + basicdata+ meaip + goods + middel + jidata + end)
+				
+				var end = '</IpJi></root>&IpJi_YN=';
+				if(atc.paysubul == 0){
+					var sum = url + '?' + basicdata+ meaip + goods + '</MeaipT></root>&IpJi_YN=N';
+				}else{
+					var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.payday +'</ij_Date><Comp_No>'+ atc.GerCode +'</Comp_No><Subul_kind>'+ atc.paysubul +'</Subul_kind><Bank_Code>'+ paycardbank[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paycardbank[0].name) +']]> </Bank_Name><Bank_Account>'+ paycardbank[0].num +'</Bank_Account><Card_Code>'+ paycardbank[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paycardbank[1].name) +']]></Card_Name><Card_Num>'+ paycardbank[1].num +'</Card_Num><Hap_Amt>'+ atc.payprice +'</Hap_Amt></item>';
+					var sum = url + '?' + basicdata+ meaip + goods + middel + jidata + end + 'Y';
+				}
+				console.log('인서트 확인 =>', sum);
+				return $http.get(sum)
 					.then(function(response){
 						if(typeof response == 'object'){
 							return response.data;
@@ -272,34 +337,22 @@ angular.module('starter.services', [])
 			return $http.get(url + '?' + data)
 				.then(function(response){
 					console.log('mconfigService(basicSetup)=', response);
+					console.log('데이터 =>', response.data.list[0].UserId);
 					if(typeof response == 'object'){
 						//조회된 환경설정 리스트중에 아이디에 맞는 리스트 조회
-						if(response.data.list.length > 0){
-							console.log('리스트 여러개 =>', response.data);
-							for(var i=0; i < response.data.list.length; i++){
-								console.log('data.Id =', response.data.list[i].UserId);
-								if(i+1 < response.data.list.length && userid == response.data.list[i].UserId){
-									console.log('same',response.data.list[i]);	
-									return response.data.list[i];
-									break;
-								}else if(i+1 == response.data.list.length && userid != response.data.list[i].UserId){
-									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
-									else console.log('저장되어있는 초기값이 없습니다.');
-										var data = {
-											state : 1,
-											basic_Place_Code : 0,
-											basic_Ch_Code : 0,
-											basic_Dn_Sale : 1,
-											basic_Dn_Meaip : 1,
-											basic_Subul_Sale : 2,
-											basic_Subul_Meaip : 2
-										};
-										console.log('확인=>', data);
-										return data;
-								}else{
-									console.log('안뇽');
-								}
-							}
+						/*response.data.list / userid*/
+						if(response.data != '<!--Parameter Check-->'){
+							var data = {
+									state : 0,
+									basic_Place_Code : response.data.list[0].basic_Place_Code,
+									basic_Ch_Code :response.data.list[0].basic_Ch_Code,
+									basic_Dn_Sale : response.data.list[0].basic_Dn_Sale,
+									basic_Dn_Meaip : response.data.list[0].basic_Dn_Meaip,
+									basic_Subul_Sale : response.data.list[0].basic_Subul_Sale,
+									basic_Subul_Meaip : response.data.list[0].basic_Subul_Meaip,
+									basic_Subul_Meaip_Before : response.data.list[0].basic_Subul_Meaip_Before
+							};
+							return data;
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
 							else console.log('저장되어있는 초기값이 없습니다.');
@@ -310,8 +363,10 @@ angular.module('starter.services', [])
 									basic_Dn_Sale : 1,
 									basic_Dn_Meaip : 1,
 									basic_Subul_Sale : 2,
-									basic_Subul_Meaip : 2
+									basic_Subul_Meaip : 2,
+									basic_Subul_Meaip_Before : 'N'
 								};
+								var testtest = 0;
 								console.log('확인=>', data);
 								return data;
 						}
@@ -330,6 +385,7 @@ angular.module('starter.services', [])
 						basic_Subul_Sale : 2,
 						basic_Subul_Meaip : 2
 					};
+					console.log('요기');
 					console.log('확인=>', data);
 					return data;
 				})

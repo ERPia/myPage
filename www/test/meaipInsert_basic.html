@@ -63,7 +63,7 @@
 		              	<input type="text" placeholder="상품정보를 입력하세요" size="15" ng-model="Meaipgoods.userGoodsName">
 		          	</td>
 		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
-		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
+		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
 	          	</tr>
 	        </table><hr>
         
@@ -85,7 +85,7 @@
 		        		<input type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
 		        	</td>
 		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
-		        		<input type="number" min="1" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>
+		        		<input type="number" min="0" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>
 		        	</td>
 		        	<td><i class="ion-android-remove-circle" ng-click="goodsDelete($index);goods_totalprice1()"></i>&nbsp;</td>
 		      	</tr>
