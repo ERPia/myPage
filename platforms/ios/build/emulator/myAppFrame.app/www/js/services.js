@@ -219,14 +219,14 @@ angular.module('starter.services', [])
 		dashBoard: dashBoard
 	}
 })
-.factory('CertifyService', function($http, $cordovaToast, ERPiaAPI){
+.factory('CertifyService', function($http, $cordovaToast, $rootScope, ERPiaAPI){
 	var url = ERPiaAPI.url + '/Json_Proc_MyPage_Scm.asp';
 	var certify = function(Admin_Code, loginType, ID, sms_id, sms_pwd, sendNum, rec_num){
-		var rndNum = Math.floor(Math.random() * 1000000) + 1;
-		if (rndNum < 100000) rndNum = '0' + rndNum;
-		console.log(rndNum);
+		$rootScope.rndNum = Math.floor(Math.random() * 1000000) + 1;
+		if ($rootScope.rndNum < 100000) $rootScope.rndNum = '0' + $rootScope.rndNum;
+		console.log($rootScope.rndNum);
 		var data = 'Kind=mobile_Certification&Value_Kind=list' + '&Admin_Code=' + Admin_Code + '&ID=' + ID;
-		data += '&Certify_Code=' + rndNum + '&loginType=' + loginType;
+		data += '&Certify_Code=' + $rootScope.rndNum + '&loginType=' + loginType;
 		return $http.get(url + '?' + data)
 		.success(function(response){
 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증코드를 전송했습니다.', 'long', 'center');
@@ -234,7 +234,7 @@ angular.module('starter.services', [])
 			if (response.list[0].Result == '1'){
 				var url = ERPiaAPI.url + '/SCP.asp';
 				var data = 'sms_id=' + sms_id + '&sms_pwd=' + sms_pwd + '&send_num=' + sendNum + '&rec_num=' + rec_num;
-				data += '&rndNum=' + rndNum + '&SendType=mobile_Certification';
+				data += '&rndNum=' + $rootScope.rndNum + '&SendType=mobile_Certification';
 				return $http.get(url + '?' + data);
 				//location.href="#/app/certification";
 			}else{

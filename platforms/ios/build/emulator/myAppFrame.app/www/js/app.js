@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 	, toast:'Y'
 })
 
-.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory, $cordovaStatusbar) {
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -119,6 +119,7 @@ angular.module('starter', ['ionic','ionic.service.core','ngCordova','ionic.servi
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 		//location.href = '#app/config';
 	};
+	$rootScope.rndNum = 0;
 })
 
 // 	// if none of the above states are matched, use this as the fallback
