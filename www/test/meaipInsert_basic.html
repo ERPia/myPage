@@ -14,13 +14,22 @@
   			<hr>&nbsp; <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매입정보
   		</div>
 
-  		<div ng-if="basictype" >
-   		<div class="list list-inset">
-   			<label class="item item-input" style="border:0;">
+  		<div ng-if="basictype" class="list list-inset" style="align:center;" >
+			<!-- <label class="item item-input" style="border:0;">
 			  거래처&nbsp;&nbsp;
-			  <input type="text" ng-model="compo.GerName" style="text-align:center;" readonly ng-click="cusSearch()">&nbsp;
-			  <button class="button button-stable" ng-click="cusSearch()">검색</button>&nbsp;
-			</label>
+			  <input type="search" ng-model="compo.userGerName" style="text-align:center;border:1px solid #eee;maxlenght:10;" size="4" ng-change="cusSearch2()">&nbsp;
+			  <button ng-click='anfma()'>??</button>
+			</label> -->
+			<table width="100%" class="list list-inset"style="align:center;vertical-align:middle;">
+				<tr>
+					<td width="20%">거래처</td>
+					<td width="40%"><input type="search" ng-model="compo.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="cusSearch2()"></td>
+					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='anfma()'></i></td>
+				</tr>
+			</table>
+			<div class="list">
+	        <li class="item" ng-repeat="x in customerDatas" ng-click="customerFunc(x.G_Name,x.G_Code);checkup()">{{x.G_Name}}</li>
+	      	</div>
 
 			<label class="item item-input" style="border:0;">
 			  수불구분
@@ -44,7 +53,6 @@
 		  		</select>
 			</label>
 	</div>
-	</div>
 
   		<div class="list list-inset" align="left" ng-click="meaipNext2()">
   			<hr>&nbsp; <i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품
@@ -60,7 +68,7 @@
 		            	</select>&nbsp;&nbsp;
 		          	</td>
 		          	<td>
-		              	<input type="text" placeholder="상품정보를 입력하세요" size="15" ng-model="Meaipgoods.userGoodsName">
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="18" style="border:1px solid #eee;" ng-model="Meaipgoods.userGoodsName">
 		          	</td>
 		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>

@@ -1273,6 +1273,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			sdate : '',
 			edate : ''
 		}
+
+		$scope.meaipPricesum = 0;
 		/* 날짜계산 */
 		$scope.dateMinus=function(days){
 
@@ -1290,6 +1292,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		}
 		$rootScope.today = $scope.dateMinus(0);
+
+$scope.meaipPricesum = 0;
 
     	//날짜별 검색
     	$scope.searchestoday = function(day){
@@ -1317,8 +1321,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			.then(function(data){
 				$scope.lists = data.list;
 				console.log("?->" , data.list);
+				$scope.meaipPricesum = 0;
+		        for (var i = 0; i < $scope.lists.length; i++) {
+		        	$scope.meaipPricesum = parseInt($scope.meaipPricesum) + parseInt($scope.lists[i].Meaip_Amt);
+		      	}
 			})
     	};
+
+    
 //////////////////////////////////////////////////////////////////////////
 
 $scope.sDate1= new Date();
@@ -1443,11 +1453,13 @@ $scope.eDate1= new Date();
 })
 .controller('meaipInsertCtrl', function($scope, $sce, $cordovaToast, $rootScope, $ionicPopup, $ionicHistory, $ionicModal, $cordovaBarcodeScanner, meaipService, mconfigService, ERPiaAPI){
 
+
+
 	/*저장시킬 데이터*/
 
 	/*거래처명 && 수불구분*/
 	$scope.compo={
-		userGerName : '', //user가 입력한 상품정보 (검색할때 사용)
+		userGoodsName : '',
 		GerName : '', // 거래처검색명
 		GerCode : 0, //거래처코드(매입등록 시 필요)
 		subulkind : 0, // 수불지정 es) 111,122
@@ -1593,24 +1605,6 @@ $scope.eDate1= new Date();
 	      $scope.datetypes='';
 	    };
 
-    /* customerSearch modal */
-	$ionicModal.fromTemplateUrl('test/customerSearch.html', {
-	    scope: $scope
-	}).then(function(modal) {
-	    $scope.customerModal = modal;
-	});
-
-	/* customerSearch modal Show */
-	$scope.cusSearch = function() {
-	    $scope.customerModal.show();
-	};
-
-	/* customerSearch modal Close */
-	$scope.cussearchClose = function() {
-		$scope.customerDatas = ''; // data배열 초기화
-		$scope.customerModal.hide();
-	};
-
 	/* goods Search modal */
     $ionicModal.fromTemplateUrl('test/goodsSearchModal.html', {
     scope: $scope
@@ -1692,23 +1686,38 @@ $scope.eDate1= new Date();
 			$scope.changolists = data.list;
 		})
 	}
-
-	/*거래처조회*/
-    $scope.cus=function(){
-    	var cusname = $scope.compo.userGerName;
-    	meaipService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+	/*거래처 자동완성기능*/
+    $scope.customerDatas = [];
+     $scope.cusSearch2 = function() {
+     	var cusname = $scope.compo.userGerName;
+     	if($scope.customerDatas == undefined || $scope.customerDatas.length == 0){
+     		meaipService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+			.then(function(data){
+				$scope.customerDatas = data.list;
+				$scope.GerName = '';
+			})
+     	}else{
+     	$scope.customerDatas.splice(0, $scope.customerDatas.length);
+     	meaipService.cusnameSearch($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
 		.then(function(data){
 			$scope.customerDatas = data.list;
 			$scope.GerName = '';
 		})
+	}
     }
     /*거래처창고 조회후 값저장*/
     $scope.customerFunc=function(gname,gcode){
+    	console.log('요기');
+    	console.log('1=>', $scope.compo.userGerName);
     	$scope.customerDatas = ''; // data배열 초기화
         $scope.compo.GerName=gname;
+        $scope.compo.userGerName = gname;
 		$scope.compo.GerCode=gcode;
         $scope.MeaipData.cusCheck = 't';
-      	$scope.customerModal.hide();
+        console.log('죠기=>', $scope.compo.userGerName);
+/*        console.log('1=',$scope.customerDatas);
+      	$scope.customerDatas.splice(0, $scope.customerDatas.length);
+      	console.log('2=',$scope.customerDatas);*/
     }
 
     /* page up And down */
@@ -1853,6 +1862,10 @@ $scope.eDate1= new Date();
     	$scope.scanBarcode = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
             console.log('format ' + imageData.format);
+
+            if(imageData.text.length < 1){
+            	alert('바코드를 정확히 입력해주세요.');
+            }else{
             	meaipService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, imageData.text)
 					.then(function(data){
 						if(data == undefined){
@@ -1869,6 +1882,7 @@ $scope.eDate1= new Date();
 							$scope.checkdataSave();
 						}
 					})
+            }
             }, function(error) {
             	console.log('an error ' + error);
             });

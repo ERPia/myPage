@@ -139,6 +139,7 @@ angular.module('starter.services', [])
 	return{
 		cusnameSearch : function(admin_code, userid, cusname){
 				console.log("meaipService and cusnameSearch");
+				console.log('cusname =>', cusname);
 				var cusname2 = escape(cusname);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_GerName&Mode=&GerName=' + cusname2;
