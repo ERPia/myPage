@@ -181,16 +181,16 @@
 
 
 .psm_segum11 {padding-bottom:10px; padding-top:8px; color:#fff; border-bottom: 1px solid #e0e0e0; font-size: 1em; background: #a298b0; font-weight: bold;}
-.psm_segum12 {width:15%; text-align: center; vertical-align: middle;}
-.psm_segum13 {width:35%; text-align: center; vertical-align: middle;}
-.psm_segum14 {width:35%; text-align: center; vertical-align: middle;}
-.psm_segum15 {width:15%; text-align: center; vertical-align: middle;}
+.psm_segum12 {width:13%; text-align: center; vertical-align: middle;}
+.psm_segum13 {width:22%; text-align: center; vertical-align: middle;}
+.psm_segum14 {width:55%; text-align: center; vertical-align: middle;}
+.psm_segum15 {width:10%; text-align: center; vertical-align: middle; min-width: 41px; max-width: 45px;}
 .psm_segum16 {padding:10px 0; border-bottom: 1px solid #e0e0e0;}
 .psm_segum17 {width:100%; font-size: 1em;}
-.psm_segum18 {width:15%; text-align: center; vertical-align: middle;}
-.psm_segum19 {width:35%; text-align: center; vertical-align: middle;}
-.psm_segum20 {width:35%; text-align: center; vertical-align: middle;}
-.psm_segum21 {width:15%; text-align: center; vertical-align: middle;}
+.psm_segum18 {width:13%; text-align: center; vertical-align: middle;}
+.psm_segum19 {width:22%; text-align: center; vertical-align: middle;}
+.psm_segum20 {width:55%; text-align: center; vertical-align: middle;}
+.psm_segum21 {width:10%; text-align: center; vertical-align: middle;}
 .psm_segum22 {width:70%; text-align: left; vertical-align: middle;}
 
 

@@ -78,12 +78,12 @@
 					<a class="button psm_left_mediv psm_left_box3" menu-close ng-click="goto_with_clearHistory('#/app/push')"><img src="./img/icon_push.png" class="psm_left_img2"><br>알림</a>
 				</div>
 
-				<!-- <div ng-switch-when="E">
+				<div ng-switch-when="E">
 					<div class="naviGubun">ERPia 거래명세표</div>
 					<a class="item item-icon-left navi-item" menu-close ng-click="showCheckSano()">
-						<i class="icon"><img src="./img/icon_deal.png" class="psm_left_icon"><span class="navi-item-leftText">거래명세표<br>미수신건</span><span class="navi-item-rightText" style="color:#ff0000;">{{userData.cntNotRead}} 건</span></i>
+						<i class="icon"><img src="./img/icon_deal.png" class="psm_left_icon"><span class="navi-item-leftText">거래명세표<br>금일 발송건</span><span class="navi-item-rightText" style="color:#ff0000;">{{userData.cntNotRead}} 건</span></i>
 					</a>
-				</div> -->
+				</div>
 
 				<div ng-switch-when="E">
 					<div class="naviGubun">ERPia 계정정보</div>
@@ -165,13 +165,10 @@
 					</a>
 				</div>
 				<div ng-switch-when="N"><img src="./img/left_add.jpg" width="100%"></div>
-
-				<div class="button-bar" ng-switch="footer_menu">
+				<div class="button-bar">
 					<a class="button button-light psm_left_mediv" menu-close ng-click="login()"><img src="./img/icon-onoff.png" class="psm_left_img2"><br><span class="psm_left_mespan" ng-bind-html="loginHTML"></span></a>
-					<!-- <a class="button button-light psm_left_mediv" menu-close ng-click='openInAppBrowser("http://www.erpia.net")'><img src="./img/icon_home.png" class="psm_left_img2"><br>홈페이지</a> -->
 					<a class="button button-light psm_left_mediv" href="#" onclick="window.open('https://www.erpia.net/','_blank', 'location=yes,closebuttoncaption=Done');" target="blank"><img src="./img/icon_home.png" class="psm_left_img2"><br>홈페이지</a>
-					<!-- <a class="button button-light psm_left_mediv" href="#" menu-close ng-click="goto_with_clearHistory('#app/ERPiaHome')"><img src="./img/icon_home.png" class="psm_left_img2"><br>홈페이지</a> -->
-					<a class="button button-light psm_left_mediv" menu-close ng-click='goto_with_clearHistory("#app/config")'  ng-switch-when="U"><img src="./img/icon_setting.png" class="psm_left_img2"><br>설정</a>
+					<a class="button button-light psm_left_mediv" menu-close ng-click='goto_with_clearHistory("#app/config")' ng-if="loginData.isLogin == 'Y'"><img src="./img/icon_setting.png" class="psm_left_img2"><br>설정</a>
 					<!-- <a class="button button-light psm_left_mediv" menu-close ng-click='goto_with_clearHistory("#app/pushTest")'><img src="./img/icon_setting.png" class="psm_left_img2"><br>테스트</a> -->
 				</div>
 				<!-- // 일반 거래처 로그인 -->

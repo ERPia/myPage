@@ -314,6 +314,32 @@ angular.module('starter.services', [])
 				}, function(response){
 					return $q.reject(response.data);
 				})
+		}, getCntNotRead: function(Admin_Code, checkNotRead){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Kind=select_Trade_Admin&Admin_Code=' + Admin_Code + '&checkNotRead=' + checkNotRead;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+		}, chkRead: function(Admin_Code, Sl_No, user_id){
+			var url = ERPiaAPI.url + '/JSon_Proc_MyPage_Scm.asp';
+			var data = 'Kind=read_Trade_Detail&Admin_Code=' + Admin_Code + '&Sl_No=' + Sl_No + '&user_id=' + user_id;
+			return $http.get(url + '?' + data)
+				.then(function(response){
+					if(typeof response.data == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
 		}
 	};
 })
