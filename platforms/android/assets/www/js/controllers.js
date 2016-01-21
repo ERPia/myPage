@@ -2625,7 +2625,9 @@ $scope.mejangselect= function() {
 /*checkcaught*/
 	$scope.checkcaught=[];
 /*바코드용 수량*/   
- $scope.barcodegoodscnt=0;
+ $scope.barcode={
+ 	barcodegoodscnt:0
+ };
 /*$scope.scanBarcode33 = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
             alert(imageData.text);
@@ -2663,7 +2665,7 @@ $scope.mejangselect= function() {
   //  
     $scope.barcodesearchon = function(){
     	$scope.itemlists=[];
-    	$scope.barcodegoodscnt=0;
+    	$scope.barcode.barcodegoodscnt=0;
     	$scope.searchde.itemselectMode='Select_GI_Code';
     	$scope.searchde.Kind='ERPia_Sale_Select_Goods';
     	   // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName
@@ -2716,7 +2718,7 @@ $scope.mejangselect= function() {
 			});
 				
     };
-  					
+  	
 //----------바코드용 체크데이터 담기 1/20 집가기전----------
 $scope.barcodeitemcheck=function(ok){
 	console.log("$scope.itemlists.length:", $scope.itemlists.length);
@@ -2724,27 +2726,32 @@ $scope.barcodeitemcheck=function(ok){
 					/*$scope.checkedDatas.push($scope.itemlists[0]);*/
 					    if($scope.itemlists.length>0){
 					    	$scope.checkcaught.checkeddata='no';
-    						console.log($scope.checkedDatas[0]);
-    	
+    						
 						    	if($scope.checkcaught !== 'yes'){
 						    		$scope.checkedDatas.push($scope.itemlists[0]);
 						    	}
 						    	console.log('막데이터=>',$scope.checkedDatas);
 								console.log("상품데이타리스트 첫번째 배열: ", $scope.itemlists[0]);
 
-								$scope.checkdataSave();
 					 	$ionicPopup.show({
 					      title: '('+$scope.checkedDatas[0].G_Code+')<br>'+$scope.checkedDatas[0].G_Name,
 					      subTitle: '수량을입력해주세요.',
-					      template: '<input type="number" ng-model="barcodegoodscnt"/>개',
-					      buttons:[
-					      { text: 'No', onTap: function(e){}},
-					      { text: 'Yes', type: 'button-positive',
-					        onTap: function(e){
-					         	$scope.checkdataSave();
-					        }
-					      },
-					    ]
+					      template: '<input type="number" ng-model="barcode.barcodegoodscnt">개',
+					      scope: $scope,
+					      buttons: [
+										      { text: '취소' },
+										      {
+										        text: '<b>담기</b>',
+										        type: 'button-positive',
+										        onTap: function(e) {
+										               /*return $scope.barcode.barcodegoodscnt;*/
+										               console.log("수량:", $scope.barcode.barcodegoodscnt);
+										               $scope.checkdataSave();
+										          
+										        }
+										      }
+										    ]
+
 					      });
 					$scope.searchde.itemselectMode='Select_GI_Code';
 					}else if($scope.itemlists.length==0&&ok==1){
@@ -2768,7 +2775,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     $scope.goodsCheck=function(goodsdata){
     	/*console.log('체크박스=', goodsdata);*/
     	$scope.checkcaught.checkeddata='no';
-    	console.log($scope.checkedDatas);
 
     	for(var i=0; i<$scope.checkedDatas.length; i++){
     		if($scope.checkedDatas[i] == goodsdata){
@@ -2817,7 +2823,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	    		default : console.log('설정안되있습니다.(매출가로저장)'); var price = $scope.checkedDatas[i].G_Dn1; break;
 	    	}
 	    	console.log('GOODSRESULT=>',$scope.checkedDatas[i]);
-	    	if($scope.barcodegoodscnt==0){
+	    	if($scope.barcode.barcodegoodscnt==0){
 			$scope.goodsresult.push({
 				goods_number : $scope.goodsresult.length+1,
 				G_Name : $scope.checkedDatas[i].G_Name,
@@ -2828,19 +2834,19 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 				goods_totalprice : 0,
 				goods_panmedanga: parseInt(price)*0.9				
 			});
-			}else{
+			}else if($scope.barcode.barcodegoodscnt==1){
 				$scope.goodsresult.push({
 				goods_number : $scope.goodsresult.length+1,
 				G_Name : $scope.checkedDatas[i].G_Name,
 				G_Code : $scope.checkedDatas[i].G_Code,
 				G_Stand : $scope.checkedDatas[i].G_Stand,
-				goods_count : parseInt($scope.barcodegoodscnt),
+				goods_count : parseInt($scope.barcode.barcodegoodscnt),
 				goods_price : parseInt(price),
 				goods_totalprice : 0,
 				goods_panmedanga: parseInt(price)*0.9				
 			});
 			}
-			$scope.barcodegoodscnt=0;
+			$scope.barcode.barcodegoodscnt=0;
 		};
     	$scope.goodsparam={   //상품검색파라미터정보 Model
     		GoodsName:'',
@@ -2926,29 +2932,38 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
      	th : false,
      	fo : false
   };
-			$scope.paycard=[];
-			$scope.paybank=[];
+			$scope.paycard={
+				Card_Code : '',
+				Card_Name : '',
+				Card_Num : ''
+			};
+			$scope.paybank={
+				Bank_Code : '',
+				Bank_Name : '',
+				Bank_Account : ''
+			};
      //---------결제정보를 배열에 담음--------
      $scope.paydataF = function(){
      	var paycardbank=[];
-			$scope.paycard.splice(0, 1);
-			$scope.paybank.splice(0, 1);
-			$scope.paycard=[];// 계좌정보 초기화
-			$scope.paybank=[];
+			// 계좌정보 초기화
+			$scope.paybank.Bank_Code = '';
+			$scope.paybank.Bank_Name = '';
+			$scope.paybank.Bank_Account = '';
+			$scope.paycard.Card_Code = '';
+		 	$scope.paycard.Card_Name = '';
+			$scope.paycard.Card_Num = '';
 		paycardbank=$scope.compo.paycardbank.split(',');
 		if($scope.compo.paysubul==722){
-     		$scope.paybank.push({
-				Bank_Code : paycardbank[0].toString(),
-				Bank_Name : paycardbank[1].toString(),
-				Bank_Account : paycardbank[2].toString()
-        	});
+     		$scope.paybank.Bank_Code = paycardbank[0].toString();
+			$scope.paybank.Bank_Name = paycardbank[1].toString(),
+			$scope.paybank.Bank_Account = paycardbank[2].toString()
+        
         	console.log("----------------------통장결제정보: ", $scope.paybank);
 		}else if($scope.compo.paysubul==723){
-			$scope.paycard.push({
-				Card_Code : paycardbank[0].toString(),
-				Card_Name : paycardbank[1].toString(),
-				Card_Num : paycardbank[2].toString()
-        	});
+				$scope.paycard.Card_Code = paycardbank[0].toString(),
+				$scope.paycard.Card_Name = paycardbank[1].toString(),
+				$scope.paycard.Card_Num = paycardbank[2].toString()
+        	
         	console.log("----------------------카드결제정보: ", $scope.paycard);
 		}else{
 
@@ -2959,9 +2974,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
      /*지급구분*/
      $scope.Payments_division=function(num){
-
-     		$scope.paycard.splice(0, 1);
-			$scope.paybank.splice(0, 1);
 
 		if(num == 1 && $scope.payment.one == true){
 			console.log('현금결제');
@@ -3039,7 +3051,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
         
      }
 
-
+//$scope.paybank.Bank_Code $scope.paybank.Bank_Name $scope.paybank.Bank_Account //$scope.paycard.Card_Code $scope.paycard.Card_Name $scope.paycard.Card_Num
   //-------------------등록하기 버튼 클릭시 -----------------------------------------
   $scope.MeachulInsertClick=function(){
      	console.log('상품정보=',$scope.goodsresult);
@@ -3052,7 +3064,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
      			var answer = '결제액을 입력해주세요.';
      		}else if($scope.payment.two == true || $scope.payment.fo == true){
      			console.log('카드&통장');
-     			if($scope.paycard.length < 1||$scope.paybank.length < 1){
+     			if($scope.paybank.Bank_Code==undefined || $scope.paybank.Bank_Name==undefined || $scope.paybank.Bank_Account==undefined || $scope.paycard.Card_Code==undefined || $scope.paycard.Card_Name==undefined || $scope.paycard.Card_Num==undefined){
      				console.log('카드&통장 셀랙스박스 미선택일시에.=',$scope.paycard.length,$scope.paybank.length);
      				var answer = '결제 카드 & 은행을 선택해주세요.';
      			}else{
@@ -3137,12 +3149,12 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 /*여기서 XML형으로 변환!!!!!!!!!!!!!*/
 $scope.insertxmlMeaChulMs=function(){
     $scope.etc.goods_bigo1=escape($scope.etc.goods_bigo);
-    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.todate+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$rootScope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
+    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.todate+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
   };
 
 $scope.updatexmlMeaChulMs=function(){
     $scope.etc.goods_bigo1=escape($scope.etc.goods_bigo);
-    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.etc.MeaChul_Date+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$rootScope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
+    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.etc.MeaChul_Date+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
   };
 
 $scope.xmlMeaChulTs=function(){
@@ -3156,7 +3168,7 @@ $scope.xmlMeaChulTs=function(){
 // 70x-지급, 72x-입금 | 현금701,721/통장702,722/카드703,723/어음704,724         //$scope.paybank.Bank_Code $scope.paybank.Bank_Name $scope.paybank.Bank_Account //$scope.paycard.Card_Code $scope.paycard.Card_Name $scope.paycard.Card_Num
 $scope.xmlIpJis=function(){
 	 $scope.IpJi='';
-	 $scope.IpJi='<item><Aseq>1</Aseq><ij_Date>'+$searchde.payday+'</ij_Date><Comp_No>'+$scope.Comp.Ger_Code+'</Comp_No><Subul_kind>'+$scope.compo.paysubul+'</Subul_kind><Bank_Code>'+$scope.paybank.Bank_Code+'</Bank_Code><Bank_Name><![CDATA['+$scope.paybank.Bank_Name+']]></Bank_Name><Bank_Account>'+$scope.paybank.Bank_Account+'</Bank_Account><Card_Code>'+$scope.paycard.Card_Code+'</Card_Code><Card_Name><![CDATA['+$scope.paycard.Card_Name+']]></Card_Name><Card_Num>'+$scope.paycard.Card_Num+'</Card_Num><Hap_Amt>'+$scope.compo.payprice+'</Hap_Amt></item>';
+	 $scope.IpJi='<item><Aseq>1</Aseq><ij_Date>'+$scope.searchde.payday+'</ij_Date><Comp_No>'+$scope.Comp.Ger_Code+'</Comp_No><Subul_kind>'+$scope.compo.paysubul+'</Subul_kind><Bank_Code>'+$scope.paybank.Bank_Code+'</Bank_Code><Bank_Name><![CDATA['+$scope.paybank.Bank_Name+']]></Bank_Name><Bank_Account>'+$scope.paybank.Bank_Account+'</Bank_Account><Card_Code>'+$scope.paycard.Card_Code+'</Card_Code><Card_Name><![CDATA['+$scope.paycard.Card_Name+']]></Card_Name><Card_Num>'+$scope.paycard.Card_Num+'</Card_Num><Hap_Amt>'+$scope.compo.payprice+'</Hap_Amt></item>';
 	
 };
 

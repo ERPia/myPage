@@ -2625,7 +2625,9 @@ $scope.mejangselect= function() {
 /*checkcaught*/
 	$scope.checkcaught=[];
 /*바코드용 수량*/   
- $scope.barcodegoodscnt=0;
+ $scope.barcode={
+ 	barcodegoodscnt:0
+ };
 /*$scope.scanBarcode33 = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
             alert(imageData.text);
@@ -2641,30 +2643,44 @@ $scope.mejangselect= function() {
             });
     	}
 */
-     /*바코드 스캔 펑션*/
-        $scope.scanBarcodeBtn = function() {
-         $cordovaBarcodeScanner.scan().then(function(imageData) {
-          if(imageData.text!=""){
-            alert("바코드스캔 성공: "+imageData.text);
-            $scope.goodsparam.GI_Code=imageData.text;
+
+$scope.scanBarcodeBtn = function(){
+
+	 if($scope.goodsparam.GI_Code!=""){
+            alert("바코드스캔 성공: "+$scope.goodsparam.GI_Code);
             $scope.barcodesearchon();
-            console.log("Barcode Format -> " + imageData.format);
-            console.log("Cancelled -> " + imageData.cancelled);
             }else{
               alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
               $scope.searchde.itemselectMode='Select_GI_Code';
-              $scope.modalpresentsearch.show(); 
             }
-        }, function(error) {
-            console.log("An error happened -> " + error);
-        });
-    };
-    $scope.itemlists=[];
+
+};
+
+
+     /*바코드 스캔 펑션*/
+        // $scope.scanBarcodeBtn = function() {
+        //  $cordovaBarcodeScanner.scan().then(function(imageData) {
+        //   if(imageData.text!=""){
+        //     alert("바코드스캔 성공: "+imageData.text);
+        //     $scope.goodsparam.GI_Code=imageData.text;
+        //     $scope.barcodesearchon();
+        //     console.log("Barcode Format -> " + imageData.format);
+        //     console.log("Cancelled -> " + imageData.cancelled);
+        //     }else{
+        //       alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
+        //       $scope.searchde.itemselectMode='Select_GI_Code';
+        //     }
+        // }, function(error) {
+    //         console.log("An error happened -> " + error);
+    //     });
+    // };
+    $scope.itemlists=[];//서버로부터 받아온 상품정보를 임시로 담는 그릇
+
   //  
     $scope.barcodesearchon = function(){
-    	$scope.itemlists=[];
-    	$scope.barcodegoodscnt=0;
-    	$scope.searchde.itemselectMode='Select_GI_Code';
+    	$scope.itemlists=[];//서버로부터 받아온 상품정보를 임시로 담는 그릇
+    	$scope.barcode.barcodegoodscnt=0; //바코드 스캔 후 입력하는 수량
+    	$scope.searchde.itemselectMode='Select_GI_Code'; 
     	$scope.searchde.Kind='ERPia_Sale_Select_Goods';
     	   // CORS 요청 데모Admin_Code, UserId, Kind, Mode, GerName
 	    console.log($scope.searchde);  
@@ -2695,8 +2711,10 @@ $scope.mejangselect= function() {
 
 						}else{
 							console.log(data);
+							console.log('==============================111111>', data.list[0]);
 							$scope.itemlists.push(data.list[0]);
 							$scope.searchde.itemselectMode='Select_GI_Code';
+							console.log('==============================2222222>', $scope.itemlists);
 							$scope.barcodeitemcheck();
 						}
 					},function(){
@@ -2716,43 +2734,110 @@ $scope.mejangselect= function() {
 			});
 				
     };
-  					
+  	
 //----------바코드용 체크데이터 담기 1/20 집가기전----------
 $scope.barcodeitemcheck=function(ok){
-	console.log("$scope.itemlists.length:", $scope.itemlists.length);
-					/*console.log("상품데이타리스트 첫번째 배열: ", $scope.itemlists[0]);*/
-					/*$scope.checkedDatas.push($scope.itemlists[0]);*/
-					    if($scope.itemlists.length>0){
-					    	$scope.checkcaught.checkeddata='no';
-    						console.log($scope.checkedDatas[0]);
-    	
-						    	if($scope.checkcaught !== 'yes'){
-						    		$scope.checkedDatas.push($scope.itemlists[0]);
-						    	}
-						    	console.log('막데이터=>',$scope.checkedDatas);
-								console.log("상품데이타리스트 첫번째 배열: ", $scope.itemlists[0]);
 
-								$scope.checkdataSave();
-					 	$ionicPopup.show({
+		if($scope.goodsresult.length > 0){
+			console.log('상품검색배열확인');
+			for(var j=0; j < $scope.goodsresult.length; j++){
+				console.log('for1 안('+j+')');
+				for(var o=0; o<$scope.itemlists.length; o++){
+					console.log('for2 안('+o+')');
+					if($scope.goodsresult[j].G_Code == $scope.itemlists[o].G_Code){
+						console.log('같은상품이 상품등록 리스트에 존재합니다.');
+
+						var mypopup = $ionicPopup.alert({
+						     title: '('+ $scope.goodsresult[j].G_Code +')<br>' + $scope.goodsresult[j].G_Name,
+						     template: '같은상품이 상품등록 리스트에 이미 존재합니다.'
+						   });
+						console.log('break1');
+						$scope.itemlists.splice(o, 1);
+						break;
+						console.log('break');
+						
+					}
+
+				}
+				console.log('for1안끝');
+			}
+			console.log('for완전안끝');
+		}
+		console.log('이프문 다 끝난다음');
+
+	console.log("$scope.itemlists.length:", $scope.itemlists);
+	//--------여기까지 상품 중복체크----------------------------------------------------------------
+					console.log('---------------1--------------바코드');
+					    if($scope.itemlists.length>0){
+					    	console.log('---------------2--------------바코드');
+				    		$scope.checkedDatas.push($scope.itemlists[0]);
+				    		console.log('막데이터=>',$scope.checkedDatas);
+							console.log("상품데이타리스트 첫번째 배열: ", $scope.itemlists[0]);
+
+					 	var myPopup1 = $ionicPopup.show({
 					      title: '('+$scope.checkedDatas[0].G_Code+')<br>'+$scope.checkedDatas[0].G_Name,
 					      subTitle: '수량을입력해주세요.',
-					      template: '<input type="number" ng-model="barcodegoodscnt"/>개',
-					      buttons:[
-					      { text: 'No', onTap: function(e){}},
-					      { text: 'Yes', type: 'button-positive',
-					        onTap: function(e){
-					         	$scope.checkdataSave();
-					        }
-					      },
-					    ]
+					      template: '<input type="number" ng-model="barcode.barcodegoodscnt">개',
+					      scope: $scope,
+					      buttons: [
+										      { text: '취소' },
+										      {
+										        text: '<b>담기</b>',
+										        type: 'button-positive',
+										        onTap: function(e) {
+										               /*return $scope.barcode.barcodegoodscnt;*/
+										               console.log("수량:", $scope.barcode.barcodegoodscnt);
+										               $scope.barcodedataSave();//상품리스트 저장
+										          		
+										        }
+										      }
+										    ]
+
 					      });
 					$scope.searchde.itemselectMode='Select_GI_Code';
 					}else if($scope.itemlists.length==0&&ok==1){
 						alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
               				$scope.searchde.itemselectMode='Select_GI_Code';
 					}
-
+					console.log('---------------3--------------바코드');
 				};
+
+$scope.barcodedataSave=function(){
+			var i = 0;
+			switch($scope.configData.basic_Dn_Sale){
+	    		case '1': console.log('매출가'); var price = $scope.checkedDatas[i].G_Dn1; break;
+	    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
+	    		case '3': console.log('인터넷가'); var price = $scope.checkedDatas[i].G_Dn3; break;
+	    		case '4': console.log('소매가'); var price = $scope.checkedDatas[i].G_Dn4; break;
+	    		case '5': console.log('권장소비자가'); var price = $scope.checkedDatas[i].G_Dn5; break;
+
+	    		default : console.log('설정안되있습니다.(매출가로저장)'); var price = $scope.checkedDatas[i].G_Dn1; break;
+	    	}
+	    	console.log('GOODSRESULT=>',$scope.checkedDatas[i]);
+
+				$scope.goodsresult.push({
+				goods_number : $scope.goodsresult.length+1,
+				G_Name : $scope.checkedDatas[i].G_Name,
+				G_Code : $scope.checkedDatas[i].G_Code,
+				G_Stand : $scope.checkedDatas[i].G_Stand,
+				goods_count : parseInt($scope.barcode.barcodegoodscnt),
+				goods_price : parseInt(price),
+				goods_totalprice : 0,
+				goods_panmedanga: parseInt(price)*0.9				
+			});
+			$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
+
+		console.log('바코드 $scope.checkedDatas: ' , $scope.checkedDatas);
+    	$scope.goodsparam={   //검색 후 초기화
+    		GoodsName:'',
+    		G_OnCode:'',
+    		GoodsCode:'',
+    		GI_Code:''
+		};
+		$scope.barcodecheckjungboc=false;
+		$scope.barcode.barcodegoodscnt=0;
+    	console.log('바코드 $scope.goodsresult: ' , $scope.goodsresult);
+};
 
 $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X버튼 클릭시
       $scope.goodsresult.splice(index, 1);
@@ -2768,7 +2853,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     $scope.goodsCheck=function(goodsdata){
     	/*console.log('체크박스=', goodsdata);*/
     	$scope.checkcaught.checkeddata='no';
-    	console.log($scope.checkedDatas);
 
     	for(var i=0; i<$scope.checkedDatas.length; i++){
     		if($scope.checkedDatas[i] == goodsdata){
@@ -2782,7 +2866,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     		$scope.checkedDatas.push(goodsdata);
     	}
     	console.log('막데이터=>',$scope.checkedDatas);
-    }
+    };
 
 
 /*선택된 상품들을 등록리스트에 저장*/
@@ -2790,23 +2874,34 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 		if($scope.goodsresult.length > 0){
 			console.log('상품검색배열확인');
 			for(var j=0; j < $scope.goodsresult.length; j++){
+				console.log('for1 안('+j+')');
 				for(var o=0; o<$scope.checkedDatas.length; o++){
+					console.log('for2 안('+o+')');
 					if($scope.goodsresult[j].G_Code == $scope.checkedDatas[o].G_Code){
 						console.log('같은상품이 상품등록 리스트에 존재합니다.');
 
-						$ionicPopup.alert({
+						var mypopup = $ionicPopup.alert({
 						     title: '('+ $scope.goodsresult[j].G_Code +')<br>' + $scope.goodsresult[j].G_Name,
 						     template: '같은상품이 상품등록 리스트에 이미 존재합니다.'
 						   });
-
+						console.log('break1');
 						$scope.checkedDatas.splice(o, 1);
-						break;
-					}
+						$scope.barcodecheckjungboc=true;
+						
+						console.log('break');
+						
+					}else{}
 
 				}
+				console.log('for1안끝');
 			}
-		}
+			console.log('for완전안끝');
+		}else{}
+		console.log('이프문 다 끝난다음');
+
+		
 		for(var i=0; i < $scope.checkedDatas.length; i++){
+			console.log('다음포문');
 			switch($scope.configData.basic_Dn_Sale){
 	    		case '1': console.log('매출가'); var price = $scope.checkedDatas[i].G_Dn1; break;
 	    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
@@ -2817,7 +2912,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	    		default : console.log('설정안되있습니다.(매출가로저장)'); var price = $scope.checkedDatas[i].G_Dn1; break;
 	    	}
 	    	console.log('GOODSRESULT=>',$scope.checkedDatas[i]);
-	    	if($scope.barcodegoodscnt==0){
 			$scope.goodsresult.push({
 				goods_number : $scope.goodsresult.length+1,
 				G_Name : $scope.checkedDatas[i].G_Name,
@@ -2828,30 +2922,24 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 				goods_totalprice : 0,
 				goods_panmedanga: parseInt(price)*0.9				
 			});
-			}else{
-				$scope.goodsresult.push({
-				goods_number : $scope.goodsresult.length+1,
-				G_Name : $scope.checkedDatas[i].G_Name,
-				G_Code : $scope.checkedDatas[i].G_Code,
-				G_Stand : $scope.checkedDatas[i].G_Stand,
-				goods_count : parseInt($scope.barcodegoodscnt),
-				goods_price : parseInt(price),
-				goods_totalprice : 0,
-				goods_panmedanga: parseInt(price)*0.9				
-			});
-			}
-			$scope.barcodegoodscnt=0;
-		};
-    	$scope.goodsparam={   //상품검색파라미터정보 Model
+			
+
+
+			
+		}
+			$scope.closepresentsearchModals();
+		
+		
+		console.log('다음포문 끝나고난후' , $scope.checkedDatas);
+    	$scope.goodsparam={   //검색 후 초기화
     		GoodsName:'',
     		G_OnCode:'',
     		GoodsCode:'',
     		GI_Code:''
 		};
-	
-    	$scope.goodslists = '';
-    	$scope.closepresentsearchModals();
-    	
+		$scope.barcodecheckjungboc=false;
+		$scope.barcode.barcodegoodscnt=0;
+    	console.log('다음포문 끝나고난후' , $scope.goodsresult);
     };
 /*상품별 가격합계 구하기*/
   $scope.goods_totalprice1=function(indexnum){
@@ -2911,44 +2999,53 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
 
   //////////////////////결제정보///////////////////////////////
-  $scope.paytype = false;
-  $scope.compo={
-  	paysubul:0,
-  	paycardbank:'',
-  	payprice:0,
-  };
-  $scope.pay={
-     	use : true
-     };
-  $scope.payment={
-     	one : false,
-     	two : false,
-     	th : false,
-     	fo : false
-  };
-			$scope.paycard=[];
-			$scope.paybank=[];
+		  $scope.paytype = false;
+		  $scope.compo={
+		  	paysubul:0,
+		  	paycardbank:'',
+		  	payprice:0,
+		  };
+		  $scope.pay={
+		     	use : true
+		     };
+		  $scope.payment={
+		     	one : false,
+		     	two : false,
+		     	th : false,
+		     	fo : false
+		  };
+			$scope.paycard={
+				Card_Code : '',
+				Card_Name : '',
+				Card_Num : ''
+			};
+			$scope.paybank={
+				Bank_Code : '',
+				Bank_Name : '',
+				Bank_Account : ''
+			};
      //---------결제정보를 배열에 담음--------
      $scope.paydataF = function(){
      	var paycardbank=[];
-			$scope.paycard.splice(0, 1);
-			$scope.paybank.splice(0, 1);
-			$scope.paycard=[];// 계좌정보 초기화
-			$scope.paybank=[];
+			// 계좌정보 초기화
+			$scope.paybank.Bank_Code = '';
+			$scope.paybank.Bank_Name = '';
+			$scope.paybank.Bank_Account = '';
+			$scope.paycard.Card_Code = '';
+		 	$scope.paycard.Card_Name = '';
+			$scope.paycard.Card_Num = '';
 		paycardbank=$scope.compo.paycardbank.split(',');
 		if($scope.compo.paysubul==722){
-     		$scope.paybank.push({
-				Bank_Code : paycardbank[0].toString(),
-				Bank_Name : paycardbank[1].toString(),
-				Bank_Account : paycardbank[2].toString()
-        	});
+     		$scope.paybank.Bank_Code = paycardbank[0].toString();
+			$scope.paybank.Bank_Name = paycardbank[1].toString(),
+			$scope.paybank.Bank_Account = paycardbank[2].toString()
+        
         	console.log("----------------------통장결제정보: ", $scope.paybank);
 		}else if($scope.compo.paysubul==723){
-			$scope.paycard.push({
-				Card_Code : paycardbank[0].toString(),
-				Card_Name : paycardbank[1].toString(),
-				Card_Num : paycardbank[2].toString()
-        	});
+				$scope.paycard.Card_Code = paycardbank[0].toString(),
+				$scope.paycard.Card_Name = paycardbank[1].toString(),
+				$scope.paycard.Card_Num = paycardbank[2].toString()
+        	
         	console.log("----------------------카드결제정보: ", $scope.paycard);
 		}else{
 
@@ -2959,9 +3056,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
      /*지급구분*/
      $scope.Payments_division=function(num){
-
-     		$scope.paycard.splice(0, 1);
-			$scope.paybank.splice(0, 1);
 
 		if(num == 1 && $scope.payment.one == true){
 			console.log('현금결제');
@@ -3039,9 +3133,10 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
         
      }
 
-
+//$scope.paybank.Bank_Code $scope.paybank.Bank_Name $scope.paybank.Bank_Account //$scope.paycard.Card_Code $scope.paycard.Card_Name $scope.paycard.Card_Num
   //-------------------등록하기 버튼 클릭시 -----------------------------------------
   $scope.MeachulInsertClick=function(){
+  		$scope.IpJi_YN=0;
      	console.log('상품정보=',$scope.goodsresult);
      	console.log('매출정보=',$scope.searchde);
      	console.log('따로저장=',$scope.compo);
@@ -3052,7 +3147,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
      			var answer = '결제액을 입력해주세요.';
      		}else if($scope.payment.two == true || $scope.payment.fo == true){
      			console.log('카드&통장');
-     			if($scope.paycard.length < 1 && $scope.paybank.length < 1){
+     			if($scope.paybank.Bank_Code==undefined || $scope.paybank.Bank_Name==undefined || $scope.paybank.Bank_Account==undefined || $scope.paycard.Card_Code==undefined || $scope.paycard.Card_Name==undefined || $scope.paycard.Card_Num==undefined){
      				console.log('카드&통장 셀랙스박스 미선택일시에.=',$scope.paycard.length,$scope.paybank.length);
      				var answer = '결제 카드 & 은행을 선택해주세요.';
      			}else{
@@ -3080,8 +3175,15 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
      			var answer = '결제정보가 입력되지 않았습니다. <br> 매출전표를 등록하시겠습니까?';
      			var distinction = 'ok';
      			console.log('nono');
-     			
-
+     				$scope.compo.subul_kind = 0;
+		     		$scope.paybank.Bank_Code = '';
+					$scope.paybank.Bank_Name = '';
+					$scope.paybank.Bank_Account = '';
+					$scope.paycard.Card_Code = '';
+				 	$scope.paycard.Card_Name = '';
+					$scope.paycard.Card_Num = '';
+					$scope.compo.payprice = 0;
+					$scope.IpJi_YN=2;
      	/*
 		if($scope.compo.payprice>$scope.etc.totalsumprices){
      					console.log('결재액이 총가격보다 클 때');
@@ -3114,9 +3216,13 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 			             type: 'button-positive',
 			             onTap: function(e) {
 			                  console.log('yes');
+
 			                  $scope.insertxmlMeaChulMs();
 			                  $scope.xmlMeaChulTs();
-			                  $scope.xmlIpJis();
+			                  if($scope.IpJi_YN==2){
+
+			                  }else{
+			                  $scope.xmlIpJis();}
 			                  console.log("Meachulm ======", $scope.MeaChulM);
 			                  console.log("MeachulT ======", $scope.MeachulT);
 			                  console.log("xmlIpJis ======", $scope.IpJi);
@@ -3137,12 +3243,12 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 /*여기서 XML형으로 변환!!!!!!!!!!!!!*/
 $scope.insertxmlMeaChulMs=function(){
     $scope.etc.goods_bigo1=escape($scope.etc.goods_bigo);
-    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.todate+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
+    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.loginData.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.todate+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
   };
 
 $scope.updatexmlMeaChulMs=function(){
     $scope.etc.goods_bigo1=escape($scope.etc.goods_bigo);
-    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.searchde.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.etc.MeaChul_Date+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
+    $scope.MeaChulM='<MeaChulM><Admin_Code>'+$scope.loginData.Admin_Code+'</Admin_Code><MeaChul_date>'+$scope.etc.MeaChul_Date+'</MeaChul_date><Comp_no>'+$scope.Comp.Ger_Code+'</Comp_no><MeaChul_Amt>'+$scope.etc.totalsumprices+'</MeaChul_Amt><i_Cancel>'+$scope.searchde.i_Cancel+'</i_Cancel><Remk><![CDATA['+$scope.etc.goods_bigo1+']]></Remk></MeaChulM><MeaChulT>';
   };
 
 $scope.xmlMeaChulTs=function(){
@@ -3156,7 +3262,7 @@ $scope.xmlMeaChulTs=function(){
 // 70x-지급, 72x-입금 | 현금701,721/통장702,722/카드703,723/어음704,724         //$scope.paybank.Bank_Code $scope.paybank.Bank_Name $scope.paybank.Bank_Account //$scope.paycard.Card_Code $scope.paycard.Card_Name $scope.paycard.Card_Num
 $scope.xmlIpJis=function(){
 	 $scope.IpJi='';
-	 $scope.IpJi='<item><Aseq>1</Aseq><ij_Date>'+$searchde.payday+'</ij_Date><Comp_No>'+$scope.Comp.Ger_Code+'</Comp_No><Subul_kind>'+$scope.compo.paysubul+'</Subul_kind><Bank_Code>'+$scope.paybank.Bank_Code+'</Bank_Code><Bank_Name><![CDATA['+$scope.paybank.Bank_Name+']]></Bank_Name><Bank_Account>'+$scope.paybank.Bank_Account+'</Bank_Account><Card_Code>'+$scope.paycard.Card_Code+'</Card_Code><Card_Name><![CDATA['+$scope.paycard.Card_Name+']]></Card_Name><Card_Num>'+$scope.paycard.Card_Num+'</Card_Num><Hap_Amt>'+$scope.compo.payprice+'</Hap_Amt></item>';
+	 $scope.IpJi='<item><Aseq>1</Aseq><ij_Date>'+$scope.searchde.payday+'</ij_Date><Comp_No>'+$scope.Comp.Ger_Code+'</Comp_No><Subul_kind>'+$scope.compo.paysubul+'</Subul_kind><Bank_Code>'+$scope.paybank.Bank_Code+'</Bank_Code><Bank_Name><![CDATA['+$scope.paybank.Bank_Name+']]></Bank_Name><Bank_Account>'+$scope.paybank.Bank_Account+'</Bank_Account><Card_Code>'+$scope.paycard.Card_Code+'</Card_Code><Card_Name><![CDATA['+$scope.paycard.Card_Name+']]></Card_Name><Card_Num>'+$scope.paycard.Card_Num+'</Card_Num><Hap_Amt>'+$scope.compo.payprice+'</Hap_Amt></item>';
 	
 };
 

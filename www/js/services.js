@@ -851,6 +851,22 @@ angular.module('starter.services', [])
 			}, function(response){
 				return $q.reject(response.data);
 			})
+		}, ERPiaCompsearchData: function(Admin_Code, UserId, kind, mode, gernamekr){
+			console.log("ERPiaMeachulService and ERPiaCompsearchData");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' +mode + '&GerName=' + gernamekr
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMeachulService', response);
+				if(typeof response == 'object'){
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
 		}
 	};
 })
