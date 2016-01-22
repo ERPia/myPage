@@ -1637,6 +1637,15 @@ $scope.eDate1= new Date();
     	}	
     }
 
+    /*상품상세조회*/
+    $scope.goodsDetail = function(){
+    	$ionicPopup.alert({
+	     title: '상품상세조회',
+	     template: 'API받아야함.'
+	   });
+
+    }
+
     /* goods Search modal Close */
     $scope.closemodesear = function() {
     	$scope.Meaipgoods.userGoodsName = '';
