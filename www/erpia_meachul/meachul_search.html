@@ -3,7 +3,7 @@
         <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
 </ion-nav-buttons>
 <!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->  
-  <ion-content >
+  <ion-content>
 <div class="item item-input-inset">
     <table>
     <tr style="width:100%">
@@ -18,10 +18,10 @@
     <tr style="width:100%">
           <td style="width:20% ; vertical-align:middle; margin-top:20px" align="center" >일 자 </td>
           <td style="width:35%; padding-left:10px;">
-           <input type="date" ng-model="sDate1" ng-change="mydate1(sDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
+           <input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
         <td style="width:10%; margin-top:20px"> ~ </td>
         <td style="width:35%" colspan="2">
-           <input type="date" ng-model="eDate1" ng-change="mydate2(eDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
+           <input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
         </td>
         </tr>
       </table>
@@ -47,7 +47,8 @@
        </thead>
        </table>
        <hr>
-       <table style="width:100%" ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts" >
+       <any ng-repeat="x in junpyolists | filter:searchdatas track by $index" >
+       <table style="width:100%" on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
           <tbody style="width:100%" ng-click="searchdetailclick(x.Sl_No)">
             <tr>
               <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
@@ -57,12 +58,16 @@
             </tr>
             <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}<br></td></tr>
           </tbody>
+          <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
+            <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
+          </tr>
           <tr>
-            <td colspan="4" on-drag-up="lastsclick($index)" ng-model="lasts">
-                <div ng-if="$index == lasts-1 && $index!=$last"  align="center"><br><b>『더보기』를 하시려면 위로올려주세요.</b></div>
+            <td colspan="4" ng-if="$index == lasts-1 && $index!=$last">
+                <div align="center" ng-model="lasts"><br><b>5 more.. </b></div>
             </td>
           </tr>
       </table>
+      </any>
   </ion-content>
     <div style="margin-top:600px" align="right">
       <button style="position:relative; z-index:1000;">빠른등록</button>
