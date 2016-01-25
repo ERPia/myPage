@@ -579,24 +579,70 @@ angular.module('starter.services', [])
 })
 
 /*매출전표 날짜 조회 서비스*/
+// .factory('ERPiaMCSearchService', function($http, ERPiaAPI){
+// 	var ERPiaMCSearchData = function(Admin_Code, UserId, kind, Mode, Sl_No, sDate, eDate, GerCode){
+// 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+// 		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No
+// 		data += '&sDate=' + sDate + '&eDate=' + eDate + '&GerCode=' + GerCode
+// 		return $http.get(url + '?' + data);
+// 	}
+// 	return{
+// 		ERPiaMCSearchData: ERPiaMCSearchData
+// 	}
+// })
+
 .factory('ERPiaMCSearchService', function($http, ERPiaAPI){
-	var ERPiaMCSearchData = function(Admin_Code, UserId, kind, Mode, Sl_No, sDate, eDate){
+return{
+		Select_Date: function(Admin_Code, UserId, kind, Mode, Sl_No, sDate, eDate){
+			console.log("ERPiaMCSearchService and Select_Date");
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+		var data = 'Admin_Code=onz&UserId=pikapika&Kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No
+		// var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No
+			data += '&sDate=' + sDate + '&eDate=' + eDate
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMCSearchService(Select_Date)=', response);
+				if(typeof response == 'object'){
+					console.log('=', response.data);
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+
+		},	Select_BeforeAmt: function(Admin_Code, UserId, kind, Mode, Sl_No, sDate, eDate, GerCode){
+			console.log("ERPiaMCSearchService and Select_BeforeAmt");
+		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Mode=' + Mode + '&Sl_No=' + Sl_No
-		data += '&sDate=' + sDate + '&eDate=' + eDate
-		return $http.get(url + '?' + data);
-	}
-	return{
-		ERPiaMCSearchData: ERPiaMCSearchData
-	}
+			data += '&sDate=' + sDate + '&eDate=' + eDate + '&GerCode=' + GerCode
+		return $http.get(url + '?' + data)
+			.then(function(response){
+				console.log('ERPiaMCSearchService(Select_BeforeAmt)=', response);
+				if(typeof response == 'object'){
+					console.log('=', response.data);
+					return response.data;
+				}else{
+					return $q.reject(response.data);
+				}
+			}, function(response){
+				return $q.reject(response.data);
+			})
+		
+		}
+
+	};
 })
+
 
 /*매출전표 상세 조회 서비스*/
 
 .factory('ERPiaMCSearchDetailService', function($http, ERPiaAPI){
 	var ERPiaMCSearchDetailData = function(Admin_Code, UserId, kind, Sl_No){
 		var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Sl_No=' + Sl_No
+		 var data = 'Admin_Code=onz&UserId=pikapika&Kind=' + kind + '&Sl_No=' + Sl_No
+		// var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind + '&Sl_No=' + Sl_No
 		return $http.get(url + '?' + data);
 	}
 	return{
@@ -644,7 +690,7 @@ angular.module('starter.services', [])
 		basicSM: function(admin_code, userid){
 			console.log("mconfigService and basicM");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_Place';
+		var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
 			.then(function(response){
 				console.log('mconfigService(basicM)=', response);
@@ -661,7 +707,7 @@ angular.module('starter.services', [])
 		}, basicM: function(admin_code, userid){
 			console.log("mconfigService and basicM");
 		var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-		var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_Cname&Mode=Select_Place';
+		var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_Place';
 		return $http.get(url + '?' + data)
 			.then(function(response){
 				console.log('mconfigService(basicM)=', response);
@@ -678,7 +724,7 @@ angular.module('starter.services', [])
 		}, basicSetup: function(admin_code, userid){
 			console.log("mconfigService and basicSetup");
 			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-			var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=select';
+			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Config&Mode=select';
 			return $http.get(url + '?' + data)
 				.then(function(response){
 					console.log('mconfigService(basicSetup)=', response);
@@ -740,7 +786,7 @@ angular.module('starter.services', [])
 				console.log("mconfigService and changoSearch");
 				console.log('매장코드=>', meajang_code);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + meajang_code;
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Sale_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + meajang_code;
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('mconfigService', response);
@@ -756,7 +802,7 @@ angular.module('starter.services', [])
 				console.log("mconfigService and changoSearch");
 				console.log('매장코드=>', meajang_code);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&User_id=' + userid + '&Kind=ERPia_Meaip_Select_Place_Cname&Mode=Select_CName&Sale_Place_Code=' + meajang_code;
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Place_CName&Mode=Select_CName&Sale_Place_Code=' + meajang_code;
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('mconfigService', response);
@@ -768,26 +814,15 @@ angular.module('starter.services', [])
 					}, function(response){
 						return $q.reject(response.data);
 					})
-		}, configUpdate: function(admin_code, userid, configdata){
-				console.log("mconfigService and changoSearch");
+		}, configIU: function(admin_code, userid, configdata, mode){
+				console.log("mconfigService and configIU");
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=update&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before='+ configdata.basic_Subul_Sale_Before  +'&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before='+ configdata.basic_Subul_Meaip_Before;
-				console.log('수정데이터확인 ->', data);
-				return $http.get(url + '?' + data)
-					.then(function(response){
-						if(typeof response == 'object'){
-							return response.data;
-						}else{
-							return $q.reject(response.data);
-						}
-					}, function(response){
-						return $q.reject(response.data);
-					})
-		}, configInsert: function(admin_code, userid, configdata){
-				console.log("mconfigService and configInsert");
-				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=insert&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before=N&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before=N';
-				console.log('저장할데이터확인 ->', data);
+				if(mode == 'insert'){
+					var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode='+ mode +'&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before=N&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before=N';
+				}else{
+					var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=update&basic_Ch_Code='+ configdata.basic_Ch_Code +'&basic_Place_Code='+ configdata.basic_Place_Code +'&basic_Dn_Meaip='+ configdata.basic_Dn_Meaip +'&basic_Dn_Sale='+ configdata.basic_Dn_Sale +'&basic_Subul_Sale='+  configdata.basic_Subul_Sale +'&basic_Subul_Sale_Before='+ configdata.basic_Subul_Sale_Before  +'&basic_Subul_Meaip='+ configdata.basic_Subul_Meaip +'&basic_Subul_Meaip_Before='+ configdata.basic_Subul_Meaip_Before;
+				}
+				console.log('저장&수정할데이터확인 ->', data);
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('mconfigService', response);
@@ -804,7 +839,7 @@ angular.module('starter.services', [])
 				console.log('kind---------------------->',kind);
 				console.log('mode------------------->',mode);
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=' + kind + '&Mode=' + mode;
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode;
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('mconfigService(paysearch)=', response);
@@ -915,7 +950,7 @@ angular.module('starter.services', [])
 		}, basic_Subul_Sale_Before : function(admin_code, userid, basic_Subul_Sale_Before){
 				console.log("mconfigService and basic_Subul_Sale_Before");
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&Userid=' + userid + '&Kind=ERPia_Config&Mode=update_subul_before&basic_Subul_Sale_Before=' + basic_Subul_Sale_Before;
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Config&Mode=update_subul_before&basic_Subul_Sale_Before=' + basic_Subul_Sale_Before;
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('basic_Subul_Sale_Before=', response);

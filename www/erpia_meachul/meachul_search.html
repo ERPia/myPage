@@ -1,3 +1,30 @@
+<style>
+ table {width:100%}
+ table td.td1-1{width:20%; vertical-align:middle; margin-top:20px}
+      td.td1-2{width:55%; padding-left:10px; vertical-align:middle; margin-top:20px}
+      td.td1-2 input{font-size:15px; width:100%; border: 1px solid silver}
+      td.td1-3{width:25%}
+      td button{border:0; background:white; font-size:20px}
+      td.td2-1{width:20%; vertical-align:middle; margin-top:20px}
+      td.td2-2{width:35%; padding-left:10px}
+      td.td2-2 input{font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px}
+      td.td2-3{width:10%; margin-top:20px}
+      td.td2-4{width:35%}
+      td.td2-4 input{font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px}
+  table tbody{width:100%;}
+      td.resulttd1-1{width:10%; border-bottom:1px solid black; vertical-align:middle}
+      td.resulttd1-2{padding-left:5px; width:25%}
+      td.resulttd1-3{width:30%}
+      td.resulttd1-4{width:30%; padding-right:15px; border-bottom:1px solid black}
+      td.resulttd2-1{width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;}
+  div.footbtn{margin-top:600px}
+  div.footbtn button{position:relative; z-index:1000;}
+  div.col1{width:10%; BORDER-RIGHT: #BDBDBD 2px solid;}
+  div.col2{width:5%;}
+  div.col3{width:55%}
+  div.col4{width:30%}
+</style>
+
 <ion-view title="매출전표조회">
  <ion-nav-buttons side="right">
         <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
@@ -5,23 +32,23 @@
 <!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->  
   <ion-content>
 <div class="item item-input-inset">
-    <table>
-    <tr style="width:100%">
-      <td style="width:20%; vertical-align:middle; margin-top:20px" align="center" >검 색 </td>
-      <td style="width:55%; padding-left:10px; vertical-align:middle; margin-top:20px" colspan="3">
-         <input type="text" ng-model="searchdatas"  placeholder="상품명, 거래처명 입력" style="font-size:15px; width:100%; border: 1px solid silver">
+    <table class="searchtable">
+    <tr>
+      <td class="td1-1" align="center" >검 색 </td>
+      <td class="td1-2" colspan="3">
+         <input type="text" ng-model="searchdatas"  placeholder="상품명, 거래처명 입력">
       </td>
-      <td style="width:25%">
-          <button ng-click="searches()" class="ion-ios-search-strong" style="border:0; background:white; font-size:20px"></button>
+      <td class="td1-3">
+          <button ng-click="searches()" class="ion-ios-search-strong"></button>
       </td>
     </tr>
-    <tr style="width:100%">
-          <td style="width:20% ; vertical-align:middle; margin-top:20px" align="center" >일 자 </td>
-          <td style="width:35%; padding-left:10px;">
-           <input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
-        <td style="width:10%; margin-top:20px"> ~ </td>
-        <td style="width:35%" colspan="2">
-           <input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)" style="font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px">
+    <tr>
+          <td class="td2-1" align="center" >일 자 </td>
+          <td class="td2-2">
+           <input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)">
+        <td class="td2-3"> ~ </td>
+        <td class="td2-4" colspan="2">
+           <input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)">
         </td>
         </tr>
       </table>
@@ -38,7 +65,7 @@
       </div>
       <hr>
      
-      <table style="width:100%">
+      <table>
        <thead>
          <th style="width:10%" align="center">순번</th>
          <th style="width:30%" align="center">매출일</th>
@@ -48,15 +75,16 @@
        </table>
        <hr>
        <any ng-repeat="x in junpyolists | filter:searchdatas track by $index" >
-       <table style="width:100%" on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
-          <tbody style="width:100%" ng-click="searchdetailclick(x.Sl_No)">
+       <table on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
+          <tbody ng-click="searchdetailclick(x.Sl_No)">
             <tr>
-              <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
-              <td style="width:25%" align="left" style="padding-left:5px;">{{x.MeaChul_Date}}</td>
-              <td style="width:30%" align="center"><b>{{x.Admin_Code}}</b></td>
-              <td rowspan="2" style="width:30%; padding-right:15px; border-bottom:1px solid black" align="right">{{x.MeaChul_Amt| number:0}}원</td>
+              <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
+              <td class="resulttd1-2" align="left">{{x.MeaChul_Date}}</td>
+              <td class="resulttd1-3" align="center"><b>{{x.Admin_Code}}</b></td>
+              <td class="resulttd1-4" rowspan="2" align="right">{{x.MeaChul_Amt| number:0}}원</td>
             </tr>
-            <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}<br></td></tr>
+            <tr>
+            <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td></tr>
           </tbody>
           <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
             <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
@@ -69,14 +97,14 @@
       </table>
       </any>
   </ion-content>
-    <div style="margin-top:600px" align="right">
-      <button style="position:relative; z-index:1000;">빠른등록</button>
+    <div class="footbtn" align="right">
+      <button>빠른등록</button>
   </div>
     <ion-footer-bar align-title="left" class="bar-stable">
-    <div style="width:10%; BORDER-RIGHT: #BDBDBD 2px solid;">기간현황</div>
-    <div style="width:5%;">&nbsp;</div>
-    <div style="width:55%">매출액 {{giganhyunhwang.meachulTotalPrice| number:0}}원<br>지급액 1,900,000원</div>
-    <div style="width:30%">이월잔액 0원</div>
+    <div class="col1" >기간현황</div>
+    <div class="col2" >&nbsp;</div>
+    <div class="col3" >매출액 {{giganhyunhwang.meachulTotalPrice| number:0}}원<br>지급액 1,900,000원</div>
+    <div class="col4" >이월잔액 0원</div>
   </ion-footer-bar>
 </ion-view>
 

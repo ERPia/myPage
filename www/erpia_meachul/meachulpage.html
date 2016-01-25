@@ -22,16 +22,16 @@
             </label>
         </div>
         <div class="list list-inset">
-            <label class="item item-input" style="border:0;">
+            <label class="item item-input" style="border:0; width:100%">
               수불구분
-              <ion-radio ng-model="searchde.meachulsubuls" ng-value="221" ng-click="subulclick();checkup()">출고</ion-radio>
-              <ion-radio ng-model="searchde.meachulsubuls" ng-value="212" ng-click="subulclick();checkup()">반품</ion-radio>
+              <ion-radio ng-model="searchde.meachulsubuls" ng-value="221" ng-click="subulclick();checkup()">매출출고</ion-radio>
+              <ion-radio ng-model="searchde.meachulsubuls" ng-value="212" ng-click="subulclick();checkup()">매출반품</ion-radio>
             </label>
             <label class="item item-input item-select" style="border:0;">
               매장지정
               <select ng-model="mejang.Sale_Place_Code" ng-change="mejangselect();checkup()" style="width:50%">
-                 <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="configData.basic_Place_Code==x.Sale_Place_Code" >
-                 {{x.Sale_Place_Name}}</option>
+                 <!-- <option value="">매장을 선택해주세요</option> -->
+                 <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}">{{x.Sale_Place_Name}}</option>
                 </select>
             </label>
 
