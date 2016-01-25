@@ -66,8 +66,19 @@
           <td colspan="3" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
         </tr>
       </table>
+      <table width='100%' ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+        <tr>
+          <td colspan="3" align="left"><b>입금정보</b></td>
+        </tr>
+        <tr>
+          <td align="right" width='30%'>{{x.IpJi_Date}}</td>
+          <td align="right" width='30%'><any ng-if='x.IpJi_Gubun == 701'>현금입금</any><any ng-if='x.IpJi_Gubun == 702'>통장입금</any><any ng-if='x.IpJi_Gubun == 703'>카드입금</any><any ng-if='x.IpJi_Gubun == 704'>어음입금</any></td>
+          <td align="right" width='30%'><b>{{x.IpJi_Amt}}원</b></td>
+        </tr>
+      </table>
       <hr>
-
+      <table >
+      <hr>
       <label class="item item-input">
   		  <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;관리비고 </i></span>
   		  <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
