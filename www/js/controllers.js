@@ -1267,7 +1267,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     ];
 })
 //////////////////////////////////////////					매입 테스트					//////////////////////////////////////////////
-.controller('chartTestCtrl', function($scope, $sce, $rootScope, testLhkServicse, dayService, ERPiaAPI, $cordovaToast){
+.controller('chartTestCtrl', function($scope, $sce, $rootScope, $ionicModal, dayService, ERPiaAPI, $cordovaToast, meaipUpdateService, $timeout){
 
 		$scope.date={
 			sdate : '',
@@ -1320,11 +1320,16 @@ $scope.meaipPricesum = 0;
     		dayService.day($scope.date.sdate, $scope.date.edate, $scope.loginData.Admin_Code, $scope.loginData.UserId)
 			.then(function(data){
 				$scope.lists = data.list;
-				console.log("?->" , data.list);
-				$scope.meaipPricesum = 0;
-		        for (var i = 0; i < $scope.lists.length; i++) {
-		        	$scope.meaipPricesum = parseInt($scope.meaipPricesum) + parseInt($scope.lists[i].Meaip_Amt);
-		      	}
+				console.log("?->" , data);
+				if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('조회된 결과가 없습니다.', 'long', 'center');
+					else alert('조회된 결과가 없습니다.');
+				}else{
+					$scope.meaipPricesum = 0;
+			        for (var i = 0; i < $scope.lists.length; i++) {
+			        	$scope.meaipPricesum = parseInt($scope.meaipPricesum) + parseInt($scope.lists[i].Meaip_Amt);
+			      	}
+				}
 			})
     	};
 
@@ -1361,28 +1366,17 @@ $scope.eDate1= new Date();
 	};
 ////////////////////////////////////////////////////////////////////////
     	$scope.listSearch = ''; //상품명 검색
-		$scope.listindex = 5; //더보기 5개씩
-
-		/* 더보기 처리 */
-		 $scope.more=function(){
-		  $scope.listindex = $scope.listindex + 5;
-		 }
-
-		 $scope.ionstar = "ion-android-star-outline";
 
 		 /* 매입전표 조회 */
 		 $scope.meaipChitF = function(lino){
 		 	dayService.meaipChit(lino, $scope.loginData.Admin_Code, $scope.loginData.UserId)
 			.then(function(data){
 				$rootScope.meaipchitlists = data.list;
-				console.log("?->" , data.list);
+
 				/* 총 수량 & 가격 */
 				$rootScope.qtysum = 0;//총 수량
 		        $rootScope.pricesum = 0;//총 가격
-		        $rootScope.ipjidate = '';//지급일
-		        $rootScope.ipjigubun = 0;//지급구분 현금 - 701 / 통장 - 702 / 카드 - 703 / 어음 - 704
-		        $rootScope.ipjiamt = 0;//총 지급액
-		        //{{x.IpJi_Date}},{{x.IpJi_Gubun}},{{x.IpJi_Amt}}
+
 		        for (var i = 0; i < $rootScope.meaipchitlists.length; i++) {
 		          $rootScope.qtysum = parseInt($rootScope.qtysum) + parseInt($rootScope.meaipchitlists[i].G_Qty);
 		          $rootScope.gop = parseInt($rootScope.meaipchitlists[i].G_Qty)*parseInt($rootScope.meaipchitlists[i].G_Price);
@@ -1390,8 +1384,12 @@ $scope.eDate1= new Date();
 		      	}
 
 		      	//즐겨찾기 부분
-		      	$scope.ionstar = "ion-android-star-outline"; // ion-android-star 
-		      	console.log('icon check=', $scope.ionstar);
+		      	if($rootScope.meaipchitlists[0].MobileQuickReg == 'N'){
+		      		$rootScope.ionstar = "ion-android-star-outline";
+		      	}else{
+		      		$rootScope.ionstar = "ion-android-star";
+		      	}
+		      	console.log('icon check=', $rootScope.ionstar);
 				location.href="#/app/meaipChit";
 			})
 		 }
@@ -1399,61 +1397,123 @@ $scope.eDate1= new Date();
 		 $rootScope.testtest = function(){
 		 	alert('1234');
 		 }
-		 $scope.meaipState=0;
-		 /*더보기버튼*/
-		 /*$scope.lastsclick = function(index) {
-               
-	            $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
+//---------여기부터 더보기 -------------		 
+$scope.moreloading=0; //더이상 더보기 값이 없으면 0, 있으면 1
+$scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
+  $scope.lastsclick = function(index) {
+  		if(index <= $scope.lists.length){ //lists의 length보다 작을 때, 
+  		console.log($scope.lasts);
+         
+         $scope.moreloading=1; //더보기 할 자료가 있다는 1로 바꾸고
 
-	            $timeout(function(){
-	         $ionicLoading.hide();
-	         $scope.loginData = {};
-	         $scope.userData = {};
-	         $scope.dashBoard = {};
+  		 $timeout(function(){ //타임아웃을 줘서 일정 시간(1000->1초) 이후 이벤트가 중단되도록 한다.
+         
+         $scope.moreloading=0; //timeout시 초기화 및 lasts(다음 더보기 개수)를 +5한다.
+         $scope.lasts=index+5;
+         
+      	 }, 1000); 
 
+        //더보기 클릭시 $index+5
+      }else{
 
-	         $scope.lasts=index+5;
-	      }, 1000); //더보기 클릭시 $index+5
-
-	            
-	    }*/
-	    $scope.lasts=5; //결과값은 기본으로 0~4까지 5개 띄운다
-		  $scope.lastsclick = function(index) {
-		               
-		  		$scope.loadingani();
-
-		        $scope.lasts=index+5; //더보기 클릭시 $index+5
-		    };
-	    /*---------로딩화면-----------*/
-		$rootScope.loadingani=function(){
-		        $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
-
-		         $timeout(function(){
-		         $ionicLoading.hide();
-
-
-		         
-		      }, 500); 
-		}
-
-		 $scope.meaipStar = function(){
+      }
+    };
+//--------------------------------------------
+		 $scope.meaipStar = function(ilno,starname){
+		 	console.log('starname', starname);
+		 	console.log(ilno);
 		 	console.log('star');
-		 	if($scope.meaipState == 0){
+		 	if(starname == 'ion-android-star-outline'){
 		 		$scope.ionstar = "ion-android-star";
-		 		$scope.meaipState = 1;
+		 		var mode = 'use';
+		 		var ilno = ilno;
+		 		meaipUpdateService.quickReg($scope.loginData.Admin_Code, $scope.loginData.UserId, mode, ilno)
+				.then(function(data){
+					console.log('결과값 =>', data.list);
+				})
 		 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('빠른등록이 등록되었습니다.', 'long', 'center');
 				else alert('빠른등록이 등록되었습니다.');
 
 		 	}else{
 		 		$scope.ionstar = "ion-android-star-outline";
-		 		$scope.meaipState = 0;
-
-		 		if(ERPiaAPI.toast == 'Y'){
-		 			 $cordovaToast.show('빠른등록이 해제되었습니다.', 'long', 'center');
-		 		}else{
-		 			alert('빠른등록이 해제되었습니다.');
-		 		} 
+		 		var mode = 'unused';
+		 		var ilno = ilno;
+		 		meaipUpdateService.quickReg($scope.loginData.Admin_Code, $scope.loginData.UserId, mode, ilno)
+				.then(function(data){
+					console.log('결과값 =>', data.list);
+				})
+		 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('빠른등록이 해제되었습니다.', 'long', 'center');
+				else alert('빠른등록이 해제되었습니다.');
 		 	}
+		 }
+
+		/*빠른등록 모달*/
+		$ionicModal.fromTemplateUrl('test/quickregP.html', {
+	    scope: $scope
+	    }).then(function(modal) {
+	    $scope.quickregM = modal;
+	    });
+
+		$scope.quicklists = []; // 빠른등록리스트 저장배열
+		 $scope.quickReg = function(){
+		 	if($scope.quicklists[0] != undefined){
+		 		$scope.quicklists.splice(0, $scope.quicklists.length); // 배열초기화
+		 	}
+
+		 	var mode = 'select_list';
+		 	var ilno = '';
+		 	meaipUpdateService.quickReg($scope.loginData.Admin_Code, $scope.loginData.UserId, mode, ilno)
+			.then(function(data){
+				console.log('결과값 =>', data);
+				if(data == '<!--Parameter Check-->'){
+					if(ERPiaAPI.toast == 'Y') $cordovaToast.show('등록된 빠른등록이 없습니다.', 'long', 'center');
+					else alert('등록된 빠른등록이 없습니다.');
+				}else{
+					for(var i =0; i < data.list.length; i++){
+					$scope.quicklists.push({
+						GerCode : data.list[i].GerCode,
+						GerName : data.list[i].GerName,
+						GoodsName : data.list[i].GoodsName,
+						Subul_kind : data.list[i].Subul_kind,
+						iL_No : data.list[i].iL_No,
+						checked : false
+					});
+				}
+				}
+			})
+
+		 	$scope.quickregM.show();
+		 }
+
+		 $scope.quickcheck = function(index){
+		 	for(var i = 0; i < $scope.quicklists.length; i++){
+  				if(i == index){
+  					console.log('같음! true');
+  				}else{
+  					$scope.quicklists[i].checked = false;
+  				}
+  			}
+
+		 }
+		 $scope.quickde = function(){
+		 	for(var i = 0; i < $scope.quicklists.length; i++){
+		 		if($scope.quicklists[i].checked == true){
+		 			console.log('체크된것 =>', i);
+		 			var ilno = $scope.quicklists[i].iL_No;
+		 			var star = 'ion-android-star';
+		 			$scope.meaipStar(ilno, star);
+		 			$scope.quicklists.splice(i, 1);//체크 배열 없애기.
+		 			break;
+		 		}else if(i == $scope.quicklists.length-1 && $scope.quicklists[i].checked != true){ // 마지막 항목까지 true아니면 선택된 것이 없는거야.
+		 			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('선택 된 값이 없습니다.', 'long', 'center');
+					else alert('선택 된 값이 없습니다.');
+		 		}
+		 	}
+
+		 }
+
+		 $scope.quickMcancle = function(){
+		 	$scope.quickregM.hide();
 		 }
 
 })
@@ -1971,7 +2031,7 @@ $scope.eDate1= new Date();
      		$scope.payname = '지급은행';
      		$scope.compo.paysubul = 702;
      		$scope.pay.use = false;
-     		var kind = 'ERPia_Bank_Card_Select';
+     		var kind = 'ERPia_Meaip_Bank_Card_Select';
      		var mode = 'Select_Bank';
      		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){
@@ -2006,7 +2066,7 @@ $scope.eDate1= new Date();
      		$scope.payname = '지급카드';
      		$scope.compo.paysubul = 703;
      		$scope.pay.use = false;
-     		var kind = 'ERPia_Bank_Card_Select';
+     		var kind = 'ERPia_Meaip_Bank_Card_Select';
      		var mode = 'Select_Card';
      		meaipService.paysearch($scope.loginData.Admin_Code, $scope.loginData.UserId, kind, mode)
 			.then(function(data){

@@ -332,6 +332,37 @@ angular.module('starter.services', [])
 		} 
 	};
 })
+
+.factory('meaipUpdateService', function($http, $q, ERPiaAPI, $cordovaToast){
+	return{
+		quickReg: function(admin_code, userid, mode, ilno){
+			console.log("meaipUpdateService and quickReg", admin_code, userid, mode, ilno);
+			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Quick_Reg&Mode=' + mode;
+			if(ilno.length == 0){
+				console.log('2 ==> 그냥 조회일경우');
+				var data2 = '';
+			}else{
+				console.log('1');
+				var data2 = '&Il_No=' + ilno;
+			}
+			console.log('url=>', data);
+			return $http.get(url + '?' + data + data2)
+				.then(function(response){
+					console.log('dayService', response);
+					if(typeof response == 'object'){
+						return response.data;
+					}else{
+						return $q.reject(response.data);
+					}
+				}, function(response){
+					return $q.reject(response.data);
+				})
+
+		}
+	};
+})
+
 .factory('mconfigService', function($http, ERPiaAPI, $q, $cordovaToast){
 	return{
 		basicM: function(admin_code, userid){
