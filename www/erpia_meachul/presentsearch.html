@@ -26,7 +26,7 @@
             </tbody>
       </table><hr>
 
-    <table width="100%" style="text-align:center">
+<table width="100%" style="text-align:center">
     <tr>
       <td width="10%"></td>
       <td width="40%" style="text-align:center">상품코드</td>
@@ -37,19 +37,19 @@
      <td colspan="4"><hr></td> 
     </tr>
     </table>
-    <ion-checkbox ng-repeat="items in itemlists" width="0%" ng-click='goodsCheck(items)'>
-
-      <table>
-        <tr>
-          <td colspan="2">{{items.G_Code}}</td>
-        </tr>
-        <tr>
-          <td>{{items.G_Name}}</td>
-          <td style="text-align:left"><i class="ion-help-circled" style="font-size:30px"></i></td>
-        </tr>
-      </table>
-
-    </ion-checkbox>
+    <table ng-repeat="x in itemlists" width='90%'>
+    <tr>
+      <td width='80%'>
+        <ion-checkbox ng-click='goodsCheck(x)'>
+        {{x.G_Code}}<br>
+        {{x.G_Name}}
+        </ion-checkbox>
+      </td>
+      <td width='20%'>
+        &nbsp;&nbsp;&nbsp;<i class="ion-help-circled" style="font-size:40px;vertical-align:middle;" ng-click='ItemDetailBtn($index)'></i>
+      </td>
+    </tr>
+    </table>
   </div>
 
   </ion-content>
