@@ -410,7 +410,45 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 				controller : 'mconfigCtrl'
 			}
 		}
-	});
+	})
+	////////////////////////////////매출전표조회///////////////////////////////////
+	.state('app.chart_test1', {
+		url : '/chart_test1',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachul_search.html',
+				controller : 'MeaChulSearchCtrl'
+			}
+		}
+	})
+
+		////////////////////////////////sample///////////////////////////////////
+	.state('app.searchdetail', {
+		url : '/searchdetail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/searchdetail.html',
+				controller : 'MeaChulSearchDetailCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+		.state('app.meachulpage', {
+		url : '/meachulpage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachulpage.html',
+				controller : 'MeaChulInsertCtrl'
+			}
+		}
+	})
+
+
+
+
+	;
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

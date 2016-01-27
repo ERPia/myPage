@@ -1,0 +1,184 @@
+<style>
+ table {width:100%}
+ table td.td1-1{width:20%; vertical-align:middle; margin-top:20px}
+      td.td1-2{width:55%; padding-left:10px; vertical-align:middle; margin-top:20px}
+      td.td1-2 input{font-size:15px; width:100%; border: 1px solid silver}
+      td.td1-3{width:25%}
+      td button{border:0; background:white; font-size:20px}
+      td.td2-1{width:20%; vertical-align:middle; margin-top:20px}
+      td.td2-2{width:35%; padding-left:10px}
+      td.td2-2 input{font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px}
+      td.td2-3{width:10%; margin-top:20px}
+      td.td2-4{width:35%}
+      td.td2-4 input{font-size:15px; border: 1px solid silver; vertical-align:middle; margin-top:20px}
+  table tbody{width:100%;}
+      td.resulttd1-1{width:10%; border-bottom:1px solid black; vertical-align:middle}
+      td.resulttd1-2{padding-left:5px; width:25%}
+      td.resulttd1-3{width:30%}
+      td.resulttd1-4{width:30%; padding-right:15px; border-bottom:1px solid black}
+      td.resulttd2-1{width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;}
+  div.footbtn{margin-top:600px}
+  div.footbtn button{position:relative; z-index:1000;}
+  div.col1{width:10%; border-right: #BDBDBD 2px solid;}
+  div.col2{width:5%;}
+  div.col3{width:55%}
+  div.col4{width:30%}
+</style>
+
+<ion-view title="매출전표조회">
+ <ion-nav-buttons side="right">
+        <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
+</ion-nav-buttons>
+<!-- <span class="navi-item-rightText" ng-bind-html="loginData.UserId"></span>  -->  
+  <ion-content>
+<div class="item item-input-inset">
+    <table class="searchtable">
+    <tr>
+      <td class="td1-1" align="center" >검 색 </td>
+      <td class="td1-2" colspan="3">
+         <input type="text" ng-model="searchdatas"  placeholder="상품명, 거래처명 입력">
+      </td>
+      <td class="td1-3">
+          <button ng-click="searches()" class="ion-ios-search-strong"></button>
+      </td>
+    </tr>
+    <tr>
+          <td class="td2-1" align="center" >일 자 </td>
+          <td class="td2-2">
+           <input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)">
+        <td class="td2-3"> ~ </td>
+        <td class="td2-4" colspan="2">
+           <input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)">
+        </td>
+        </tr>
+      </table>
+      </div>
+      <hr>
+      <div align="center" style="width:100%">
+        <button class="button button-calm" ng-click="searchesday(0)" style="width:30%">금일</button>
+        <button class="button button-balanced" ng-click="searchesday(7)" style="width:30%">1주일</button>
+        <button class="button button-energized" ng-click="searchesday(30)" style="width:30%">1개월</button>
+    </div>
+    <hr>
+    <div align="center">
+        조회목록
+      </div>
+      <hr>
+     
+      <table>
+       <thead>
+         <th style="width:10%" align="center">순번</th>
+         <th style="width:30%" align="center">매출일</th>
+         <th style="width:30%" align="center">업체명</th>
+         <th style="width:30%" align="center">금액</th>
+       </thead>
+       </table>
+       <hr>
+       <any ng-repeat="x in junpyolists | filter:searchdatas track by $index" >
+       <table on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
+          <tbody ng-click="searchdetailclick(x.Sl_No)">
+            <tr>
+              <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
+              <td class="resulttd1-2" align="left">{{x.MeaChul_Date}}</td>
+              <td class="resulttd1-3" align="center"><b>{{x.Admin_Code}}</b></td>
+              <td class="resulttd1-4" rowspan="2" align="right">{{x.MeaChul_Amt| number:0}}원</td>
+            </tr>
+            <tr>
+            <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td></tr>
+          </tbody>
+          <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
+            <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
+          </tr>
+          <tr>
+            <td colspan="4" ng-if="$index == lasts-1 && $index!=$last">
+                <div align="center" ng-model="lasts"><br><b>5 more.. </b></div>
+            </td>
+          </tr>
+      </table>
+      </any>
+  </ion-content>
+    <div class="footbtn" align="right">
+      <button>빠른등록</button>
+  </div>
+    <ion-footer-bar align-title="left" class="bar-stable">
+    <div class="col1" >기간현황</div>
+    <div class="col2" >&nbsp;</div>
+    <div class="col3" >매출액 {{giganhyunhwang.meachulTotalPrice| number:0}}원<br>지급액 1,900,000원</div>
+    <div class="col4" >이월잔액 0원</div>
+  </ion-footer-bar>
+</ion-view>
+
+<!-- <ion-view view-title="매출전표 조회">
+<ion-nav-buttons side="right">
+        <button menu-toggle="right" onclick="location.href='#/app/meachul_page'" ng-controller='MeaChulinsertCtrl' ng-click="configoption(1)">등록
+        </button>
+</ion-nav-buttons>
+  <ion-content>
+
+   <div align="center"> 
+   검색<hr>
+  </div>
+
+    <div class="item item-input-inset">
+    <label class="item-input-wrapper">
+      <input type="text" ng-model="searchdatas" placeholder="검색어">
+    </label>
+
+</div>
+      <div align="center">
+      <div class="row">
+           <div class="col col-20">일자</div>
+         <div class="col col-30">
+  <input class="col" type="text" ng-model="reqparams.sDate" ng-click="opendateModal('sDate')" 
+            readonly style="border:1px solid #eee;"></div>
+          <div class="col col-10">~</div>
+           <div class="col col-30"> <input class="col" type="text" ng-model="reqparams.eDate" ng-click="opendateModal('eDate')" 
+            readonly style="border:1px solid #eee;"></div>
+            <div class="col col-10"><button ng-click="searches()" class="ion-ios-search-strong" style="border:0; background:white;"></button></div>
+      </div>
+      <table>
+        <tr>
+          <td align="center" width="25%">일자</td>
+          <td style="width:30%">
+            <input type="text" ng-model="reqparams.sDate" style="border:1px solid #eee;">
+          </td>
+          <td>
+            ~
+          </td>
+          <td style="width:30%">
+            <input type="text" ng-model="reqparams.eDate" style="border:1px solid #eee;">
+          </td>
+          <td align="center" style="width:40%">
+               <button ng-click='searches()' class="button button-small">
+      검색
+    </button>
+          </td>
+        </tr>
+      </table>
+      <div><button style="width:20%" ng-click="searchesday(0)" class="button button-small">금일</button> <button style="width:20%" ng-click="searchesday(7)" class="button button-small">1주일</button> <button style="width:20%" ng-click="searchesday(30)" class="button button-small">1개월</button>
+      </div>
+      <hr>
+
+      </div>
+      <div align="center">
+        조회목록
+      </div>
+      <hr>
+      <any ng-repeat="x in junpyolists | filter:searchdatas track by $index"  ng-if="$index < lasts">
+   <div class="row" ng-click='searchdetail(x.Sl_No)'>
+  <div class="col col-33">{{x.MeaChul_Date}}<br>{{x.G_Name}}</div>
+  <div class="col col-33">{{x.Admin_Code}}</div>
+  <div class="col col-33">{{x.MeaChul_Amt}}원</div>
+</div>
+<hr>
+<br>
+<center>
+<button class="button button-small" ng-click="lastsclick($index)" ng-model="lasts" ng-if="$index == lasts-1 && $index!=$last">더보기</button>
+</center>
+</any>
+<br>
+
+
+  </ion-content>
+</ion-view>
+ -->

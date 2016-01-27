@@ -1,0 +1,87 @@
+<ion-view title="매출전표">
+  <ion-nav-buttons side="right" ng-show="false">
+    <any>수정</any>
+  </ion-nav-buttons>
+  <ion-content>
+
+  <div class="list list-inset">
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;전표번호 : </i></span>
+       <input type="text" readonly value='{{meachulDetaildata.Sl_No}}'><br>
+      </label>
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;일 자 : </i></span>
+       <input type="text" readonly value='{{meachulDetaildata.MeaChul_Date}}'><br>
+      </label>
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
+       <input type="text" readonly value='매출출고' ng-if="meachulDetaildata.Subul_kind==221">
+       <input type="text" readonly value='매출반품' ng-if="meachulDetaildata.Subul_kind==212"><br>
+      </label>
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;거래처 : </i></span>
+       <input type="text" readonly value='{{meachulDetaildata.GerName}}'><br>
+      </label>
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;입고창고 : </i></span>
+       <input type="text" readonly value='{{meachulDetaildata.CName}}'><br>
+      </label>
+
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;입고매장 : </i></span>
+       <input type="text" readonly value='{{meachulDetaildata.Sale_Place_Name}}'><br>
+      </label>
+      <hr>
+
+
+      <table width="100%">
+        <tr width="100%">
+          <td width="40%" align="center">상품명</td>
+          <td width="20%" align="center">수량</td>
+          <td width="40%" align="center">총액</td>
+        </tr>
+        <tr>
+          <td colspan="3"><hr></td>
+        </tr>
+        <tr ng-repeat="meachuldetail in meachulDetailGdata">
+          <td width="40%" align="center">
+            {{meachuldetail.G_Name}}
+          </td>
+          <td width="20%" align="center">
+            {{meachuldetail.G_Qty}}
+          </td>
+          <td width="40%" align="center">
+            ￦{{meachuldetail.G_Price | number:0}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3"><hr></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="right"><b>총 {{meachulDetaildata.SumQty}}개 / {{meachulDetaildata.SumG_Price | number:0}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+      </table>
+      <hr>
+
+      <label class="item item-input">
+        <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;관리비고 </i></span>
+          {{meachulDetaildata.Remk}}
+      </label>
+        <hr>
+        <div align="center" style="width:100%">
+          <!-- ion-android-star-outline && ion-android-star -->
+          <button class="button button-icon button-clear ion-ios-star-outline" ng-click="fastClick()"  style="font-size:50px;align:left" ng-if="meachulDetaildata.MobileQuickReg=='N'"></button>
+          <button class="button button-icon button-clear ion-ios-star" ng-click="fastClick()"  style="font-size:50px;align:left" ng-if="meachulDetaildata.MobileQuickReg=='Y'"></button>
+            <button class="button button-calm" style="width:30%" ng-click="deleteclickbtn(meachulDetaildata.Sl_No)">삭제</button>
+            <!-- <button class="button button-balanced" style="width:30%" ng-click="chitUpdateF(meaipchitlists)">수정</button> -->
+          
+            <button class="button button-energized" style="width:30%">거래명세서</button>
+        </div>
+   </div>
+  </ion-content>
+</ion-view>

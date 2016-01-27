@@ -1,0 +1,120 @@
+<ion-modal-view title="">
+  <ion-header-bar>
+    <h1 class="title">상품 검색</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list list-inset" style="align:center;" >
+      <table width="100%">
+          <tbody  ng-switch on="searchde.itemselectMode">
+            <tr>
+                <td style="text-align:center">
+                  <b ng-switch-when="Select_GoodsName">상품명</b>
+                  <b ng-switch-when="Select_G_OnCode">자체코드</b>
+                  <b ng-switch-when="Select_G_Code">상품코드</b>
+                  <b ng-switch-when="Select_GI_Code">바코드</b>
+                  <b ng-switch-default>상품명</b>
+                </td>
+                <td>
+                <!--상품검색 검색어 입력 텍스트박스-->
+                  <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" size="20" ng-switch-when="Select_GoodsName">
+                  <input type="text" ng-model='goodsparam.G_OnCode' placeholder="자체코드" size="20" ng-switch-when="Select_G_OnCode"/>
+                  <input type="text" placeholder="상품코드" ng-model='goodsparam.GoodsCode' size="20" ng-switch-when="Select_G_Code"/>
+                  <input type="text" placeholder="공인바코드 번호" ng-model='goodsparam.GI_Code' size="20" ng-switch-when="Select_GI_Code"/>
+                  <input type="text" placeholder="상품명" ng-model='goodsparam.GoodsName' size="20" ng-switch-default/>
+                </td>
+                 <!--상품검색 검색어 입력 텍스트박스-->
+                <td><i class="ion-search" style="font-size:30px" ng-click="presentsclick(2)"></i></td>
+              </tr>
+            </tbody>
+      </table><hr>
+
+<table width="100%" style="text-align:center">
+    <tr>
+      <td width="10%"></td>
+      <td width="40%" style="text-align:center">상품코드</td>
+      <td width="40%" style="text-align:center">상품명</td>
+      <td width="10%"></td>
+    </tr>
+    <tr>
+     <td colspan="4"><hr></td> 
+    </tr>
+    </table>
+    <table ng-repeat="x in itemlists" width='90%'>
+    <tr>
+      <td width='80%'>
+        <ion-checkbox ng-click='goodsCheck(x)'>
+        {{x.G_Code}}<br>
+        {{x.G_Name}}
+        </ion-checkbox>
+      </td>
+      <td width='20%'>
+        &nbsp;&nbsp;&nbsp;<i class="ion-help-circled" style="font-size:40px;vertical-align:middle;" ng-click='ItemDetailBtn($index)'></i>
+      </td>
+    </tr>
+    </table>
+  </div>
+
+  </ion-content>
+  <ion-footer-bar align-title="left" class="bar-assertive">
+  <div class="buttons" ng-click="closepresentsearchModals()">
+    <button class="button">취소</button>
+  </div>
+  <h1 class="title"></h1>
+  <div class="buttons" ng-click="checkdataSave()">
+    <button class="button">확인</button>
+  </div>
+</ion-footer-bar>
+  </ion-modal-view>
+<!-- <ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">상품검색</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closepresentsearchModals()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="item item-input-inset" >
+    <label class="item-input-wrapper" ng-switch on="searchde.Mode">
+      <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" ng-switch-when="Select_GoodsName">
+      <input type="text" ng-model='goodsparam.G_OnCode' placeholder="자체코드"  ng-switch-when="Select_G_OnCode"/>
+    <input type="text" placeholder="상품코드" ng-model='goodsparam.GoodsCode' ng-switch-when="Select_G_Code"/>
+    <input type="text" placeholder="공인바코드 번호" ng-model='goodsparam.GI_Code' ng-switch-when="Select_GI_Code"/>
+    <input type="text" placeholder="상품명" ng-model='goodsparam.GoodsName' ng-switch-default/>
+    </label>
+    <button ng-click='presentsclick(2)' class="button button-small">
+      검색
+    </button>
+  </div>
+
+      <hr>
+
+      </div>
+      <div align="center">
+        조회목록
+        <br>
+        
+      <br>
+      </div>
+      <hr>
+
+  <table>
+  <tr ng-repeat="items in itemlists">
+        <td width="10%" align="center"><input type="checkbox" ng-model="itemlists[i].checked"></td>
+        <td width="20%" align="center">{{items.G_Code}}</td>
+        <td width="50%" align="center" ng-switch on="basicConfiglist.basic_Dn_Sale">
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn1)" ng-switch-default>{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn2)" ng-switch-when="2">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn3)" ng-switch-when="3">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn4)" ng-switch-when="4">{{items.G_Name}}</a>
+        <a ng-click="presentselect(items.G_Name,items.G_Code,items.G_Stand,items.G_Dn5)" ng-switch-when="5">{{items.G_Name}}</a>
+        </td>
+        <td width="20%" align="center">
+        </td>
+    </tr>
+
+
+  </table>
+  <hr>
+  </ion-content>
+</ion-modal-view>
+ -->
