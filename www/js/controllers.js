@@ -2263,9 +2263,9 @@ console.log('Detail : ', $scope);
     	changoCheck : 'f'
     };
 
-
-    $scope.basictype=true;
-	$scope.basic2type=false;
+// 매출전표 열렸다 닫혔다---
+    $scope.basictype=true;		
+	$scope.basic2type=false;	
 	$scope.basic3type=false;
 	$scope.upAnddown="ion-arrow-down-b";
 	$scope.upAnddown2="ion-arrow-up-b";
@@ -2706,7 +2706,7 @@ $scope.mejangselect= function() {
             });
     	}
 */
-/*
+
 $scope.scanBarcodeBtn = function(){
 
 	 if($scope.goodsparam.GI_Code!=""){
@@ -2717,26 +2717,26 @@ $scope.scanBarcodeBtn = function(){
               $scope.searchde.itemselectMode='Select_GI_Code';
             }
 
-};*/
+};
 
 
-     /*바코드 스캔 펑션*/
-        $scope.scanBarcodeBtn = function() {
-         $cordovaBarcodeScanner.scan().then(function(imageData) {
-          if(imageData.text!=""){
-            alert("바코드스캔 성공: "+imageData.text);
-            $scope.goodsparam.GI_Code=imageData.text;
-            $scope.barcodesearchon();
-            console.log("Barcode Format -> " + imageData.format);
-            console.log("Cancelled -> " + imageData.cancelled);
-            }else{
-              alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
-              $scope.searchde.itemselectMode='Select_GI_Code';
-            }
-        }, function(error) {
-            console.log("An error happened -> " + error);
-        });
-    };
+    //  /*바코드 스캔 펑션*/
+    //     $scope.scanBarcodeBtn = function() {
+    //      $cordovaBarcodeScanner.scan().then(function(imageData) {
+    //       if(imageData.text!=""){
+    //         alert("바코드스캔 성공: "+imageData.text);
+    //         $scope.goodsparam.GI_Code=imageData.text;
+    //         $scope.barcodesearchon();
+    //         console.log("Barcode Format -> " + imageData.format);
+    //         console.log("Cancelled -> " + imageData.cancelled);
+    //         }else{
+    //           alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
+    //           $scope.searchde.itemselectMode='Select_GI_Code';
+    //         }
+    //     }, function(error) {
+    //         console.log("An error happened -> " + error);
+    //     });
+    // };
     $scope.itemlists=[];//서버로부터 받아온 상품정보를 임시로 담는 그릇
 
   //  
@@ -3368,7 +3368,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 					             text: '예',
 					             type: 'button-positive',
 					             onTap: function(e) {
-					             	// searchdetailclick(x.Sl_No)					                 
+					             	location.href='#/app/chart_test';					                 
 								}
 							 		},
 			         			]

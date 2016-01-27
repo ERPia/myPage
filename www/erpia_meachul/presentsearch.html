@@ -15,12 +15,14 @@
                   <b ng-switch-default>상품명</b>
                 </td>
                 <td>
+                <!--상품검색 검색어 입력 텍스트박스-->
                   <input type="text" ng-model='goodsparam.GoodsName' placeholder="상품명" size="20" ng-switch-when="Select_GoodsName">
                   <input type="text" ng-model='goodsparam.G_OnCode' placeholder="자체코드" size="20" ng-switch-when="Select_G_OnCode"/>
                   <input type="text" placeholder="상품코드" ng-model='goodsparam.GoodsCode' size="20" ng-switch-when="Select_G_Code"/>
                   <input type="text" placeholder="공인바코드 번호" ng-model='goodsparam.GI_Code' size="20" ng-switch-when="Select_GI_Code"/>
                   <input type="text" placeholder="상품명" ng-model='goodsparam.GoodsName' size="20" ng-switch-default/>
                 </td>
+                 <!--상품검색 검색어 입력 텍스트박스-->
                 <td><i class="ion-search" style="font-size:30px" ng-click="presentsclick(2)"></i></td>
               </tr>
             </tbody>
