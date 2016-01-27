@@ -1020,7 +1020,7 @@ angular.module('starter.services', [])
 })
 
 
-
+/////////////////////////////////////////매출서비스////////////////////////////////////////////////////////////////
 .factory('ERPiaMeachulService', function($http, ERPiaAPI, $q){
 	return{
 		ERPiaCompsearchData: function(Admin_Code, UserId, kind, mode, gernamekr){
@@ -1298,3 +1298,4 @@ return{
 		ERPiaMCDeleteResult: ERPiaMCDeleteResult
 	}
 });
+/////////////////////////////////////////매출서비스////////////////////////////////////////////////////////////////

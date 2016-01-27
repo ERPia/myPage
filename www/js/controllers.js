@@ -3826,21 +3826,6 @@ $scope.mejangselect= function() {
  $scope.barcode={
  	barcodegoodscnt:0
  };
-/*$scope.scanBarcode33 = function() {
-        $cordovaBarcodeScanner.scan().then(function(imageData) {
-            alert(imageData.text);
-            console.log('format ' + imageData.format);
-
-            	meaipService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, imageData.text)
-				.then(function(data){
-					console.log('바코드 스캔 데이터 확인=', data);
-				})
-
-            }, function(error) {
-            	console.log('an error ' + error);
-            });
-    	}
-*/
 
 $scope.scanBarcodeBtn = function(){
 
@@ -3854,24 +3839,6 @@ $scope.scanBarcodeBtn = function(){
 
 };
 
-
-    //  /*바코드 스캔 펑션*/
-    //     $scope.scanBarcodeBtn = function() {
-    //      $cordovaBarcodeScanner.scan().then(function(imageData) {
-    //       if(imageData.text!=""){
-    //         alert("바코드스캔 성공: "+imageData.text);
-    //         $scope.goodsparam.GI_Code=imageData.text;
-    //         $scope.barcodesearchon();
-    //         console.log("Barcode Format -> " + imageData.format);
-    //         console.log("Cancelled -> " + imageData.cancelled);
-    //         }else{
-    //           alert("바코드스캔 실패.\n 번호를 직접입력해주세요");
-    //           $scope.searchde.itemselectMode='Select_GI_Code';
-    //         }
-    //     }, function(error) {
-    //         console.log("An error happened -> " + error);
-    //     });
-    // };
     $scope.itemlists=[];//서버로부터 받아온 상품정보를 임시로 담는 그릇
 
   //  
@@ -4542,4 +4509,9 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
 
 
+})
+
+.controller('configCtrl2', function($scope, $rootScope) {
+	if($rootScope.loginState == 'E'){
+	}
 });

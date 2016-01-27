@@ -448,7 +448,18 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 
 
 
-	;
+
+		///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+		.state('app.meaip_page', {
+		url : '/meaip_page',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meaip_page.html',
+				controller : 'MeaChulInsertCtrl'
+			}
+		}
+	});
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
