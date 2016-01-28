@@ -1,0 +1,121 @@
+<ion-view title="간편매입 등록">
+	<ion-nav-bar>
+		<ion-nav-back-button ng-click="backControll()">Back</ion-nav-back-button>
+	</ion-nav-bar>
+  	<ion-content>
+  	<div class="list list-inset">
+  		<div>
+  			<label class="item item-input" style="border:0;">
+			  <input type="text" style="text-align:right;" value='{{date.todate}}' ng-model='date.todate' ng-click="opendateModal('meaipdate')" readonly>&nbsp;
+			  <button class="ion-ios-calendar-outline" style="font-size:25px; border:0; background:white;" ></button>&nbsp;
+			</label>
+  		</div>
+  		<div class="list list-inset" align="left" ng-click="meaipNext()">
+  			<hr>&nbsp; <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매입정보
+  		</div>
+
+  		<div ng-if="basictype" class="list list-inset" style="align:center;" >
+			<table width="100%" class="list list-inset"style="align:center;vertical-align:middle;">
+				<tr>
+					<td width="20%">거래처</td>
+					<td width="40%"><input type="search" ng-model="compo.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="cusSearch2()"></td>
+					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
+				</tr>
+			</table>
+			<div class="list">
+	        <li class="item" ng-repeat="x in customerDatas" ng-click="customerFunc(x.G_Name,x.G_Code);checkup()">{{x.G_Name}}</li>
+	      	</div>
+
+			<label class="item item-input" style="border:0;">
+			  수불구분
+  				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="111">입고</ion-radio>
+				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="122">반품</ion-radio>
+			</label>
+
+			<label class="item item-input item-select" style="border:0;">
+			  매장지정
+			  <select ng-model="configData.basic_Place_Code" ng-change='Chango();checkup()' style="width:50%">
+			     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="configData.basic_Place_Code == {{x.Sale_Place_Code}}">
+			     {{x.Sale_Place_Name}}</option>
+			    </select>
+			</label>
+
+			<label class="item item-input item-select" style="border:0;">
+			  창고지정
+			  <select ng-model="configData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
+		  		  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+		  		  {{x.Name}}</option>
+		  		</select>
+			</label>
+	</div>
+
+  		<div class="list list-inset" align="left" ng-click="meaipNext2()">
+  			<hr>&nbsp; <i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품
+  		</div>
+
+  		<div ng-if="basic2type">
+		<div class="list list-inset" style="align:center;" >
+			<table width="100%">
+	        	<tr>
+		            <td>
+		          &nbsp;<select ng-model="Meaipgoods.userMode" ng-change="modeselect()">
+		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="Meaipgoods.userMode == {{x.Code}}">{{x.Name}}</option>
+		            	</select>&nbsp;&nbsp;
+		          	</td>
+		          	<td>
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" style="border:1px solid #eee;" ng-model="Meaipgoods.userGoodsName">
+		          	</td>
+		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
+		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
+	          	</tr>
+	        </table><hr>
+        
+	   		<table width="100%" style="text-align:center;">
+                <tr bgcolor="#EAEAEA">
+                    <td width="10%" style="font-size:12px">번호</td>
+                    <td width="40%" style="font-size:12px">상품명</td>
+                    <td width="10%" style="font-size:12px">수 량</td>
+                    <td width="40%" style="font-size:12px" colspan='2'>단 가</td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="5"><hr></td>
+                </tr>
+		      	<tr ng-repeat="y in goodsaddlists">
+		      		<td style="vertical-align:middle;">{{$index+1}}.</td>
+		        	<td style="vertical-align:middle; text-align:left">{{y.name}}</td>
+		        	<td style="width:20%">
+		        		<input type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
+		        	</td>
+		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
+		        		<input type="number" min="0" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>
+		        	</td>
+		        	<td><i class="ion-android-remove-circle" ng-click="goodsDelete($index);goods_totalprice1()"></i>&nbsp;</td>
+		      	</tr>
+	   		</table>
+	   	</div>
+	   	<div class="list list-inset" align="right">     
+            <b>최종가격 :{{Meaipgoods.totalsumprices | number:0}} 원</b>
+        </div>
+	</div>
+  		
+  		<div class="list list-inset" align="left" ng-click="meaipNext3()">
+  			<hr>&nbsp; <i class="{{upAnddown3}}"></i> &nbsp;&nbsp; 관리비고
+  		</div>
+  		<div ng-if="basic3type" class="list list-inset">
+	  		<label class="item item-input item-stacked-label">
+		        <textarea placeholder="관리자비고란 입니다." rows="8" cols="10" ng-model="compo.remk"></textarea>
+      		</label>
+      	</div>
+  	</div>
+  	<br><br>
+  </ion-content>
+
+  <ion-footer-bar align-title="left" class="bar-assertive" ng-click='meaipDataRegist()'>
+    <div class="buttons">
+    </div>
+    <h1 class="title">다음<h1>
+    <div class="buttons">
+    </div>
+  </ion-footer-bar>
+</ion-view>

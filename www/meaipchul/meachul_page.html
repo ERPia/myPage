@@ -1,4 +1,4 @@
-<!-- //매입페이지 -->
+<!-- //매출페이지 -->
 <style>
  table {width:100%}
  table td.td1-1{width:20%; vertical-align:middle; margin-top:20px}
@@ -26,9 +26,9 @@
   div.col4{width:30%}
 </style>
 
-<ion-view title="매입전표조회">
+<ion-view title="매출전표조회">
  <ion-nav-buttons side="right">
-        <button menu-toggle="right" ng-click="meaip_iu()">등록</button>
+        <button menu-toggle="right" ng-click="meachulpageopen()">등록</button>
 </ion-nav-buttons> 
   <ion-content>
 <div class="item item-input-inset">
@@ -68,7 +68,7 @@
       <table>
        <thead>
          <th style="width:10%" align="center">순번</th>
-         <th style="width:30%" align="center">매입일</th>
+         <th style="width:30%" align="center">매출일</th>
          <th style="width:30%" align="center">업체명</th>
          <th style="width:30%" align="center">금액</th>
        </thead>
@@ -76,16 +76,15 @@
        <hr>
        <any ng-repeat="x in chit_lists | filter:searchdatas track by $index" >
        <table on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
-          <tbody ng-click="chit_de(x.iL_No)">
+          <tbody ng-click="chit_de(x.Sl_No)">
             <tr>
               <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
-              <td class="resulttd1-2" align="left">{{x.Meaip_Date}}</td>
+              <td class="resulttd1-2" align="left">{{x.MeaChul_Date}}</td>
               <td class="resulttd1-3" align="center"><b>{{x.Admin_Code}}</b></td>
-              <td class="resulttd1-4" rowspan="2" align="right">{{x.Meaip_Amt | number:0}}원</td>
+              <td class="resulttd1-4" rowspan="2" align="right">{{x.MeaChul_Amt| number:0}}원</td>
             </tr>
             <tr>
-            	<td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td>
-            </tr>
+            <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td></tr>
           </tbody>
           <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
             <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
@@ -104,7 +103,7 @@
     <ion-footer-bar align-title="left" class="bar-stable">
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
-    <div class="col3" >매입액 {{chit_atmSum | number:0}}원<br>지급액 1,900,000원</div>
+    <div class="col3" >매출액 {{chit_atmSum | number:0}}원<br>지급액 1,900,000원</div>
     <div class="col4" >이월잔액 0원</div>
   </ion-footer-bar>
 </ion-view>
