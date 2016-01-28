@@ -22,7 +22,7 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "erpia.lhk.test"
         },
-        "com.phonegap.plugins.barcodescanner": {
+        "phonegap-plugin-barcodescanner": {
             "PACKAGE_NAME": "erpia.lhk.test"
         }
     },

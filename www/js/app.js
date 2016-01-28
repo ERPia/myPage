@@ -2,22 +2,22 @@
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'['ionic', 'starter.controllers', 'ngCordova']
+// the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
  .constant('ERPiaAPI',{
-	 url:'http://localhost:8100/include'
-	, imgUrl:'http://localhost:8100/erpia_update/img'
-	, toast:'N'
-})
+ 	url:'http://localhost:8100/include'
+ 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ 	, toast:'N'
+ })
 
 //실제 사용시
 // .constant('ERPiaAPI',{
 // 	url:'http://www.erpia.net/include'
 // 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-//  	, toast:'Y'
-//  })
+// 	, toast:'Y'
+// })
 
 .run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
 	$ionicPlatform.ready(function() {
@@ -127,10 +127,10 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-     	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',	// public key 개발테스트시 
-      	 // api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		 // dev_push: false // 실적용시
+      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 
@@ -376,6 +376,46 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		url : '/chart_test',
 		views : {
 			'menuContent' : {
+				templateUrl : 'test/meaip_test.html',
+				controller : 'chartTestCtrl'
+			}
+		}
+	})
+	/*전표조회*/
+	.state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipChit.html',
+          controller: 'chartTestCtrl'
+        }
+      }
+    })
+    /*전표등록*/
+	.state('app.meaipInsert', {
+      url: '/meaipInsert',
+      views: {
+        'menuContent': {
+          templateUrl: 'test/meaipInsert_basic.html',
+          controller: 'meaipInsertCtrl'
+        }
+      }
+    })
+    /*매입&매출 환경설정*/
+    .state('app.test-meaipmeachulsetup', {
+		url : '/test/meaipmeachulsetup',
+		views : {
+			'menuContent' : {
+				templateUrl : 'test/meaipmeachulsetup.html',
+				controller : 'mconfigCtrl'
+			}
+		}
+	})
+	////////////////////////////////매출전표조회///////////////////////////////////
+	.state('app.chart_test1', {
+		url : '/chart_test1',
+		views : {
+			'menuContent' : {
 				templateUrl : 'erpia_meachul/meachul_search.html',
 				controller : 'MeaChulSearchCtrl'
 			}
@@ -405,16 +445,10 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		}
 	})
 
-	///////////////////////////// /*매입&매출 환경설정*//////////////////////////////////////
-    .state('app.test-meaipmeachulsetup', {
-		url : '/test/meaipmeachulsetup',
-		views : {
-			'menuContent' : {
-				templateUrl : 'test/meaipmeachulsetup.html',
-				controller : 'mconfigCtrl'
-			}
-		}
-	})
+
+
+
+	;
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {

@@ -78,14 +78,13 @@
           '</div>',
 
         link: function(scope, element, attrs, ngModel)  {
-              var minDate       = scope.minDate && dateUtils.stringToDate(scope.minDate),
+          var minDate       = scope.minDate && dateUtils.stringToDate(scope.minDate),
               maxDate       = scope.maxDate && dateUtils.stringToDate(scope.maxDate),
               disabledDates = scope.disabledDates || [],
               currentDate   = new Date();
 
           scope.dayNames    = $locale.DATETIME_FORMATS['SHORTDAY'];
-          scope.dayNames    = '일,월,화,수,목,금,토'.split(',');
-
+          scope.dayNames    = '일,월,화,수,목,금,토'.split(','),
           scope.currentDate = currentDate;
 
           scope.render = function(initialDate) {

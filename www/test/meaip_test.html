@@ -1,0 +1,84 @@
+<ion-view title="매입전표조회"> <!-- 전표 -->
+    <ion-nav-buttons side="right" ng-show="false">
+		<any onclick="location.href='#/app/meaipInsert'">등록</any>
+	</ion-nav-buttons>
+	<div>
+	<ion-content class="padding2">
+		<div align="center"> 
+			검색<hr>
+		</div>
+		<div class="list list-inset">
+			<label class="item item-input">
+				<i class="icon ion-search placeholder-icon"></i>
+				<input type="search" ng-model="listSearch" placeholder="상품명을 입력하세요">
+			</label>
+
+		<table width="100%">
+		<tr>
+	   			<td align="center">일자</td>
+	   			<td>
+					  <input type="date" ng-model='sDate1' ng-change='mydate1(sDate1)' size="11" style="border:1px solid #eee;">
+				</td>
+				<td>~</td>
+				<td>
+					  <input type="date" ng-model='eDate1' ng-change='mydate2(eDate1)' size="11" style="border:1px solid #eee;">
+				</td>
+	   		</tr>
+	    </table>
+	    </div>
+	    <hr>
+	    <div align="center" style="width:100%">
+		    <button class="button button-calm" ng-click="searchestoday(0)" style="width:30%">금일</button>
+			<button class="button button-balanced" ng-click="searchestoday(7)" style="width:30%">1주일</button>
+			<button class="button button-energized" ng-click="searchestoday(30)" style="width:30%">1개월</button>
+		</div>
+		<hr>
+		<div align="center">
+	   		조회목록
+	   	</div>
+	   	<hr>
+		<table style="width:100%">
+		    <thead>
+		      <th style="width:10%" align="center">순번</th>
+		      <th style="width:30%" align="center">매입일</th>
+		      <th style="width:30%" align="center">업체명</th>
+		      <th style="width:30%" align="center">금액</th>
+		    </thead>
+	    </table>
+	    <hr>
+	    <!-- 애니태그로 묶인 부분을 NG-REPEAT처리 -->
+	     <any ng-repeat="x in lists | filter: listSearch track by $index" >
+	      <table on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" style="width:100%"><!-- on-swipe-up(쓸어올리기)을 이용하여 onclick 대신사용 -->
+	    	<tbody style="padding:0px;"  style="width:100%" ng-click="meaipChitF(x.iL_No)">
+	     <!--   <tbody ng-repeat="x in lists | filter: listSearch track by $index"  ng-if="$index < listindex" style="padding:0px;"  style="width:100%" ng-click="meaipChitF(x.iL_No)"> -->
+	        <tr>
+	        <td rowspan="2" style="width:10%; border-bottom:1px solid black; vertical-align:middle" align="center">{{$index+1}}.</td>
+	        <td style="width:25%" align="left" style="padding-left:5px;">{{x.Meaip_Date}}</td>
+	        <td style="width:30%" align="center"><b>{{x.Admin_Code}}</b></td>
+	        <td rowspan="2" style="width:30%; padding-right:15px; border-bottom:1px solid black" align="right">{{x.Meaip_Amt}}원</td>
+	        </tr>
+	        <tr style="width:100%"><td colspan="2" style="width:55% ; padding-bottom:10px; padding-left:5px; border-bottom:1px solid black;" align="left">{{x.G_Name}}</td></tr>
+	    </tbody>
+	      <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
+            <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
+          </tr>
+          <tr>
+            <td colspan="4" ng-if="$index == lasts-1 && $index!=$last">
+                <div align="center" ng-model="lasts"><br><b>5 more.. </b></div>
+            </td>
+          </tr>
+	    </table>
+	    </any>
+
+	</ion-content>
+	</div>
+<div style="margin-top:140%" align="right">
+      <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;
+  </div>
+	<ion-footer-bar align-title="left" class="bar-stable">
+		<div style="width:10%; BORDER-RIGHT: #BDBDBD 2px solid;">기간현황</div>
+		<div style="width:5%;">&nbsp;</div>
+		<div style="width:55%">매입액 {{meaipPricesum}}원<br>지급액 1,900,000원</div>
+		<div style="width:30%">이월잔액 0원</div>
+	</ion-footer-bar>
+</ion-view>
