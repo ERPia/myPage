@@ -530,6 +530,87 @@ angular.module('starter.services', [])
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		},	ERPiaMCUpdateData: function(Admin_Code, UserId, Sl_No, updatemode){
+			//업데이트 모드 1 (기초정보)
+			if(updatemode==1){
+					console.log("mconfigService and ERPiaMCUpdateData");
+					var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+				 	var data = 'Admin_Code='+Admin_Code+'&UserId='+UserId+'&Kind=ERPia_Sale_Select_Detail&Sl_No=' + Sl_No
+					return $http.get(url + '?' + data)
+					.then(function(response){
+				if(typeof response == 'object'){
+					if(response.data != '<!--Parameter Check-->'){
+								var data = {
+										state : 0,
+										basic_Place_Code : response.data.list[0].basic_Place_Code,
+										basic_Ch_Code : '',
+										basic_Ch_Name : response.data.list[0].CName,
+										basic_Dn_Sale : response.data.list[0].basic_Dn_Sale,
+										basic_Subul_Sale : response.data.list[0].basic_Subul_Sale,
+										basic_Place_Name : response.data.list[0].Sale_Place_Name,
+										GerCode : response.data.list[0].GerCode,
+										GerName : response.data.list[0].GerName,
+										Remk : response.data.list[0].Remk,
+										MeaChul_Date : response.data.list[0].MeaChul_Date,
+										Meaip_Date : '',
+										Subul_kind : response.data.list[0].Subul_kind,
+										IpJi_Amt: response.data.list[0].IpJi_Amt,
+										IpJi_Date: response.data.list[0].IpJi_Date,
+										IpJi_Gubun: response.data.list[0].IpJi_Gubun
+									
+										};
+								return data;
+							}else{}
+							console.log("불러들인 수정할 정보:",data);
+				}else{
+						return $q.reject(response.data);
+					 }
+					
+				}, function(response){
+					return $q.reject(response.data);
+				})
+			//업데이트 모드 2(아이템)
+			}else if(updatemode==2){
+									console.log("mconfigService and ERPiaMCUpdateData");
+					var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
+				 	var data = 'Admin_Code='+Admin_Code+'&UserId='+UserId+'&Kind=ERPia_Sale_Select_Detail&Sl_No=' + Sl_No
+					return $http.get(url + '?' + data)
+					.then(function(response){
+				if(typeof response == 'object'){
+					if(response.data != '<!--Parameter Check-->'){
+								var data =[];
+								
+								for(var i=0; i<response.data.list.length; i++){
+									var goods = {
+											goods_number : response.data.list[i].Seq,
+											G_Name: response.data.list[i].G_Name,
+											G_Code : '',
+											goods_price: response.data.list[i].G_Price,
+											goods_count: response.data.list[i].G_Qty,
+											G_Stand: response.data.list[i].G_Stand,
+											goods_totalprice: response.data.list[i].G_Qty*response.data.list[i].G_Price,
+											goods_panmedanga: response.data.list[i].G_Price*0.9
+											//goods_number : $scope.goodsresult.length+1,
+											// G_Name : $scope.checkedDatas[i].G_Name,
+											// G_Code : $scope.checkedDatas[i].G_Code,
+											// G_Stand : $scope.checkedDatas[i].G_Stand,
+											// goods_count : parseInt($scope.barcode.barcodegoodscnt),
+											// goods_price : parseInt(price),
+											// goods_totalprice : 0,
+											// goods_panmedanga: parseInt(price)*0.9	
+									}
+								};
+								return data;
+							}else{}
+							console.log("불러들인 수정할 정보:",data);
+				}else{
+						return $q.reject(response.data);
+					 }
+					
+				}, function(response){
+					return $q.reject(response.data);
+				})
+			}
 		}
 	};
 })
@@ -1227,10 +1308,10 @@ return{
 
 .factory('ERPiaMCSearchDetailService', function($http, $q, ERPiaAPI){
 	return{
-		ERPiaMCSearchDetailData: function(Admin_Code, UserId, kind, Sl_No){
+		ERPiaMCSearchDetailData: function(Admin_Code, UserId, Sl_No){
 			console.log("ERPiaMCSearchDetailService and ERPiaMCSearchDetailData");
 			var url = ERPiaAPI.url + '/ERPiaApi_TestProject.asp';
-		 	var data = 'Admin_Code=onz&UserId=pikapika&Kind=' + kind + '&Sl_No=' + Sl_No
+		 	var data = 'Admin_Code=onz&UserId=pikapika&Kind=ERPia_Sale_Select_Detail&Sl_No=' + Sl_No
 		return $http.get(url + '?' + data)
 			.then(function(response){
 				console.log('ERPiaMCSearchDetailService(ERPiaMCSearchDetailData)=', response);
@@ -1240,6 +1321,7 @@ return{
 				}else{
 					return $q.reject(response.data);
 				}
+
 			}, function(response){
 				return $q.reject(response.data);
 			})
