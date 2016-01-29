@@ -4914,7 +4914,8 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	 	subulkind : 0,
 	 	userGerName : '', // 사용자가 입력한 거래처명
 	 	GerName : '',
-	 	GerCode : 0
+	 	GerCode : 0,
+	 	totalsumprices : 0 //합계
 	 }
 
 	 /*체크데이터*/
@@ -4955,6 +4956,8 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     	userGoodsName : '',
     	userMode : 'Select_GoodsName'
     };
+
+    $scope.bar = 'N';
 
 	 /* page up And down */
     $scope.Next=function(){
@@ -5058,14 +5061,26 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 			/*조회된 수불카인드*/
 			$scope.datas.subulkind = data.list[0].Subul_kind;
 
+			for(var i=0; i < data.list.length; i++){
+				$scope.goodsaddlists.push({
+					name : data.list[i].G_Name,
+					num : parseInt(data.list[i].G_Qty),
+					goodsprice : parseInt(data.list[i].G_Price),
+					code : data.list[i].G_Code
+				});
+			}
+
 			$scope.m_check.meajangCheck = 't';
 			$scope.m_check.changoCheck = 't';
 			$scope.m_check.subulCheck = 't';
 
+			$scope.company_Func(data.list[0].GerName,data.list[0].GerCode);
+			$scope.checkup();
+
 		})
 		
 	}
-	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////
+	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////////////////////////
 
 	/*매장에따른 연계창고 조회*/
 	$scope.Link_Chango = function(){
@@ -5108,7 +5123,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     /*상품조회모달*/
     $scope.goods_searchM = function(){
     	var goodsname = escape($scope.user.userGoodsName);
-
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code)
 		.then(function(data){
 			console.log(data);
@@ -5132,13 +5146,15 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     	}
     	if($scope.checkcaught != 'yes'){
     		$scope.checkedDatas.push(goodsdata);
+    	}else{
+
     	}
     }
 
     /*선택된 상품들을 등록리스트에 저장*/
     $scope.checkdataSave=function(){
     	console.log($scope.goodsaddlists);
-    	console.log($scope.checkedDatas);
+    	console.log($scope.checkedDatas[0]);
 		if($scope.goodsaddlists.length > 0){
 			for(var j=0; j < $scope.goodsaddlists.length; j++){
 				for(var o=0; o < $scope.checkedDatas.length; o++){
@@ -5162,7 +5178,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 				var d = $scope.setupData.basic_Dn_Sale;
 			}
 			switch(d){
-				case '0': console.log('거래처별 단가'); 
+				case '0': console.log('거래처별 단가 ==> 나중에 추가적으로 코딩해야됨.'); 
 						  MiuService.com_Dn($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, $scope.checkedDatas[i].G_Code, $scope.datas.GerCode)
 						  .then(function(data){
 						  		console.log(data);
@@ -5177,30 +5193,70 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	    		default : console.log('설정안되있습니다.'); break;
 	    	}
 
-	    	$scope.goodsaddlists.push({
+	    	if($scope.bar == 'Y'){
+	    		console.log('여기는 바코드!', $scope.checkedDatas);
+	    		$ionicPopup.show({
+				    template: '<input type="text" ng-model="bargoods.num">',
+				    title: '('+ $scope.checkedDatas[0].G_Code +')<br>' + $scope.checkedDatas[0].G_Name,
+				    subTitle: '수량을 입력해주세요.',
+				    scope: $scope,
+				    buttons: [
+					           { text: '확인',
+					            onTap: function(e){
+					            	if($scope.bargoods.num != 0){
+					            		$scope.goodsaddlists.push({
+											name : $scope.checkedDatas[0].G_Name,
+											num : parseInt($scope.checkedDatas.num),
+											goodsprice : parseInt(price),
+											code : $scope.checkedDatas[0].G_Code
+										});
+					            	}else{
+					            		alert('0개는 등록 할 수 없습니다. 다시 시도해주세요.');
+					            	}
+					            	console.log('확인좀 =>', $scope.checkedDatas.num);
+					            	
+					            }},
+					         ]
+				  });
+	    	}else{
+	    		$scope.goodsaddlists.push({
 					name : $scope.checkedDatas[i].G_Name,
 					num : 1,
 					goodsprice : parseInt(price),
 					code : $scope.checkedDatas[i].G_Code
 				});
-	    }
 
-	    $scope.goodsmodal.hide();
+				$scope.checkedDatas.splice(0,$scope.checkedDatas.length);
+	    		$scope.goodsmodal.hide();
+	    	}
+
+	    	
+	    }
 	}
 
     /*상품조회모달 닫기*/
     $scope.goods_searchM_close = function(){
+    	$scope.checkedDatas.splice(0,$scope.checkedDatas.length);
     	$scope.goodsmodal.hide();
     }
 
      /////////////////////////////////////////////////////////////바코드///////////////////////////////////////////////////////////////////////////////////////////////////
-    	// $scope.scanBarcode = function() {
+    	$scope.scanBarcode = function() {
+    		var test = '1233333';
+    		MiuService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, test)
+    		.then(function(data){
+    			console.log(data);
+    			$scope.checkedDatas.push(data.list);
+    			$scope.bar = 'Y';
+    			$scope.checkdataSave();
+    		})
      //    $cordovaBarcodeScanner.scan().then(function(imageData) {
      //        console.log('format ' + imageData.format);
 
      //        if(imageData.text.length < 1){
      //        	alert('바코드 입력 취소');
      //        }else{
+     //        	console.log(imageData.text);
      //        	meaipService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, imageData.text)
 					// .then(function(data){
 					// 	if(data == undefined){
@@ -5221,13 +5277,22 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
      //        }, function(error) {
      //        	console.log('an error ' + error);
      //        });
-    	// }
+    	}
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
         $scope.goodsaddlists.splice(index,1);					
      }
+
+     /*상품 종합 합계 가격 구하기*/
+    $scope.goods_totalprice1=function(){
+     	$scope.datas.totalsumprices = 0;
+     	for(var count=0;count<$scope.goodsaddlists.length;count++){
+     		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
+     		$scope.datas.totalsumprices = $scope.datas.totalsumprices + sum;
+     	}
+    };
 
 	/*자동슬라이드업*/
 	$scope.checkup=function(){

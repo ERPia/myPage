@@ -1560,6 +1560,67 @@ return{
 						return $q.reject(response.data);
 					})
 	
+		}, barcode : function(admin_code, userid, barnum){
+				console.log("MiuService and barcode");
+				console.log('코드, 아이디, 바코드 넘버==>', admin_code, userid, barnum);
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
+				else var kind = 'ERPia_Sale_Select_Goods';
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=';
+				var mode1 = 'Select_GI_Code&GI_Code=';
+				var mode2 = 'Select_G_OnCode&G_OnCode=';
+				var mode3 = 'Select_G_Code&GoodsCode=';
+				/*공인 바코드 조회*/
+				return $http.get(url + '?' + data + mode1 + barnum).then(function(response){
+						console.log('공인바코드');
+						if(typeof response == 'object'){
+								if(response.data == '<!--Parameter Check-->'){
+									/*자체코드 조회*/
+									return $http.get(url + '?' + data + mode2 + barnum).then(function(response){
+											console.log('자체코드');
+											if(typeof response == 'object'){
+													if(response.data == '<!--Parameter Check-->'){
+															/*상품코드*/
+															return $http.get(url + '?' + data + mode3 + barnum).then(function(response){
+																	console.log('상품코드');
+																	if(typeof response == 'object'){
+																			if(response.data == '<!--Parameter Check-->'){
+																				console.log('일치하는 상품 없음.');
+																			}else{
+																				console.log('상품코드 일때 ', response.data);
+																				return response.data;
+																			}
+																	}else{
+																		return $q.reject(response.data);
+																	}
+																}, function(response){
+																	return $q.reject(response.data);
+																})
+														//////////////////////////////////////////////
+													}else{
+														console.log('자체코드 일때 ', response.data);
+														return response.data;
+													}
+											}else{
+												return $q.reject(response.data);
+											}
+										}, function(response){
+											return $q.reject(response.data);
+										})
+									//////////////////////////////////////////////
+
+								}else{
+									console.log('공인바코드 일때 ', response.data);
+									return response.data;
+								}
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
 	};
 })

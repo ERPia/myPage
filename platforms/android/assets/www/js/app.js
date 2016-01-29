@@ -6,11 +6,11 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
 	, 'starter.services'])
 
- /*.constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })*/
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ // 	, toast:'N'
+ // })
 
 //실제 사용시
 .constant('ERPiaAPI',{
@@ -104,6 +104,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
 		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		if(goto_Href == '#app/meachul_page') $rootScope.distinction = 'meachul';
+		else if(goto_Href == '#app/meaip_page') $rootScope.distinction = 'meaip';
 		location.href = goto_Href;
 	}
 	$rootScope.goto_with_backButton = function(goto_Href){
@@ -410,7 +412,45 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 				controller : 'mconfigCtrl'
 			}
 		}
-	});
+	})
+	////////////////////////////////매출전표조회///////////////////////////////////
+	.state('app.chart_test1', {
+		url : '/chart_test1',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachul_search.html',
+				controller : 'MeaChulSearchCtrl'
+			}
+		}
+	})
+
+		////////////////////////////////sample///////////////////////////////////
+	.state('app.searchdetail', {
+		url : '/searchdetail',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/searchdetail.html',
+				controller : 'MeaChulSearchDetailCtrl'
+			}
+		}
+	})
+
+	///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+	.state('app.meachulpage', {
+		url : '/meachulpage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'erpia_meachul/meachulpage.html',
+				controller : 'MeaChulInsertCtrl'
+			}
+		}
+	})
+
+
+
+
+
  // 	.state('app.tab.dash', {
 	// 	url : '/dash',
 	// 	views : {
@@ -491,6 +531,77 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	// });
 
 	// if none of the above states are matched, use this as the fallback
+
+
+
+
+	/////////////////////////////////////////////////////////////매입&매출 통합 다시//////////////////////////////////////////////////////////
+		///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
+	
+.state('app.m_Setup', { // 매입&매출 환경설정
+	url : '/meaipchul/m_Setup',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/m_Setup.html',
+			controller : 'MconfigCtrl'
+		}
+	}
+})
+.state('app.meaip_page', { // 매입전표조회
+	url : '/meaip_page',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meaip_page.html',
+			controller : 'MLookupCtrl'
+		}
+	}
+})
+.state('app.meachul_page', { //매출전표조회
+	url : '/meachul_page',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meachul_page.html',
+			controller : 'MLookupCtrl'
+		}
+	}
+})
+.state('app.meaip_depage', { //매입전표상세조회
+	url : '/meaip_depage',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meaip_depage.html',
+			controller : 'MLookup_DeCtrl'
+		}
+	}
+})
+.state('app.meachul_depage', { //매출전표상세조회
+	url : '/meachul_depage',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meachul_depage.html',
+			controller : 'MLookup_DeCtrl'
+		}
+	}
+})
+.state('app.meaip_IU', { //매입등록
+	url : '/meaip_IU',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meaip_IU.html',
+			controller : 'MiuCtrl'
+		}
+	}
+})
+.state('app.meachul_IU', { //매출등록
+	url : '/meachul_IU',
+	views : {
+		'menuContent' : {
+			templateUrl : 'meaipchul/meachul_IU.html',
+			controller : 'MiuCtrl'
+		}
+	}
+});
+
 	$urlRouterProvider.otherwise('/app/main');
 }); 
 
