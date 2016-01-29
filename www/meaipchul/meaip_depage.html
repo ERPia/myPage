@@ -1,58 +1,74 @@
+<style>
+ .table1 {width:100%; margin-left: auto; margin-right: auto;}
+ .table1 .td3{text-align:right}
+ .table2 {width: 100%; float:right;}
+ .table2 .td1{float:left;}
+ .table2 td{width:30%;}
+ 
+  table tr {width: 100%; }
+ .width-40{width:40%;}
+ .width-20{width:20%;}
+ .width-30{width:30%; text-align:right}
+
+  div.footerdiv{margin-top:0px;width:100%}
+  button .starbtn{font-size:50px;float:left}
+</style>
+
 <ion-view title="매입전표">
-	<ion-content>
+  <ion-content>
 
   <div class="list list-inset">
     <any ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
 
       <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;전표번호 : </i></span>
-  		 <input type="text" readonly value='{{x.iL_No}}'><br>
-  	  </label>
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;전표번호 : </i></span>
+       <input type="text" readonly value='{{x.iL_No}}'><br>
+      </label>
 
       <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;일 자 : </i></span>
-  		 <input type="text" readonly value='{{x.Meaip_Date}}'><br>
-  	  </label>
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;일 자 : </i></span>
+       <input type="text" readonly value='{{x.Meaip_Date}}'><br>
+      </label>
 
-  	  <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
-  		 <input type="text" readonly value='{{x.Subul_kind}}'><br>
-  	  </label>
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
+       <input type="text" readonly value='{{x.Subul_kind}}'><br>
+      </label>
 
-  	  <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;거래처 : </i></span>
-  		 <input type="text" readonly value='{{x.GerName}}'><br>
-  	  </label>
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;거래처 : </i></span>
+       <input type="text" readonly value='{{x.GerName}}'><br>
+      </label>
 
-  	  <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;창고지정 : </i></span>
-  		 <input type="text" readonly value='{{x.CName}}'><br>
-  	  </label>
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;창고지정 : </i></span>
+       <input type="text" readonly value='{{x.CName}}'><br>
+      </label>
 
-  	  <label class="item item-input">
-  		 <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;매장지정 : </i></span>
-  		 <input type="text" readonly value='{{x.Sale_Place_Name}}'><br>
-  	  </label>
+      <label class="item item-input">
+       <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;매장지정 : </i></span>
+       <input type="text" readonly value='{{x.Sale_Place_Name}}'><br>
+      </label>
       <hr>
     </any>
 
-      <table width="100%">
-        <tr width="100%">
-          <td width="40%" align="center">상품명</td>
-          <td width="20%" align="center">수량</td>
-          <td width="40%" align="center">단가</td>
+      <table class="table1">
+        <tr>
+          <td class="width-40">상품명</td>
+          <td class="width-20">수량</td>
+          <td class="width-40">단가</td>
         </tr>
         <tr>
           <td colspan="3"><hr></td>
         </tr>
         <tr ng-repeat="y in chit_dedata">
-          <td width="40%" align="center">
+          <td class="width-40">
             {{y.G_Name}}
           </td>
-          <td width="20%" align="center">
+          <td class="width-20">
             {{y.G_Qty}}
           </td>
-          <td width="40%" align="center">
+          <td class="width-40">
             {{y.G_Price}}
           </td>
         </tr>
@@ -60,42 +76,42 @@
           <td colspan="3"><hr></td>
         </tr>
         <tr>
-          <td colspan="3" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td colspan="3" class="td3"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
         </tr>
       </table>
-      <table width='100%' ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
+      <table class="table2" ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
         <tr>
-          <td colspan="3" align="left"><b>입금정보</b></td>
+          <td colspan="3" class="td1"><b>입금정보</b></td>
         </tr>
         <tr>
-          <td align="right" width='30%'>{{x.IpJi_Date}}</td>
-          <td align="right" width='30%'><any ng-if='x.IpJi_Gubun == 701'>현금입금</any><any ng-if='x.IpJi_Gubun == 702'>통장입금</any><any ng-if='x.IpJi_Gubun == 703'>카드입금</any><any ng-if='x.IpJi_Gubun == 704'>어음입금</any></td>
-          <td align="right" width='30%'><b>{{x.IpJi_Amt}}원</b></td>
+          <td class="width-30">{{x.IpJi_Date}}</td>
+          <td class="width-30"><any ng-if='x.IpJi_Gubun == 701'>현금입금</any><any ng-if='x.IpJi_Gubun == 702'>통장입금</any><any ng-if='x.IpJi_Gubun == 703'>카드입금</any><any ng-if='x.IpJi_Gubun == 704'>어음입금</any></td>
+          <td class="width-30"><b>{{x.IpJi_Amt}}원</b></td>
         </tr>
       </table>
       <hr>
       <hr>
       <label class="item item-input">
-  		  <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;관리비고 </i></span>
-  		  <any ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
+        <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;관리비고 </i></span>
+        <any ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
           {{x.Remk}}
           </any>
-	  </label>
+    </label>
         <hr>
-	 </div>
+   </div>
 </ion-content>
 <ion-footer-bar align-title="left">
-	  <div align="center" style="margin-top:0px;width:100%">
+    <div align="center" class="footerdiv">
         <any ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
-          <button class="button button-icon button-clear {{ionstar}}" menu-close ng-click="m_quick(x.iL_No,ionstar)"  style="font-size:50px;align:left"></button>
+          <button class="button button-icon button-clear {{ionstar}} starbtn" menu-close ng-click="m_quick(x.iL_No,ionstar)"  style="font-size:50px;align:left"></button>
         </any>
           <any ng-repeat="x in chit_dedata | filter: listSearch track by $index" ng-if="$index < 1">
             <button class="button button-calm" ng-click="chitDeleteF(x.iL_No)">삭제</button>
-            <button class="button button-balanced" ng-click="chitUpdateF(chit_dedata)">수정</button>
+            <button class="button button-balanced" ng-click="meaipchul_u(x.iL_No)">수정</button>
             <button class="button button-energized" >거래명세서</button>
           </any>
         </div>
-	</ion-footer-bar>
+  </ion-footer-bar>
 </ion-view>
 
 

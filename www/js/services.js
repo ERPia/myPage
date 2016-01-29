@@ -1333,8 +1333,8 @@ return{
 									basic_Ch_Code : 101,
 									basic_Dn_Sale : 0, //기본매출(거래처등록지정)
 									basic_Dn_Meaip : 0, //기본매입(거래처등록지정)
-									basic_Subul_Sale : 0, //기본매출등록수불
-									basic_Subul_Meaip : 0, //기본매입등록수불
+									basic_Subul_Sale : 1, //기본매출등록수불
+									basic_Subul_Meaip : 1, //기본매입등록수불
 									basic_Subul_Meaip_Before : 'N'
 								};
 								console.log('확인=>', data);
@@ -1407,14 +1407,12 @@ return{
 return{
 	chit_lookup: function(admin_code, userid, sedata){
 				console.log("MLookupService and chit_lookup");
-				console.log('000>', $rootScope.distinction);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Master';
 				else var kind = 'ERPia_Sale_Select_Master';
 
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=Select_Date&sDate='+ sedata.sDate +'&eDate='+ sedata.eDate;
 				
-				console.log('데이터확인 ->', data);
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('MLookupService', response);
@@ -1472,6 +1470,32 @@ return{
 					})
 		}
 
+	};
+})
+
+/* 매입 & 매출 등록 & 수정 통합 */
+.factory('MiuService', function($http, ERPiaAPI, $q, $cordovaToast, $rootScope){
+return{
+	company_sear: function(admin_code, userid, com_name){
+				console.log("MiuService and company_sear");
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_GerName';
+				else var kind = 'ERPia_Sale_Select_GerName';
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=select&GerName=' + com_name;
+				console.log('?=>', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('MLookupService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}
 	};
 })
 

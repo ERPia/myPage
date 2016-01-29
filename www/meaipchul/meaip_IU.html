@@ -10,7 +10,7 @@
 			  <button class="ion-ios-calendar-outline" style="font-size:25px; border:0; background:white;" ></button>&nbsp;
 			</label>
   		</div>
-  		<div class="list list-inset" align="left" ng-click="meaipNext()">
+  		<div class="list list-inset" align="left" ng-click="Next()">
   			<hr>&nbsp; <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매입정보
   		</div>
 
@@ -18,38 +18,39 @@
 			<table width="100%" class="list list-inset"style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search" ng-model="compo.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="cusSearch2()"></td>
+					<td width="40%"><input type="search" ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
 					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
 				</tr>
 			</table>
 			<div class="list">
-	        <li class="item" ng-repeat="x in customerDatas" ng-click="customerFunc(x.G_Name,x.G_Code);checkup()">{{x.G_Name}}</li>
+	        <li class="item" ng-repeat="x in companyDatas" ng-click="company_Func(x.G_Name,x.G_Code);checkup()">{{x.G_Name}}</li>
 	      	</div>
 
 			<label class="item item-input" style="border:0;">
 			  수불구분
-  				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="111">입고</ion-radio>
-				<ion-radio ng-click="checkup()" ng-model="compo.subulkind" ng-value="122">반품</ion-radio>
+  				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="111">매입입고</ion-radio>
+				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="122">매입반품</ion-radio>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
 			  매장지정
-			  <select ng-model="configData.basic_Place_Code" ng-change='Chango();checkup()' style="width:50%">
-			     <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="configData.basic_Place_Code == {{x.Sale_Place_Code}}">
+			  <select ng-model="setupData.basic_Place_Code" ng-change='Link_Chango();checkup()' style="width:50%">
+			  	<option value='000' ng-selected="setupData.basic_Place_Code == 000">매장미지정</option>
+			    <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="setupData.basic_Place_Code == {{x.Sale_Place_Code}}">
 			     {{x.Sale_Place_Name}}</option>
 			    </select>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
 			  창고지정
-			  <select ng-model="configData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
-		  		  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="configData.basic_Ch_Code == {{x.Code}}">
+			  <select ng-model="setupData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
+		  		  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="setupData.basic_Ch_Code == {{x.Code}}">
 		  		  {{x.Name}}</option>
 		  		</select>
 			</label>
 	</div>
 
-  		<div class="list list-inset" align="left" ng-click="meaipNext2()">
+  		<div class="list list-inset" align="left" ng-click="Next2()">
   			<hr>&nbsp; <i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품
   		</div>
 
@@ -99,7 +100,7 @@
         </div>
 	</div>
   		
-  		<div class="list list-inset" align="left" ng-click="meaipNext3()">
+  		<div class="list list-inset" align="left" ng-click="Next3()">
   			<hr>&nbsp; <i class="{{upAnddown3}}"></i> &nbsp;&nbsp; 관리비고
   		</div>
   		<div ng-if="basic3type" class="list list-inset">
