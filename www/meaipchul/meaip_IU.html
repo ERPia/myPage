@@ -5,9 +5,8 @@
   	<ion-content>
   	<div class="list list-inset">
   		<div>
-  			<label class="item item-input" style="border:0;">
-			  <input type="text" style="text-align:right;" value='{{date.todate}}' ng-model='date.todate' ng-click="opendateModal('meaipdate')" readonly>&nbsp;
-			  <button class="ion-ios-calendar-outline" style="font-size:25px; border:0; background:white;" ></button>&nbsp;
+  			<label class="item item-input col-80" style="border:0;">
+			 매입일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)">
 			</label>
   		</div>
   		<div class="list list-inset" align="left" ng-click="Next()">
@@ -59,14 +58,14 @@
 			<table width="100%">
 	        	<tr>
 		            <td>
-		          &nbsp;<select ng-model="Meaipgoods.userMode" ng-change="modeselect()">
-		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="Meaipgoods.userMode == {{x.Code}}">{{x.Name}}</option>
+		          &nbsp;<select ng-model="user.userMode" ng-change="modeselect()">
+		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="user.userMode == {{x.Code}}">{{x.Name}}</option>
 		            	</select>&nbsp;&nbsp;
 		          	</td>
 		          	<td>
-		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" style="border:1px solid #eee;" ng-model="Meaipgoods.userGoodsName">
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" style="border:1px solid #eee;" ng-model="user.userGoodsName">
 		          	</td>
-		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
+		          	<td><i class="ion-search" style="font-size:30px" ng-click="goods_searchM()"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
 	          	</tr>
 	        </table><hr>
