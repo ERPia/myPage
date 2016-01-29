@@ -4851,9 +4851,9 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 })
 
 /* 매입&매출 등록 컨트롤러 */
-.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, ERPiaAPI, MconfigService, MiuService, MLookupService) {
+.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, $cordovaBarcodeScanner, ERPiaAPI, MconfigService, MiuService, MLookupService) {
 	console.log($rootScope.iu);
-	//() 날짜생성
+	/*날짜생성*/
 	$scope.dateMinus=function(days){
 
 	    var nday = new Date();  //오늘 날짜..  
@@ -4867,12 +4867,14 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
 	    return yy + "-" + mm + "-" + dd;
 	}
+	/*date형변환에 필요한 그릇*/
 	$scope.date={
 		todate : '',
 		payday : '',
 		todate1 : '',
 		payday1 : ''
 	}
+
 	$scope.datetypes='';
 	$scope.date.todate=$scope.dateMinus(0); //오늘날짜 스코프
 	$scope.date.payday=$scope.dateMinus(0);
@@ -4880,9 +4882,9 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	$scope.date.payday1=new Date($scope.date.payday);
 
 
-	//todaychange == 매입일/매출일 날짜 형변환하기 //
+	/*매입일/매출일 날짜 형변환하기*/
 	$scope.datechange=function(date,num){
-		var nday = new Date(date);  //선택1 날짜..  
+		var nday = new Date(date); 
 	    var yy = nday.getFullYear();
 	    var mm = nday.getMonth()+1;
 	    var dd = nday.getDate();
@@ -4922,6 +4924,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 	 	meajangCheck : 'f',
 	 	changoCheck : 'f'
 	 }
+
 	 /*매입&매출 기본정보*/
 	 $scope.setupData={
 	 	basic_Place_Code : 0,
@@ -4930,6 +4933,28 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
 	 /*상품등록 리스트*/
     $scope.goodsaddlists=[];
+    $scope.checkedDatas=[];
+
+    /*상품검색 selectBoxList*/
+    $scope.modeselectlist=[
+    { Name: '상품명', Code: 'Select_GoodsName' },
+    { Name: '자체코드', Code: 'Select_G_OnCode' },
+    { Name: '상품코드', Code: 'Select_G_Code' },
+    { Name: '공인바코드', Code: 'Select_GI_Code' }
+    ];
+
+    /* goods Search modal */
+    $ionicModal.fromTemplateUrl('meaipchul/goods_Modal.html', {
+    scope: $scope
+    }).then(function(modal) {
+    $scope.goodsmodal = modal;
+    });
+
+    /*유저가 쓴 상품이름 & 검색 모드*/
+    $scope.user = {
+    	userGoodsName : '',
+    	userMode : 'Select_GoodsName'
+    };
 
 	 /* page up And down */
     $scope.Next=function(){
@@ -4961,71 +4986,61 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     }
 
     /*환경설정값 있는지 먼저 불러오기.*/
-	    MconfigService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+    MconfigService.basicSetup($scope.loginData.Admin_Code, $scope.loginData.UserId)
+	.then(function(data){
+		$scope.setupData = data;
+
+		$scope.m_check.meajangCheck = 't';
+		$scope.m_check.changoCheck = 't';
+		$scope.m_check.subulCheck = 't';
+
+		if($rootScope.distinction == 'meaip'){  								//매입 수불구분확인 -------------------- 매입일경우
+			var i = $scope.setupData.basic_Subul_Meaip;
+			console.log('수불확인 =>', i);
+			switch (i) {
+			    case '1' : console.log('1'); 
+			    		   switch($scope.configData.basic_Subul_Meaip_Before){
+			    		   		case 'I' : console.log('I'); $scope.datas.subulkind=111; break;
+			    		   		case 'B' : console.log('B'); $scope.datas.subulkind=122; break;
+			    		   }
+			    		   break;
+			    case '2' : console.log('2'); $scope.datas.subulkind=111; break;
+			    case '3' : console.log('3'); $scope.datas.subulkind=122; break;
+
+			    default : console.log('수불카인드 오류'); $scope.m_check.subulCheck = 'f'; break; // 최근등록수불로 되어있는데 등록된 값 없을경우
+			  }
+		}else{  																//매출 수불구분확인 -------------------- 매출일경우
+			var i = $scope.setupData.basic_Subul_Sale;
+			console.log('수불확인 =>', i);
+			switch (i) {
+			    case '1' : console.log('1'); 
+			    		   switch($scope.configData.basic_Subul_Sale_Before){
+			    		   		case 'C' : console.log('C'); $scope.datas.subulkind=221; break;
+			    		   		case 'B' : console.log('B'); $scope.datas.subulkind=212; break;
+			    		   }
+			    		   break;
+			    case '2' : console.log('2'); $scope.datas.subulkind=221; break;
+			    case '3' : console.log('3'); $scope.datas.subulkind=212; break;
+
+			    default : console.log('수불카인드 오류'); $scope.m_check.subulCheck = 'f'; break; // 최근등록수불로 되어있는데 등록된 값 없을경우
+			  }
+
+		}
+
+		/*기본 매장조회*/
+		MconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
 		.then(function(data){
-			$scope.setupData = data;
-
-			$scope.m_check.meajangCheck = 't';
-			$scope.m_check.changoCheck = 't';
-			$scope.m_check.subulCheck = 't';
-
-			if($rootScope.distinction == 'meaip'){
-				//매입 수불구분확인 -------------------- 매입일경우
-				var i = $scope.setupData.basic_Subul_Meaip;
-				console.log('수불확인 =>', i);
-				switch (i) {
-				    case '1' : console.log('1'); 
-				    		   switch($scope.configData.basic_Subul_Meaip_Before){
-				    		   		case 'I' : console.log('I'); $scope.datas.subulkind=111; break;
-				    		   		case 'B' : console.log('B'); $scope.datas.subulkind=122; break;
-				    		   }
-				    		   break;
-				    case '2' : console.log('2'); $scope.datas.subulkind=111; break;
-				    case '3' : console.log('3'); $scope.datas.subulkind=122; break;
-
-				    default : console.log('수불카인드 오류'); $scope.m_check.subulCheck = 'f'; break;
-				  }
-			}else{
-				//매출 수불구분확인 -------------------- 매출일경우
-				var i = $scope.setupData.basic_Subul_Sale;
-				console.log('수불확인 =>', i);
-				switch (i) {
-				    case '1' : console.log('1'); 
-				    		   switch($scope.configData.basic_Subul_Sale_Before){
-				    		   		case 'C' : console.log('C'); $scope.datas.subulkind=221; break;
-				    		   		case 'B' : console.log('B'); $scope.datas.subulkind=212; break;
-				    		   }
-				    		   break;
-				    case '2' : console.log('2'); $scope.datas.subulkind=221; break;
-				    case '3' : console.log('3'); $scope.datas.subulkind=212; break;
-
-				    default : console.log('수불카인드 오류'); $scope.m_check.subulCheck = 'f'; break;
-				  }
-
-			}
-
-			/*기본 매장조회*/
-			MconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
-			.then(function(data){
-				$scope.mejanglists = data.list;
-			})
-
-			/*기본 창고조회*/
-			MconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.setupData.basic_Place_Code)
-			.then(function(data){
-				$scope.changolists = data.list;
-			})
-
+			$scope.mejanglists = data.list;
 		})
 
-    /* goods Search modal */
-    $ionicModal.fromTemplateUrl('meaipchul/goods_Modal.html', {
-    scope: $scope
-    }).then(function(modal) {
-    $scope.goodsmodal = modal;
-    });
+		/*기본 창고조회*/
+		MconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.setupData.basic_Place_Code)
+		.then(function(data){
+			$scope.changolists = data.list;
+		})
 
-	/*등록일경우*/
+	})
+	////////////////////////////////////////////// 수정 일경우 데이터 불러오기 //////////////////////////////////////////////////////////
 	if($rootScope.iu == 'u'){
 		console.log('수정', $rootScope.u_no);
 		/*전표 상세조회*/
@@ -5043,23 +5058,15 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 			/*조회된 수불카인드*/
 			$scope.datas.subulkind = data.list[0].Subul_kind;
 
-	  // goodsaddlists codegoods, namegoods, standgoods, gdngoods, numgoods
-	  		// for(var i=0; i < data.list.length; i++){
-	  		// 	$scope.goodsaddlists.push({
-
-	  		// 	});
-	  		// }
-	  	console.log('3333=>', $scope.setupData);
 			$scope.m_check.meajangCheck = 't';
 			$scope.m_check.changoCheck = 't';
 			$scope.m_check.subulCheck = 't';
 
 		})
 		
+	}
+	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////
 
-	} // else문끝
-
-	////////////////////////////////////////////// 등록 수정 공통사용 function //////////////////////////////////////////////////////////
 	/*매장에따른 연계창고 조회*/
 	$scope.Link_Chango = function(){
 		MconfigService.basicC($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.setupData.basic_Place_Code)
@@ -5076,6 +5083,7 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 
 	/*거래처 자동완성기능 (매입+매출)*/
     $scope.companyDatas = []; // 자동완성 배열
+
      $scope.company_auto = function() {
      	var cusname = escape($scope.datas.userGerName);
      	if($scope.companyDatas != undefined){
@@ -5097,22 +5105,8 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
         $scope.m_check.cusCheck = 't';
     }
 
-    /*상품검색 selectBoxList*/
-    $scope.modeselectlist=[
-    { Name: '상품명', Code: 'Select_GoodsName' },
-    { Name: '자체코드', Code: 'Select_G_OnCode' },
-    { Name: '상품코드', Code: 'Select_G_Code' },
-    { Name: '공인바코드', Code: 'Select_GI_Code' }
-    ];
-
-    $scope.user = {
-    	userGoodsName : '',
-    	userMode : 'Select_GoodsName'
-    };
-
     /*상품조회모달*/
     $scope.goods_searchM = function(){
-    	console.log('상품 검색 모달');
     	var goodsname = escape($scope.user.userGoodsName);
 
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code)
@@ -5122,8 +5116,6 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 		})
     	$scope.goodsmodal.show();
     }
-    $scope.checkedDatas=[];
-    $scope.goodsaddlists=[];
 
     /*상품체크박스*/
     $scope.goodsCheck=function(goodsdata){
@@ -5171,7 +5163,11 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
 			}
 			switch(d){
 				case '0': console.log('거래처별 단가'); 
-							console.log('요것도 나오나?'); break;
+						  MiuService.com_Dn($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, $scope.checkedDatas[i].G_Code, $scope.datas.GerCode)
+						  .then(function(data){
+						  		console.log(data);
+						  })
+						  break;
 	    		case '1': console.log('매입가&매출가'); var price = $scope.checkedDatas[i].G_Dn1; break;
 	    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
 	    		case '3': console.log('인터넷가'); var price = $scope.checkedDatas[i].G_Dn3; break;
@@ -5196,6 +5192,42 @@ $scope.itemremove = function(index) {// 등록/수정 상품 리스트에서 X�
     $scope.goods_searchM_close = function(){
     	$scope.goodsmodal.hide();
     }
+
+     /////////////////////////////////////////////////////////////바코드///////////////////////////////////////////////////////////////////////////////////////////////////
+    	// $scope.scanBarcode = function() {
+     //    $cordovaBarcodeScanner.scan().then(function(imageData) {
+     //        console.log('format ' + imageData.format);
+
+     //        if(imageData.text.length < 1){
+     //        	alert('바코드 입력 취소');
+     //        }else{
+     //        	meaipService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, imageData.text)
+					// .then(function(data){
+					// 	if(data == undefined){
+					// 		alert('일치하는 데이터가 없습니다.');
+					// 	}else{
+					// 		console.log('바코드 스캔 데이터 확인=', data);
+					// 		console.log('상품 개수는=?', data.list.length);
+					// 		for(var b=0; b < data.list.length; b++){
+					// 			console.log('for문안->', b);
+					// 			$scope.checkedDatas.push(data.list[b]);
+					// 			console.log('checkedDatas=>', $scope.checkedDatas[0].G_Code);
+					// 			$scope.barcheck = 'Y';
+					// 		}
+					// 		$scope.checkdataSave();
+					// 	}
+					// })
+     //        }
+     //        }, function(error) {
+     //        	console.log('an error ' + error);
+     //        });
+    	// }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /* 해당 상품리스트항목 삭제 */
+     $scope.goodsDelete=function(index){
+        $scope.goodsaddlists.splice(index,1);					
+     }
 
 	/*자동슬라이드업*/
 	$scope.checkup=function(){

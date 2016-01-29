@@ -1539,6 +1539,27 @@ return{
 							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
+		}, com_Dn : function(admin_code, userid, goods_code, ger_code){
+				console.log("MiuService and com_Dn==> onz이 아닌 pikachu로 테스트 입니다. 후에 변경하세요.");
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
+				else var kind = 'ERPia_Sale_Select_Goods';
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=pikachu&UserId=khs239&Kind='+ kind +'&Mode=Select_G_Dn0&GoodsCode=' + goods_code + '&GerCode=' + ger_code;
+				console.log('?=>', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('MLookupService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+	
 		}
 	};
 })
