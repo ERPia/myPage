@@ -1,0 +1,55 @@
+<ion-modal-view title="">
+  <ion-header-bar>
+    <h1 class="title">상품 검색</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list list-inset" style="align:center;" >
+      <table width="100%">
+            <tr>
+                <td style="text-align:center">상품정보</td>
+                <td>
+                    <input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="user.userGoodsName">
+                </td>
+                <td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(2)"></i></td>
+              </tr>
+      </table><hr>
+
+    <table width="100%" style="text-align:center">
+    <tr>
+      <td width="10%"></td>
+      <td width="40%" style="text-align:center">상품코드</td>
+      <td width="40%" style="text-align:center">상품명</td>
+      <td width="10%"></td>
+    </tr>
+    <tr>
+     <td colspan="4"><hr></td> 
+    </tr>
+    </table>
+    <table ng-repeat="x in goodslists" width='90%'>
+    <tr>
+      <td width='80%'>
+        <ion-checkbox ng-click='goodsCheck(x)'>
+        {{x.G_Code}}<br>
+        {{x.G_Name}}
+        </ion-checkbox>
+      </td>
+      <td width='20%'>
+        &nbsp;&nbsp;&nbsp;<i class="ion-help-circled" style="font-size:40px;vertical-align:middle;" ng-click='goodsDetail($index)'></i>
+      </td>
+    </tr>
+    </table>
+  </div>
+
+  </ion-content>
+<ion-footer-bar align-title="left" class="bar-assertive">
+  <div class="buttons" ng-click="goods_searchM_close()">
+    <button class="button">취소</button>
+  </div>
+  <h1 class="title"></h1>
+  <div class="buttons" ng-click="checkdataSave()">
+    <button class="button">확인</button>
+  </div>
+</ion-footer-bar>
+  </ion-modal-view>
+
+

@@ -6,7 +6,7 @@
   	<div class="list list-inset">
   		<div>
   			<label class="item item-input col-80" style="border:0;">
-			 매출일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-model='date.todate1' ng-change="todatechange(date.todate1)">
+			 매출일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)">
 			</label>
   		</div>
   		<div class="list list-inset" align="left" ng-click="Next()">
@@ -58,14 +58,14 @@
 			<table width="100%">
 	        	<tr>
 		            <td>
-		          &nbsp;<select ng-model="Meaipgoods.userMode" ng-change="modeselect()">
-		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="Meaipgoods.userMode == {{x.Code}}">{{x.Name}}</option>
+		          &nbsp;<select ng-model="user.userMode" ng-change="modeselect()">
+		          			<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="user.userMode == {{x.Code}}">{{x.Name}}</option>
 		            	</select>&nbsp;&nbsp;
 		          	</td>
 		          	<td>
-		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" style="border:1px solid #eee;" ng-model="Meaipgoods.userGoodsName">
+		              	<input type="text" placeholder="상품정보를 입력하세요" size="20" style="border:1px solid #eee;" ng-model="user.userGoodsName">
 		          	</td>
-		          	<td><i class="ion-search" style="font-size:30px" ng-click="goodsSearch(1)"></i></td>
+		          	<td><i class="ion-search" style="font-size:30px" ng-click="goods_searchM()"></i></td>
 		          	<td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode()"></i></td>
 	          	</tr>
 	        </table><hr>
