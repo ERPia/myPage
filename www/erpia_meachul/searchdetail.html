@@ -1,4 +1,7 @@
 <ion-view title="매출전표">
+  <ion-nav-buttons side="right" ng-show="false">
+    <any>수정</any>
+  </ion-nav-buttons>
   <ion-content>
 
   <div class="list list-inset">
@@ -75,7 +78,7 @@
           <button class="button button-icon button-clear ion-ios-star-outline" ng-click="fastClick()"  style="font-size:50px;align:left" ng-if="meachulDetaildata.MobileQuickReg=='N'"></button>
           <button class="button button-icon button-clear ion-ios-star" ng-click="fastClick()"  style="font-size:50px;align:left" ng-if="meachulDetaildata.MobileQuickReg=='Y'"></button>
             <button class="button button-calm" style="width:30%" ng-click="deleteclickbtn(meachulDetaildata.Sl_No)">삭제</button>
-            <button class="button button-balanced" style="width:30%" ng-controller="MeaChulInsertCtrl" ng-click="meachulpageopen(2, meachulDetaildata.Sl_No)">수정</button>
+            <!-- <button class="button button-balanced" style="width:30%" ng-click="chitUpdateF(meaipchitlists)">수정</button> -->
           
             <button class="button button-energized" style="width:30%">거래명세서</button>
         </div>
