@@ -1419,7 +1419,7 @@ return{
 						if(typeof response == 'object'){
 							if(response.data == '<!--Parameter Check-->'){
 								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('금일 정보가 없습니다.', 'long', 'center');
-								else alert('금일 정보가 없습니다.1');
+								else alert('금일 정보가 없습니다.');
 							}else{
 								for(var i=0; i<response.data.list.length; i++){
 									response.data.list[i].G_Name=response.data.list[i].G_Name.substr(0,9)+'...';
@@ -1504,6 +1504,41 @@ return{
 						return $q.reject(response.data);
 					})
 	
+		},company_detail_sear: function(admin_code, userid, GerCode){
+				console.log("MiuService and company_detail_sear");
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_GerName';
+				else var kind = 'ERPia_Sale_Select_GerName';
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=select_detail&GerCode=' + GerCode;
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+								if(response.data != '<!--Parameter Check-->'){
+									return response.data;
+								}else{
+									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('저장되어있는 초기값이 없습니다.', 'long', 'center');
+									else console.log('저장되어있는 초기값이 없습니다.');
+										var data = {
+											G_Code : '업체정보가없습니다.',
+											G_Name : '',
+											G_DanGa_Gu : '',
+											Use_Recent_DanGa_YN : '',
+											G_Tel : '',
+											G_Juso : '',
+											Recent_purchase_date : '',
+											Recent_sales_date : ''
+									};
+										
+										console.log('확인=>', data);
+										return data;
+								}
+
+					}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		
 		}, goods_sear: function(admin_code, userid, mode, goods_name, Ccode){
 				console.log("MiuService and goods_sear");
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
