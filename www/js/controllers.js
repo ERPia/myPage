@@ -2703,7 +2703,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
   		}
 
-  		if(index == 1 && $scope.payment[index].checked == true || index == 3 && $scope.payment[index].checked == true){
+  		if(index == 1 && $scope.payment[index].checked == true || index == 3 && $scope.payment[index].checked == true){ // 은행/카드정보
   			$scope.pay.gubun = index;
   			$scope.paycardbank.splice(0,$scope.paycardbank.length);
   			$scope.paytype = true;
@@ -2743,7 +2743,8 @@ $scope.paylist = [];
     		$scope.paylist.splice(0,2);
     	}
 		$scope.pay_datas = $scope.pay.paycardbank.split(',');
-    	if($scope.payment[0].checked == true){ // 은행
+
+    	if($scope.payment[1].checked == true){ // 은행
     		$scope.paylist.push({
     			code :  $scope.pay_datas[0],
     			name :  $scope.pay_datas[1],

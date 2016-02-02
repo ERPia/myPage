@@ -1050,8 +1050,34 @@ return{
 						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y';
 					}
 				}else{ /*매출등록*/
+					var i_Cancel='';
+					if(datas.subulkind==221){ //정상 : J, 반품: B //수불구분  매출221/반품212
+						i_Cancel='J'
+					}else{
+						i_Cancel='B'
+					}
 					var kind = 'ERPia_Sale_Insert_Goods';
-					// var meachul = ;
+					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';
+					var goods_xml = '';
+					var middel = '</MeaChulT>';
+					// 상품
+					for(var i = 0; i < goods.length; i++){
+						var ii = i+1;
+						var meachulgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa></item>';
+						var goods_xml = goods_xml + meachulgoods;
+					}
+					if(pay.gubun == 0){
+						var end = '</root>&IpJi_YN=N&Sale_Place_Code='+ setup.basic_Place_Code;
+					}else{
+						switch(pay.gubun){
+							case 0 : var pay_subul = 721; break; 
+							case 1 : var pay_subul = 722; break; 
+							case 2 : var pay_subul = 724; break; 
+							case 3 : var pay_subul = 723; break; 
+						}
+						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
+						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
+					}
 				} 
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
@@ -1109,8 +1135,33 @@ return{
 						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y';
 					}
 				}else{ /*매출수정*/
+					var i_Cancel='';
+					if(datas.subulkind==221){ //정상 : J, 반품: B //수불구분  매출221/반품212
+						i_Cancel='J'
+					}else{
+						i_Cancel='B'
+					}
 					var kind = 'ERPia_Sale_Insert_Goods';
-					// var meachul = ;
+					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';					var goods_xml = '';
+					var middel = '</MeaChulT>';
+					// 상품
+					for(var i = 0; i < goods.length; i++){
+						var ii = i+1;
+						var meachulgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa></item>';
+						var goods_xml = goods_xml + meachulgoods;
+					}
+					if(pay.gubun == 0){
+						var end = '</root>&IpJi_YN=N';
+					}else{
+						switch(pay.gubun){
+							case 0 : var pay_subul = 721; break; 
+							case 1 : var pay_subul = 722; break; 
+							case 2 : var pay_subul = 724; break; 
+							case 3 : var pay_subul = 723; break; 
+						}
+						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
+						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
+					}
 				} 
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
