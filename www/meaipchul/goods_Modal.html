@@ -1,4 +1,73 @@
 <ion-modal-view title="">
+  <ion-header-bar class="bar bar-header">
+    <h1 class="title">상품 검색</h1>
+  </ion-header-bar>
+  <ion-header-bar class="bar bar-subheader">
+      <table width="100%">
+            <tr>
+                <td style="text-align:center">상품정보</td>
+                <td>
+                    <input type="text" placeholder="상품정보를 입력하세요" size="20" ng-model="user.userGoodsName">
+                </td>
+
+                <td><i class="ion-search" style="font-size:30px" ng-click="goods_searchM()"></i></td>
+              </tr>
+      </table>
+  </ion-header-bar>
+
+  <ion-content>
+      <div class="list list-inset" style="align:center;" >
+    <table width="100%" style="text-align:center">
+    <tr>
+      <td width="10%"></td>
+      <td width="40%" style="text-align:center">상품코드</td>
+      <td width="40%" style="text-align:center">상품명</td>
+      <td width="10%"></td>
+    </tr>
+    </table>
+    <table width="100%" style="text-align:center">
+     <td colspan="4"><hr></td> 
+    </tr>
+    </table>
+    <any ng-repeat="x in goodslists">
+    <table on-swipe-up="goods_more()" width='90%'>
+    <tr>
+      <td width='80%'>
+        <ion-checkbox ng-click='goodsCheck(x)'>
+        {{x.G_Code}}<br>
+        {{x.G_Name}}
+        </ion-checkbox>
+      </td>
+      <td width='20%'>
+        &nbsp;&nbsp;&nbsp;<i class="ion-help-circled" style="font-size:40px;vertical-align:middle;" ng-click='goodsDetail($index)'></i>
+      </td>
+    </tr>
+    <tr ng-if="moreloading==1&&$last">
+      <td colspan="2" align="center" style="width:90%">
+      <ion-spinner icon="spiral"></ion-spinner>
+      </td>
+    </tr>
+    </table>
+    </any>
+  </div>
+    <br><br>
+  </ion-content>
+<ion-footer-bar align-title="left" class="bar-assertive">
+  <div class="buttons" ng-click="goods_searchM_close()">
+    <button class="button">취소</button>
+  </div>
+  <h1 class="title"></h1>
+  <div class="buttons" ng-click="checkdataSave()">
+    <button class="button">확인</button>
+  </div>
+</ion-footer-bar>
+  </ion-modal-view>
+
+
+
+
+
+<!-- <ion-modal-view title="">
   <ion-header-bar>
     <h1 class="title">상품 검색</h1>
   </ion-header-bar>
@@ -51,5 +120,5 @@
   </div>
 </ion-footer-bar>
   </ion-modal-view>
-
+ -->
 

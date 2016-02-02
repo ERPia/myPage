@@ -36,7 +36,7 @@
     <tr>
       <td class="td1-1" align="center" >검 색 </td>
       <td class="td1-2" colspan="3">
-         <input type="text" ng-model="searchdatas"  placeholder="상품명, 거래처명 입력">
+         <input type="text" ng-model="searchdatas"  placeholder="거래처명 입력">
       </td>
       <td class="td1-3">
           <button ng-click="searches()" class="ion-ios-search-strong"></button>
@@ -104,7 +104,7 @@
     <ion-footer-bar align-title="left" class="bar-stable">
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
-    <div class="col3" >매입액 {{chit_atmSum | number:0}}원<br>지급액 1,900,000원</div>
-    <div class="col4" >이월잔액 0원</div>
+    <div class="col3" >매입액 {{chit_atmSum | number:0}}원<br>지급액 {{chit_jiSum | number:0}}원</div>
+    <div class="col4" ng-if='balance == true'>이월잔액 {{chit_atmSum | number:0}}원</div>
   </ion-footer-bar>
 </ion-view>
