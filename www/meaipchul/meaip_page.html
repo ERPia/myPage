@@ -75,33 +75,28 @@
        </thead>
        </table>
        <hr>
-       <any ng-repeat="x in chit_lists | filter:searchdatas track by $index" >
-       <table on-swipe-up="lastsclick(lasts)" ng-if="$index < lasts" >
+         <any ng-repeat="x in chit_lists" >
+       <table on-swipe-up="search_more()">
           <tbody ng-click="chit_de(x.iL_No)">
             <tr>
               <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
               <td class="resulttd1-2" align="left">{{x.Meaip_Date}}</td>
-              <td class="resulttd1-3" align="center"><b>{{x.Admin_Code}}</b></td>
+              <td class="resulttd1-3" align="center"><b>{{x.GerName}}</b></td>
               <td class="resulttd1-4" rowspan="2" align="right">{{x.Meaip_Amt | number:0}}원</td>
             </tr>
             <tr>
-            	<td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td>
+              <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td>
             </tr>
           </tbody>
-          <tr ng-if="moreloading==1&&$index == lasts-1 && $index!=$last">
+          <tr ng-if="moreloading==1&&$last">
             <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
-          </tr>
-          <tr>
-            <td colspan="4" ng-if="$index == lasts-1 && $index!=$last">
-                <div align="center" ng-model="lasts"><br><b>5 more.. </b></div>
-            </td>
           </tr>
       </table>
       </any>
   </ion-content>
     <div style="margin-top:140%" align="right">
       <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;
-  	</div>
+    </div>
     <ion-footer-bar align-title="left" class="bar-stable">
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
