@@ -1909,62 +1909,39 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams)
 		.then(function(data){
 			$scope.chit_lists = data.list;
-			$scope.chit_atmSum = 0;
-			$scope.chit_jiSum = 0;
-			$scope.loadingani();
 			if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
 				console.log('금일데이터 없음.');
 			}else{
+				$scope.chit_atmSum = 0;
 		        for (var i = 0; i < $scope.chit_lists.length; i++) {
 		        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
 		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
-		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
 		        	}else{ /* 매출일 경우 */
 		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].MeaChul_Amt);
-		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
 		        	}
 		      	}
 			}
 		})
-	/*---------로딩화면-----------*/
-	$rootScope.loadingani=function(){
-		     $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
-	         $timeout(function(){
-	         $ionicLoading.hide();
 
-	      }, 500); 
-	}
-	$scope.balance = false;
-	/* 거래처명 + 기간검색 & 기간검색 */
-	$scope.searches = function(){
-		console.log('sdate=', $scope.reqparams.sDate);
-		console.log('edate=', $scope.reqparams.eDate);
-		$scope.sear_day(1);
-	}
 	/* 금일/ 일주일/ 일개월 */
 	$scope.sear_day = function(agoday) {
 		$scope.lasts=5;
-		if(agoday != 1){
-			$scope.reqparams.sDate = $scope.dateMinus(agoday);
-	     	$scope.reqparams.eDate = $scope.dateMinus(0);
-     	}
+
+		$scope.reqparams.sDate = $scope.dateMinus(agoday);
+     	$scope.reqparams.eDate = $scope.dateMinus(0);
 
 		MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams)
 			.then(function(data){
-				$scope.chit_atmSum = 0;
-				$scope.chit_jiSum = 0;
 				$scope.chit_lists = data.list;
-				$scope.loadingani();
 				if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
 					console.log('조회된 데이터가 없습니다.');
 				}else{
+					$scope.chit_atmSum = 0;
 			        for (var i = 0; i < $scope.chit_lists.length; i++) {
 			        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
 			        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
-			        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
 			        	}else{ /* 매출일 경우 */
 			        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].MeaChul_Amt);
-			        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
 			        	}
 			      	}
 				}
@@ -2071,8 +2048,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표상세조회 컨트롤러 */
-.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, ERPiaAPI, MLookupService) {
-$rootScope.tax_u = false; // 세금전표 구분
+.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, ERPiaAPI, MLookupService) {
+
 	/*매출매입 상세조회*/
 	MLookupService.chit_delookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $rootScope.m_no)
 		.then(function(data){
@@ -2122,61 +2099,18 @@ $rootScope.tax_u = false; // 세금전표 구분
 
 	/*수정페이지 전환*/
 	$scope.meaipchul_u = function(no){
-		MLookupService.u_before_check($scope.loginData.Admin_Code, $scope.loginData.UserId, no)
-			.then(function(data){
-
-				if(data.list[0].Rslt == 0){ // --------------- 세금계산서 및 배송정보 미존재
-					$rootScope.iu = 'u';
-					$rootScope.mode='수정';
-					$rootScope.u_no = no;
-					$rootScope.tax_u = false;
-					if($rootScope.distinction == 'meaip') location.href="#/app/meaip_IU";
-					else location.href="#/app/meachul_IU";
-				}else{
-					if(data.list[0].Rslt == 1){ // --------------- 세금계산서 존재
-						console.log('세금계산서');
-						var data_alert = '세금계산서가 발행된 전표는<br>창고,매장,단가만 수정 가능합니다.';
-						// $rootScope.u_No = true;
-
-					}else if(data.list[0].Rslt == -2){  // --------------- 배송정보 존재
-						console.log('배송정보 존재');
-						var data_alert = '연계된 배송정보가 존재합니다.<br>수정하시겠습니까?';
-
-					}else if(data.list[0].Rslt == -2){  // --------------- 세금계산서 & 배송정보 존재
-						console.log('세금계산서 & 배송정보 존재');
-						var data_alert = '세금계산서와 배송정보가 모두 존재합니다.<br>창고,매장,단가만 수정가능합니다.';
-					}
-					$ionicPopup.show({
-			         title: '경고',
-			         subTitle: '',
-			         content: data_alert,
-			         buttons: [
-			           { text: 'No',
-			            onTap: function(e){
-			            }},
-			           {
-			             text: 'Yes',
-			             type: 'button-positive',
-			             onTap: function(e) {
-			                    $rootScope.iu = 'u';
-								$rootScope.mode='수정';
-								$rootScope.u_no = no;
-								$rootScope.tax_u = true;
-								if($rootScope.distinction == 'meaip') location.href="#/app/meaip_IU";
-								else location.href="#/app/meachul_IU";
-			             }
-			           },
-			         ]
-			        })
-				}
-		})
+		$rootScope.iu = 'u';
+		$rootScope.mode='수정';
+		$rootScope.u_no = no;
+		if($rootScope.distinction == 'meaip') location.href="#/app/meaip_IU";
+		else location.href="#/app/meachul_IU";
+		
 	}
 
 })
 
 /* 매입&매출 등록 컨트롤러 */
-.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, $cordovaBarcodeScanner, $ionicHistory, $timeout, ERPiaAPI, MconfigService, MiuService, MLookupService) {
-	$rootScope.tax_u = false; 
+.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, $cordovaBarcodeScanner, $ionicHistory, ERPiaAPI, MconfigService, MiuService, MLookupService) {
 	console.log($rootScope.iu);
 	/*날짜생성*/
 	$scope.dateMinus=function(days){
@@ -2381,8 +2315,7 @@ $rootScope.tax_u = false; // 세금전표 구분
     $scope.pay={
      	use : true,
      	payprice : 0, // 지급액
-     	paycardbank : '', //은행&카드 정보
-     	gubun : 0
+     	paycardbank : '' //은행&카드 정보
      };
 
      /*은행/카드 정보*/
@@ -2458,8 +2391,7 @@ $rootScope.tax_u = false; // 세금전표 구분
 			if($scope.setupData.basic_Place_Code == 000){ //매장미지정을 선택할 경우 본사창고 디폴트
 				$scope.setupData.basic_Ch_Code = 101;	
 			}else{
-				$scope.setupData.basic_Ch_Code = '000';
-				$scope.m_check.changoCheck = 'f';
+				$scope.setupData.basic_Ch_Code = '000';				
 			}
 
 		})
@@ -2512,63 +2444,17 @@ $rootScope.tax_u = false; // 세금전표 구분
 		
 	};
 
-	$scope.Changosave = function(){
-		$scope.m_check.changoCheck = 't';
-	}
-
- /*상품조회모달*/
+    /*상품조회모달*/
     $scope.goods_searchM = function(){
-    	$scope.moreloading=0; 
-    	$scope.pageCnt=1;
-    	$scope.maxover=0;
     	var goodsname = escape($scope.user.userGoodsName);
-    	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
-
+    	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code)
 		.then(function(data){
 			console.log(data);
 			$scope.goodslists = data.list;
 		})
     	$scope.goodsmodal.show();
     }
-//------------------상품 더보기(페이징)------------------------------------------
-    /* 더보기 버튼 클릭시 */
-	
 
-	$scope.goods_more = function() {
-			var goodsname = escape($scope.user.userGoodsName);
-	  		if($scope.goodslists.length>0){
-	  		console.log($scope.goodslists.length);
-	  		
-
-	  		if($scope.maxover==0){
-	        $scope.pageCnt+=1;
-
-	      	$scope.moreloading=1; 
-	      	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
-				.then(function(data){
-					$scope.maxCnt=0;
-				console.log(data);
-			$timeout(function(){
-				if(data!=='<!--Parameter Check-->'){
-					for(var i=0; i<data.list.length; i++){
-						$scope.goodslists.push(data.list[i]);
-					}
-				}else{
-					$scope.moreloading=0; 
-					$scope.maxover = 1;
-
-				}
-				console.log("추가된 5개 데이터: ", $scope.goodslists);
-			
-	  	
-	         $scope.moreloading=0; 
-	        
-	         
-	      		}, 1000); 
-	  		 })
-			}
-	      }
-	    };
     //---------------------------상품정보 디테일 조회--------------------------------
    $scope.goodsDetail=function(indexnum){
 		$ionicPopup.alert({
@@ -2761,7 +2647,6 @@ $rootScope.tax_u = false; // 세금전표 구분
   		}
 
   		if(index == 1 && $scope.payment[index].checked == true || index == 3 && $scope.payment[index].checked == true){
-  			$scope.pay.gubun = index;
   			$scope.paycardbank.splice(0,$scope.paycardbank.length);
   			$scope.paytype = true;
   			MiuService.ij_data($scope.loginData.Admin_Code, $scope.loginData.UserId, index)
@@ -2789,41 +2674,8 @@ $rootScope.tax_u = false; // 세금전표 구분
 				console.log($scope.paycardbank[0].name);
   			})
   		}else{
-  			$scope.pay.gubun = 0;
   			$scope.paytype = false;
   		}
-    }
-$scope.paylist = [];
-    $scope.payinsert = function(){
-    	console.log('ㅡㅡ', $scope.pay.paycardbank);
-    	if($scope.paylist.length > 0){
-    		$scope.paylist.splice(0,2);
-    	}
-		$scope.pay_datas = $scope.pay.paycardbank.split(',');
-    	if($scope.payment[1].checked == true){ // 은행
-    		$scope.paylist.push({
-    			code :  $scope.pay_datas[0],
-    			name :  $scope.pay_datas[1],
-    			num :  $scope.pay_datas[2]
-    		});
-    		$scope.paylist.push({
-    			code : '',
-    			name : '',
-    			num : 0
-    		});
-    	}else{ //카드
-    		$scope.paylist.push({
-    			code : '',
-    			name : '',
-    			num : 0
-    		});
-    		$scope.paylist.push({
-    			code :  $scope.pay_datas[0],
-    			name :  $scope.pay_datas[1],
-    			num :  $scope.pay_datas[2]
-    		});
-    	}
-    	console.log('dkTL =>', $scope.paylist);
     }
 
     $scope.ijmodalCancel = function(){
@@ -2847,13 +2699,13 @@ $scope.paylist = [];
 	                  console.log('yes');
 	                  if($rootScope.iu == 'i'){
 	                  	console.log('등록일경우');
-	                  	MiuService.i_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.paylist, $scope.date, $scope.goodsaddlists,$scope.setupData,$scope.datas)
+	                  	MiuService.i_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.date.todate,$scope.goodsaddlists,$scope.setupData,$scope.datas)
 						  .then(function(data){
 						  	console.log(data);
 						  })
 	                  }else{
 	                  	console.log('수정일경우');
-	                  	MiuService.u_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.paylist, $scope.date, $scope.goodsaddlists,$scope.setupData,$scope.datas)
+	                  	MiuService.u_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.date.todate,$scope.goodsaddlists,$scope.setupData,$scope.datas)
 						  .then(function(data){
 						  	console.log(data);
 						  })

@@ -735,7 +735,7 @@ return{
 				
 				return $http.get(url + '?' + data)
 					.then(function(response){
-						console.log('MLookupService');
+						console.log('MLookupService', response);
 						if(typeof response == 'object'){
 							if(response.data == '<!--Parameter Check-->'){
 								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('금일 정보가 없습니다.', 'long', 'center');
@@ -784,29 +784,6 @@ return{
 
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode='+ mode + no;
-				
-				return $http.get(url + '?' + data)
-					.then(function(response){
-						console.log('MLookupService', response);
-						if(typeof response == 'object'){
-							return response.data;
-						}else{
-							return $q.reject(response.data);
-						}
-					}, function(response){
-						return $q.reject(response.data);
-					})
-		}, u_before_check: function(admin_code, userid, no){
-				console.log("MLookupService and u_before_check");
-
-				if($rootScope.distinction == 'meaip'){
-					var no = '&iL_No=' + no; var kind = 'ERPia_Meaip_Update_Goods';
-				}else{
-					var no = '&Sl_No=' + no; var kind='ERPia_Sale_Update_Goods';
-				} 
-
-				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=Update_Check'+ no;
 				
 				return $http.get(url + '?' + data)
 					.then(function(response){
@@ -882,8 +859,7 @@ return{
 						return $q.reject(response.data);
 					})
 		
-		}, goods_sear: function(admin_code, userid, mode, goods_name, Ccode, pageCnt){
-
+		}, goods_sear: function(admin_code, userid, mode, goods_name, Ccode){
 				console.log("MiuService and goods_sear");
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
 				else var kind = 'ERPia_Sale_Select_Goods';
@@ -898,37 +874,24 @@ return{
 				}
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-
-				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode + dataDetail + '&Changgo_Code=' + Ccode + '&pageCnt=' +pageCnt+ '&pageRow=10';
-
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode + dataDetail + '&Changgo_Code=' + Ccode + '&pageCnt=1&pageRow=5';
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('goods_sear', response);
 						if(typeof response == 'object'){
 							if(response.data == '<!--Parameter Check-->'){
-
-								if(pageCnt > 1){
-									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('마지막 데이터 입니다.', 'long', 'center');
-									else alert('마지막 데이터 입니다.');
-								}else{
-									if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
-									else alert('일치하는 정보가 없습니다.1');
-								}
-
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
+								else alert('일치하는 정보가 없습니다.1');
 							}
 							return response.data;
 						}else{
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
-
-							else alert('일치하는 정보가 없습니다.2');
-
+							else alert('일치하는 정보가 없습니다.1');
 							return $q.reject(response);
 						}
 					}, function(response){
 							if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'long', 'center');
-
-							else alert('일치하는 정보가 없습니다.3');
-
+							else alert('일치하는 정보가 없습니다.2');
 							return $q.reject(response);
 					})
 		}, com_Dn : function(admin_code, userid, goods_code, ger_code){
@@ -1013,7 +976,7 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
-		}, ij_data : function(admin_code, userid, index){
+		}, ij_data : function(admin_code, userid, index){iu_data
 				console.log("MiuService and ij_data", index);
 
 				if(index == '1') var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Bank';
@@ -1033,83 +996,27 @@ return{
 						return $q.reject(response.data);
 					})
 	
-		}, i_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
-				console.log("MiuService and i_data", pay, date, goods, setup, datas);
-				console.log('등록일 =', date.todate);
-				console.log('거래처 =', datas.GerCode);
-				console.log('매입출 합계 =', datas.totalsumprices);
-				console.log('매장 코드 =', setup.basic_Place_Code);
-				console.log('관리비고 =', datas.remk);
+		}, i_data : function(admin_code, userid, pay, m_date, goods, setup, datas){
+				console.log("MiuService and iu_data", pay, m_date, goods, setup, datas);
+				console.log('등록일 =', m_date);
+				console.log('거래처 =', m_date);
+				console.log('매입출 합계 =', m_date);
+				console.log('매장 코드 =', m_date);
+				console.log('관리비고 =', m_date);
+				console.log('상품(창고코드) =', m_date);
+				console.log('상품(수불/코드/이름/규격/) =', m_date);
+				console.log('매입일 =', m_date);
+				console.log('매입일 =', m_date);
 
-				console.log('상품(창고코드) =', setup.basic_Ch_Code);
-				console.log('상품(수불/코드/이름/규격/가격/수량/공급가) =', datas.subulkind, '/', goods[0].code, '/', goods[0].name, '/', goods[0].goodsprice, '/', goods[0].num, '/');
-				console.log('지급일 =', date.payday);
-				console.log('지급구분 =', pay.gubun);
-				console.log('지급카드&은행 =', pay.paycardbank);
-				console.log('지급액 =', pay.payprice);
-
-				/*매입등록*/
-				if($rootScope.distinction == 'meaip'){
-					var kind = 'ERPia_Meaip_Insert_Goods';
-					var m_data = '<root><MeaipM><Admin_Code>'+ admin_code + '</Admin_Code><Meaip_Date>'+ date.payday +'</Meaip_Date><GuMeaCom_Code>'+ datas.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ datas.totalsumprices +'</Meaip_Amt><Sale_Place>'+ setup.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaipM><MeaipT>';
-					var goods_xml = '';
-					var middel = '</MeaipT>';
-					// 상품
-					for(var i = 0; i < goods.length; i++){
-						var ii = i+1;
-						var meaipgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><G_vat>'+ parseInt(goods[i].goodsprice)*0.9 +'</G_vat></item>';
-						var goods_xml = goods_xml + meaipgoods;
-					}
-					if(pay.gubun == 0){
-						var end = '</root>&IpJi_YN=N';
-					}else{
-						switch(pay.gubun){
-							case 0 : var pay_subul = 701; break; 
-							case 1 : var pay_subul = 702; break; 
-							case 2 : var pay_subul = 704; break; 
-							case 3 : var pay_subul = 703; break; 
-						}
-						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y';
-					}
-				}else{ /*매출등록*/
-					var i_Cancel='';
-					if(datas.subulkind==221){ //정상 : J, 반품: B //수불구분  매출221/반품212
-						i_Cancel='J'
-					}else{
-						i_Cancel='B'
-					}
-					var kind = 'ERPia_Sale_Insert_Goods';
-					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';
-					var goods_xml = '';
-					var middel = '</MeaChulT>';
-					// 상품
-					for(var i = 0; i < goods.length; i++){
-						var ii = i+1;
-						var meachulgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa></item>';
-						var goods_xml = goods_xml + meachulgoods;
-					}
-					if(pay.gubun == 0){
-						var end = '</root>&IpJi_YN=N&Sale_Place_Code='+ setup.basic_Place_Code;
-					}else{
-						switch(pay.gubun){
-							case 0 : var pay_subul = 721; break; 
-							case 1 : var pay_subul = 722; break; 
-							case 2 : var pay_subul = 724; break; 
-							case 3 : var pay_subul = 723; break; 
-						}
-						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
-					}
-				}
+				if(index == '1') var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Bank';
+				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind + '&Mode=&RequestXml=';
-				console.log('?',data, m_data, goods_xml, middel, end);
-				return $http.get(url + '?' + data + m_data + goods_xml + middel + end)
+				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
+				console.log(url ,'?',data);
+				return $http.get(url + '?' + data)
 					.then(function(response){
 						if(typeof response == 'object'){
-							console.log(response.data);
 							return response.data;
 						}else{
 							return $q.reject(response.data);
@@ -1118,74 +1025,11 @@ return{
 						return $q.reject(response.data);
 					})
 	
-		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
-				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
-				console.log('등록일 =', date.todate);
-				console.log('거래처 =', datas.GerCode);
-				console.log('매입출 합계 =', datas.totalsumprices);
-				console.log('매장 코드 =', setup.basic_Place_Code);
-				console.log('관리비고 =', datas.remk);
+		}, u_data : function(admin_code, userid, pay, m_date, goods, setup, datas){
+				console.log("MiuService and iu_data", pay, m_date, goods, setup, datas);
 
-				console.log('상품(창고코드) =', setup.basic_Ch_Code);
-				console.log('상품(수불/코드/이름/규격/가격/수량/공급가) =', datas.subulkind, '/', goods[0].code, '/', goods[0].name, '/', goods[0].goodsprice, '/', goods[0].num, '/');
-				console.log('지급일 =', date.payday);
-				console.log('지급구분 =', pay.gubun);
-				console.log('지급카드&은행 =', pay.paycardbank);
-				console.log('지급액 =', pay.payprice);
-
-				/*매입수정*/
-				if($rootScope.distinction == 'meaip'){
-					var kind = 'ERPia_Meaip_Insert_Goods';
-					var m_data = '<root><MeaipM><Admin_Code>'+ admin_code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ datas.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ datas.totalsumprices +'</Meaip_Amt><Sale_Place>'+ setup.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaipM><MeaipT>';
-					var goods_xml = '';
-					var middel = '</MeaipT>';
-					// 상품
-					for(var i = 0; i < goods.length; i++){
-						var ii = i+1;
-						var meaipgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><G_vat>'+ parseInt(goods[i].goodsprice)*0.9 +'</G_vat></item>';
-						var goods_xml = goods_xml + meaipgoods;
-					}
-					if(pay.gubun == 0){
-						var end = '</root>&IpJi_YN=N';
-					}else{
-						switch(pay.gubun){
-							case 0 : var pay_subul = 701; break; 
-							case 1 : var pay_subul = 702; break; 
-							case 2 : var pay_subul = 704; break; 
-							case 3 : var pay_subul = 703; break; 
-						}
-						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.payday +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y';
-					}
-				}else{ /*매출수정*/
-					var i_Cancel='';
-					if(datas.subulkind==221){ //정상 : J, 반품: B //수불구분  매출221/반품212
-						i_Cancel='J'
-					}else{
-						i_Cancel='B'
-					}
-					var kind = 'ERPia_Sale_Insert_Goods';
-					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';					var goods_xml = '';
-					var middel = '</MeaChulT>';
-					// 상품
-					for(var i = 0; i < goods.length; i++){
-						var ii = i+1;
-						var meachulgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa></item>';
-						var goods_xml = goods_xml + meachulgoods;
-					}
-					if(pay.gubun == 0){
-						var end = '</root>&IpJi_YN=N';
-					}else{
-						switch(pay.gubun){
-							case 0 : var pay_subul = 721; break; 
-							case 1 : var pay_subul = 722; break; 
-							case 2 : var pay_subul = 724; break; 
-							case 3 : var pay_subul = 723; break; 
-						}
-						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
-					}
-				}
+				if(index == '1') var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Bank';
+				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
