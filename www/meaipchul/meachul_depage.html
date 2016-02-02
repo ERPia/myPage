@@ -31,7 +31,8 @@
 
       <label class="item item-input">
        <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
-       <input type="text" readonly value='{{x.Subul_kind}}'><br>
+       <input type="text" ng-if='x.Subul_kind == 221' readonly value='매출출고' >
+       <input type="text" ng-if='x.Subul_kind == 212' readonly value='매출반품' ><br>
       </label>
 
       <label class="item item-input">

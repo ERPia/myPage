@@ -48,7 +48,7 @@
 
         <select ng-if="paytype"  ng-disabled="tax_u" ng-model="pay.paycardbank" ng-change='payinsert()'>
           <option value=''>카드&은행을 선택 해주세요.</option>
-          <option ng-repeat='x in paycardbank' value='{{x.code}},{{x.name}},{{x.num}}'>{{x.name}}</option>
+          <option ng-repeat='x in paycardbank' value='{{x.code}},{{x.name}},{{x.num}}' ng-selected='pay.codenum == {{x.code}}'>{{x.name}}</option>
         </select><br>
 
       </label><br>
