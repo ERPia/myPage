@@ -1809,7 +1809,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $timeout, ERPiaAPI, MLookupService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $timeout, ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$scope.moreloading = 0;
@@ -1822,6 +1822,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.date = {
 		sDate1 : '',
 		eDate1 : ''
+	};
+	/*거래처명*/
+	$scope.company = {
+		username : '', 
+		name : '', // 거래처이름
+		code : 0 // 거래처 코드
 	};
 
 	/* 형변환 */
@@ -1926,6 +1932,29 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		      	}
 			}
 		})
+
+	/*거래처 자동완성기능 (매입+매출)*/
+    $scope.companyDatas = []; // 자동완성 배열
+
+     $scope.company_auto = function() {
+     	var cusname = escape($scope.company.username);
+     	if($scope.companyDatas != undefined){
+     		$scope.companyDatas.splice(0, $scope.companyDatas.length); // 이전에 검색한 데이터 목록 초기화
+     	}
+		MiuService.company_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
+		.then(function(data){
+			console.log('안녕 =>',data);
+			$scope.companyDatas = data.list;
+		})
+    }
+    
+    /*거래처창고 조회후 값저장*/
+    $scope.company_Func=function(gname,gcode){
+    	$scope.companyDatas = ''; // data배열 초기화
+        $scope.company.name=gname;
+        $scope.company.username = gname;
+		$scope.company.code=gcode;
+    }
 	/*---------로딩화면-----------*/
 	$rootScope.loadingani=function(){
 		     $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
