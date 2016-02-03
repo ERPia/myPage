@@ -1902,7 +1902,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	$scope.chit_lists = [];
 	/* 금일데이터 디폴트 */
-	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams, 1)
+	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams, $scope.company.name, 1)
 		.then(function(data){
 			$scope.chit_atmSum = 0;
 			$scope.chit_jiSum = 0;
