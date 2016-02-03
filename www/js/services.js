@@ -1111,6 +1111,7 @@ return{
 	
 		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
 				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
+				console.log("매출전표번호:" , pay.no);
 				console.log('등록일 =', date.todate);
 				console.log('거래처 =', datas.GerCode);
 				console.log('매입출 합계 =', datas.totalsumprices);
@@ -1156,8 +1157,9 @@ return{
 					}else{
 						i_Cancel='B'
 					}
-					var kind = 'Update_MeaChul';
-					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';					var goods_xml = '';
+					var kind = 'ERPia_Sale_Update_Goods&Mode=Update_MeaChul&RequestXml=';
+					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';
+					var goods_xml = '';
 					var middel = '</MeaChulT>';
 					// 상품
 					for(var i = 0; i < goods.length; i++){
@@ -1166,7 +1168,8 @@ return{
 						var goods_xml = goods_xml + meachulgoods;
 					}
 					if(pay.gubun == 4){
-						var end = '</root>&IpJi_YN=N';
+						console.log('????????????????????????????');
+						var end = '</root>&IpJi_YN=N&Sale_Place_Code='+ setup.basic_Place_Code + '&AC_No=' + pay.acno + '&Sl_No=' + pay.no;
 					}else{
 						switch(pay.gubun){
 							case 0 : var pay_subul = 721; break; 
@@ -1175,7 +1178,7 @@ return{
 							case 3 : var pay_subul = 723; break; 
 						}
 						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
+						var end = '<IpJi>' + jidata + '</IpJi></root>&Sl_No=' + pay.no + '&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code + '&AC_No=' + pay.acno;
 					}
 				}
 				

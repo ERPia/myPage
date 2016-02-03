@@ -1980,6 +1980,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.chit_lists=[];
 		$scope.chit_atmSum = 0;
 		$scope.chit_jiSum = 0;
+		$scope.pageCnt = 1;
 		$scope.loadingani();
 		if(agoday != 1){
 			$scope.reqparams.sDate = $scope.dateMinus(agoday);
@@ -2514,7 +2515,9 @@ $rootScope.tax_u = false; // 세금전표 구분
 				$scope.pay.acno = data.list[0].AC_No;
 				$scope.pay.no = data.list[0].iL_No;
 			}else{
-				console.log('매출일경우 지급전표 번호 & 매출전표번호 여기다 저장');
+				$scope.pay.acno = data.list[0].AC_No;
+				$scope.pay.no = data.list[0].Sl_No;
+				console.log("SL_NO: ", $scope.pay.no)
 			} 
 			/*조회된 창고랑 매장*/
 			if(data.list[0].Sale_Place_Code.length == 0){
