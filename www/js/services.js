@@ -1138,7 +1138,7 @@ return{
 
 				/*매입수정*/
 				if($rootScope.distinction == 'meaip'){
-					var kind = 'ERPia_Meaip_Insert_Goods';
+					var kind = 'Update_Meaip';
 					var m_data = '<root><MeaipM><Admin_Code>'+ admin_code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ datas.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ datas.totalsumprices +'</Meaip_Amt><Sale_Place>'+ setup.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaipM><MeaipT>';
 					var goods_xml = '';
 					var middel = '</MeaipT>';
@@ -1167,7 +1167,7 @@ return{
 					}else{
 						i_Cancel='B'
 					}
-					var kind = 'ERPia_Sale_Insert_Goods';
+					var kind = 'Update_MeaChul';
 					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';					var goods_xml = '';
 					var middel = '</MeaChulT>';
 					// 상품
