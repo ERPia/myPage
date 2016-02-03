@@ -36,7 +36,7 @@
     <tr>
       <td class="td1-1" align="center" >검 색 </td>
       <td class="td1-2" colspan="3">
-         <input type="search" ng-model="company.username" placeholder="거래처명 입력" style="border:1px solid #eee;" ng-change="company_auto()">
+         <input type="search" ng-model="company.username" placeholder="거래처명 입력" style="border:1px solid #eee;" ng-change="company_auto()" ng-click='clearcompany()'><i class='ion-close-circled' ng-click='clearcompany()'></i>
          <li class="item" ng-repeat="x in companyDatas" ng-click="company_Func(x.G_Name,x.G_Code)">{{x.G_Name}}</li>
       </td>
       <td class="td1-3">
@@ -95,7 +95,7 @@
   </ion-content>
     <div style="margin-top:140%" align="right">
       <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;
-  	</div>
+    </div>
     <ion-footer-bar align-title="left" class="bar-stable">
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
