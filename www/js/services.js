@@ -725,24 +725,28 @@ angular.module('starter.services', [])
 /*전표 조회 & 상세조회*/
 .factory('MLookupService', function($http, ERPiaAPI, $q, $cordovaToast, $rootScope){
 return{
-	chit_lookup: function(admin_code, userid, sedata){
+	 chit_lookup: function(admin_code, userid, sedata, gername, pageCnt){
 				console.log("MLookupService and chit_lookup");
+				console.log('ㅎㅇ',gername);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Master';
 				else var kind = 'ERPia_Sale_Select_Master';
 
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=Select_Date&sDate='+ sedata.sDate +'&eDate='+ sedata.eDate;
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=Select_Ger_Date&GerName='+ escape(gername) +'&pageCnt='+ pageCnt + '&pageRow=5&sDate='+ sedata.sDate +'&eDate='+ sedata.eDate;
 				
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						console.log('MLookupService');
 						if(typeof response == 'object'){
 							if(response.data == '<!--Parameter Check-->'){
-								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('금일 정보가 없습니다.', 'long', 'center');
-								else alert('금일 정보가 없습니다.');
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('조회된 데이터가 없습니다.', 'long', 'center');
+								else alert('조회된 데이터가 없습니다.');
 							}else{
 								for(var i=0; i<response.data.list.length; i++){
+									if(response.data.list[i].G_Name.length>=10||response.data.list[i].GerName.length>=7){
 									response.data.list[i].G_Name=response.data.list[i].G_Name.substr(0,9)+'...';
+									response.data.list[i].GerName=response.data.list[i].GerName.substr(0,9)+'...';
+									}
 								}
 							}	
 							return response.data;
@@ -1178,6 +1182,26 @@ return{
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
 				console.log(url ,'?',data, m_data, goods_xml, middel, end);
 				return $http.get(url + '?' + data + m_data + goods_xml + middel + end)
+					.then(function(response){
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+	
+		}, seq_del : function(admin_code, userid, no, seq){
+				console.log("MiuService and seq_del", no, '/', seq);
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_MeaipT&iL_No=' + no + '&Tseq=';
+				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
+				console.log(url ,'?',data);
+				return $http.get(url + '?' + data)
 					.then(function(response){
 						if(typeof response == 'object'){
 							return response.data;

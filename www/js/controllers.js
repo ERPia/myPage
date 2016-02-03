@@ -1839,6 +1839,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.lasts = 5; //결과값은 기본으로 0~4까지 5개 띄운다
 	$scope.chit_lists=[]; //조회된 전표리스트
 
+	$scope.pageCnt = 1;
+	$scope.balance = false;
+	$rootScope.m_no ='';
 	/* 로딩화면 */
 	$rootScope.loadingani=function(){
 		     $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
@@ -1863,21 +1866,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	$scope.todate=$scope.dateMinus(0); // 오늘날짜
 
-	/* 더보기 버튼 클릭시 */
-	$scope.lastsclick = function(index) {
-	  		if(index <= $scope.chit_lists.length){
-	  		console.log($scope.lasts);
-	         
-	         $scope.moreloading=1;
 
-	  		 $timeout(function(){
-	         
-	         $scope.moreloading=0;
-	         $scope.lasts=index+5;
-	         
-	      }, 1500); 
-	      }
-	    };
 
 	$scope.mydate1=function(sdate1){
 	    var nday = new Date(sdate1);  //선택1 날짜..  
@@ -1911,17 +1900,24 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.mydate1($scope.date.sDate1);
 	$scope.mydate2($scope.date.eDate1);
 
+	$scope.chit_lists = [];
 	/* 금일데이터 디폴트 */
-	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams)
+	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams, 1)
 		.then(function(data){
-			$scope.chit_lists = data.list;
 			$scope.chit_atmSum = 0;
 			$scope.chit_jiSum = 0;
 			$scope.loadingani();
 			if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
 				console.log('금일데이터 없음.');
+					$scope.moreloading=0; 
+					$scope.maxover = 1;
 			}else{
-		        for (var i = 0; i < $scope.chit_lists.length; i++) {
+
+				if(data.list.length!=0){
+					for(var m = 0; m < data.list.length; m++){
+						$scope.chit_lists.push(data.list[m]);
+					}
+		        for (var i = 0; i < data.list.length; i++) {
 		        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
 		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
 		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
@@ -1929,7 +1925,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].MeaChul_Amt);
 		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
 		        	}
-		      	}
+
+		       		}
+				}
 			}
 		})
 
@@ -1938,7 +1936,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
      $scope.company_auto = function() {
      	var cusname = escape($scope.company.username);
-     	console.log('444444=>', $scope.companyDatas);
      	if($scope.companyDatas != undefined && $scope.companyDatas.length != 0){
      		$scope.companyDatas.splice(0, $scope.companyDatas.length); // 이전에 검색한 데이터 목록 초기화
      	}
@@ -1964,31 +1961,51 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	      }, 500); 
 	}
-	$scope.balance = false;
+
 	/* 거래처명 + 기간검색 & 기간검색 */
 	$scope.searches = function(){
+		$scope.chit_atmSum = 0;
+		$scope.chit_jiSum = 0;
+		$scope.chit_lists = [];
+		$scope.moreloading=1; 
+    	$scope.pageCnt=1;
+    	$scope.maxover=0;
 		console.log('sdate=', $scope.reqparams.sDate);
 		console.log('edate=', $scope.reqparams.eDate);
-		$scope.sear_day(1);
+		$scope.loadingani();
+		$scope.sear_day(1);//날짜+거래처 검색
 	}
-	/* 금일/ 일주일/ 일개월 */
+	/* 금일/ 일주일/ 일개월 / 날짜만검색 */
 	$scope.sear_day = function(agoday) {
-		$scope.lasts=5;
-
+		$scope.chit_lists=[];
+		$scope.chit_atmSum = 0;
+		$scope.chit_jiSum = 0;
+		$scope.loadingani();
 		if(agoday != 1){
 			$scope.reqparams.sDate = $scope.dateMinus(agoday);
 	     	$scope.reqparams.eDate = $scope.dateMinus(0);
-     	}
 
-		MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams)
+     	}
+     		$scope.mydate1($scope.reqparams.sDate);
+	     	$scope.mydate2($scope.reqparams.eDate);
+		console.log("날짜 검색");
+		MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams, $scope.company.name, 1)
 			.then(function(data){
+				$scope.maxover=0;
 				$scope.chit_atmSum = 0;
 				$scope.chit_jiSum = 0;
-				$scope.chit_lists = data.list;
-				$scope.loadingani();
+
+
+			$timeout(function(){
+				// $scope.chit_lists = data.list;
 				if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
 					console.log('조회된 데이터가 없습니다.');
+					$scope.moreloading=0; 
+					$scope.maxover = 1;
 				}else{
+					for(var m = 0; m < data.list.length; m++){
+						$scope.chit_lists.push(data.list[m]);
+					}
 			        for (var i = 0; i < $scope.chit_lists.length; i++) {
 			        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
 			        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
@@ -1999,19 +2016,68 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			        	}
 			      	}
 				}
+				console.log("추가된 5개 데이터: ", $scope.chit_lists);
+				$scope.moreloading=0; 
+			}, 1000); 
+
 		})
 	};
-	$rootScope.m_no ='';
+
+	/*매출전표에 더보기*/
+	$scope.search_more = function() {
+		if($scope.chit_lists.length>0){
+  		console.log($scope.chit_lists.length);
+  		
+  		if($scope.maxover==0){
+			console.log("날짜 검색");
+			$scope.pageCnt+=1;
+		    $scope.moreloading=1; 
+
+			MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.reqparams, $scope.company.name, $scope.pageCnt)
+				.then(function(data){
+					$timeout(function(){
+					$scope.maxover=0;
+					if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
+						console.log('조회된 데이터가 없습니다.');
+						$scope.moreloading=0; 
+						$scope.maxover = 1;
+					}else{
+						for(var m = 0; m < data.list.length; m++){
+							$scope.chit_lists.push(data.list[m]);
+						}
+				        for (var i = 0; i < $scope.chit_lists.length; i++) {
+				        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+				        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
+				        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
+				        	}else{ /* 매출일 경우 */
+				        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].MeaChul_Amt);
+				        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
+				        	}
+				      	}
+					}
+					console.log("추가된 5개 데이터: ", $scope.chit_lists);
+					$scope.moreloading=0; 
+				}, 1000); 
+				})
+			}
+		}
+	};
+	/*거래처명 초기화*/
+	$scope.clearcompany = function(){
+		$scope.company.username = '';
+		$scope.company.name = '';
+		$scope.company.code = 0;
+	}
 
 	/* 매입전표 조회 */
-	 $scope.chit_de = function(no){
+	$scope.chit_de = function(no){
 	 	$rootScope.m_no = no;
 	 	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
     		location.href="#/app/meaip_depage";
     	}else{ /* 매출일 경우 */
     		location.href="#/app/meachul_depage";
     	}
-	 }
+	}
 
 	 /*빠른등록(매입매출통합) 모달*/
 	$ionicModal.fromTemplateUrl('meaipchul/quickreg_modal.html', {
@@ -2027,7 +2093,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	 	if($scope.quicklists[0] != undefined){
 	 		$scope.quicklists.splice(0, $scope.quicklists.length); // 배열초기화
 	 	}
-
 	 	var mode = 'select_list';
 	 	var no = '';
 	 	MLookupService.quickReg($scope.loginData.Admin_Code, $scope.loginData.UserId, mode, no)
@@ -2052,9 +2117,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		})
 
 	 	$scope.quickregM.show();
-	 }
+	}
 
-	 $scope.quickcheck = function(index){
+	$scope.quickcheck = function(index){
 	 	for(var i = 0; i < $scope.quicklists.length; i++){
 			if(i == index){
 				console.log('같음! true');
@@ -2091,7 +2156,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		// for(var i = 0; i){
 
 		// }
-		
 	}
 
 	$scope.quickMcancle = function(){
@@ -2108,6 +2172,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 
 })
+
 
 /* 매입&매출 전표상세조회 컨트롤러 */
 .controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, ERPiaAPI, MLookupService) {
