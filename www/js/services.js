@@ -756,6 +756,26 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, eMoon: function(admin_code, userid, sedata, gercode){
+				console.log("MLookupService and eMoon");
+				console.log('ㅎㅇ=>', gercode);
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Master';
+				else var kind = 'ERPia_Sale_Select_Master';
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=Select_Before_Amt&sDate=' + sedata.sDate +'&eDate='+ sedata.eDate + '&GerCode=' + gercode;
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('MLookupService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}, chit_delookup: function(admin_code, userid, no){
 				console.log("MLookupService and chit_delookup");
 				if($rootScope.distinction == 'meaip'){
@@ -1155,8 +1175,9 @@ return{
 					}else{
 						i_Cancel='B'
 					}
-					var kind = 'ERPia_Sale_Insert_Goods';
-					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';					var goods_xml = '';
+					var kind = 'ERPia_Sale_Update_Goods&Mode=Update_MeaChul&RequestXml=';
+					var m_data = '<root><MeaChulM><Admin_Code>'+ admin_code + '</Admin_Code><MeaChul_date>'+ date.payday +'</MeaChul_date><Comp_no>'+ datas.GerCode +'</Comp_no><MeaChul_Amt>'+ datas.totalsumprices +'</MeaChul_Amt><i_Cancel>'+i_Cancel+'</i_Cancel><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaChulM><MeaChulT>';
+					var goods_xml = '';
 					var middel = '</MeaChulT>';
 					// 상품
 					for(var i = 0; i < goods.length; i++){
@@ -1165,7 +1186,8 @@ return{
 						var goods_xml = goods_xml + meachulgoods;
 					}
 					if(pay.gubun == 4){
-						var end = '</root>&IpJi_YN=N';
+						console.log('????????????????????????????');
+						var end = '</root>&IpJi_YN=N&Sale_Place_Code='+ setup.basic_Place_Code + '&AC_No=' + pay.acno + '&Sl_No=' + pay.no;
 					}else{
 						switch(pay.gubun){
 							case 0 : var pay_subul = 721; break; 
@@ -1174,7 +1196,7 @@ return{
 							case 3 : var pay_subul = 723; break; 
 						}
 						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.todate +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code;
+						var end = '<IpJi>' + jidata + '</IpJi></root>&Sl_No=' + pay.no + '&IpJi_YN=Y&Sale_Place_Code='+ setup.basic_Place_Code + '&AC_No=' + pay.acno;
 					}
 				}
 				
@@ -1191,7 +1213,6 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
-	
 		}, seq_del : function(admin_code, userid, no, seq){
 				console.log("MiuService and seq_del", no, '/', seq);
 
