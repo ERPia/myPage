@@ -756,6 +756,26 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, eMoon: function(admin_code, userid, sedata, gercode){
+				console.log("MLookupService and eMoon");
+				console.log('ㅎㅇ=>', gercode);
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Master';
+				else var kind = 'ERPia_Sale_Select_Master';
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind='+ kind +'&Mode=Select_Before_Amt&sDate=' + sedata.sDate +'&eDate='+ sedata.eDate + '&GerCode=' + gercode;
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('MLookupService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}, chit_delookup: function(admin_code, userid, no){
 				console.log("MLookupService and chit_delookup");
 				if($rootScope.distinction == 'meaip'){
@@ -1111,7 +1131,6 @@ return{
 	
 		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
 				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
-				console.log("매출전표번호:" , pay.no);
 				console.log('등록일 =', date.todate);
 				console.log('거래처 =', datas.GerCode);
 				console.log('매입출 합계 =', datas.totalsumprices);
@@ -1126,8 +1145,7 @@ return{
 				console.log('지급액 =', pay.payprice);
 
 				/*매입수정*/
-
-			if($rootScope.distinction == 'meaip'){ // kind m_data goods_xml middel
+				if($rootScope.distinction == 'meaip'){ // kind m_data goods_xml middel
 					var kind = 'ERPia_Meaip_Update_Goods&Mode=Update_Meaip&RequestXml=';
 					var m_data = '<root><MeaipM><Admin_Code>'+ admin_code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ datas.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ datas.totalsumprices +'</Meaip_Amt><Sale_Place>'+ setup.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaipM><MeaipT>';
 					var goods_xml = '';
@@ -1195,7 +1213,6 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
-	
 		}, seq_del : function(admin_code, userid, no, seq){
 				console.log("MiuService and seq_del", no, '/', seq);
 

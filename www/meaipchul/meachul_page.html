@@ -100,6 +100,6 @@
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
     <div class="col3" >매출액 {{chit_atmSum | number:0}}원<br>지급액 {{chit_jiSum | number:0}}원</div>
-    <div class="col4" ng-if='balance == true'>이월잔액 {{chit_atmSum | number:0}}원</div>
+    <div class="col4" ng-if='balance == true'>이월잔액 {{money.emoon | number:0}}원<br>총액 {{money.hap | number:0}}원</div>
   </ion-footer-bar>
 </ion-view>

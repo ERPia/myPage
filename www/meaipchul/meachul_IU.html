@@ -6,18 +6,19 @@
   	<div class="list list-inset">
   		<div>
   			<label class="item item-input col-80" style="border:0;">
-			 매출일&nbsp;:&nbsp; <input type="date" ng-disabled="tax_u" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)">
+			 매출일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)">
 			</label>
   		</div>
-  		<div class="list list-inset" align="left" ng-click="Next()">
-  			<hr>&nbsp; <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매출정보
-  		</div>
+  		<div class="list list-inset" align="left">
+  			<hr>&nbsp;
+  		<div  ng-click="Next()">	 <i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매출정보</div>
+  		
 
   		<div ng-if="basictype" class="list list-inset" style="align:center;" >
 			<table width="100%" class="list list-inset"style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search" ng-disabled="tax_u" ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
+					<td width="40%"><input type="search"ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
 					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
 				</tr>
 			</table>
@@ -27,8 +28,8 @@
 
 			<label class="item item-input" style="border:0;">
 			  수불구분
-  				<ion-radio ng-click="checkup()" ng-disabled="tax_u" ng-model="datas.subulkind" ng-value="221">매출출고</ion-radio>
-				<ion-radio ng-click="checkup()" ng-disabled="tax_u" ng-model="datas.subulkind" ng-value="212">매출반품</ion-radio>
+  				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="221">매출출고</ion-radio>
+				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="212">매출반품</ion-radio>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
@@ -48,14 +49,16 @@
 		  		</select>
 			</label>
 	</div>
+	</div>
 
-  		<div class="list list-inset" align="left" ng-click="Next2()">
-  			<hr>&nbsp; <i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품
-  		</div>
+  		<div class="list list-inset" align="left">
+  			<hr>&nbsp; 
+  			<div  ng-click="Next2()"><i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품</div>
+  		
 
   		<div ng-if="basic2type">
 		<div class="list list-inset" style="align:center;" >
-			<table width="100%" ng-if="tax_u == false">
+			<table width="100%">
 	        	<tr>
 		            <td>
 		          &nbsp;<select ng-model="user.userMode" ng-change="modeselect()">
@@ -85,7 +88,7 @@
 		      		<td style="vertical-align:middle;">{{$index+1}}.</td>
 		        	<td style="vertical-align:middle; text-align:left">{{y.name}}</td>
 		        	<td style="width:20%">
-		        		<input type="number" min="0" max="999" ng-disabled="tax_u" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
+		        		<input type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
 		        	</td>
 		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
 		        		<input type="number" min="0" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>
@@ -98,15 +101,22 @@
             <b>최종가격 :{{datas.totalsumprices | number:0}} 원</b>
         </div>
 	</div>
+</div>
+
   		
-  		<div class="list list-inset" align="left" ng-click="Next3()">
-  			<hr>&nbsp; <i class="{{upAnddown3}}"></i> &nbsp;&nbsp; 관리비고
-  		</div>
+  		<div class="list list-inset" align="left">
+  			<hr>&nbsp; 
+  			<div ng-click='Next3()'><i class="{{upAnddown3}}"></i> &nbsp;&nbsp; 관리비고</div>
+  		
   		<div ng-if="basic3type" class="list list-inset">
 	  		<label class="item item-input item-stacked-label">
 		        <textarea placeholder="관리자비고란 입니다." rows="8" cols="10" ng-model="datas.remk"></textarea>
       		</label>
       	</div>
+      	</div>
+
+
+
   	</div>
   	<br><br>
   </ion-content>
