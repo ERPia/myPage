@@ -777,7 +777,7 @@ return{
 						return $q.reject(response.data);
 					})
 		}, chit_delookup: function(admin_code, userid, no){
-				console.log("MLookupService and chit_delookup");
+				console.log("MLookupService and chit_delookup", no);
 				if($rootScope.distinction == 'meaip'){
 					var kind = 'ERPia_Meaip_Select_Detail'; var no = '&Il_No=' + no;
 				}else{
@@ -1131,18 +1131,6 @@ return{
 	
 		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
 				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
-				console.log('등록일 =', date.todate);
-				console.log('거래처 =', datas.GerCode);
-				console.log('매입출 합계 =', datas.totalsumprices);
-				console.log('매장 코드 =', setup.basic_Place_Code);
-				console.log('관리비고 =', datas.remk);
-
-				console.log('상품(창고코드) =', setup.basic_Ch_Code);
-				console.log('상품(수불/코드/이름/규격/가격/수량/공급가) =', datas.subulkind, '/', goods[0].code, '/', goods[0].name, '/', goods[0].goodsprice, '/', goods[0].num, '/');
-				console.log('지급일 =', date.payday);
-				console.log('지급구분 =', pay.gubun);
-				console.log('지급카드&은행 =', pay.paycardbank);
-				console.log('지급액 =', pay.payprice);
 
 				/*매입수정*/
 				if($rootScope.distinction == 'meaip'){ // kind m_data goods_xml middel
@@ -1166,7 +1154,7 @@ return{
 							case 3 : var pay_subul = 703; break; 
 						}
 						var jidata = '<item><Aseq>'+ 1 +'</Aseq><ij_Date>'+ date.payday +'</ij_Date><Comp_No>'+ datas.GerCode +'</Comp_No><Subul_kind>'+ pay_subul +'</Subul_kind><Bank_Code>'+ paylist[0].code +'</Bank_Code><Bank_Name> <![CDATA['+ escape(paylist[0].name) +']]> </Bank_Name><Bank_Account>'+ paylist[0].num +'</Bank_Account><Card_Code>'+ paylist[1].code +'</Card_Code><Card_Name><![CDATA['+ escape(paylist[1].name) +']]></Card_Name><Card_Num>'+ paylist[1].num +'</Card_Num><Hap_Amt>'+ pay.payprice +'</Hap_Amt></item>';
-						var end = '<IpJi>' + jidata + '</IpJi></root>&iL_No=' + pay.no + '&IpJi_YN=Y&AC_No=' + pay.acno;
+						var end = '<IpJi>' + jidata + '</IpJi></root>&iL_No=' + pay.no + '&IpJi_YN=Y&AC_No=' + pay.acno ;
 					}
 				}else{ /*매출수정*/
 					var i_Cancel='';

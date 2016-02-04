@@ -22,7 +22,7 @@ div.col3{width:45%; color: #fff;}
 div.col4{width:30%; color: #fff;}
 </style>
 
-<ion-view title="매입전표조회" s>
+<ion-view title="매입전표조회" cache-view="false">
 
   <ion-nav-buttons side="right">
     <button menu-toggle="right" ng-click="meaipchul_i()" class="button button-small button-psm00">등록</button>
@@ -87,13 +87,13 @@ div.col4{width:30%; color: #fff;}
 
   </ion-content>
 
-    <div style="margin-top:140%" align="right"><i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;</div>
+    <div style="margin-top:140%;" align="right"><i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;</div>
 
-  <ion-footer-bar align-title="left" class="bar-stable" style="background: #795e81; height: 50px;">
+  <ion-footer-bar align-title="left" style="background: #795e81; height: 50px;" width="100%">
     <div class="col1" >기간<br>현황</div>
-    <div class="col2" >&nbsp;</div>
-    <div class="col3" >매입액 {{chit_atmSum | number:0}}원<br>지급액 {{chit_jiSum | number:0}}원</div>
-    <div class="col4" ng-if='balance == true'>{{money.emoon | number:0}}원<br>{{money.hap | number:0}}원</div>
-    </ion-footer-bar>
+    <div class="col2">&nbsp;</div>
+    <div class="col3" style="font-size:12px;">매입액 {{chit_atmSum | number:0}}원<br>지급액 {{chit_jiSum | number:0}}원</div>
+    <div class="col4" ng-if='balance == true' style="font-size:10px; margin-left:-48px;">이월잔액 {{money.emoon | number:0}}원<br>총액 {{money.hap | number:0}}원</div>
+  </ion-footer-bar>
 
 </ion-view>
