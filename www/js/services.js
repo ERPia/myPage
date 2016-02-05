@@ -1131,7 +1131,7 @@ return{
 	
 		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
 				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
-
+				console.log('=====================>>', goods[0].goods_seq);
 				/*매입수정*/
 				if($rootScope.distinction == 'meaip'){ // kind m_data goods_xml middel
 					var kind = 'ERPia_Meaip_Update_Goods&Mode=Update_Meaip&RequestXml=';
@@ -1141,7 +1141,7 @@ return{
 					// 상품
 					for(var i = 0; i < goods.length; i++){
 						var ii = i+1;
-						var meaipgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><G_vat>'+ parseInt(goods[i].goodsprice)*0.9 +'</G_vat></item>';
+						var meaipgoods = '<item><seq>'+ goods[i].goods_seq + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><G_vat>'+ parseInt(goods[i].goodsprice)*0.9 +'</G_vat></item>';
 						var goods_xml = goods_xml + meaipgoods;
 					}
 					if(pay.gubun == 4){
@@ -1202,14 +1202,15 @@ return{
 						return $q.reject(response.data);
 					})
 		}, seq_del : function(admin_code, userid, no, seq){
-				console.log("MiuService and seq_del", no, '/', seq);
+				console.log('여기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+				console.log("MiuService and seq_del==>", no, '/', seq);
 
-				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_MeaipT&iL_No=' + no + '&Tseq=';
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_MeaipT&iL_No=' + no + '&Tseq=' + seq;
 				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
-				
+
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
-				console.log(url ,'?',data);
+				console.log('dkssud==================================>',url ,'?',data);
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						if(typeof response == 'object'){
