@@ -12,7 +12,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
  // 	, toast:'N'
  // })
 
-//실제 사용시
+// 실제 사용시
 .constant('ERPiaAPI',{
 	url:'http://www.erpia.net/include'
 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
@@ -129,9 +129,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		// dev_push: true // 개발테스트시
+      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		 // dev_push: true // 개발테스트시
 		dev_push: false // 실적용시
 	});
 }])

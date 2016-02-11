@@ -1809,13 +1809,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $ionicScrollDelegate,ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
 	$ionicHistory.clearHistory();
 	$scope.moreloading = 0;
-
+	$scope.scrollTop = function() {
+    $ionicScrollDelegate.scrollTop();
+  };
 	$scope.reqparams = {  //날짜검색에 필요한 파라미터
       sDate : '',
       eDate : ''
@@ -2837,8 +2839,9 @@ $rootScope.tax_u = true; // 세금전표 구분
 				}
 			}
 		}
+		console.log("기존의 상품리스트의 마지막 배열:",$scope.goodsaddlists.length-1)
 		for(var i=0; i < $scope.checkedDatas.length; i++){
-			$scope.updateseq = $scope.goodsaddlists.length+$scope.goods_seqlist.length+1;
+			$scope.updateseq = $scope.goodsaddlists[$scope.goodsaddlists.length-1].goods_seq+1+$scope.goods_seqlist.length+1;
 			console.log("$scope.updateseq>>>>>>", $scope.updateseq);
 			if($rootScope.distinction == 'meaip'){
 				var d = $scope.setupData.basic_Dn_Meaip;
@@ -2967,7 +2970,8 @@ $scope.goods_seqlist = [];
      		});
      		// $scope.goods_seq[index]
      	}
-        $scope.goodsaddlists.splice(index,1);					
+        $scope.goodsaddlists.splice(index,1);	
+		
      }
 
      /*상품 종합 합계 가격 구하기*/
@@ -3175,7 +3179,7 @@ $scope.goods_seqlist = [];
 								$ionicHistory.goBack();
 								$ionicHistory.clearCache();
 								$ionicHistory.clearHistory();
-								if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+								if($rootScope.distinction == 'meaip'){ /* 매입일  경우 */
 									$rootScope.iu = 'i';
 						    		location.href="#/app/meaip_page";
 						    	}else{ /* 매출일 경우 */
