@@ -2516,8 +2516,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		/*전표 상세조회*/
 		MLookupService.chit_delookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $rootScope.u_no)
 		.then(function(data){
-			console.log(data);
-			console.log('spdspd',data.list[0].AC_No);
 			if($rootScope.distinction == 'meaip'){
 				$scope.pay.acno = data.list[0].AC_No;
 				$scope.pay.no = data.list[0].iL_No;
@@ -2543,7 +2541,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					num : parseInt(data.list[i].G_Qty),
 					goodsprice : parseInt(data.list[i].G_Price),
 					code : data.list[i].G_Code,
-					goods_seq : data.list[i].Seq
+					goods_seq : data.list[i].Seq,
+					state : 'Y' // 디비에있는 데이터인지 확인하기위해.
 				});
 			}
 
@@ -2688,8 +2687,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 //------------------상품 더보기(페이징)------------------------------------------
     /* 더보기 버튼 클릭시 */
-	
-
 	$scope.goods_more = function() {
 			var goodsname = escape($scope.user.userGoodsName);
 	  		if($scope.goodslists.length>0){
@@ -2832,7 +2829,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						num : 1,
 						goodsprice : parseInt(price),
 						code : $scope.checkedDatas[i].G_Code,
-						goods_seq : parseInt($scope.pay.goods_seq_end) + 1
+						goods_seq : parseInt($scope.pay.goods_seq_end) + 1,
+						state : 'N'
 					});
 					$scope.pay.goods_seq_end = parseInt($scope.pay.goods_seq_end) + 1;
 	    		}
@@ -2880,7 +2878,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 $scope.goods_seqlist = [];
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
-     	if($rootScope.iu == 'u'){
+     	if($rootScope.iu == 'u' && $scope.goodsaddlists[index].state == 'Y'){
      		$scope.pay.goods_del = 'Y';
      		$scope.goods_seqlist.push({
      			seq : $scope.goodsaddlists[index].goods_seq
@@ -3068,8 +3066,6 @@ $scope.goods_seqlist = [];
 						        })
 						  })
 	                  }else{
-	                  	console.log('수정일경우' , $scope.goods_seqlist);
-	                    console.log('diq =>', $scope.goodsaddlists)
 	                    MiuService.u_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.paylist, $scope.date, $scope.goodsaddlists,$scope.setupData,$scope.datas,$scope.goods_seqlist)
 						  .then(function(data){
 						  	console.log(data);
@@ -3087,7 +3083,6 @@ $scope.goods_seqlist = [];
 						    	}
 						  })
 	                  	if($scope.pay.goods_del == 'Y'){
-	                  		console.log('여기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!2');
 	                  		for(var i = 0; i < $scope.goods_seqlist.length; i++){
 	                  			console.log('???????????????????????????????', i);
 	                  			var seq = $scope.goods_seqlist[i].seq;

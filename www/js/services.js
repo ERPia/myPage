@@ -1130,10 +1130,10 @@ return{
 					})
 	
 		}, u_data : function(admin_code, userid, pay, paylist, date, goods, setup, datas){
-				console.log("MiuService and u_data", pay, paylist, date, goods, setup, datas);
-				console.log('=====================>>', goods[0].goods_seq);
+				console.log("MiuService and u_data");
+				console.log('시퀀스확인좀 =>', goods);
 				/*매입수정*/
-				if($rootScope.distinction == 'meaip'){ // kind m_data goods_xml middel
+				if($rootScope.distinction == 'meaip'){
 					var kind = 'ERPia_Meaip_Update_Goods&Mode=Update_Meaip&RequestXml=';
 					var m_data = '<root><MeaipM><Admin_Code>'+ admin_code + '</Admin_Code><Meaip_Date>'+ date.todate +'</Meaip_Date><GuMeaCom_Code>'+ datas.GerCode +'</GuMeaCom_Code><Meaip_Amt>'+ datas.totalsumprices +'</Meaip_Amt><Sale_Place>'+ setup.basic_Place_Code +'</Sale_Place><Remk><![CDATA['+ escape(datas.remk) +']]></Remk></MeaipM><MeaipT>';
 					var goods_xml = '';
@@ -1174,7 +1174,6 @@ return{
 						var goods_xml = goods_xml + meachulgoods;
 					}
 					if(pay.gubun == 4){
-						console.log('????????????????????????????');
 						var end = '</root>&IpJi_YN=N&Sale_Place_Code='+ setup.basic_Place_Code + '&AC_No=' + pay.acno + '&Sl_No=' + pay.no;
 					}else{
 						switch(pay.gubun){
@@ -1190,7 +1189,7 @@ return{
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
-				console.log(url ,'?',data, m_data, goods_xml, middel, end);
+				console.log('황ㄱ인확인화어리ㅏ어리ㅏㅓ=>', url, '?', data,m_data, goods_xml, middel, end);
 				return $http.get(url + '?' + data + m_data + goods_xml + middel + end)
 					.then(function(response){
 						if(typeof response == 'object'){
@@ -1210,7 +1209,6 @@ return{
 
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
-				console.log('dkssud==================================>',url ,'?',data);
 				return $http.get(url + '?' + data)
 					.then(function(response){
 						if(typeof response == 'object'){
