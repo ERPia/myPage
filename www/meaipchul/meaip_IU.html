@@ -1,4 +1,4 @@
-<ion-view title="간편매입 {{mode}}">
+<ion-view title="간편매입 {{mode}}" cache-view="false">
 <ion-nav-bar>
 <ion-nav-back-button ng-click="backControll()">Back</ion-nav-back-button>
 </ion-nav-bar>
@@ -16,7 +16,7 @@
 			<table width="100%" class=""style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search" ng-disabled="tax_u" ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
+					<td width="40%"><input type="search" ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
 					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
 				</tr>
 			</table>
@@ -26,14 +26,14 @@
 
 			<label class="item item-input" style="border:0; padding-left: 0;">
 			<span style="display: inline-block; widht: 30%; padding-right: 20px;">수불구분</span>
-			<ion-radio ng-disabled="tax_u" ng-click="checkup()" ng-model="datas.subulkind" ng-value="111">매입입고</ion-radio>
-			<ion-radio ng-disabled="tax_u" ng-click="checkup()" ng-model="datas.subulkind" ng-value="122">매입반품</ion-radio>
+			<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="111">매입입고</ion-radio>
+			<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="122">매입반품</ion-radio>
 			</label>
 
 			<label class="item item-input item-select" style="border:0; padding-left: 0">
 			<span style="display: inline-block; widht: 30%; padding-right: 20px;">매장지정</span>
 			<select ng-model="setupData.basic_Place_Code" ng-change='Link_Chango();checkup()' style="width:50%">
-			<option value='000' ng-selected="setupData.basic_Place_Code == 000">매장미지정</option>
+			<option value="000" ng-selected="setupData.basic_Place_Code == 000">매장미지정</option>
 			<option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="setupData.basic_Place_Code == {{x.Sale_Place_Code}}">
 			{{x.Sale_Place_Name}}</option>
 			</select>
@@ -54,13 +54,12 @@
 
 		<div ng-if="basic2type">
 			<div class="list list-inset" style="align:center;" >
-				<table width="100%" ng-if="tax_u == false">
+				<table width="100%">
 				<tr>
 					<td>
 						&nbsp;
 						<select ng-model="user.userMode" ng-change="modeselect()">
 						<option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="user.userMode == x.Code">{{x.Name}}</option>
-						<!-- <option ng-repeat="x in modeselectlist" value="{{x.Code}}" ng-selected="Meaipgoods.userMode == {{x.Code}}">{{x.Name}}</option> -->
 						</select>
 						&nbsp;&nbsp;
 					</td>

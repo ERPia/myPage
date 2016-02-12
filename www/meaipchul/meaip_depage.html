@@ -15,7 +15,10 @@
   button .starbtn{font-size:50px;}
 </style>
 
-<ion-view title="매입전표" style="background: #bca1b4;">
+<ion-view title="매입전표" style="background: #bca1b4;" cache-view="false">
+<ion-nav-bar>
+  <ion-nav-back-button ng-click="backControll()">Back</ion-nav-back-button>
+</ion-nav-bar>
   <ion-content>
     <div><img src="./img/img_meme.jpg" width="100%; border:0; margin:0; padding:0;"></div>
 
@@ -34,7 +37,8 @@
 
         <label class="item item-input">
           <span class="input-label psm_sang_01"><i class="ion-record">&nbsp;&nbsp;구 분 : </i></span>
-          <input type="text" readonly value='{{x.Subul_kind}}' style="padding-left: 20px;"><br>
+          <input type="text" ng-if='x.Subul_kind == 111' readonly value='매입입고' style="padding-left: 20px;">
+          <input type="text" ng-if='x.Subul_kind == 122' readonly value='매입반품' style="padding-left: 20px;"><br>
         </label>
 
         <label class="item item-input">
