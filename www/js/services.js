@@ -843,6 +843,26 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, d_before_check: function(admin_code, userid, no){
+				console.log("MLookupService and u_before_check");
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_Check&iL_No=' + no;
+				else var kind = 'ERPia_Sale_Delete_Goods&Mode=Delete_Check&Sl_No=' + no;
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind;
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log('MLookupService', response);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
 
 	};
@@ -1189,7 +1209,7 @@ return{
 				
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
-				console.log('황ㄱ인확인화어리ㅏ어리ㅏㅓ=>', url, '?', data,m_data, goods_xml, middel, end);
+				console.log('수정데이터 확인!!!!!!!!!!!! =>', url, '?', data,m_data, goods_xml, middel, end);
 				return $http.get(url + '?' + data + m_data + goods_xml + middel + end)
 					.then(function(response){
 						if(typeof response == 'object'){
@@ -1201,9 +1221,7 @@ return{
 						return $q.reject(response.data);
 					})
 		}, seq_del : function(admin_code, userid, no, seq){
-				console.log('여기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 				console.log("MiuService and seq_del==>", no, '/', seq);
-
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_MeaipT&iL_No=' + no + '&Tseq=' + seq;
 				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
 
@@ -1220,7 +1238,29 @@ return{
 						return $q.reject(response.data);
 					})
 	
+		}, d_data : function(admin_code, userid, no){
+				console.log("MiuService and seq_del", no);
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_Meaip&iL_No=' + no;
+				else var kind = 'ERPia_Sale_Delete_Goods&Mode=Delete_MeaChul&Sl_No=' + no;
+				
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
+				console.log(url ,'?',data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+	
 		}
+
+		
 	};
 })
 
