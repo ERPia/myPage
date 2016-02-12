@@ -187,7 +187,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, $scope.loginData.Pwd);	
 			}else{
 				switch($rootScope.userType){
-					case 'SCM':response.data.list[i].UserId환
+					case 'SCM':response.data.list[i].UserId;
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = '1111';
 						$scope.loginData.Pwd = '1234';
@@ -198,9 +198,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = '1234';
 					break;
 					// case 'ERPia':
-					// 	$scope.loginData.Admin_Code = 'pikachu';
+					// 	$scope.loginData.Admin_Code = 'onz';
 					// 	$scope.loginData.UserId = 'khs239';
-					// 	$scope.loginData.Pwd = '1234';
+					// 	$scope.loginData.Pwd = 'rlagudtjrk1!';
 					// break;
 					// case 'ERPia':
 					// 	$scope.loginData.Admin_Code = 'onz';
@@ -1809,7 +1809,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
@@ -1844,6 +1844,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.pageCnt = 1;
 	$scope.balance = false;
 	$rootScope.m_no ='';
+
 	/* 로딩화면 */
 	$rootScope.loadingani=function(){
 		     $ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
@@ -1851,6 +1852,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	         $ionicLoading.hide(); 
 	      }, 500); 
 	}
+
+	/* 최상단으로 */
+	$scope.scrollTop = function() {
+    	$ionicScrollDelegate.scrollTop();
+    };
 
 	/* 오늘날짜 구하기 */
 	$scope.dateMinus=function(days){
@@ -1903,35 +1909,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.mydate2($scope.date.eDate1);
 
 	$scope.chit_lists = [];
-	/* 금일데이터 디폴트 */
-	MLookupService.chit_lookup($scope.loginData.Admin_Code, $scope.loginData.UserId,  $scope.reqparams, $scope.company.name, 1)
-		.then(function(data){
-			$scope.chit_atmSum = 0;
-			$scope.chit_jiSum = 0;
-			$scope.loadingani();
-			if(data == '<!--Parameter Check-->'){//조회된 결과 없을경우
-				console.log('금일데이터 없음.');
-					$scope.moreloading=0; 
-					$scope.maxover = 1;
-			}else{
-
-				if(data.list.length!=0){
-					for(var m = 0; m < data.list.length; m++){
-						$scope.chit_lists.push(data.list[m]);
-					}
-		        for (var i = 0; i < data.list.length; i++) {
-		        	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
-		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].Meaip_Amt);
-		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
-		        	}else{ /* 매출일 경우 */
-		        		$scope.chit_atmSum = parseInt($scope.chit_atmSum) + parseInt($scope.chit_lists[i].MeaChul_Amt);
-		        		$scope.chit_jiSum = parseInt($scope.chit_jiSum) + parseInt($scope.chit_lists[i].IpJi_Amt);
-		        	}
-
-		       		}
-				}
-			}
-		})
 
 	/*거래처 자동완성기능 (매입+매출)*/
     $scope.companyDatas = []; // 자동완성 배열
@@ -1943,7 +1920,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
      	}
 		MiuService.company_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
 		.then(function(data){
-			console.log('안녕 =>',data);
 			$scope.companyDatas = data.list;
 		})
     }
@@ -2038,6 +2014,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		})
 	};
+	$scope.sear_day(0);
 
 	/*매출전표에 더보기*/
 	$scope.search_more = function() {
@@ -2173,9 +2150,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.quickregM.hide();
 			if($scope.quicklists[i].checked == true){
 				if($rootScope.distinction == 'meaip'){
+					$rootScope.iu = 'qi';
+					$rootScope.mode = '등록';
 					$rootScope.u_no = $scope.quicklists[i].No;
 					$state.go('app.meaip_IU', {}, {location:'replace'});
 				}else{
+					$rootScope.iu = 'qi';
+					$rootScope.mode = '등록';
 					$rootScope.u_no = $scope.quicklists[i].No;
 					$state.go('app.meachul_IU', {}, {location:'replace'});
 				}
@@ -2204,9 +2185,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 
 /* 매입&매출 전표상세조회 컨트롤러 */
-.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, $ionicHistory, $state, ERPiaAPI, MLookupService) {
+.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, $ionicHistory, $state, ERPiaAPI, MLookupService, MiuService) {
 
-	/*매출매입 상세조회*/
+ 	/*매출매입 상세조회*/
 	MLookupService.chit_delookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $rootScope.m_no)
 		.then(function(data){
 			$scope.chit_dedata = data.list;
@@ -2304,6 +2285,70 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				}
 		})
 	}
+
+
+	/*삭제*/
+	$scope.chitDeleteF = function(no){
+		MLookupService.d_before_check($scope.loginData.Admin_Code, $scope.loginData.UserId, no)
+			.then(function(data){
+				var decheck = 'N';
+				if(data.list[0].Rslt == 0){ // --------------- 세금계산서 및 배송정보 미존재
+					var decheck = 'd';
+					$rootScope.mode='삭제가능';
+					$rootScope.u_no = no;
+					$rootScope.tax_u = false;
+					var data_alert = '정말로 삭제하시겠습니까?.';
+				}else if(data.list[0].Rslt == 1){ // --------------- 세금계산서 존재
+						console.log('세금계산서 존재');
+						var data_alert = '세금계산서가 발행된 전표는<br>삭제가 불가능합니다.';
+
+					}else if(data.list[0].Rslt == -2){
+						var decheck = 'd';  // --------------- 배송정보 존재
+						console.log('배송정보 존재');
+						var data_alert = '연계된 배송정보가 존재합니다.<br>모두 삭제하시겠습니까?';
+
+					}else if(data.list[0].Rslt == -1){  // --------------- 세금계산서 & 배송정보 존재
+						console.log('세금계산서 & 배송정보 존재');
+						var data_alert = '세금계산서와 배송정보가 모두 존재합니다.<br>삭제가 불가능합니다.';
+					}
+					$ionicPopup.show({
+			         title: '경고',
+			         subTitle: '',
+			         content: data_alert,
+			         buttons: [
+			           { text: 'No',
+			            onTap: function(e){
+			            }},
+			           {
+			             text: 'Yes',
+			             type: 'button-positive',
+			             onTap: function(e) {
+			             		if(decheck == 'd'){
+			             			MiuService.d_data($scope.loginData.Admin_Code, $scope.loginData.UserId, no)
+								.then(function(data){
+									if(data.list[0].rslt == 'Y'){
+										if(ERPiaAPI.toast == 'Y') $cordovaToast.show('전표가 삭제되었습니다.', 'long', 'center');
+										else alert('전표가 삭제되었습니다.');
+										 if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+										    $state.go('app.meaip_page', {}, {location:'replace'});
+										}else{ /* 매출일 경우 */
+										    $state.go('app.meachul_page', {}, {location:'replace'});
+										}
+									}
+								})
+
+			             		}else{}
+			             		
+
+			             }
+			           },
+			         ]
+			        })
+				
+		})
+	}
+
+
 	 /*뒤로 제어*/
      $scope.backControll=function(){
 
@@ -2464,12 +2509,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		if($rootScope.distinction == 'meaip'){  								//매입 수불구분확인 -------------------- 매입일경우
 			var i = $scope.setupData.basic_Subul_Meaip;
-			console.log('수불확인 =>', i);
 			switch (i) {
 			    case '1' : console.log('1'); 
-			    		   switch($scope.configData.basic_Subul_Meaip_Before){
+			    		   switch($scope.setupData.basic_Subul_Meaip_Before){
 			    		   		case 'I' : console.log('I'); $scope.datas.subulkind=111; break;
 			    		   		case 'B' : console.log('B'); $scope.datas.subulkind=122; break;
+			    		   		case 'N' : console.log('N'); break;
 			    		   }
 			    		   break;
 			    case '2' : console.log('2'); $scope.datas.subulkind=111; break;
@@ -2479,12 +2524,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			  }
 		}else{  																//매출 수불구분확인 -------------------- 매출일경우
 			var i = $scope.setupData.basic_Subul_Sale;
-			console.log('수불확인 =>', i);
 			switch (i) {
 			    case '1' : console.log('1'); 
-			    		   switch($scope.configData.basic_Subul_Sale_Before){
+			    		   switch($scope.setupData.basic_Subul_Sale_Before){
 			    		   		case 'C' : console.log('C'); $scope.datas.subulkind=221; break;
 			    		   		case 'B' : console.log('B'); $scope.datas.subulkind=212; break;
+			    		   		case 'N' : console.log('N'); break;
 			    		   }
 			    		   break;
 			    case '2' : console.log('2'); $scope.datas.subulkind=221; break;
@@ -2525,7 +2570,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
      	acno : '', //지급전표 정보 (수정시 사용)
      	no : '', // 전표번호 (수정시 사용)
      	codenum : 0,
-     	goods_del : 'N' // 상품 삭제 Y&N
+     	goods_del : 'N', // 상품 삭제 Y&N
+     	goods_seq_end : 0
      };
 
      /*은행/카드 정보*/
@@ -2535,20 +2581,31 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
      $scope.paylist=[];
 
 	////////////////////////////////////////////// 수정일경우 데이터 불러오기 //////////////////////////////////////////////////////////
-	if($rootScope.iu == 'u'){
+	if($rootScope.iu == 'u' || $rootScope.iu == 'qi'){
 		console.log('수정', $rootScope.u_no);
-		/*전표 상세조회*/
+		/*전표 상세조회 -- 날짜 paydate(입출일), todate(지급일)*/ 
 		MLookupService.chit_delookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $rootScope.u_no)
 		.then(function(data){
-			console.log(data);
-			console.log('spdspd',data.list[0].AC_No);
 			if($rootScope.distinction == 'meaip'){
+				$scope.date.todate1 = new Date(data.list[0].Meaip_Date);
+				$scope.date.todate = data.list[0].Meaip_Date;
 				$scope.pay.acno = data.list[0].AC_No;
 				$scope.pay.no = data.list[0].iL_No;
+				$scope.pay.goods_seq_end = data.list[data.list.length-1].Seq;
+				if(data.list[0].IpJi_Date.length > 0){
+					$scope.date.payday1 = new Date(data.list[0].IpJi_Date);
+					$scope.date.payday = data.list[0].IpJi_Date;
+				} 
 			}else{
+				$scope.date.todate1 = new Date(data.list[0].MeaChul_Date);
+				$scope.date.payday = data.list[0].MeaChul_Date;
 				$scope.pay.acno = data.list[0].AC_No;
 				$scope.pay.no = data.list[0].Sl_No;
-				console.log("SL_NO: ", $scope.pay.no)
+				$scope.pay.goods_seq_end = data.list[data.list.length-1].Seq;
+				if(data.list[0].IpJi_Date.length > 0){
+					$scope.date.payday1 = new Date(data.list[0].IpJi_Date);
+					$scope.date.todate = data.list[0].IpJi_Date;
+				} 
 			} 
 			/*조회된 창고랑 매장*/
 			if(data.list[0].Sale_Place_Code.length == 0){
@@ -2566,7 +2623,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					num : parseInt(data.list[i].G_Qty),
 					goodsprice : parseInt(data.list[i].G_Price),
 					code : data.list[i].G_Code,
-					goods_seq : data.list[i].Seq
+					goods_seq : data.list[i].Seq,
+					state : 'Y' // 디비에있는 데이터인지 확인하기위해.
 				});
 			}
 
@@ -2622,9 +2680,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 
 		})
+	if($rootScope.iu == 'qi'){
+		$rootScope.iu = 'i';
+	}
 		
 	}
 	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////////////////////////
+
+	/*거래처명 초기화*/
+	$scope.clearcompany = function(){
+		$scope.datas.userGerName = '';
+		$scope.datas.GerName = '';
+		$scope.datas.GerCode = 0;
+	}
 
 	/*매장에따른 연계창고 조회*/
 	$scope.Link_Chango = function(){
@@ -2669,22 +2737,25 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
  	 $scope.CompDetailData={};
 	  $scope.gerDetail=function(){
 	  MiuService.company_detail_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.datas.GerCode)
-				.then(function(data){
-					console.log(data);
-					$scope.CompDetailData = data.list[0];
-					if($scope.CompDetailData.Use_Recent_DanGa_YN=='Y'){
-						$scope.CompDetailData.Use_Recent_DanGa_YN='/ 최근단가 우선적용'
-					}else{
-						$scope.CompDetailData.Use_Recent_DanGa_YN=''
-					}
-					console.log("거래처 디테일==>", $scope.CompDetailData);
-					$ionicPopup.alert({
- 					         title: '<b>거래처정보</b>',
- 					         subTitle: '',
- 					         template: '<table width="100%"><tr><td width="40%" style="border-right:1px solid black;">거래처명</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Name+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">매출단가</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_DanGa_Gu+$scope.CompDetailData.Use_Recent_DanGa_YN+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">전화번호</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Tel+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">배송지 주소</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Juso+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">최근 매입일</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.Recent_purchase_date+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">최근 매출일</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.Recent_sales_date+'</td></tr></table>'
- 					         
- 			    		})
-				})
+		.then(function(data){
+			if(data.G_Code == '업체정보가없습니다.'){
+				if(ERPiaAPI.toast == 'Y') $cordovaToast.show('거래처명을 검색해주세요.', 'long', 'center');
+				else alert('거래처명을 검색해주세요.');
+			}else{
+				$scope.CompDetailData = data.list[0];
+				if($scope.CompDetailData.Use_Recent_DanGa_YN=='Y'){
+					$scope.CompDetailData.Use_Recent_DanGa_YN='/ 최근단가 우선적용'
+				}else{
+					$scope.CompDetailData.Use_Recent_DanGa_YN=''
+				}
+				$ionicPopup.alert({
+			        title: '<b>거래처정보</b>',
+			        subTitle: '',
+			        template: '<table><tr><td width="40%" style="border-right:1px solid black;">거래처명</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Name+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">매출단가</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_DanGa_Gu+$scope.CompDetailData.Use_Recent_DanGa_YN+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">전화번호</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Tel+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">배송지 주소</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.G_Juso+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">최근 매입일</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.Recent_purchase_date+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">최근 매출일</td><td width="60%" style="padding-left:5px">'+$scope.CompDetailData.Recent_sales_date+'</td></tr></table>'
+			         
+	    		})
+			}
+		})
 		
 	};
 
@@ -2701,15 +2772,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
 
 		.then(function(data){
-			console.log(data);
 			$scope.goodslists = data.list;
 		})
     	$scope.goodsmodal.show();
     }
 //------------------상품 더보기(페이징)------------------------------------------
     /* 더보기 버튼 클릭시 */
-	
-
 	$scope.goods_more = function() {
 			var goodsname = escape($scope.user.userGoodsName);
 	  		if($scope.goodslists.length>0){
@@ -2839,12 +2907,25 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					         ]
 				  });
 	    	}else{
-	    		$scope.goodsaddlists.push({
-					name : $scope.checkedDatas[i].G_Name,
-					num : 1,
-					goodsprice : parseInt(price),
-					code : $scope.checkedDatas[i].G_Code
-				});
+	    		if($rootScope.iu == 'i'){
+	    			$scope.goodsaddlists.push({ 
+						name : $scope.checkedDatas[i].G_Name,
+						num : 1,
+						goodsprice : parseInt(price),
+						code : $scope.checkedDatas[i].G_Code
+					});
+	    		}else{
+	    			$scope.goodsaddlists.push({ 
+						name : $scope.checkedDatas[i].G_Name,
+						num : 1,
+						goodsprice : parseInt(price),
+						code : $scope.checkedDatas[i].G_Code,
+						goods_seq : parseInt($scope.pay.goods_seq_end) + 1,
+						state : 'N'
+					});
+					$scope.pay.goods_seq_end = parseInt($scope.pay.goods_seq_end) + 1;
+	    		}
+	    		
 				if(i+1 == $scope.checkedDatas.length){
 					$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
 				}
@@ -2852,7 +2933,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    	}
 	    }
 	    
-	    $scope.goodsmodal.hide();
+	    $scope.goodsmodal.hide(); //goods_seq : data.list[i].Seq
 	}
 
     /*상품조회모달 닫기*/
@@ -2888,8 +2969,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 $scope.goods_seqlist = [];
     /* 해당 상품리스트항목 삭제 */
      $scope.goodsDelete=function(index){
-     	if($rootScope.iu == 'u'){
-     		$scope.goods_del = 'Y';
+     	if($rootScope.iu == 'u' && $scope.goodsaddlists[index].state == 'Y'){
+     		$scope.pay.goods_del = 'Y';
      		$scope.goods_seqlist.push({
      			seq : $scope.goodsaddlists[index].goods_seq
      		});
@@ -2909,7 +2990,6 @@ $scope.goods_seqlist = [];
 
 	/*자동슬라이드업*/
 	$scope.checkup=function(){
-   		console.log('checkup', $scope.m_check.cusCheck,$scope.m_check.subulCheck,$scope.m_check.meajangCheck,$scope.m_check.changoCheck);
     	if($scope.m_check.cusCheck == 't' && $scope.m_check.subulCheck == 't' && $scope.m_check.meajangCheck == 't' && $scope.m_check.changoCheck == 't'){
         	/*상품폼 열기*/
         	$scope.basic2type=true;
@@ -3076,14 +3156,8 @@ $scope.goods_seqlist = [];
 						        })
 						  })
 	                  }else{
-	                  	console.log('수정일경우');
-	                  	if($scope.pay.goods_del == 'Y'){
-	                  		MiuService.seq_del($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay.no, $scope.goods_seqlist)
-							  .then(function(data){ 
-							  	$scope.pay.goods_del = 'N';
-							})
-	                  	}
-	                  	MiuService.u_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.paylist, $scope.date, $scope.goodsaddlists,$scope.setupData,$scope.datas,$scope.goods_seqlist)
+	                  	console.log('짜증나네=>',$scope.date);
+	                    MiuService.u_data($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay, $scope.paylist, $scope.date, $scope.goodsaddlists,$scope.setupData,$scope.datas,$scope.goods_seqlist)
 						  .then(function(data){
 						  	console.log(data);
 						  		$ionicPopup.alert({
@@ -3099,8 +3173,18 @@ $scope.goods_seqlist = [];
 						    		$state.go('app.meachul_page', {}, {location:'replace'});
 						    	}
 						  })
-	                  }
-	                  
+	                  	if($scope.pay.goods_del == 'Y'){
+	                  		for(var i = 0; i < $scope.goods_seqlist.length; i++){
+	                  			console.log('???????????????????????????????', i);
+	                  			var seq = $scope.goods_seqlist[i].seq;
+	                  			MiuService.seq_del($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.pay.no, seq)
+								  .then(function(data){ 
+								  	
+								})
+	                  		}
+	                  		$scope.pay.goods_del = 'N';
+	                  	}
+	                  } 
 	             }
 	           },
 	         ]
