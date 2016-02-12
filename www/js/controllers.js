@@ -18,7 +18,7 @@ var g_playlists = [{
 	id : 6
 }];
 
-angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox', 'pickadate'])
+angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox', 'pickadate', 'fcsa-number'])
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, ERPiaAPI){
 	$rootScope.urlData = [];
@@ -2795,6 +2795,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		         template: '<table width="100%"><tr><td width="40%" style="border-right:1px solid black;">상품명</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Name+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">규격</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Stand+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">로케이션</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].Location+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">자체코드</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_OnCode+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">거래처단가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn0+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">매입가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn1+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">도매가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn2+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">인터넷가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn3+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">소매가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn4+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">권장소비자가</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].G_Dn5+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">입수량</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].Box_In_Qty+'</td></tr><tr><td width="40%" style="border-right:1px solid black;">재고</td><td width="55%" style="padding-left:5px">'+$scope.goodslists[indexnum].Jego+'</td></tr></table>'
 		  })
  	};
+//=======================================Comma
+
+
 
     /*상품체크박스*/
     $scope.goodsCheck=function(goodsdata){
@@ -2910,6 +2913,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    $scope.goodsmodal.hide(); //goods_seq : data.list[i].Seq
 	}
 
+
+
     /*상품조회모달 닫기*/
     $scope.goods_searchM_close = function(){
     	$scope.checkedDatas.splice(0,$scope.checkedDatas.length);
@@ -2954,12 +2959,15 @@ $scope.goods_seqlist = [];
      }
 
      /*상품 종합 합계 가격 구하기*/
-    $scope.goods_totalprice1=function(){
+    $scope.goods_totalprice1=function(index){
      	$scope.datas.totalsumprices = 0;
+
      	for(var count=0;count<$scope.goodsaddlists.length;count++){
      		var sum = parseInt($scope.goodsaddlists[count].goodsprice) * parseInt($scope.goodsaddlists[count].num);
      		$scope.datas.totalsumprices = $scope.datas.totalsumprices + sum;
      	}
+     		
+		   
     };
 
 	/*자동슬라이드업*/

@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova'
+angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'fcsa-number'
 	, 'starter.services'])
 
  // .constant('ERPiaAPI',{
@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	, toast:'Y'
 })
 
-.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory) {
+.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -44,6 +44,55 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			name: 'ERPiaUser',
 			bio: 'ERPiaPush'
 		});
+		//----------------뒤로가기 마지막페이지일때 ....----
+		$ionicPlatform.registerBackButtonAction(function(e){
+		    if ($rootScope.backButtonPressedOnceToExit) {
+		     
+		      $ionicPopup.show({
+				title: '경고',
+				subTitle: '',
+				content: '앱을 종료하시겠습니까?',
+				buttons: [
+					{ text: 'No',
+						onTap: function(e){
+						}
+					},
+					{
+						text: 'Yes',
+						type: 'button-positive',
+						onTap: function(e) {
+						 ionic.Platform.exitApp();
+						}
+					},
+				]
+			})
+		     
+		    }
+
+		    else if ($ionicHistory.backView()) {
+		      $rootScope.backButtonPressedOnceToExit = false;
+		      $ionicHistory.goBack();
+		    }
+		    else {
+		      $rootScope.backButtonPressedOnceToExit = false;
+			   
+		      window.plugins.toast.showShortCenter(
+		        "메인으로 이동합니다.",function(a){},function(b){}
+		      );
+		      $ionicHistory.clearCache();
+			  $ionicHistory.clearHistory();
+		      // $state.go('app.meaip_page', {}, {location:'replace'});
+		      $state.go('app.erpia_main', {}, {location:'replace'});
+		     $rootScope.backButtonPressedOnceToExit = true;
+		      // setTimeout(function(){
+		      	
+		      //    $rootScope.backButtonPressedOnceToExit = true;
+		        
+		      // },500);
+		    }
+		    e.preventDefault();
+		    return false;
+		  },101);
 
 		// Identify your user with the Ionic User Service
 		$ionicUser.identify(user).then(function(){
@@ -126,11 +175,19 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	$urlRouterProvider.otherwise('/app/slidingtab');
 // });
 
+.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
+  fcsaNumberConfigProvider.setDefaultOptions({
+    min: 0
+  });
+}])
+
+
+
 .config(['$ionicAppProvider', function($ionicAppProvider) {
 	$ionicAppProvider.identify({
       	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
 		// dev_push: true // 개발테스트시
 		dev_push: false // 실적용시
 	});
