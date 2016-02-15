@@ -1809,7 +1809,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup,ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
@@ -1874,10 +1874,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	$scope.todate=$scope.dateMinus(0); // 오늘날짜
 
+ 	$scope.keypressHandler = function(event, nextIdx){
+ 		console.log("keycode:", event.keyCode);
+	    if(event.keyCode == 13){
+	        angular.element(
+	            document.querySelector('#f_'+nextIdx))[0].focus();
+
+	    }
+	}
 
 
 	$scope.mydate1=function(sdate1){
-	    var nday = new Date(sdate1);  //선택1 날짜..  
+
+	   	var nday = new Date(sdate1);  //선택1 날짜..  
 	    var yy = nday.getFullYear();
 	    var mm = nday.getMonth()+1;
 	    var dd = nday.getDate();
@@ -1885,24 +1894,44 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    if( mm<10) mm="0"+mm;
 
 	    if( dd<10) dd="0"+dd;
-
 	    $scope.reqparams.sDate = yy + "-" + mm + "-" + dd;
 	    $scope.date.sDate1=new Date(sdate1);
+
+	    if($scope.date.sDate1>$scope.date.eDate1){
+		    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
+		    $scope.date.eDate1=new Date(sdate1);
+		}else{}
 	 	console.log('선택날짜3:'+$scope.reqparams.sDate);
+
+
 	};
 
 	$scope.mydate2=function(edate1){
-	    var nday = new Date(edate1);  //선택2 날짜..  
-	    var yy = nday.getFullYear();
-	    var mm = nday.getMonth()+1;
-	    var dd = nday.getDate();
+		if(edate1 < $scope.date.sDate1){
+				$ionicPopup.alert({
+			        title: '경고',
+			        subTitle: '조회기간이 올바르지 않습니다.',
+			        template: ''
+			         
+	    		})
+			edate1 = new Date($scope.date.sDate1);
+			console.log(edate1);
+		}else{
+			console.log(edate1);
+		}
+			var nday = new Date(edate1);  //선택2 날짜..  
+		    var yy = nday.getFullYear();
+		    var mm = nday.getMonth()+1;
+		    var dd = nday.getDate();
 
-	    if( mm<10) mm="0"+mm;
-	    if( dd<10) dd="0"+dd;
+		    if( mm<10) mm="0"+mm;
+		    if( dd<10) dd="0"+dd;
 
-	    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
-	    $scope.date.eDate1=new Date(edate1);
-	 	console.log('선택날짜2:'+$scope.reqparams.eDate);
+		    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
+		    $scope.date.eDate1=new Date(edate1);
+		 	console.log('선택날짜2:'+$scope.reqparams.eDate);
+		
+	    
 	};
 
 	$scope.mydate1($scope.date.sDate1);
@@ -2688,6 +2717,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 		
 	}
+
+
+	/*key누를때마다 숫자만 가능하도록*/
+	$scope.onlyNumber=function(event){
+		if((event.keyCode<48)||(event.keyCode>57))
+			event.returnValue=false;
+	}
+
 	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////////////////////////
 
 	/*거래처명 초기화*/
