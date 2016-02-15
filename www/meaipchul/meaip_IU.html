@@ -1,3 +1,4 @@
+
 <ion-view title="간편매입 {{mode}}" cache-view="false">
 <ion-nav-bar>
 <ion-nav-back-button ng-click="backControll()">Back</ion-nav-back-button>
@@ -7,7 +8,7 @@
 
 <div>
     <div  style="background: #bca1b4; padding: 10px;" >
-		<div style="background: #fff;" ><label class=" item-input" style="border:0;">매입일&nbsp;:&nbsp;<input type="date" ng-disabled="tax_u" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)"></label></div>
+		<div style="background: #fff;" ><label class=" item-input" style="border:0;">매입일&nbsp;:&nbsp;<input type="date" ng-disabled="tax_u" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1,1)"></label></div>
 	</div>
     <div class="list list-inset" style="padding: 10px;" align="left">
 		<div ng-click="Next()"><i class="{{upAnddown}}"></i> &nbsp;&nbsp; 매입정보</div><!--  -->
@@ -16,8 +17,8 @@
 			<table width="100%" class=""style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search" ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
-					<td width="20%"><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
+					<td width="40%"><input type="search" ng-model="datas.userGerName" placeholder="거래처명검색" size="30" style="border:1px solid #eee;" ng-change="company_auto()"></td>
+					<td width="20%"><i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px;' ng-click='clearcompany()'></i><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
 				</tr>
 			</table>
 			<div class="list">
