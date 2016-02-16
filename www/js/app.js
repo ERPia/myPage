@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	, toast:'Y'
 // })
 
-.run(function($ionicPlatform, $ionicPush, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup) {
+.run(function($ionicPlatform, $ionicPush, $location, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -46,8 +46,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		});
 		//----------------뒤로가기 마지막페이지일때 ....----
 		$ionicPlatform.registerBackButtonAction(function(e){
-		    if ($rootScope.backButtonPressedOnceToExit) {
-		     
+		    if ($location.url()=='/app/main') { //현재 페이지 url이 메인일 때,
 		      $ionicPopup.show({
 				title: '경고',
 				subTitle: '',
@@ -70,20 +69,22 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		     
 		    }
 
-		    else if ($ionicHistory.backView()) {
+		    else if ($ionicHistory.backView()) { // 상단에 뒤로가기버튼이 true일때,
 		      $rootScope.backButtonPressedOnceToExit = false;
 		      $ionicHistory.goBack();
 		    }
-		    else {
+		    else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
 		      $rootScope.backButtonPressedOnceToExit = false;
 			   
 		      window.plugins.toast.showShortCenter(
 		        "메인으로 이동합니다.",function(a){},function(b){}
 		      );
-		      $ionicHistory.clearCache();
-			  $ionicHistory.clearHistory();
 		      // $state.go('app.meaip_page', {}, {location:'replace'});
-		      $state.go('app.erpia_main', {}, {location:'replace'});
+		     $ionicHistory.clearCache();
+			 $ionicHistory.clearHistory();
+			 $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		     location.href = '#/app/main';
+
 		     $rootScope.backButtonPressedOnceToExit = true;
 		      // setTimeout(function(){
 		      	
@@ -176,7 +177,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	$urlRouterProvider.otherwise('/app/slidingtab');
 // });
 
-.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
+.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) { // input에 숫자입력시 천자리마다 콤마를 찍어주는 플러그인 기본옵션부분
   fcsaNumberConfigProvider.setDefaultOptions({
     min: 0
   });

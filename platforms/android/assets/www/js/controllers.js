@@ -1809,9 +1809,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup,ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $location, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup,ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
-	console.log('구별 =>', $rootScope.distinction);
+	console.log('구별 =>', $rootScope.current);
 	$ionicHistory.clearCache();
 	$ionicHistory.clearHistory();
 	$scope.moreloading = 0;
@@ -1874,14 +1874,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	$scope.todate=$scope.dateMinus(0); // 오늘날짜
 
- 	$scope.keypressHandler = function(event, nextIdx){
- 		console.log("keycode:", event.keyCode);
-	    if(event.keyCode == 13){
-	        angular.element(
-	            document.querySelector('#f_'+nextIdx))[0].focus();
-
-	    }
-	}
 
 
 	$scope.mydate1=function(sdate1){
@@ -2719,11 +2711,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 
 
-	/*key누를때마다 숫자만 가능하도록*/
-	$scope.onlyNumber=function(event){
-		if((event.keyCode<48)||(event.keyCode>57))
-			event.returnValue=false;
-	}
 
 	////////////////////////////////////////////// 수정 끝 //////////////////////////////////////////////////////////////////////////////
 
