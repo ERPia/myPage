@@ -91,7 +91,7 @@
 		        		<input type="number" ng-disabled="{{sbu}}" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
 		        	</td>
 		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
-		        		<input type="number" ng-disabled="{{sbu}}" min="0" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" required>
+		        		<input type="tel" ng-disabled="{{sbu}}" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" fcsa-number="{ preventInvalidInput: true }" pattern="\d*"/>
 		        	</td>
 		        	<td><i class="ion-android-remove-circle" ng-if="sbu == false" ng-click="goodsDelete($index);goods_totalprice1()"></i>&nbsp;</td>
 		      	</tr>

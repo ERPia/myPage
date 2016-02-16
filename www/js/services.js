@@ -974,9 +974,8 @@ return{
 
 							return $q.reject(response);
 					})
-		}, com_Dn : function(admin_code, userid, goods_code, ger_code){
-				console.log("MiuService and com_Dn==> onz이 아닌 pikachu로 테스트 입니다. 후에 변경하세요.");
-
+		}, com_Dn : function(admin_code, userid, goods_code, ger_code,i){
+				console.log("MiuService and com_Dn",i);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
 				else var kind = 'ERPia_Sale_Select_Goods';
 				
@@ -987,7 +986,11 @@ return{
 					.then(function(response){
 						console.log('MLookupService', response);
 						if(typeof response == 'object'){
-							return response.data;
+							var returndata = { 
+								'data' : response.data,
+								'i' : i
+							};
+							return returndata;
 						}else{
 							return $q.reject(response.data);
 						}
