@@ -6,7 +6,7 @@
   	<div class="list list-inset">
   		<div>
   			<label class="item item-input col-80" style="border:0;">
-			 매출일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-model='date.todate1' ng-change="datechange(date.todate1)">
+			 매출일&nbsp;:&nbsp; <input type="date" style="text-align:right;" ng-disabled="{{sbu}}" ng-model='date.todate1' ng-change="datechange(date.todate1)">
 			</label>
   		</div>
   		<div class="list list-inset" align="left">
@@ -18,8 +18,8 @@
 			<table width="100%" class="list list-inset"style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search"ng-model="datas.userGerName" placeholder="거래처명검색" size="25" style="border:1px solid #eee;" ng-change="company_auto()"></td>
-					<td width="20%"><i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px;' ng-click='clearcompany()'></i><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
+					<td width="40%"><input type="search"ng-model="datas.userGerName" placeholder="거래처명검색" size="25" ng-disabled="{{sbu}}" style="border:1px solid #eee;" ng-change="company_auto()"></td>
+					<td width="20%"><i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px;' ng-if="sbu == false" ng-click='clearcompany()'></i><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
 				</tr>
 			</table>
 			<div class="list">
@@ -28,8 +28,8 @@
 
 			<label class="item item-input" style="border:0;">
 			  수불구분
-  				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="221">매출출고</ion-radio>
-				<ion-radio ng-click="checkup()" ng-model="datas.subulkind" ng-value="212">매출반품</ion-radio>
+  				<ion-radio ng-click="checkup()" ng-disabled="{{sbu}}" ng-model="datas.subulkind" ng-value="221">매출출고</ion-radio>
+				<ion-radio ng-click="checkup()" ng-disabled="{{sbu}}" ng-model="datas.subulkind" ng-value="212">매출반품</ion-radio>
 			</label>
 
 			<label class="item item-input item-select" style="border:0;">
@@ -58,7 +58,7 @@
 
   		<div ng-if="basic2type">
 		<div class="list list-inset" style="align:center;" >
-			<table width="100%">
+			<table width="100%" ng-if="sbu == false">
 	        	<tr>
 		            <td>
 		          &nbsp;<select ng-model="user.userMode" ng-change="modeselect()">
@@ -88,13 +88,12 @@
 		      		<td style="vertical-align:middle;">{{$index+1}}.</td>
 		        	<td style="vertical-align:middle; text-align:left">{{y.name}}</td>
 		        	<td style="width:20%">
-		        		<input type="number" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
+		        		<input type="number" ng-disabled="{{sbu}}" min="0" max="999" ng-bind-html="goods_totalprice1($index)" style="text-align:right; border: 1px solid silver; width:80%" ng-model="y.num" required>
 		        	</td>
 		        	<td align="right" style="width:28%; padding-left:1%; padding-right:1%">
-		        		<!-- <input type="text" min="0" max="9999999" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index,y.goodsprice1)" ng-model="y.goodsprice1" required> -->
-		        		<input type="tel" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" fcsa-number="{ preventInvalidInput: true }" pattern="\d*"/>
+		        		<input type="tel" ng-disabled="{{sbu}}" style="width:100%; border: 1px solid silver; text-align:right" ng-change="goods_totalprice1($index)" ng-model="y.goodsprice" fcsa-number="{ preventInvalidInput: true }" pattern="\d*"/>
 		        	</td>
-		        	<td><i class="ion-android-remove-circle" ng-click="goodsDelete($index);goods_totalprice1()"></i>&nbsp;</td>
+		        	<td><i class="ion-android-remove-circle" ng-if="sbu == false" ng-click="goodsDelete($index);goods_totalprice1()"></i>&nbsp;</td>
 		      	</tr>
 	   		</table>
 	   	</div>

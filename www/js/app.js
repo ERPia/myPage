@@ -6,18 +6,18 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'fcsa-number'
 	, 'starter.services'])
 
- .constant('ERPiaAPI',{
- 	url:'http://localhost:8100/include'
- 	, imgUrl:'http://localhost:8100/erpia_update/img'
- 	, toast:'N'
- })
+ // .constant('ERPiaAPI',{
+ // 	url:'http://localhost:8100/include'
+ // 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ // 	, toast:'N'
+ // })
 
 //실제 사용시
-// .constant('ERPiaAPI',{
-// 	url:'http://www.erpia.net/include'
-// 	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
-// 	, toast:'Y'
-// })
+.constant('ERPiaAPI',{
+	url:'http://www.erpia.net/include'
+	, imgUrl:'http://erpia2.godohosting.com/erpia_update/img'
+	, toast:'Y'
+})
 
 .run(function($ionicPlatform, $ionicPush, $location, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup) {
 	$ionicPlatform.ready(function() {
@@ -44,7 +44,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 			name: 'ERPiaUser',
 			bio: 'ERPiaPush'
 		});
-		//----------------뒤로가기 마지막페이지일때 ....----
+//----------------뒤로가기 마지막페이지일때 ....----
 		$ionicPlatform.registerBackButtonAction(function(e){
 		    if ($location.url()=='/app/main') { //현재 페이지 url이 메인일 때,
 		      $ionicPopup.show({
@@ -95,7 +95,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		    e.preventDefault();
 		    return false;
 		  },101);
-
 		// Identify your user with the Ionic User Service
 		$ionicUser.identify(user).then(function(){
 			//$scope.identified = true;
@@ -177,23 +176,23 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // 	$urlRouterProvider.otherwise('/app/slidingtab');
 // });
 
+.config(['$ionicAppProvider', function($ionicAppProvider) {
+	$ionicAppProvider.identify({
+      	app_id: 'b94db7cd', //app id
+      	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
+      	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
+		dev_push: true // 개발테스트시
+		// dev_push: false // 실적용시
+	});
+}])
+
+
 .config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) { // input에 숫자입력시 천자리마다 콤마를 찍어주는 플러그인 기본옵션부분
   fcsaNumberConfigProvider.setDefaultOptions({
     min: 0
   });
 }])
 
-
-
-.config(['$ionicAppProvider', function($ionicAppProvider) {
-	$ionicAppProvider.identify({
-      	app_id: 'b94db7cd', //app id
-      	api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
-      	// api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
-	});
-}])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
 	$stateProvider
