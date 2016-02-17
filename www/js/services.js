@@ -974,7 +974,7 @@ return{
 
 							return $q.reject(response);
 					})
-		}, com_Dn : function(admin_code, userid, goods_code, ger_code,i){
+		}, com_Dn : function(admin_code, userid, goods_code, ger_code,i,bar){
 				console.log("MiuService and com_Dn",i);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
 				else var kind = 'ERPia_Sale_Select_Goods';
@@ -988,7 +988,8 @@ return{
 						if(typeof response == 'object'){
 							var returndata = { 
 								'data' : response.data,
-								'i' : i
+								'i' : i,
+								'bar' : bar
 							};
 							return returndata;
 						}else{
