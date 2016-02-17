@@ -2502,6 +2502,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown="ion-arrow-up-b";
     	}else{
     		$scope.basictype=true;
+    		$scope.basic2type= false;
+    		$scope.basic3type= false;
     		$scope.upAnddown="ion-arrow-down-b";
     	}
     }
@@ -2511,6 +2513,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown2="ion-arrow-up-b";
     	}else{
     		$scope.basic2type=true;
+    		$scope.basictype= false;
+    		$scope.basic3type= false;
     		$scope.upAnddown2="ion-arrow-down-b";
     	}
     }
@@ -2520,6 +2524,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown3="ion-arrow-up-b";
     	}else{
     		$scope.basic3type=true;
+    		$scope.basictype= false;
+    		$scope.basic2type= false;
     		$scope.upAnddown3="ion-arrow-down-b";
     	}
     }

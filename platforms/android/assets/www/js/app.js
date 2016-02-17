@@ -46,7 +46,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		});
 //----------------뒤로가기 마지막페이지일때 ....----
 		$ionicPlatform.registerBackButtonAction(function(e){
-		    if ($location.url()=='/app/main') { //현재 페이지 url이 메인일 때,
+		    if ($location.url()=='/app/main'||$location.url()=='/app/slidingtab'||$location.url()=='/app/scmhome'||$location.url()=='/app/sample/Main') { //현재 페이지 url이 메인일 때,
 		      $ionicPopup.show({
 				title: '경고',
 				subTitle: '',
@@ -83,7 +83,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		     $ionicHistory.clearCache();
 			 $ionicHistory.clearHistory();
 			 $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-		     location.href = '#/app/main';
+			switch($rootScope.userType){
+				case 'ERPia': location.href = '#/app/slidingtab'; break;
+				case 'SCM' : location.href = '#/app/scmhome'; break;
+				case 'Geust': location.href = '#/app/sample/Main'; break;
+			} 
 
 		     $rootScope.backButtonPressedOnceToExit = true;
 		      // setTimeout(function(){
@@ -181,8 +185,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
       	app_id: 'b94db7cd', //app id
       	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
       	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 

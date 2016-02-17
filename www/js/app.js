@@ -83,7 +83,6 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		     $ionicHistory.clearCache();
 			 $ionicHistory.clearHistory();
 			 $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-		     location.href = '#/app/main';
 
 		     $rootScope.backButtonPressedOnceToExit = true;
 		      // setTimeout(function(){
@@ -181,8 +180,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
       	app_id: 'b94db7cd', //app id
       	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
       	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 
