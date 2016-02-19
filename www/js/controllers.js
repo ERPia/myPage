@@ -195,7 +195,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case 'ERPia':
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = 'test1234';
-						$scope.loginData.Pwd = '1234';
+						$scope.loginData.Pwd = 'test1234!';
 					break;
 					// case 'ERPia':
 					// 	$scope.loginData.Admin_Code = 'onz';
@@ -1809,7 +1809,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, $cordovaToast, ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
@@ -2206,7 +2206,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 
 /* 매입&매출 전표상세조회 컨트롤러 */
-.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, $ionicHistory, $state, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookup_DeCtrl', function($scope, $rootScope, $ionicModal, $ionicPopup, $ionicHistory, $state, $cordovaToast, ERPiaAPI, MLookupService, MiuService) {
 
  	/*매출매입 상세조회*/
 	MLookupService.chit_delookup($scope.loginData.Admin_Code, $scope.loginData.UserId, $rootScope.m_no)
@@ -2382,7 +2382,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 등록 컨트롤러 */
-.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, $cordovaBarcodeScanner, $ionicHistory, $timeout, $state, ERPiaAPI, MconfigService, MiuService, MLookupService) {
+.controller('MiuCtrl', function($scope, $rootScope, $ionicPopup, $ionicModal, $cordovaBarcodeScanner, $ionicHistory, $timeout, $state, $cordovaToast, ERPiaAPI, MconfigService, MiuService, MLookupService) {
 	if($rootScope.iu == 'sb_u'){
 		$scope.sbu = true;
 	}else{
@@ -3153,6 +3153,7 @@ $scope.goods_seqlist = [];
 			.then(function(data){
 				if(index == 1){
 					$scope.payname = '지급은행';
+					$scope.pay.paycardbank = '000';
 					for(var i=0; i < data.list.length; i++){
 						$scope.paycardbank.push({
 							num : data.list[i].Bank_Account,
@@ -3162,6 +3163,7 @@ $scope.goods_seqlist = [];
 					}
 				}else{
 					$scope.payname = '지급카드';
+					$scope.pay.paycardbank = '000';
 					for(var i=0; i < data.list.length; i++){
 						$scope.paycardbank.push({
 							num : data.list[i].Card_Num,
@@ -3222,6 +3224,10 @@ $scope.goods_seqlist = [];
 
 
     $scope.insertGoodsF=function(){
+    	console.log($scope.pay, $scope.paylist);
+    	if($scope.payment[0].checked != true && $scope.payment[1].checked != true && $scope.payment[2].checked != true && $scope.payment[3].checked != true){
+    		$scope.pay.gubun = 4;
+    	}
     	$ionicPopup.show({
 	         title: '전표를 저장하시겠습니까?',
 	         content: '',
