@@ -2502,9 +2502,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown="ion-arrow-up-b";
     	}else{
     		$scope.basictype=true;
-    		$scope.basic2type= false;
-    		$scope.basic3type= false;
+    		$scope.basic2type=false;
+    		$scope.basic3type=false;
     		$scope.upAnddown="ion-arrow-down-b";
+    		$scope.upAnddown2="ion-arrow-up-b";
+    		$scope.upAnddown3="ion-arrow-up-b";
     	}
     }
     $scope.Next2=function(){
@@ -2513,9 +2515,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown2="ion-arrow-up-b";
     	}else{
     		$scope.basic2type=true;
-    		$scope.basictype= false;
-    		$scope.basic3type= false;
+    		$scope.basictype=false;
+    		$scope.basic3type=false;
     		$scope.upAnddown2="ion-arrow-down-b";
+    		$scope.upAnddown="ion-arrow-up-b";
+    		$scope.upAnddown3="ion-arrow-up-b";
     	}
     }
     $scope.Next3=function(){
@@ -2524,9 +2528,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		$scope.upAnddown3="ion-arrow-up-b";
     	}else{
     		$scope.basic3type=true;
-    		$scope.basictype= false;
-    		$scope.basic2type= false;
+    		$scope.basictype=false;
+    		$scope.basic2type=false;
     		$scope.upAnddown3="ion-arrow-down-b";
+    		$scope.upAnddown="ion-arrow-up-b";
+    		$scope.upAnddown2="ion-arrow-up-b";
     	}
     }
 
@@ -2803,7 +2809,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	$scope.maxover=0;
     	var goodsname = escape($scope.user.userGoodsName);
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
-
 		.then(function(data){
 			$scope.goodslists = data.list;
 		})
@@ -2899,7 +2904,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 
 			if(d == '0' && $scope.datas.GerCode != 0){
-				MiuService.com_Dn($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.checkedDatas[i].G_Code, $scope.datas.GerCode,i)
+				MiuService.com_Dn($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.checkedDatas[i].G_Code, $scope.datas.GerCode,i,$scope.bar)
 				  .then(function(data){
 						if(data.data.list[0].G_Discount_Or_Up == undefined || data.data.list[0].G_Discount_Or_Up != 'D' && data.data.list[0].G_Discount_Or_Up != 'U'){
 							var price = data.data.list[0].G_Dn0;
@@ -2914,12 +2919,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 								var price = parseInt(data.data.list[0].G_Dn0) + parseInt(yul);
 							}
 						}
-						$scope.test1(price,data.i);
+						$scope.test1(price,data.i,data.bar);
 				})
 
 			}else{
 				switch(d){
-					case '0': console.log('거래처별 단가'); var price = $scope.checkedDatas[i].G_Dn1; break;
+					case '0': console.log('거래처별 단가'); var price = $scope.checkedDatas[i].G_Dn3; break;
 		    		case '1': console.log('매입가&매출가'); var price = $scope.checkedDatas[i].G_Dn1; break;
 		    		case '2': console.log('도매가'); var price = $scope.checkedDatas[i].G_Dn2; break;
 		    		case '3': console.log('인터넷가'); var price = $scope.checkedDatas[i].G_Dn3; break;
@@ -2982,9 +2987,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 		}
 
-		$scope.test1 = function(price,i){
+		$scope.test1 = function(price,i,bar){
 			console.log('i확인=>',i);
-			if($scope.bar == 'Y'){
+			if(bar == 'Y'){
 	    		$scope.bargoods = {
 	    			num : 0
 	    		}
@@ -3034,7 +3039,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    	}
 		}
 		
-	    
+	    $scope.bar = 'N';
 	    $scope.goodsmodal.hide(); //goods_seq : data.list[i].Seq
 	}
 
@@ -3046,6 +3051,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
     /*바코드 스캔하기*/
 	$scope.scanBarcode = function() {
+		if($scope.checkedDatas.length != 0){
+			$scope.checkedDatas.splice(0, $scope.checkedDatas.length);
+		}
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
             MiuService.barcode($scope.loginData.Admin_Code, $scope.loginData.UserId, imageData.text)
 			.then(function(data){
