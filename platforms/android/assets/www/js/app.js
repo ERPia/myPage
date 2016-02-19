@@ -19,7 +19,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 	, toast:'Y'
 })
 
-.run(function($ionicPlatform, $ionicPush, $location, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup) {
+.run(function($ionicPlatform, $ionicPush, $location, $ionicUser, $rootScope, $ionicHistory, $state, $ionicPopup, $cordovaBarcodeScanner) {
 	$ionicPlatform.ready(function() {
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
@@ -70,8 +70,20 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		    }
 
 		    else if ($ionicHistory.backView()) { // 상단에 뒤로가기버튼이 true일때,
-		      $rootScope.backButtonPressedOnceToExit = false;
-		      $ionicHistory.goBack();
+		    	if($location.url()=='/app/meaip_depage'){
+		    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		    		location.href = '#/app/meaip_page';
+		    	}else if($location.url()=='/app/meachul_depage'){
+		    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		    		location.href = '#/app/meachul_page';
+		    	}else{$ionicHistory.goBack();}
+
+
+		      		$rootScope.backButtonPressedOnceToExit = false;	
+		      		
+
+		    }else if($cordovaBarcodeScanner.scan()){
+		    	$ionicHistory.goBack();
 		    }
 		    else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
 		      $rootScope.backButtonPressedOnceToExit = false;
@@ -181,8 +193,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
       	app_id: 'b94db7cd', //app id
       	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
       	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 
@@ -192,6 +204,7 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
     min: 0
   });
 }])
+
 
 
 .config(function($stateProvider, $urlRouterProvider, $ionicAppProvider) {
