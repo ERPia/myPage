@@ -47,16 +47,13 @@
         <span class="input-label psm_sang_01">&nbsp;&nbsp;{{payname}}</span>
 
         <select ng-if="paytype"  ng-disabled="tax_u" ng-model="pay.paycardbank" ng-change='payinsert()'>
-          <option value=''>카드&은행을 선택 해주세요.</option>
-          <option ng-repeat='x in paycardbank' value='{{x.code}},{{x.name}},{{x.num}}' ng-selected='pay.codenum == {{x.code}}'>{{x.name}}</option>
+          <option value='000' ng-selected="pay.paycardbank == 000">======================</option>
+          <option ng-repeat='x in paycardbank' value='{{x.code}},{{x.name}},{{x.num}}' ng-selected="pay.codenum == {{x.code}}">{{x.name}}</option>
         </select><br>
 
       </label><br>
       <label class="item item-input">
         <span class="input-label psm_sang_01">&nbsp;&nbsp;지급액</span>
-
-
-
         <input type="tel" ng-disabled="pay.use" style="text-align:right" min='0' value='0' ng-model='pay.payprice' fcsa-number="{ preventInvalidInput: true }" pattern="\d*"><span class="input-label psm_sang_01" >원</span><br>
       </label><br>
    </div>

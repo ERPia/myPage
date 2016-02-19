@@ -974,7 +974,7 @@ return{
 
 							return $q.reject(response);
 					})
-		}, com_Dn : function(admin_code, userid, goods_code, ger_code,i){
+		}, com_Dn : function(admin_code, userid, goods_code, ger_code,i,bar){
 				console.log("MiuService and com_Dn",i);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
 				else var kind = 'ERPia_Sale_Select_Goods';
@@ -988,7 +988,8 @@ return{
 						if(typeof response == 'object'){
 							var returndata = { 
 								'data' : response.data,
-								'i' : i
+								'i' : i,
+								'bar' : bar
 							};
 							return returndata;
 						}else{
@@ -1192,7 +1193,7 @@ return{
 					// 상품
 					for(var i = 0; i < goods.length; i++){
 						var ii = i+1;
-						var meachulgoods = '<item><seq>'+ ii + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa></item>';
+						var meachulgoods = '<item><seq>'+ goods[i].goods_seq + '</seq><ChangGo_Code>'+ setup.basic_Ch_Code +'</ChangGo_Code><subul_kind>'+ datas.subulkind +'</subul_kind><G_Code>'+ goods[i].code +'</G_Code><G_name><![CDATA['+ escape(goods[i].name) +']]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>'+ goods[i].goodsprice +'</G_Price><G_Qty>'+ goods[i].num +'</G_Qty><PanMeaDanGa>'+ parseInt(goods[i].goodsprice)*0.9 +'</PanMeaDanGa><In_Or_Up>' + goods[i].state + '</In_Or_Up><localSeq>' + ii + '</localSeq></item>';
 						var goods_xml = goods_xml + meachulgoods;
 					}
 					if(pay.gubun == 4){
@@ -1225,7 +1226,7 @@ return{
 		}, seq_del : function(admin_code, userid, no, seq){
 				console.log("MiuService and seq_del==>", no, '/', seq);
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_MeaipT&iL_No=' + no + '&Tseq=' + seq;
-				else var kind = 'ERPia_Meaip_Bank_Card_Select&Mode=Select_Card';
+				else var kind = 'ERPia_Sale_Delete_Goods&Mode=Delete_MeaChulT&Sl_No=' + no + '&Tseq=' + seq;
 
 				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 				var data = 'Admin_Code=' + admin_code +'&UserId=' + userid + '&Kind='+ kind;
