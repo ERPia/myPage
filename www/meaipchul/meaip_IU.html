@@ -50,7 +50,7 @@
 	</div>
 
     <div class="list list-inset" align="left" style="padding: 10px;">
-		<div ng-click="Next2()"><i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품</div><!--  -->
+		<div ng-click="Next2()"><i class="{{upAnddown2}}"></i> &nbsp;&nbsp; 상품</div>
 
 		<div ng-if="basic2type">
 			<div class="list list-inset" style="align:center;" >
@@ -72,7 +72,6 @@
 					<td><i class="ion-search" style="font-size:30px" ng-click="goods_searchM()"></i></td>
 				</tr>
 				</table>
-				<hr>
 
 				<table width="100%" style="text-align:center;">
 				<tr bgcolor="#EAEAEA">
@@ -81,9 +80,6 @@
 					<td width="10%" style="font-size:12px">수 량</td>
 					<td width="40%" style="font-size:12px" colspan='2'>단 가</td>
 
-				</tr>
-				<tr>
-					<td colspan="5"><hr></td>
 				</tr>
 				<tr ng-repeat="y in goodsaddlists">
 					<td style="vertical-align:middle;">{{$index+1}}.</td>

@@ -70,10 +70,79 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		    }
 
 		    else if ($ionicHistory.backView()) { // 상단에 뒤로가기버튼이 true일때,
-		      $rootScope.backButtonPressedOnceToExit = false;
-		      $ionicHistory.goBack();
-		    }
-		    else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
+		    	if($location.url()=='/app/meaip_depage'){
+		    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		    		location.href = '#/app/meaip_page';
+		    	}else if($location.url()=='/app/meachul_depage'){
+		    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		    		location.href = '#/app/meachul_page';
+				}else if($location.url()=='/app/meaip_IU'||$location.url()=='/app/meachul_IU'){  		
+		    	      $ionicPopup.show({
+				         title: '경고',
+				         subTitle: '',
+				         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+				         buttons: [
+				           { text: 'No',
+				            onTap: function(e){
+				            }},
+				           {
+				             text: 'Yes',
+				             type: 'button-positive',
+				             onTap: function(e) {
+				                if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+								    $ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+		    						location.href = '#/app/meaip_page';
+								}else{ /* 매출일 경우 */
+									$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+								    location.href = '#/app/meachul_page';
+								}
+
+				             }
+				           },
+				         ]
+				        })
+		    	}else if($location.url()=='/app/meaipchul/m_Setup'){
+		    		$ionicPopup.show({
+				         title: '경고',
+				         subTitle: '',
+				         content: '저장하시겠습니까?',
+				         buttons: [
+				           { text: 'No',
+				            onTap: function(e){
+				              $ionicHistory.goBack(); 
+				            }
+				           },
+				           {
+				             text: 'Yes',
+				             type: 'button-positive',
+				             onTap: function(e) {
+				             	if($scope.setupData.basic_Ch_Code == '000'){//창고가 선택되지 않았을때.
+				             		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('창고를 선택해주세요.', 'long', 'center');
+									else alert('창고를 선택해주세요.');
+				             	}else {
+				             		if($scope.setupData.state == 0) var mode = 'update';
+				             		else var mode = 'insert';
+
+				             		MconfigService.configIU($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.setupData, mode)
+										.then(function(data){
+											console.log('Y?',data.list[0].rslt);
+											if(data.list[0].rslt == 'Y'){
+												$ionicHistory.goBack();
+											}else{
+												alert('수정에 성공하지 못하였습니다');
+												if(ERPiaAPI.toast == 'Y') $cordovaToast.show('수정에 성공하지 못하였습니다', 'long', 'center');
+												else alert('수정에 성공하지 못하였습니다');
+											}
+											
+										})
+				             	}
+				             }
+				           },
+				         ]
+				        })
+		    	}else{$ionicHistory.goBack();}
+		      		$rootScope.backButtonPressedOnceToExit = false;	
+		    }else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
 		      $rootScope.backButtonPressedOnceToExit = false;
 			   
 		      window.plugins.toast.showShortCenter(
@@ -181,8 +250,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
       	app_id: 'b94db7cd', //app id
       	// api_key:'eaed7668bef9fb66df87641b2b8e100084454e528d5f3150',		// public key 개발테스트시 
       	api_key:'7a751bc2857d64eeecdd7c9858dd2e0edb0315f621497ecc', 	// private key 실적용시
-		dev_push: true // 개발테스트시
-		// dev_push: false // 실적용시
+		// dev_push: true // 개발테스트시
+		dev_push: false // 실적용시
 	});
 }])
 
