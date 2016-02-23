@@ -1242,8 +1242,7 @@ return{
 					})
 	
 		}, d_data : function(admin_code, userid, no){
-				console.log("MiuService and seq_del", no);
-
+				console.log("MiuService and seq_del");
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Delete_Goods&Mode=Delete_Meaip&iL_No=' + no;
 				else var kind = 'ERPia_Sale_Delete_Goods&Mode=Delete_MeaChul&Sl_No=' + no;
 				
