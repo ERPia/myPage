@@ -2358,8 +2358,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 										if(ERPiaAPI.toast == 'Y') $cordovaToast.show('전표가 삭제되었습니다.', 'long', 'center');
 										else alert('전표가 삭제되었습니다.');
 										 if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+										 	$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 										    $state.go('app.meaip_page', {}, {location:'replace'});
 										}else{ /* 매출일 경우 */
+											$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 										    $state.go('app.meachul_page', {}, {location:'replace'});
 										}
 									}
@@ -2881,13 +2883,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		  })
  	};
 
-    /*상품체크박스*/
+/*상품체크박스*/
     $scope.goodsCheck=function(goodsdata){
-
     	$scope.checkcaught='no';
-    	console.log($scope.checkedDatas);
-
-
     	for(var i=0; i<$scope.checkedDatas.length; i++){
     		if($scope.checkedDatas[i] == goodsdata){
     			$scope.checkedDatas.splice(i, 1);
@@ -2896,24 +2894,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		}
     	}
     	if($scope.checkcaught != 'yes'){
-    		if(goodsdata.Jego<1){
+    		if(goodsdata.Jego < 1 && $rootScope.distinction == 'meachul'){
 	    		$ionicPopup.show({
-					    template: '계속 진행하시겠습니까?',
-					    title: goodsdata.G_Name+'<br>재고수량이 부족합니다.<br>재고수량: '+goodsdata.Jego,
+					    template: goodsdata.G_Name+'<br>재고수량이 부족합니다.<br>재고수량:<font style="color:red"> '+ goodsdata.Jego+'</font><br><font style="font-size:-2">*전표에 상품추가는 가능합니다.</font>',
+					    title: '경고',
 					    subTitle: '',
 					    scope: $scope,
-					    buttons: [{ // Array[Object] (optional). Buttons to place in the popup footer.
-									    text: '아니요',
-									    type: 'button-default',
-									    onTap: function(e) {
-									      // e.preventDefault() will stop the popup from closing when tapped.
-									      e.preventDefault();
-									    }
-									  }, { text: '확인',
-						            	onTap: function(e){
-						            	$scope.checkedDatas.push(goodsdata);
-						            	
-						            }},
+					    buttons: [{ text: '확인',
+					            	onTap: function(e){
+					            	$scope.checkedDatas.push(goodsdata);
+					            	}},
 		        	 			]
 					  });
 	    	}else{
@@ -2923,7 +2913,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	}
     }
 
-    /*선택된 상품들을 등록리스트에 저장*/
+    /*선택된 상품들을 등록리스트에 저장왜ㄴ*/
     $scope.checkdataSave=function(){
 		if($scope.goodsaddlists.length > 0){
 			var check = 'N';
@@ -2938,7 +2928,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 			if(check == 'Y'){
 				$ionicPopup.alert({
-				    template: '중복된 상품입니다.'
+					title : '경고',
+				    template: '몇 개의 상품이 중복되었습니다<br> <b>* 중복된 상품은 추가되지 않습니다.</b>'
 				});
 			}
 		}
@@ -3037,10 +3028,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			console.log('i확인=>',i);
 			if(bar == 'Y'){
 	    		$scope.bargoods = {
-	    			num : 0
+	    			num : 1
 	    		}
 	    		$ionicPopup.show({
-				    template: '<input type="text" ng-model="bargoods.num">',
+				    template: '<input type="number" ng-model="bargoods.num" style="text-align:right">',
 				    title: '('+ $scope.checkedDatas[0].G_Code +')<br>' + $scope.checkedDatas[0].G_Name,
 				    subTitle: '수량을 입력해주세요.',
 				    scope: $scope,
@@ -3319,8 +3310,10 @@ $scope.goods_seqlist = [];
 								            onTap: function(e){
 								            	$scope.ijmodal.hide();
 								            	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+								            		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 										    		$state.go('app.meaip_page', {}, {location:'replace'});
 										    	}else{ /* 매출일 경우 */
+										    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 										    		$state.go('app.meachul_page', {}, {location:'replace'});
 										    	}
 								            }},
@@ -3354,8 +3347,10 @@ $scope.goods_seqlist = [];
 									$ionicHistory.clearCache();
 									$ionicHistory.clearHistory();
 									if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+										$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 							    		$state.go('app.meaip_page', {}, {location:'replace'});
 							    	}else{ /* 매출일 경우 */
+							    		$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 							    		$state.go('app.meachul_page', {}, {location:'replace'});
 							    	}
 							  })
@@ -3378,7 +3373,7 @@ $scope.goods_seqlist = [];
 
     }
 
-     /*뒤로 제어*/
+    /*뒤로 제어*/
      $scope.backControll=function(){
       $ionicPopup.show({
          title: '경고',
@@ -3393,9 +3388,12 @@ $scope.goods_seqlist = [];
              type: 'button-positive',
              onTap: function(e) {
                 if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
+                	$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true}); // ------------------이소스 다음에 띄워질 페이지는 루트페이지(더이상 뒤로갈 곳이없음) 이다.
 				    $state.go('app.meaip_page', {}, {location:'replace'});
 				}else{ /* 매출일 경우 */
+					$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
 				    $state.go('app.meachul_page', {}, {location:'replace'});
+				    
 				}
 
              }

@@ -35,7 +35,9 @@
       <td width='80%'>
         <ion-checkbox ng-click='goodsCheck(x)'>
         {{x.G_Code}}<br>
-        {{x.G_Name}}
+        {{x.G_Name}}<br>
+        가용재고: <font color="red" ng-if="x.Jego<=0">{{x.Jego}}</font>
+                  <font color="blue" ng-if="x.Jego>0">{{x.Jego}}</font>
         </ion-checkbox>
       </td>
       <td width='20%'>
