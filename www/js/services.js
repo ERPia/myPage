@@ -926,7 +926,6 @@ return{
 					})
 		
 		}, goods_sear: function(admin_code, userid, mode, goods_name, Ccode, pageCnt){
-
 				console.log("MiuService and goods_sear");
 				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_Goods';
 				else var kind = 'ERPia_Sale_Select_Goods';

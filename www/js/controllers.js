@@ -2622,7 +2622,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
      	gubun : 4,
      	acno : '', //지급전표 정보 (수정시 사용)
      	no : '', // 전표번호 (수정시 사용)
-     	codenum : 0,
+     	codenum : -1,
      	goods_del : 'N', // 상품 삭제 Y&N
      	goods_seq_end : 0
      };
@@ -2841,31 +2841,31 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	  		
 
 	  		if($scope.maxover==0){
-	        $scope.pageCnt+=1;
+		        $scope.pageCnt+=1;
 
-	      	$scope.moreloading=1; 
-	      	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
+		      	$scope.moreloading=1; 
+		      	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
 				.then(function(data){
 					$scope.maxCnt=0;
-				console.log(data);
-			$timeout(function(){
-				if(data!=='<!--Parameter Check-->'){
-					for(var i=0; i<data.list.length; i++){
-						$scope.goodslists.push(data.list[i]);
-					}
-				}else{
-					$scope.moreloading=0; 
-					$scope.maxover = 1;
+					$timeout(function(){
+						if(data != '<!--Parameter Check-->'){
+							for(var i=0; i<data.list.length; i++){
+								if(data.list[i].G_Name.length > 14){
+									console.log('짜쭝나꼐찌1111=>',data.list[i].G_Name);
+									data.list[i].G_Name=data.list[i].G_Name.substring(0,14) + '\n' + data.list[i].G_Name.substring(14,data.list[i].G_Name.length);
+									console.log('짜쭝나꼐찌=>',data.list[i].G_Name);
+								}
+								$scope.goodslists.push(data.list[i]);
+							}
+						}else{
+							$scope.moreloading=0; 
+							$scope.maxover = 1;
 
-				}
-				console.log("추가된 5개 데이터: ", $scope.goodslists);
-			
-	  	
-	         $scope.moreloading=0; 
-	        
-	         
-	      		}, 1000); 
-	  		 })
+						}
+		       		$scope.moreloading=0; 
+		         
+		      		}, 1000); 
+		  		})
 			}
 	      }
 	    };
@@ -2874,8 +2874,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
    		$scope.G_NameS =  $scope.goodslists[indexnum].G_Name;
    		$scope.G_OnCodeS = $scope.goodslists[indexnum].G_OnCode;
    		//상품명, 자체코드가 11글자보다 크면 <BR>태그를 삽입하여 한줄 띄게 만든다 ( IONIC POPUP 깨지는 문제 해결방안)
-   		if($scope.goodslists[indexnum].G_Name.length>11) $scope.G_NameS = $scope.goodslists[indexnum].G_Name.substring(0,10)+'<br>'+$scope.goodslists[indexnum].G_Name.substring(10,$scope.goodslists[indexnum].G_Name.length);
-   		if($scope.goodslists[indexnum].G_OnCode.length>11) $scope.G_OnCodeS = $scope.goodslists[indexnum].G_OnCode.substring(0,10)+'<br>'+$scope.goodslists[indexnum].G_OnCode.substring(10,$scope.goodslists[indexnum].G_OnCode.length);
+   		if($scope.goodslists[indexnum].G_Name.length>11) $scope.G_NameS = $scope.goodslists[indexnum].G_Name.substring(0,10) + '<br>' + $scope.goodslists[indexnum].G_Name.substring(10,$scope.goodslists[indexnum].G_Name.length);
+   		if($scope.goodslists[indexnum].G_OnCode.length>11) $scope.G_OnCodeS = $scope.goodslists[indexnum].G_OnCode.substring(0,10) + '<br>' + $scope.goodslists[indexnum].G_OnCode.substring(10,$scope.goodslists[indexnum].G_OnCode.length);
 		$ionicPopup.alert({
 		         title: '<b>상품 정보</b>',
 		         subTitle: '',
@@ -3174,10 +3174,31 @@ $scope.goods_seqlist = [];
     	if($scope.datas.GerCode == 0 || $scope.datas.subulkind == 0 || $scope.goodsaddlists.length == 0){ // 거래처명 선택 x && 상품선택 x
     		if($scope.datas.GerCode == 0){
     			alert('거래처를 선택해주세요.');
+    			$scope.basictype=true;
+				$scope.basic2type=false;
+				$scope.basic3type=false;
+				$scope.upAnddown="ion-arrow-down-b";
+				$scope.upAnddown2="ion-arrow-up-b";
+				$scope.upAnddown3="ion-arrow-up-b";
+
     		}else if($scope.datas.subulkind == 0){
     			alert('수불구분을 선택해주세요.');
+    			$scope.basictype=true;
+				$scope.basic2type=false;
+				$scope.basic3type=false;
+				$scope.upAnddown="ion-arrow-down-b";
+				$scope.upAnddown2="ion-arrow-up-b";
+				$scope.upAnddown3="ion-arrow-up-b";
+
     		}else{
     			alert('상품이 없습니다.');
+    			$scope.basictype=false;
+				$scope.basic2type=true;
+				$scope.basic3type=false;
+				$scope.upAnddown="ion-arrow-up-b";
+				$scope.upAnddown2="ion-arrow-down-b";
+				$scope.upAnddown3="ion-arrow-up-b";
+
     		}
     	}else{
     		$scope.ijmodal.show();	
@@ -3206,7 +3227,7 @@ $scope.goods_seqlist = [];
 			.then(function(data){
 				if(index == 1){
 					$scope.payname = '지급은행';
-					$scope.pay.paycardbank = '000';
+					$scope.pay.paycardbank = 'no';
 					for(var i=0; i < data.list.length; i++){
 						$scope.paycardbank.push({
 							num : data.list[i].Bank_Account,
@@ -3216,7 +3237,7 @@ $scope.goods_seqlist = [];
 					}
 				}else{
 					$scope.payname = '지급카드';
-					$scope.pay.paycardbank = '000';
+					$scope.pay.paycardbank = 'no';
 					for(var i=0; i < data.list.length; i++){
 						$scope.paycardbank.push({
 							num : data.list[i].Card_Num,
@@ -3277,9 +3298,14 @@ $scope.goods_seqlist = [];
 
 
     $scope.insertGoodsF=function(){
-    	console.log($scope.pay.use);
+    	console.log('$scope.pay.paycardbank',$scope.pay);
     	if($scope.pay.use == false && $scope.pay.payprice == 0){
     		alert('지급액을 확인해주세요.');
+    	}else if($scope.pay.use == false && $scope.payment[1].checked == true || $scope.payment[3].checked == true){
+    		if($scope.pay.paycardbank == 'no'){
+    			alert('카드/통장을 선택해주세요.');
+    		}
+    		
     	}else{
 	    	if($scope.payment[0].checked != true && $scope.payment[1].checked != true && $scope.payment[2].checked != true && $scope.payment[3].checked != true){
 	    		$scope.pay.gubun = 4;
