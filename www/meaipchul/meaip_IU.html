@@ -16,8 +16,12 @@
 			<table width="100%" class=""style="align:center;vertical-align:middle;">
 				<tr>
 					<td width="20%">거래처</td>
-					<td width="40%"><input type="search" ng-model="datas.userGerName" ng-disabled="{{sbu}}" placeholder="거래처명검색" size="30" style="border:1px solid #eee;" ng-change="company_auto()"></td>
-					<td width="20%"><i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px;' ng-if="sbu == false" ng-click='clearcompany()'></i><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i></td>
+					<td width="40%">
+						<input type="search" ng-model="datas.userGerName" ng-disabled="{{sbu}}" placeholder="거래처명검색" size="35" style="border:1px solid #eee;" ng-change="company_auto()">
+					</td>
+					<td width="20%">
+						<i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px;' ng-if="sbu == false" ng-click='clearcompany()'></i><i class='ion-help-circled' style='font-size:35px;vertical-align:middle;' ng-click='gerDetail()'></i>
+					</td>
 				</tr>
 			</table>
 			<div class="list">
