@@ -1816,7 +1816,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, $cordovaToast, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, $cordovaToast, $ionicSlideBoxDelegate, ERPiaAPI, MLookupService, MiuService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
@@ -2195,6 +2195,22 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else $state.go('app.meachul_IU', {}, {location:'replace'});
 		
 	}
+
+	$ionicModal.fromTemplateUrl('meaipchul/detailSet_modal.html', {
+      scope: $scope
+    }).then(function(modal){
+      $scope.detailSet_modal = modal;
+    });
+
+    $scope.detailSet_openModal = function() {
+      $scope.detailSet_modal.show();
+    };
+
+    $scope.detailSet_closeModal = function() {
+      $scope.detailSet_modal.hide()
+    };
+
+
 
 })
 
@@ -2834,21 +2850,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					$timeout(function(){
 						if(data != '<!--Parameter Check-->'){
 							for(var i=0; i<data.list.length; i++){
-								if(data.list[i].G_Name.length > 13){
-									if(data.list[i].G_Name.length > 26){
-										data.list[i].G_Name=data.list[i].G_Name.substring(0,13)+'<br>'+data.list[i].G_Name.substring(13,26)+'<br>'+ data.list[i].G_Name.substring(26,data.list[i].G_Name.length);
-									}else{
-										data.list[i].G_Name=data.list[i].G_Name.substring(0,13) + '<br>' + data.list[i].G_Name.substring(13,data.list[i].G_Name.length);
-									}
-								}else{}
 								$scope.goodslists.push(data.list[i]);
-
-								console.log(data.list[i]);
 							}	
 						}else{
 							$scope.moreloading=0; 
 							$scope.maxover = 1;
-
 						}
 		       		$scope.moreloading=0; 
 		         
@@ -2862,7 +2868,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
    		$scope.G_NameS =  $scope.goodslists[indexnum].G_Name;
    		$scope.G_OnCodeS = $scope.goodslists[indexnum].G_OnCode;
    		//상품명, 자체코드가 11글자보다 크면 <BR>태그를 삽입하여 한줄 띄게 만든다 ( IONIC POPUP 깨지는 문제 해결방안)
-   		if($scope.goodslists[indexnum].G_Name.length>11) $scope.G_NameS = $scope.goodslists[indexnum].G_Name.substring(0,10) + '<br>' + $scope.goodslists[indexnum].G_Name.substring(10,$scope.goodslists[indexnum].G_Name.length);
+   		if($scope.goodslists[indexnum].G_Name.length>7) $scope.G_NameS = $scope.goodslists[indexnum].G_Name.substring(0,8) + '<br>' + $scope.goodslists[indexnum].G_Name.substring(8,$scope.goodslists[indexnum].G_Name.length);
    		if($scope.goodslists[indexnum].G_OnCode.length>11) $scope.G_OnCodeS = $scope.goodslists[indexnum].G_OnCode.substring(0,10) + '<br>' + $scope.goodslists[indexnum].G_OnCode.substring(10,$scope.goodslists[indexnum].G_OnCode.length);
 		$ionicPopup.alert({
 		         title: '<b>상품 정보</b>',
@@ -2882,22 +2888,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     		}
     	}
     	if($scope.checkcaught != 'yes'){
-    		if(goodsdata.Jego < 1 && $rootScope.distinction == 'meachul'){
-	    		$ionicPopup.show({
-				    template: goodsdata.G_Name+'<br>재고수량이 부족합니다.<br>재고수량:<font style="color:red"> '+ goodsdata.Jego+'</font><br><font style="font-size:-2">*전표에 상품추가는 가능합니다.</font>',
-				    title: '경고',
-				    subTitle: '',
-				    scope: $scope,
-				    buttons: [{ text: '확인',
-				            	onTap: function(e){
-				            		$scope.checkedDatas.push(goodsdata);
-				            	}},
-	        	 			]
-				});
-	    	}else{
-	    		$scope.checkedDatas.push(goodsdata);
-	    	}
-    		
+	    		$scope.checkedDatas.push(goodsdata);	    	
     	}
     }
 

@@ -925,7 +925,6 @@ return{
 			}
 			
 			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
-
 			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode + dataDetail + '&Changgo_Code=' + Ccode + '&pageCnt=' +pageCnt+ '&pageRow=10';
 
 			return $http.get(url + '?' + data)
@@ -938,6 +937,25 @@ return{
 							}else{
 								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'short', 'center');
 								else alert('일치하는 정보가 없습니다.1');
+							}
+						}else{
+							for(var i=0; i<response.data.list.length; i++){
+								var G_Name1='';
+								if(response.data.list[i].G_Name.length > 13){
+									for(var j=0; j<response.data.list[i].G_Name.length; j += 13){
+										if(j == 0){
+											G_Name1 = G_Name1 + response.data.list[i].G_Name.substring(0,13); 
+										}else if(j+13 > response.data.list[i].G_Name.length){
+											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,response.data.list[i].G_Name.length); 
+											response.data.list[i].G_Name1 = G_Name1;
+										}else{
+											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,j+13); 
+										}
+									}
+								}else{
+									G_Name1 = response.data.list[i].G_Name;
+									response.data.list[i].G_Name1 = G_Name1;
+								}
 							}
 						}
 						return response.data;

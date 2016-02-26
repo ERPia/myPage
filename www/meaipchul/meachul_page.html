@@ -1,4 +1,4 @@
-<!-- //매출페이지 -->
+<!-- 매출전표조회 페이지 -->
 <style>
  table {width:100%}
  table td.td1-1{width:20%; vertical-align:middle; margin-top:20px}
@@ -27,77 +27,72 @@
 </style>
 
 <ion-view title="매출전표조회" cache-view="false">
- <ion-nav-buttons side="right">
-        <button menu-toggle="right" ng-click="meaipchul_i()">등록</button>
-</ion-nav-buttons> 
+  <ion-nav-buttons side="right">
+    <button menu-toggle="right" ng-click="meaipchul_i()">등록</button>
+  </ion-nav-buttons> 
+
   <ion-content>
-<div class="item item-input-inset">
-    <table class="searchtable">
-    <tr>
-      <td class="td1-1" align="center" >검 색 </td>
-      <td class="td1-2" colspan="3">
-         <input type="search" ng-model="company.username" placeholder="거래처명 입력" style="border:1px solid #eee;" ng-change="company_auto()" ng-click='clearcompany()'><i class='ion-close-circled' ng-click='clearcompany()'></i>
-         <li class="item" ng-repeat="x in companyDatas" ng-click="company_Func(x.G_Name,x.G_Code)">{{x.G_Name}}</li>
-      </td>
-      <td class="td1-3">
-          <button ng-click="searches()" class="ion-ios-search-strong"></button>
-      </td>
-    </tr>
-    <tr>
+    <div class="item item-input-inset">
+      <table class="searchtable">
+        <tr>
+          <td class="td1-1" align="center" >검 색 </td>
+          <td class="td1-2" colspan="3">
+            <input type="search" ng-model="company.username" placeholder="거래처명 입력" style="border:1px solid #eee;" ng-change="company_auto()" ng-click='clearcompany()'><i class='ion-close-circled' ng-click='clearcompany()'></i>
+            <li class="item" ng-repeat="x in companyDatas" ng-click="company_Func(x.G_Name,x.G_Code)">{{x.G_Name}}</li>
+          </td>
+          <td class="td1-3"><button ng-click="searches()" class="ion-ios-search-strong"></button></td>
+        </tr>
+        <tr>
           <td class="td2-1" align="center" >일 자 </td>
-          <td class="td2-2">
-           <input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)">
-        <td class="td2-3"> ~ </td>
-        <td class="td2-4" colspan="2">
-           <input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)">
-        </td>
+          <td class="td2-2"><input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)"></td>
+          <td class="td2-3"> ~ </td>
+          <td class="td2-4" colspan="2"><input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)"></td>
         </tr>
       </table>
-      </div>
-      <hr>
-      <div align="center" style="width:100%">
-        <button class="button button-calm" ng-click="sear_day(0)" style="width:30%">금일</button>
-        <button class="button button-balanced" ng-click="sear_day(7)" style="width:30%">1주일</button>
-        <button class="button button-energized" ng-click="sear_day(30)" style="width:30%">1개월</button>
     </div>
     <hr>
-    <div align="center">
-        조회목록
-      </div>
-      <hr>
-     
-      <table>
-       <thead>
-         <th style="width:10%" align="center">순번</th>
-         <th style="width:30%" align="center">매출일</th>
-         <th style="width:30%" align="center">업체명</th>
-         <th style="width:30%" align="center">금액</th>
-       </thead>
-       </table>
-       <hr>
-       <any ng-repeat="x in chit_lists" >
-       <table on-swipe-up="search_more()" style="font-size:12px">
-          <tbody ng-click="chit_de(x.Sl_No)">
-            <tr>
-              <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
-              <td class="resulttd1-2" align="left">{{x.MeaChul_Date}}</td>
-              <td class="resulttd1-3" align="center"><b>{{x.GerName}}</b></td>
-              <td class="resulttd1-4" rowspan="2" align="right">{{x.MeaChul_Amt| number:0}}원</td>
-            </tr>
-            <tr>
-            <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td></tr>
-          </tbody>
-          <tr ng-if="moreloading==1&&$last">
-            <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
-          </tr>
-      </table>
-      </any>
-  </ion-content>
-    <div style="margin-top:140%" align="right">
-      <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;
-      <i class='ion-android-arrow-dropup-circle' style="position:relative; z-index:1000;font-size:50px; color:gray" ng-click='scrollTop()'></i>&nbsp;&nbsp;
+    <div align="center" style="width:100%">
+      <button class="button button-calm" ng-click="sear_day(0)" style="width:30%">금일</button>
+      <button class="button button-balanced" ng-click="sear_day(7)" style="width:30%">1주일</button>
+      <button class="button button-energized" ng-click="sear_day(30)" style="width:30%">1개월</button>
     </div>
-    <ion-footer-bar align-title="left" class="bar-stable">
+    <hr>
+    <div align="center">조회목록</div>
+    <hr>
+  <table>
+    <thead>
+      <th style="width:10%" align="center">순번</th>
+      <th style="width:30%" align="center">매출일</th>
+      <th style="width:30%" align="center">업체명</th>
+      <th style="width:30%" align="center">금액</th>
+    </thead>
+  </table>
+  <hr>
+  <any ng-repeat="x in chit_lists" >
+    <table on-swipe-up="search_more()" style="font-size:12px">
+      <tbody ng-click="chit_de(x.Sl_No)">
+        <tr>
+          <td class="resulttd1-1" rowspan="2" align="center">{{$index+1}}.</td>
+          <td class="resulttd1-2" align="left">{{x.MeaChul_Date}}</td>
+          <td class="resulttd1-3" align="center"><b>{{x.GerName}}</b></td>
+          <td class="resulttd1-4" rowspan="2" align="right">{{x.MeaChul_Amt| number:0}}원</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="resulttd2-1" align="left">{{x.G_Name}}<br></td>
+        </tr>
+      </tbody>
+        <tr ng-if="moreloading==1&&$last">
+          <td colspan="4" align="center"><ion-spinner icon="spiral"></ion-spinner></td>
+        </tr>
+    </table>
+  </any>
+  </ion-content>
+
+  <div style="margin-top:140%" align="right">
+    <i class='ion-plus-circled' style="position:relative; z-index:1000;font-size:50px;" ng-click='quickReg()'></i>&nbsp;&nbsp;
+    <i class='ion-android-arrow-dropup-circle' style="position:relative; z-index:1000;font-size:50px; color:gray" ng-click='scrollTop()'></i>&nbsp;&nbsp;
+  </div>
+  <ion-footer-bar align-title="left" class="bar-stable">
     <div class="col1" >기간현황</div>
     <div class="col2" >&nbsp;</div>
     <div class="col3" >매출액 {{chit_atmSum | number:0}}원<br>지급액 {{chit_jiSum | number:0}}원</div>
