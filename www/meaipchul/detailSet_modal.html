@@ -42,10 +42,9 @@
 		  <div  style="clear: both; width:100%; padding-top:20px;">
 			<div style="float: left; width:14%; color: #fff;"> 창고지정 </div>
 			<div style="float: left; width:76%;">
-			  <select ng-model="setupData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
+			  <select style="width:50%">
 				<option>선택안함</option>
-				<option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="setupData.basic_Ch_Code == {{x.Code}}">
-				{{x.Name}}</option>
+				<!-- <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="setupData.basic_Ch_Code == {{x.Code}}">{{x.Name}}</option>-->
 			  </select>
 			</div>
 		  </div>
@@ -53,10 +52,9 @@
 		  <div  style="clear: both; width:100%; padding-top:20px;">
 			<div style="float: left; width:14%; padding-top:6px; color: #fff;"> 매장지정 </div>
 			<div style="float: left; width:76%;">
-				<select ng-model="setupData.basic_Place_Code" ng-change='Link_Chango();checkup()' style="width:50%">
-				  <option value="000" ng-selected="setupData.basic_Place_Code == 000">선택안함</option>
-				  <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="setupData.basic_Place_Code == {{x.Sale_Place_Code}}">
-				  {{x.Sale_Place_Name}}</option>
+				<select style="width:50%">
+				  <option>선택안함</option>
+				  <!-- <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="setupData.basic_Place_Code == {{x.Sale_Place_Code}}">{{x.Sale_Place_Name}}</option> -->
 				</select>
 			</div>
 		  </div>
@@ -91,14 +89,46 @@
 	  <!-- 최근검색 -->
 	  <ion-slide>
 		<div align="center" style="width:100%; height:100%; background: #b572a0; clear: both;">
-		  <div style="float: center;"> 검색리스트 </div>
+		  <table width="100%" style="text-align:center;" ng-repeat="y in testlist1">
+		    <tr>
+			  <td style="vertical-align:middle; text-align:center">{{y.test1}}</td>
+			  <td colspan="3" style="vertical-align:middle; text-align:center">
+				{{y.test2}} ~ {{y.test3}}
+			  </td>
+		    </tr>
+		    <tr>
+			  <td style="vertical-align:middle; text-align:center">{{y.test4}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test5}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test6}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test7}}</td>
+		    </tr>
+		    <tr>
+		  	  <td colspan="4"><hr></td>
+		    </tr>
+		  </table>
 		</div>
 	  </ion-slide>
 
 	  <!-- 빠른검색 -->
 	  <ion-slide>
 		<div align="center" style="width:100%; height:100%; background: #b572a0; clear: both;">
-		  <div style="float: center;"> 검색리스트 </div>
+		  <table width="100%" style="text-align:center;" ng-repeat="y in testlist1">
+		    <tr>
+			  <td style="vertical-align:middle; text-align:center">{{y.test1}}</td>
+			  <td colspan="3" style="vertical-align:middle; text-align:center">
+				{{y.test2}} ~ {{y.test3}}
+			  </td>
+		    </tr>
+		    <tr>
+			  <td style="vertical-align:middle; text-align:center">{{y.test4}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test5}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test6}}</td>
+			  <td style="vertical-align:middle; text-align:center">{{y.test7}}</td>
+		    </tr>
+		    <tr>
+		  	  <td colspan="4"><hr></td>
+		    </tr>
+		  </table>
 		</div>
 	  </ion-slide>
 

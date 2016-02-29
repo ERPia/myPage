@@ -1884,6 +1884,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 
 	$scope.mydate1=function(sdate1){
+
 	   	var nday = new Date(sdate1);  //선택1 날짜..  
 	    var yy = nday.getFullYear();
 	    var mm = nday.getMonth()+1;
@@ -1899,7 +1900,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
 		    $scope.date.eDate1=new Date(sdate1);
 		}
-		  console.log('시작 조회날짜 : >>>', $scope.reqparams.sDate, $scope.date.sDate1, sdate1);
 	};
 
 	$scope.mydate2=function(edate1){
@@ -1912,8 +1912,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    		})
 			edate1 = new Date($scope.date.sDate1);
 		}
-		
-			console.log('끝 조회날짜 : >>>', $scope.reqparams.eDate, $scope.date.eDate1, edate1);
 			var nday = new Date(edate1);  //선택2 날짜
 		    var yy = nday.getFullYear();
 		    var mm = nday.getMonth()+1;
@@ -1924,7 +1922,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
 		    $scope.date.eDate1=new Date(edate1);
-		    console.log('끝 조회날짜 : >>>', $scope.reqparams.eDate, $scope.date.eDate1, edate1);
 	};
 
 	$scope.mydate1($scope.date.sDate1);

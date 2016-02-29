@@ -6,12 +6,12 @@
 angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 'starter.controllers', 'tabSlideBox' ,'ngCordova', 'fcsa-number'
 	, 'starter.services'])
 
- // .constant('ERPiaAPI',{
- // 	url:'http://localhost:8100/include'
- // 	, imgUrl:'http://localhost:8100/erpia_update/img'
- // 	, toast:'N'
- // })
-
+/* .constant('ERPiaAPI',{
+ 	url:'http://localhost:8100/include'
+ 	, imgUrl:'http://localhost:8100/erpia_update/img'
+ 	, toast:'N'
+ })
+*/
 //실제 사용시
 .constant('ERPiaAPI',{
 	url:'http://www.erpia.net/include'
