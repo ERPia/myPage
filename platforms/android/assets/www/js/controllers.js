@@ -2955,10 +2955,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		    	if($scope.bar == 'Y'){
 		    		$scope.bargoods = {
-		    			num : 0
+		    			num : 1
 		    		}
 		    		$ionicPopup.show({
-					    template: '<input type="text" ng-model="bargoods.num">',
+					    template: '<input type="number" ng-model="bargoods.num" style="text-align:right">',
 					    title: '('+ $scope.checkedDatas[0].G_Code +')<br>' + $scope.checkedDatas[0].G_Name,
 					    subTitle: '수량을 입력해주세요.',
 					    scope: $scope,
