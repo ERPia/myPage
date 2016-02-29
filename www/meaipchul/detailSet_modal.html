@@ -1,0 +1,108 @@
+<!-- 상세조회모달 -->
+<ion-modal-view title="">
+  <ion-header-bar class="bar bar-header" style="background: #474747; border:0;">
+    <div class="buttons">
+      <button class="button" ng-click="detailSet_closeModal()">back</button>
+    </div>
+    <h1 class="title" style="color: #fff;">전표 상세 조회</h1>
+  </ion-header-bar>
+
+  <ion-content scroll="false">
+    <tab-slide-box>
+      <div class="tsb-icons"> <!-- class건들이면 안되요..ㅠㅠ -->
+        <div class="tsb-ic-wrp"> <!-- class건들이면 안되요..ㅠㅠ -->
+		  <ion-scroll direction="x" class="tsb-hscroll">
+		    <a href="javascript:;">조회조건</a>
+		    <a href="javascript:;">최근검색</a>
+		    <a href="javascript:;">빠른검색</a>
+		  </ion-scroll>
+		</div>
+	  </div>
+
+	<ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+	  <!-- 조회조건 -->
+	  <ion-slide>
+	    <div class="item" style="background: #b572a0; border:0; height:100%; padding-top:20px;">
+		  <div  style="clear: both; width:100%; padding-top:30px;">
+		    <div style="float: left; width:14%; color: #fff;"> 검 색 </div>
+		    <div style="float: left; width:76%;">
+		      <input type="text" ng-model="company.username" placeholder="거래처명 입력" style="width: 100%; height: 30px; background: #b572a0; border:0; border-bottom: 1px solid #fff; color: #fff;" ng-change="company_auto()">
+		      <li class="item" ng-repeat="x in companyDatas" ng-click="company_Func(x.G_Name,x.G_Code)">{{x.G_Name}}</li>
+		    </div>
+		    <div style="float: left; width:10%;"><i class='ion-close-circled' style='margin-left:-38px; margin-top:8px; padding-right:16px; vertical-align:middle; font-size:25px; color:#fff' ng-click='clearcompany()'></i><button ng-click="searches()" class="button button-small button-psm00 ion-search" style="width: 100%; height: 30px;"></button></div>
+		  </div>
+
+		  <div style="clear: both; width:100%; padding-top:20px;">
+		    <div style="float: left; width:14%; padding-top:9px; color: #fff;"> 일 자 </div>
+		    <div style="float: left; width:36%;"><input type="date" ng-model="date.sDate1" ng-change="mydate1(date.sDate1)" style="width: 100%; height: 30px; background: #b572a0; border:0; border-bottom: 1px solid #fff; color: #fff;"></div>
+		    <div style="float: left; width:4%; padding-top:5px; color: #fff;"> ~ </div>
+		    <div style="float: left; width:36%;"><input type="date" ng-model="date.eDate1" ng-change="mydate2(date.eDate1)" style="width: 100%; height: 30px; background: #b572a0; border:0; border-bottom: 1px solid #fff; color: #fff;"></div>
+		  </div>
+
+		  <div  style="clear: both; width:100%; padding-top:20px;">
+			<div style="float: left; width:14%; color: #fff;"> 창고지정 </div>
+			<div style="float: left; width:76%;">
+			  <select ng-model="setupData.basic_Ch_Code" ng-change='Changosave({{x.Code}});checkup()' style="width:50%">
+				<option>선택안함</option>
+				<option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="setupData.basic_Ch_Code == {{x.Code}}">
+				{{x.Name}}</option>
+			  </select>
+			</div>
+		  </div>
+
+		  <div  style="clear: both; width:100%; padding-top:20px;">
+			<div style="float: left; width:14%; padding-top:6px; color: #fff;"> 매장지정 </div>
+			<div style="float: left; width:76%;">
+				<select ng-model="setupData.basic_Place_Code" ng-change='Link_Chango();checkup()' style="width:50%">
+				  <option value="000" ng-selected="setupData.basic_Place_Code == 000">선택안함</option>
+				  <option ng-repeat="x in mejanglists" value="{{x.Sale_Place_Code}}" ng-selected="setupData.basic_Place_Code == {{x.Sale_Place_Code}}">
+				  {{x.Sale_Place_Name}}</option>
+				</select>
+			</div>
+		  </div>
+
+		  <div  style="clear: both; width:100%; padding-top:20px;">
+			<div style="float: left; width:14%; padding-top:6px; color: #fff;"> 수불구분 </div>
+			<div style="float: left; width:76%;">
+			  <select style="width:50%">
+				<option>선택안함</option>
+				<option>매입입고</option>
+				<option>매입반품</option>
+			  </select>
+			</div>
+		  </div>
+
+		  <div  style="clear: both; width:100%; padding-top:20px;">
+			<div style="float: left; width:14%; padding-top:6px; color: #fff;"> 담당자 </div>
+			<div style="float: left; width:76%;">
+			  <select style="width:50%">
+			    <option>선택안함</option>
+			    <option>박혜진</option>
+			  </select>
+			</div>
+		  </div>
+
+		  <div  style="clear: both; width:100%; padding-top:40px;">
+			<button class="button button-small button-psm02" ng-click="sear_day(0)" style="width:50%">빠른검색 등록</button>
+		  </div>
+		</div>
+	  </ion-slide>
+
+	  <!-- 최근검색 -->
+	  <ion-slide>
+		<div align="center" style="width:100%; height:100%; background: #b572a0; clear: both;">
+		  <div style="float: center;"> 검색리스트 </div>
+		</div>
+	  </ion-slide>
+
+	  <!-- 빠른검색 -->
+	  <ion-slide>
+		<div align="center" style="width:100%; height:100%; background: #b572a0; clear: both;">
+		  <div style="float: center;"> 검색리스트 </div>
+		</div>
+	  </ion-slide>
+
+	</ion-slide-box>
+    </tab-slide-box>
+  </ion-content>
+</ion-modal-view>
