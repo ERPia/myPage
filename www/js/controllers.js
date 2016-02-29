@@ -2202,6 +2202,37 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
       $scope.detailSet_modal = modal;
     });
 
+    //그냥 임시 데이터
+    $scope.testlist1 = [
+	    { 
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+		},
+	    {
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+	    },
+	    {
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+	    }
+    ];
+
     $scope.detailSet_openModal = function() {
       $scope.detailSet_modal.show();
     };
@@ -2952,10 +2983,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 		    	if($scope.bar == 'Y'){
 		    		$scope.bargoods = {
-		    			num : 0
+		    			num : 1
 		    		}
 		    		$ionicPopup.show({
-					    template: '<input type="text" ng-model="bargoods.num">',
+					    template: '<input type="number" ng-model="bargoods.num" style="text-align:right">',
 					    title: '('+ $scope.checkedDatas[0].G_Code +')<br>' + $scope.checkedDatas[0].G_Name,
 					    subTitle: '수량을 입력해주세요.',
 					    scope: $scope,
