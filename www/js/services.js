@@ -949,7 +949,10 @@ return{
 											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,response.data.list[i].G_Name.length); 
 											response.data.list[i].G_Name1 = G_Name1;
 										}else{
-											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,j+13); 
+											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,j+13);
+											if(response.data.list[i].G_Name.length == j+13){
+												response.data.list[i].G_Name1 = G_Name1;
+											}
 										}
 									}
 								}else{

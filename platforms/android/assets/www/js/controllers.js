@@ -2202,6 +2202,37 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
       $scope.detailSet_modal = modal;
     });
 
+    //그냥 임시 데이터
+    $scope.testlist1 = [
+	    { 
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+		},
+	    {
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+	    },
+	    {
+	    	test1 : '미지정',
+	    	test2 : '2015-01-01',
+	    	test3 : '2015-12-31',
+	    	test4 : '선택안함',
+	    	test5 : '선택안함',
+	    	test6 : '선택안함',
+	    	test7 : '선택안함'
+	    }
+    ];
+
     $scope.detailSet_openModal = function() {
       $scope.detailSet_modal.show();
     };
