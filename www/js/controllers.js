@@ -2709,7 +2709,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.goodsaddlists.push({
 					name : data.list[i].G_Name,
 					num : parseInt(data.list[i].G_Qty),
-					goodsprice : parseInt(data.list[i].G_Price),
+					goodsprice : data.list[i].G_Price,
 					code : data.list[i].G_Code,
 					goods_seq : data.list[i].Seq,
 					state : 'u' // 디비에있는 데이터인지 확인하기위해.
@@ -2854,6 +2854,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	$scope.pageCnt=1;
     	$scope.maxover=0;
     	var goodsname = escape($scope.user.userGoodsName);
+    	console.log('한글=>', $scope.user.userGoodsName);
+    	console.log('인코딩=>', goodsname);
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
 		.then(function(data){
 			$scope.goodslists = data.list;
