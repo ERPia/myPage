@@ -198,9 +198,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.Pwd = 'test1234!';
 					break;
 					// case 'ERPia':
-					// 	$scope.loginData.Admin_Code = 'onz';
+					// 	$scope.loginData.Admin_Code = 'hs0424';
 					// 	$scope.loginData.UserId = 'khs239';
-					// 	$scope.loginData.Pwd = 'rlagudtjrk1!';
+					// 	$scope.loginData.Pwd = 'khs239!!';
 					// break;
 					// case 'ERPia':
 					// 	$scope.loginData.Admin_Code = 'onz';
@@ -2709,7 +2709,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.goodsaddlists.push({
 					name : data.list[i].G_Name,
 					num : parseInt(data.list[i].G_Qty),
-					goodsprice : parseInt(data.list[i].G_Price),
+					goodsprice : data.list[i].G_Price,
 					code : data.list[i].G_Code,
 					goods_seq : data.list[i].Seq,
 					state : 'u' // 디비에있는 데이터인지 확인하기위해.

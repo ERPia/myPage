@@ -916,7 +916,7 @@ return{
 			else var kind = 'ERPia_Sale_Select_Goods';
 
 			switch (mode) {
-			    case 'Select_GoodsName' : console.log('Select_GoodsName'); var dataDetail = '&GoodsName='+goods_name; break;
+			    case 'Select_GoodsName' : console.log('Select_GoodsName'); mode = 'Select_Hangul';  var dataDetail = '&GoodsName='+goods_name; break;
 			    case 'Select_G_OnCode' : console.log('Select_G_OnCode'); var dataDetail = '&G_OnCode='+goods_name; break;
 			    case 'Select_G_Code' : console.log('Select_G_Code'); var dataDetail = '&GoodsCode='+goods_name; break;
 			    case 'Select_GI_Code' : console.log('Select_GI_Code'); var dataDetail = '&GI_Code='+goods_name; break;
@@ -926,7 +926,6 @@ return{
 			
 			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode + dataDetail + '&Changgo_Code=' + Ccode + '&pageCnt=' +pageCnt+ '&pageRow=10';
-
 			return $http.get(url + '?' + data)
 				.then(function(response){
 					if(typeof response == 'object'){
@@ -950,6 +949,9 @@ return{
 											response.data.list[i].G_Name1 = G_Name1;
 										}else{
 											G_Name1 = G_Name1 + '<br>' + response.data.list[i].G_Name.substring(j,j+13); 
+											if(response.data.list[i].G_Name.length == j+13){
+												response.data.list[i].G_Name1 = G_Name1;
+											}
 										}
 									}
 								}else{
@@ -958,6 +960,7 @@ return{
 								}
 							}
 						}
+						console.log('>>>>>', response.data.list)
 						return response.data;
 					}else{
 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'short', 'center');
