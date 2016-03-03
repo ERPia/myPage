@@ -850,7 +850,60 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, Select_OptSet: function(Admin_Code, UserId, RL_Gubun){
+			console.log("MLookupService and Select_OptSet");
+
+			if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+			else var kind = 'ERPia_Sale_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+
+			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind;
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							if(response.data == '<!--Parameter Check-->'){
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('조회된 데이터가 없습니다.', 'short', 'center');
+								else alert('조회된 데이터가 없습니다.');
+							}else{
+							}	
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
+		// },Select_OptSet_Rag: function(Admin_Code, UserId, GerCode, reqparams, sel_ipgoPlace, sel_subulKind){
+		// 	console.log("MLookupService and Select_OptSet");
+
+		// 	if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+		// 	else var kind = 'ERPia_Sale_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+
+		// 	var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+		// 	var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind;
+				
+		// 		return $http.get(url + '?' + data)
+		// 			.then(function(response){
+		// 				if(typeof response == 'object'){
+		// 					if(response.data == '<!--Parameter Check-->'){
+		// 						if(ERPiaAPI.toast == 'Y') $cordovaToast.show('조회된 데이터가 없습니다.', 'short', 'center');
+		// 						else alert('조회된 데이터가 없습니다.');
+		// 					}else{
+		// 						for(var i=0; i<response.data.list.length; i++){
+										
+		// 							}
+		// 						}
+		// 					}	
+		// 					return response.data;
+		// 				}else{
+		// 					return $q.reject(response.data);
+		// 				}
+		// 			}, function(response){
+		// 				return $q.reject(response.data);
+		// 			})
+		// }
 
 	};
 })

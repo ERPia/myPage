@@ -1824,11 +1824,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.moreloading = 0;
 
 	$scope.reqparams = {  //날짜검색에 필요한 파라미터
-      sDate : '',
-      eDate : ''
+      sDate : '',		//조회 시작일
+      eDate : '',		//조회 마지막일
+      changgo : '',		//창고 명? 창고코드??
+      mejang : '',		//매장 명? 매장코드??
+      subulgubun : '',	//수불구분
+      damdang : ''		//담당자
     };
 
-	$scope.date = {
+	$scope.date = { 	//형변환된 날짜가 저장되는 스코프
 		sDate1 : '',
 		eDate1 : ''
 	};
@@ -1885,16 +1889,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 	$scope.mydate1=function(sdate1){
 
-	   	var nday = new Date(sdate1);  //선택1 날짜..  
-	    var yy = nday.getFullYear();
-	    var mm = nday.getMonth()+1;
-	    var dd = nday.getDate();
+	   	var nday = new Date(sdate1);  //선택1 날짜를 Date형으로 변환
+	    var yy = nday.getFullYear();	//년도4글자를 get하여 yy 값을 저장
+	    var mm = nday.getMonth()+1;		//월 +1 하여 mm에 저장
+	    var dd = nday.getDate();		//일을 get하여 dd에 저장
 
-	    if( mm<10) mm="0"+mm;
-
-	    if( dd<10) dd="0"+dd;
-	    $scope.reqparams.sDate = yy + "-" + mm + "-" + dd;
-	    $scope.date.sDate1=new Date(sdate1);
+	    if( mm<10) mm="0"+mm;			//mm이 10보다 작으면 앞에 0을 붙인다.
+	    
+	    if( dd<10) dd="0"+dd;			//dd가 10보다 작으면 앞에 0을 붙인다.
+	    $scope.reqparams.sDate = yy + "-" + mm + "-" + dd;	//String형으로 변환된 yy-mm-dd를 다시 저장시킨다.
+	    $scope.date.sDate1=new Date(sdate1);				//data배열에는 Data형으로 변환된 날짜정보가 들어간다.
 
 	    if($scope.date.sDate1>$scope.date.eDate1){
 		    $scope.reqparams.eDate = yy + "-" + mm + "-" + dd;
@@ -1979,6 +1983,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		hap : 0
 	}
 
+	$scope.OptsetList=[];
+//-------------새로 추가될 부분 건들지마!!!!!!!!!!!---------------------------
+
+	$scope.Select_OptSet = function(mode) {
+   		console.log('돌아라 펑션!!!!!!!!!!!!!');
+		MiuService.company_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, mode)
+		.then(function(data){
+			$scope.OptsetList = data.list;
+			console.log('>>>>',OptsetList);
+		})
+    }
+
+//--------------------------------------------------------------------------
 	/* 금일/ 일주일/ 일개월 / 날짜만검색 */
 	$scope.sear_day = function(agoday) {
 		$scope.chit_lists=[];
@@ -2085,9 +2102,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.chit_de = function(no){
 	 	$rootScope.m_no = no;
 	 	if($rootScope.distinction == 'meaip'){ /* 매입일 경우 */
-    		$state.go('app.meaip_depage', {}, {location:'replace'});
+    		$state.go('app.meaip_depage', {}, {location:'replace'});	//매입상세조회페이지로 이동하라!
     	}else{ /* 매출일 경우 */
-    		$state.go('app.meachul_depage', {}, {location:'replace'});
+    		$state.go('app.meachul_depage', {}, {location:'replace'}); //매출상세조회피이지로 이동하라!
     	}
 	}
 
@@ -2138,6 +2155,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
   		}
 	}
+
+
 
 	$scope.quickde = function(){
 	 	for(var i = 0; i < $scope.quicklists.length; i++){
@@ -2206,8 +2225,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     $scope.testlist1 = [
 	    { 
 	    	test1 : '미지정',
-	    	test2 : '2015-01-01',
-	    	test3 : '2015-12-31',
+	    	test2 : '어제',
+	    	test3 : '오늘',
 	    	test4 : '선택안함',
 	    	test5 : '선택안함',
 	    	test6 : '선택안함',
@@ -3233,6 +3252,7 @@ $scope.goods_seqlist = [];
 					$scope.upAnddown="ion-arrow-up-b";
 					$scope.upAnddown2="ion-arrow-down-b";
 					$scope.upAnddown3="ion-arrow-up-b";
+					$scope.upAndDown4="ion-arrow-up-b";
 	    			break;
 	    		}else if(i == $scope.goodsaddlists.length-1 && $scope.goodsaddlists[i].goodsprice != '' || $scope.goodsaddlists[i].goodsprice != undefined){
 	    			$scope.ijmodal.show();	
@@ -3441,9 +3461,9 @@ $scope.goods_seqlist = [];
     /*뒤로 제어*/
      $scope.backControll=function(){
       $ionicPopup.show({
-         title: '경고',
+         title: '경고',	
          subTitle: '',
-         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',	
          buttons: [
            { text: 'No',
             onTap: function(e){
