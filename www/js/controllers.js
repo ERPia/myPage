@@ -1816,7 +1816,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 })
 
 /* 매입&매출 전표조회 컨트롤러 */
-.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, $cordovaToast, $ionicSlideBoxDelegate, ERPiaAPI, MLookupService, MiuService) {
+.controller('MLookupCtrl', function($scope, $rootScope, $ionicLoading, $ionicModal, $ionicHistory, $timeout, $state, $ionicScrollDelegate, $ionicPopup, $cordovaToast, $ionicSlideBoxDelegate, ERPiaAPI, MLookupService, MiuService, MconfigService) {
 	console.log('MLookupCtrl(매입&매출 전표조회&상제조회 컨트롤러)');
 	console.log('구별 =>', $rootScope.distinction);
 	$ionicHistory.clearCache();
@@ -1836,7 +1836,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	$scope.company = {
 		username : '', 
 		name : '', // 거래처이름
-		code : 0 // 거래처 코드
+		code : 0, // 거래처 코드
+		dam : ''
 	};
 
 	/* 형변환 */
@@ -1944,11 +1945,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
     
     /*거래처창고 조회후 값저장*/
-    $scope.company_Func=function(gname,gcode){
+    $scope.company_Func=function(gname,gcode,gdam){
     	$scope.companyDatas = ''; // data배열 초기화
         $scope.company.name=gname;
         $scope.company.username = gname;
 		$scope.company.code=gcode;
+		$scope.company.dam=gdam;
+
     }
 	/*---------로딩화면-----------*/
 	$rootScope.loadingani=function(){
@@ -2233,9 +2236,30 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    }
     ];
 
+    $scope.detail = {
+    	Place_Code : '0'
+    }
+    /*조회셋 모달*/
     $scope.detailSet_openModal = function() {
       $scope.detailSet_modal.show();
+      /*기본 매장조회*/
+		MconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
+		.then(function(data){
+			$scope.mejanglists = data.list;
+		})
     };
+
+    /*조회셋 검색*/
+    $scope.detailset_up = function(){
+    	console.log('조회셋 검색');
+    	console.log($scope.reqparams);
+    	console.log($scope.company);
+    	console.log('????==>', $scope.detail.Place_Code);
+    	MLookupService.detailSet($scope.loginData.Admin_Code, $scope.loginData.UserId,$scope.reqparams,$scope.company,$scope.detail.Place_Code)
+		.then(function(data){
+			console.log(data);
+	  	})
+    }
 
     $scope.detailSet_closeModal = function() {
       $scope.detailSet_modal.hide()
@@ -2316,12 +2340,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
 				}else if(data.list[0].Rslt == -2){  // --------------- 배송정보 존재
 					console.log('배송정보 존재');
-					var data_alert = '연계된 배송정보가 존재합니다.<br>정보를 수정하시러면 배송정보를 삭제하셔야 합니다.<br>연계된배송정보를 삭제하시겠습니까?';
-					$rootScope.iu = 'u';
+					var data_alert = '연계된 배송정보가 존재합니다.<br>이중출고의 위험이 있어 모바일에서는<br>배송정보 삭제가 불가하며, <br>일부(창고,매장,단가,지급정보)만 수정이 가능합니다.';
+					$rootScope.iu = 'sb_u';
 
 				}else if(data.list[0].Rslt == -1){  // --------------- 세금계산서 & 배송정보 존재
 					console.log('세금계산서 & 배송정보 존재');
-					var data_alert = '세금계산서와 배송정보가 모두 존재합니다.<br>창고,매장만 수정가능하며,<br>연계된 배송정보는 삭제됩니다.';
+					var data_alert = '세금계산서와 배송정보가 모두 존재합니다.<br>창고,매장만 수정가능합니다.';
+					$rootScope.iu = 'sb_u';
 				}
 				$ionicPopup.show({
 		         title: '경고',
@@ -2720,7 +2745,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$scope.m_check.changoCheck = 't';
 			$scope.m_check.subulCheck = 't';
 
-			$scope.company_Func(data.list[0].GerName,data.list[0].GerCode);
+			$scope.company_Func(data.list[0].GerName,data.list[0].GerCode,data.list[0].G_GDamdang);
 			$scope.checkup();
 
 			/*지급구분*/
@@ -2805,6 +2830,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
      	}
 		MiuService.company_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, cusname)
 		.then(function(data){
+			console.log(data);
 			$scope.companyDatas = data.list;
 		})
     }
@@ -2854,10 +2880,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	$scope.pageCnt=1;
     	$scope.maxover=0;
     	var goodsname = escape($scope.user.userGoodsName);
-    	console.log('한글=>', $scope.user.userGoodsName);
-    	console.log('인코딩=>', goodsname);
     	MiuService.goods_sear($scope.loginData.Admin_Code, $scope.loginData.UserId, $scope.user.userMode, goodsname, $scope.setupData.basic_Ch_Code,$scope.pageCnt)
 		.then(function(data){
+			console.log('컨트롤러=>',data);
 			$scope.goodslists = data.list;
 		})
 		if($scope.checkedDatas.length != 0){

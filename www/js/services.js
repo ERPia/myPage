@@ -850,6 +850,23 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, detailSet: function(admin_code, userid, date, ger, mejang){
+				console.log("조회셋", admin_code, userid, date, ger, mejang);
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Master&Mode=Select_OptSet&GerName=' + escape(ger.name) + '&pageCnt=1&pageRow=5&sDate=' + date.sDate + '&eDate=' + date.eDate + '&sel_ipgoPlace=' + mejang + '&sel_user=' + escape(ger.dam);
+				// var data = 'Admin_Code=onz&UserId=yyk0628&Kind=ERPia_Meaip_Select_Master&Mode=Select_OptSet&GerName=&pageCnt=1&pageRow=5&sDate=2016-01-01&eDate=2016-03-03&sel_ipgoPlace=&sel_user=';
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
 
 	};
@@ -929,6 +946,7 @@ return{
 			console.log(data);
 			return $http.get(url + '?' + data)
 				.then(function(response){
+					console.log('dmadma?=', response.data);
 					if(typeof response == 'object'){
 						if(response.data == '<!--Parameter Check-->'){
 							if(pageCnt > 1){
