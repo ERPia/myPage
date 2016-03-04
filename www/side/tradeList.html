@@ -21,7 +21,7 @@
 								<tr>
 									<td rowspan="2" class="psm_segum18">{{$index + 1}}</td>
 									<td class="psm_segum19">{{item.in_date}}</td>
-									<td class="psm_segum20" ng-if="userType == 'SCM'">{{item.Admin_Code}}</td>
+									<td class="psm_segum20" ng-if="userType == 'SCM' || userType =='Normal' ">{{item.Admin_Code}}</td>
 									<td class="psm_segum20" ng-if="userType == 'ERPia'">
 									{{ (item.G_name.length>15?item.G_name.substring(0,15) + "..." : item.G_name) }}
 									</td>

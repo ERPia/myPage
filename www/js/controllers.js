@@ -195,11 +195,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 						$scope.loginData.UserId = 'lhk';
 						$scope.loginData.Pwd = 'alsdud0125!';
 					break;
-					// case 'ERPia':
-					// 	$scope.loginData.Admin_Code = 'lhktest';
-					// 	$scope.loginData.UserId = 'lhktest';
-					// 	$scope.loginData.Pwd = 'alsdud0125!';
-					// break;
+					case 'Normal':
+						$scope.loginData.Admin_Code = 'onz';
+						$scope.loginData.UserId = 'Ghana';
+						$scope.loginData.Pwd = 'dlghrud1234!';
+					break;
 				}
 			}
 		}
@@ -508,7 +508,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	});
 	$scope.check = {};
 	$scope.tradeList = {};
-	if($rootScope.userType == 'SCM'){
+	if($rootScope.userType == 'SCM' || $rootScope.userType == "Normal"){
 		$scope.tradeList.Title = '매출거래처 수신함';
 		$scope.tradeList.MeaipMeachul = '매출일';
 		$scope.tradeList.Publisher = '발행처';
@@ -574,7 +574,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		);
 	}
 	$scope.check_Sano = function(){
-		if($rootScope.userType == "SCM"){
+		if($rootScope.userType == "SCM" || $rootScope.userType == "Normal" ){
 			console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
 			if($scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1) == $scope.userData.Sano){
 				$scope.check_sano_Modal.hide();
