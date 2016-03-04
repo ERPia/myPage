@@ -850,6 +850,69 @@ return{
 					}, function(response){
 						return $q.reject(response.data);
 					})
+		}, detailSet: function(admin_code, userid, date, ger, mejang){
+				console.log("MLookupService and detailSet");
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_Master&Mode=Select_OptSet&GerName=' + escape(ger.name) + '&pageCnt=1&pageRow=5&sDate=' + date.sDate + '&eDate=' + date.eDate + '&sel_ipgoPlace=' + mejang + '&sel_user=' + escape(ger.dam);
+				console.log(url, '?', data);
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, lqdetail_set: function(admin_code, userid, date, ger, mejang, gubun){
+				console.log("MLookupService and latelydetail_set");
+				if(gubun == 1){
+					console.log('최근등록');
+					var mode = 'Reg_Select_OptSet_Lately';
+				}else{
+					console.log('빠른검색등록');
+					var mode = 'Reg_Select_OptSet_Rapid';
+				}
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=ERPia_Meaip_Select_OptSet&Mode=' + mode + '&GerCode=' + escape(ger.code) + '&sDate=' + date.sDate + '&eDate=' + date.eDate + '&sel_ipgoPlace=' + mejang;
+				
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						console.log(mode,' ???=>', response.data);
+						if(typeof response == 'object'){
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
+		}, Select_OptSet: function(Admin_Code, UserId, RL_Gubun){
+				console.log("MLookupService and Select_OptSet");
+
+				if($rootScope.distinction == 'meaip') var kind = 'ERPia_Meaip_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+				else var kind = 'ERPia_Sale_Select_OptSet&Mode=Select_OptSet_List&RL_Gubun=' + RL_Gubun;
+
+				var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
+				var data = 'Admin_Code=' + Admin_Code + '&UserId=' + UserId + '&Kind=' + kind;
+			
+				return $http.get(url + '?' + data)
+					.then(function(response){
+						if(typeof response == 'object'){
+							if(response.data == '<!--Parameter Check-->'){
+								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('조회된 데이터가 없습니다.', 'short', 'center');
+								else alert('조회된 데이터가 없습니다.');
+							}else{
+							}	
+							return response.data;
+						}else{
+							return $q.reject(response.data);
+						}
+					}, function(response){
+						return $q.reject(response.data);
+					})
 		}
 
 	};
@@ -916,7 +979,7 @@ return{
 			else var kind = 'ERPia_Sale_Select_Goods';
 
 			switch (mode) {
-			    case 'Select_GoodsName' : console.log('Select_GoodsName'); var dataDetail = '&GoodsName='+goods_name; break;
+			    case 'Select_GoodsName' : console.log('Select_GoodsName'); mode = 'Select_Hangul';  var dataDetail = '&GoodsName='+goods_name; break;
 			    case 'Select_G_OnCode' : console.log('Select_G_OnCode'); var dataDetail = '&G_OnCode='+goods_name; break;
 			    case 'Select_G_Code' : console.log('Select_G_Code'); var dataDetail = '&GoodsCode='+goods_name; break;
 			    case 'Select_GI_Code' : console.log('Select_GI_Code'); var dataDetail = '&GI_Code='+goods_name; break;
@@ -926,17 +989,24 @@ return{
 			
 			var url = ERPiaAPI.url +'/ERPiaApi_TestProject.asp';
 			var data = 'Admin_Code=' + admin_code + '&UserId=' + userid + '&Kind=' + kind + '&Mode=' + mode + dataDetail + '&Changgo_Code=' + Ccode + '&pageCnt=' +pageCnt+ '&pageRow=10';
-
+			console.log(data);
 			return $http.get(url + '?' + data)
 				.then(function(response){
+					console.log('dmadma?=', response.data);
 					if(typeof response == 'object'){
 						if(response.data == '<!--Parameter Check-->'){
 							if(pageCnt > 1){
 								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('마지막 데이터 입니다.', 'short', 'center');
 								else alert('마지막 데이터 입니다.');
 							}else{
-								if(ERPiaAPI.toast == 'Y') $cordovaToast.show('일치하는 정보가 없습니다.', 'short', 'center');
-								else alert('일치하는 정보가 없습니다.1');
+								if(ERPiaAPI.toast == 'Y'){
+									$cordovaToast.show('일치하는 정보가 없습니다.', 'short', 'center');
+								} 
+								else{
+									alert('일치하는 정보가 없습니다.');
+									console.log('=======================>',response);
+								} 
+
 							}
 						}else{
 							for(var i=0; i<response.data.list.length; i++){
