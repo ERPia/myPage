@@ -2231,7 +2231,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     	$scope.company.code = 0;
     	$scope.company.dam = '0';
     	$scope.detail.Place_Code = '0';
-
         $scope.detailSet_modal.show();
         /*기본 매장조회*/
 		MconfigService.basicM($scope.loginData.Admin_Code, $scope.loginData.UserId)
@@ -2286,7 +2285,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
     }
 
     $scope.quickdetail = function(){
-    	MLookupService.lqdetail_set($scope.loginData.Admin_Code, $scope.loginData.UserId,$scope.reqparams,$scope.company,$scope.detail.Place_Code,2)
+    	MLookupService.lqdetail_set($scope.loginData.Admin_Code, $scope.loginData.UserId,$scope.reqparams,$scope.company,$scope.detail.Place_Code,2,$scope.todate)
 		.then(function(data){
 			console.log(data);
 			if(data.list[0].rslt == 'Y'){
@@ -2302,18 +2301,30 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
     $scope.OpsetScopeCarry=function(index){
     	$ionicSlideBoxDelegate.slide(0, 500);
-    	console.log(">>>>>>>>")
+    	console.log(">>>>>>>>",$scope.todate)
     	if($scope.OptsetList[index].sel_Ger_Name == null || $scope.OptsetList[index].sel_Ger_Name == '') $scope.OptsetList[index].sel_Ger_Name = '';
     	if($scope.OptsetList[index].sel_Ger_Code == null || $scope.OptsetList[index].sel_Ger_Code == '') $scope.OptsetList[index].sel_Ger_Code = '0';
     	if($scope.OptsetList[index].sel_Damdang == null || $scope.OptsetList[index].sel_Damdang == '') $scope.OptsetList[index].sel_Damdang = '0';
     	if($scope.OptsetList[index].sel_Place_Name == null || $scope.OptsetList[index].sel_Place_Name == '') $scope.OptsetList[index].sel_Place_Name = '';
     	if($scope.OptsetList[index].sel_Place_Code == null || $scope.OptsetList[index].sel_Place_Code == '') $scope.OptsetList[index].sel_Place_Code = '0';
 
-    	$scope.reqparams.sDate = $scope.OptsetList[index].sel_Sdate;
-    	$scope.reqparams.eDate = $scope.OptsetList[index].sel_Edate;
-    	$scope.date.sDate1 = new Date($scope.reqparams.sDate);
-		$scope.date.eDate1 = new Date($scope.reqparams.eDate);
+    	if($scope.OptsetList[index].sel_Sdate == 'today'){
+    		$scope.reqparams.sDate = $scope.todate;
+    		$scope.date.sDate1 = new Date($scope.reqparams.sDate);
+    	}else{
+    		$scope.reqparams.sDate = $scope.OptsetList[index].sel_Sdate;
+    		$scope.date.sDate1 = new Date($scope.reqparams.sDate);
+    	}
 
+    	if($scope.OptsetList[index].sel_Edate == 'today'){
+    		console.log('?????????????????');
+    		$scope.reqparams.eDate = $scope.todate;
+    		$scope.date.eDate1 = new Date($scope.reqparams.eDate);
+    	}else{
+    		$scope.reqparams.eDate = $scope.OptsetList[index].sel_Edate;
+    		$scope.date.eDate1 = new Date($scope.reqparams.eDate);
+    	}
+    	
 		$scope.company.username = $scope.OptsetList[index].sel_Ger_Name;
 		$scope.company.name = $scope.OptsetList[index].sel_Ger_Name;
 		$scope.company.code = $scope.OptsetList[index].sel_Ger_Code;
@@ -2828,11 +2839,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					default : console.log('셀렉트 된 것이 없습니다.'); break;
 				}
 				if(data.list[0].IpJi_Gubun == 703 || data.list[0].IpJi_Gubun == 723){
+					console.log('????????????????????????????????????????????????????????????????');
 					$scope.Payments_division(3);
 					$scope.pay.paycardbank = data.list[0].Card_Code + ',' + data.list[0].Card_Name + ',' + data.list[0].Card_Num;
 					$scope.pay.codenum = data.list[0].Card_Code;
 
 				}else if(data.list[0].IpJi_Gubun == 702 || data.list[0].IpJi_Gubun == 722){
+					console.log('????????????????????????????????????????????????????????????????2');
 					$scope.Payments_division(1);
 					$scope.pay.paycardbank = data.list[0].Bank_Code + ',' + data.list[0].Bank_Name + ',' + data.list[0].Bank_Account;
 					$scope.pay.codenum = data.list[0].Bank_Code;
@@ -3425,14 +3438,14 @@ $scope.goods_seqlist = [];
     	if($scope.pay.use == false && $scope.pay.payprice == 0){
     		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('지급액을 확인해주세요.', 'short', 'center');
 			else alert('지급액을 확인해주세요.');
-    	}else if($scope.pay.use == false && $scope.payment[1].checked == true || $scope.payment[3].checked == true){
+    	}else if($scope.pay.use == true && $scope.payment[1].checked == true || $scope.payment[3].checked == true){
+    		console.log('??');
     		if($scope.pay.paycardbank == 'no'){
     			if(ERPiaAPI.toast == 'Y') $cordovaToast.show('카드/통장을 선택해주세요.', 'short', 'center');
 				else alert('카드/통장을 선택해주세요.');
-
     		}
-    		
     	}else{
+    		console.log('좋은말로 할대 여기와라.');
 	    	if($scope.payment[0].checked != true && $scope.payment[1].checked != true && $scope.payment[2].checked != true && $scope.payment[3].checked != true){
 	    		$scope.pay.gubun = 4;
 	    	}
