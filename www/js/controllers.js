@@ -21,39 +21,42 @@ var g_playlists = [{
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox', 'pickadate', 'fcsa-number'])
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, tradeDetailService, ERPiaAPI){
-	$rootScope.urlData = [];
 	$rootScope.loginState = "R"; //R: READY, E: ERPIA LOGIN TRUE, S: SCM LOGIN TRUE
-	$rootScope.deviceInfo = {};
+	$rootScope.deviceInfo = {};  // Device 정보를 담아두는 변수
 	
-	$scope.ion_login = "ion-power active";
-	$scope.loginData = {};	//Admin_Code, UserId, Pwd
-	$scope.userData = {};
+	$scope.ion_login = "ion-power active";  // 로그인/로그아웃 시 변경되는 CSS
+	// 각각의 변수를 담아두는 공간. 초기화를 쉽게 하기 위해 만들었음.
+	$scope.loginData = {};
+	$scope.userData = {};  
 	$scope.SMSData = {};
 
-	// Create the login modal that we will use later
+	// 로그인 모달창
 	$ionicModal.fromTemplateUrl('erpia_login/login.html', {
 		scope : $scope
 	}).then(function(modal) {
 		$scope.loginModal = modal;
 	});
+	// 이용약관 모달창
 	$ionicModal.fromTemplateUrl('side/agreement.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.agreeModal = modal;
 		$scope.agreeModal.hardwareBackButtonClose = false;
 	});
+	// 인증 모달창
 	$ionicModal.fromTemplateUrl('side/certification.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.certificationModal = modal;
 		$scope.certificationModal.hardwareBackButtonClose = false;
 	});
-
+	// 거래명세표 조회시 뜨는 모달창
 	$ionicModal.fromTemplateUrl('side/check_Sano.html',{
 		scope : $scope
 	}).then(function(modal){
 		$scope.check_sano_Modal = modal;
 	});
+	//초기화 함수
 	$scope.init = function(loginType){
 		if(loginType == 'logout') {
 			$ionicLoading.show({template:'<ion-spinner icon="spiral"></ion-spinner>'});
@@ -78,7 +81,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			$state.go('app.erpia_main');
 		}, 1000);
 	}
-	// Triggered in the login modal to close it
+	// 로그인창 닫기 함수
 	$scope.closeLogin = function() {
 		$ionicHistory.nextViewOptions({
 			disableBack: true
@@ -160,7 +163,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		};
 	};
 
-	// Perform the login action when the user submits the login form
+	// 로그인 함수
 	$scope.doLogin = function(admin_code, loginType, id, pwd, autologin_YN) {
 		
 		if (autologin_YN == 'Y') {
@@ -182,7 +185,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				uuidService.saveUUID($cordovaDevice.getUUID(), $scope.loginData.Admin_Code, userType, $scope.loginData.UserId, escape($scope.loginData.Pwd));
 			}else{
 				switch($rootScope.userType){
-					case 'SCM':response.data.list[i].UserId;
+					case 'SCM': 
 						$scope.loginData.Admin_Code = 'onz';
 						$scope.loginData.UserId = '1111';
 						$scope.loginData.Pwd = '1234';
@@ -424,6 +427,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 
   	$scope.loginHTML = "로그인";
 
+  	// 약관 동의 클릭 이벤트
   	$scope.click_agreement = function(agrees){
 		if(agrees.agree_1 && agrees.agree_2){
 			$scope.agreeModal.hide();
@@ -434,16 +438,18 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 
+	// 약관 동의 취소 클릭 이벤트
 	$scope.click_cancel = function(){
 		$scope.agreeModal.hide();
 		$scope.init('logout');
 	}
-	// $rootScope.CertificationSwitch = 'firstPage';
+	// 인증번호 전송 버튼 클릭 이벤트
 	$scope.click_Certification = function(){
 		CertifyService.certify($scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, 'erpia', 'a12345', '070-7012-3071', $scope.SMSData.recUserTel)
 		if(ERPiaAPI.toast == 'Y') $cordovaToast.show('인증번호를 발송했습니다.', 'long', 'center');
 		else alert('인증번호를 발송했습니다.');
 	}
+	// 인증번호 입력 버튼 클릭 이벤트
 	$scope.click_responseText = function(){
 		if($rootScope.rndNum == $scope.SMSData.rspnText){
 			CertifyService.check($scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.SMSData.rspnText)
@@ -457,20 +463,25 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			return false;
 		}
 	}
+	// 모달창을 띄워주는 함수
 	$scope.showCheckSano = function(){
 		$scope.check_sano_Modal.show();
 	}
+	// 로그인 화면에서 이알피아 아이콘을 클릭하면 사용자 선택화면으로 돌아간다.
 	$scope.login_back = function(){
 		$rootScope.loginMenu = "selectUser";
 	}
+	// 홈버튼 클릭 함수
 	$scope.click_home = function(){
 		if($rootScope.userType == 'ERPia') $location.href = '#/slidingtab'; //$state.go('app.slidingtab');
 		else if($rootScope.userType == 'Guest') $location.href = '#/sample/Main'; //$state.go('app.sample_Main');
 	}
+	// 인증 모달 닫기 함수
 	$scope.close_cert = function(){
 		$scope.certificationModal.hide();
 		$scope.init('logout');
 	}
+	// 단말기로 접속시 UUID의 정보를 불러와서 자동로그인 여부를 체크한 후 자동 로그인 시켜준다. 
 	document.addEventListener("deviceready", function () {
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
@@ -494,6 +505,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}, false);
 	 
 })
+// 거래명세표 컨트롤러
 .controller('tradeCtrl', function($scope, $rootScope, $state, $ionicSlideBoxDelegate, $cordovaToast, $ionicModal, $ionicHistory, $location
 	, tradeDetailService, ERPiaAPI){
 	$ionicModal.fromTemplateUrl('side/trade_Detail.html',{
@@ -503,6 +515,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	});
 	$scope.check = {};
 	$scope.tradeList = {};
+	// 각각의 로그인 타입별로 보여지는 화면을 다르게 표시.
 	if($rootScope.userType == 'SCM' || $rootScope.userType == "Normal"){
 		$scope.tradeList.Title = '매출거래처 수신함';
 		$scope.tradeList.MeaipMeachul = '매출일';
@@ -536,6 +549,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				console.log('haveList', $scope.haveList);
 			})
 	}
+	// 거래명세표 보기 
 	$scope.readTradeDetail = function(dataParam){
 		var Sl_No = dataParam.substring(0, dataParam.indexOf('^'));
 		var detail_title = dataParam.substring(dataParam.indexOf('^') + 1);
@@ -546,17 +560,17 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				$scope.trade_Detail_Modal.show();
 			})
 		if($rootScope.userType!='ERPia') tradeDetailService.chkRead($scope.loginData.Admin_Code, Sl_No, $scope.loginData.User_Id)
-	}
+	} //거래명세표 사업자 번호 입력 모달 닫기
 	$scope.close_sano = function(){
-		console.log('asdsss');
 		$scope.check_sano_Modal.hide();
-	}
+	} //거래명세표 닫기
 	$scope.close = function(){
 		$scope.trade_Detail_Modal.hide();
 	}
 	// $scope.backToList = function(){
 	// 	$ionicSlideBoxDelegate.previous();
 	// }
+	// 프린트 (거래명세표 화면에서 프린트 버튼의 주석을 해제해야 기능을 사용할 수 있음.. 블루투스 연결까지는 확인했으나 프린트 잉크가 없어서 테스트 못함.)
 	$scope.print = function(){
 		cordova.plugins.printer.isAvailable(
 		    function (isAvailable) {
@@ -568,7 +582,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				});
 		    }
 		);
-	}
+	}// 각각의 타입별로 안내메세지를 다르게 표시.
 	$scope.check_Sano = function(){
 		if($rootScope.userType == "SCM" || $rootScope.userType == "Normal" ){
 			console.log('sano', $scope.userData.G_Sano.substring($scope.userData.G_Sano.lastIndexOf('-') + 1));
@@ -596,39 +610,25 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 })
-
+// 필요없는 컨트롤러인듯..
 .controller('configCtrl', function($scope, $rootScope) {
 	if($rootScope.loginState == 'E'){
 	}
 })
+// 아래부터 설정 화면에 있는 컨트롤러들..
+// 프로그램정보 컨트롤러
 .controller('configCtrl_Info', function($scope, $rootScope) {
+	// 기본정보를 디폴트 값으로 넣었다.
 	$scope.AppInfo = {currentVer:"1.0.0", deviceInfo:"webView"};
 	console.log(ionic.Platform);
+	// 여기서 정보를 가져와야하는데 안가져와짐.. 해결해주길...
 	if(ionic.Platform.length > 0){
 		$scope.AppInfo.currentVer = ionic.Platform.version();
 		$scope.AppInfo.deviceInfo = ionic.Platform.device();	
 	}
-})
+})// 공지사항 컨트롤러
 .controller('configCtrl_Notice', function($scope, $ionicPopup, $ionicHistory, NoticeService) {
 	$scope.myGoBack = function() {
-		// $ionicPopup.show({
-		// 	title: 'View',
-		// 	subTitle: '',
-		// 	content: '¿Are you sure you back?',
-		// 	buttons: [
-		// 		{ text: 'No',
-		// 			onTap: function(e){
-		// 			}
-		// 		},
-		// 		{
-		// 			text: 'Yes',
-		// 			type: 'button-positive',
-		// 			onTap: function(e) {
-		// 			$ionicHistory.goBack();
-		// 			}
-		// 		},
-		// 	]
-		// })
 		$ionicHistory.goBack();
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
@@ -640,20 +640,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		.then(function(data){
 			$scope.items = data.list;
 		})
-})
-.controller('configCtrl_login', function($scope, $rootScope, uuidService){
-	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
-	else $scope.autoLogin = false;
-	$scope.autoLogin_YN = function(check){
-		if(check) uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'Y')
-		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, $scope.loginData.Pwd, 'N')
-	}
-})
+})// 통계리포트 설정 컨트롤러
 .controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
 	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 		.then(function(data){
 			$scope.items = data;
 		})
+	// 아이템을 옮길때마다 내용을 서버에 저장시켜둔다.
 	$scope.moveItem = function(item, fromIndex, toIndex) {
 		fromIdx = $scope.items[fromIndex].Idx;
 		fromTitle = $scope.items[fromIndex].title;
@@ -680,15 +673,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('rsltList', rsltList);
 		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
 	};
-
+	// 지우려고 만들었는데 2차 업데이트로 넘김.
 	$scope.onItemDelete = function(item) {
 		$scope.items.splice($scope.items.indexOf(item), 1);
 	};
-})
+}) //알림설정 컨트롤러
 .controller('configCtrl_alarm', function($scope, $rootScope, $location, alarmService){
 	 $scope.settingsList = [];
 	var cntList = 6;
 	$scope.fnAlarm = function(isCheckAll){
+		// 푸쉬알림 체크시 전체 체크 되도록.
 		if(isCheckAll == 'checkAll'){
 			var arrAlarm = new Array();
 			arrAlarm.push({idx:1,name:'공지사항',checked:true});
@@ -699,6 +693,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			arrAlarm.push({idx:6,name:'기타 이벤트',checked:true});
 			$scope.settingsList = arrAlarm;
 		}else{
+			// 서버에 저장된 설정 값을 불러와서 알맞게 체크해줌. 
 			alarmService.select('select_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 			.then(function(data){
 				// cntList = data.list.length;
@@ -735,6 +730,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			});
 		}
 	}
+	// 실제로 알람 설정 내용을 서버에 저장하는 서비스
 	$scope.check_alarm = function(check){
 		if(check) {
 			rsltList = '0^T^|1^T^|2^T^|3^T^|4^T^|5^T^|6^T^|';
@@ -750,6 +746,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			item.checked = check; 
 		})
 	}
+	// 알람 내용이 변경될때마다 그 내용을 서버에 저장 
 	$scope.check_change = function(item){
 		var rsltList = '';
 		console.log('settingsList', $scope.settingsList[0]);
@@ -760,43 +757,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		alarmService.save('save_Alarm', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, '0^U|' + rsltList)
 	}
 	$scope.fnAlarm('loadAlarm');
-})
-.controller('configCtrl_statistics', function($scope, $rootScope, statisticService, publicFunction){
-	statisticService.all('myPage_Config_Stat', 'select_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
-		.then(function(data){
-			$scope.items = data;
-		})
-	$scope.moveItem = function(item, fromIndex, toIndex) {
-		fromIdx = $scope.items[fromIndex].Idx;
-		fromTitle = $scope.items[fromIndex].title;
-		fromVisible = $scope.items[fromIndex].visible;
-
-		toIdx = $scope.items[toIndex].Idx;
-		toTitle = $scope.items[toIndex].title;
-		toVisible = $scope.items[toIndex].visible;
-
-		$scope.items[fromIndex].Idx = toIdx;
-		$scope.items[fromIndex].title = toTitle;
-		$scope.items[fromIndex].visible = toVisible;
-
-		$scope.items[toIndex].Idx = fromIdx;
-		$scope.items[toIndex].title = fromTitle;
-		$scope.items[toIndex].visible = fromVisible;
-
-		var rsltList = '';
-		for(var i = 0; i < $scope.items.length; i++){
-			rsltList += $scope.items[i].cntOrder + '^';
-			rsltList += $scope.items[i].Idx + '^';
-			rsltList += $scope.items[i].visible + '^|';
-		}
-		console.log('rsltList', rsltList);
-		statisticService.save('myPage_Config_Stat', 'save_Statistic', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, rsltList);
-	};
-
-	$scope.onItemDelete = function(item) {
-		$scope.items.splice($scope.items.indexOf(item), 1);
-	};
-})
+})//로그인 설정 컨트롤러
 .controller('configCtrl_login', function($scope, $rootScope, uuidService){
 	if($scope.loginData.autologin_YN == 'Y') $scope.autoLogin = true;
 	else $scope.autoLogin = false;
@@ -805,6 +766,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		else uuidService.saveUUID($rootScope.deviceInfo.uuid, $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId, escape($scope.loginData.Pwd), 'N')
 	}
 })
+// 설정 화면 컨트롤러 끝 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SCM 메인 화면 컨트롤러
 .controller('ScmUser_HomeCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $sce, scmInfoService, AmChart_Service){
 	$scope.ScmBaseData = function() {
 		if($rootScope.loginState == "S") {
@@ -824,7 +787,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			var aWeekAgo = w.getFullYear() + '-' + (wMonth<10 ? '0':'') + wMonth + '-' + (wDay<10 ? '0' : '') + wDay;
 
 			$scope.nowTime = '최근 조회 시간 :' + nowday + ' ' + nowTime;
-			
+			// 발주정보 조회
 			scmInfoService.scmInfo('ScmMain', 'Balju', $scope.loginData.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
 			.then(function(scmInfo){
 				var B_TOT = 0;
@@ -847,7 +810,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 				}
 				$scope.B_TOT = B_TOT + '';	
 				
-			});
+			});// 직배송 정보 조회
 			scmInfoService.scmInfo('ScmMain', 'Direct', $scope.loginData.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
 			.then(function(scmInfo){
 				var J_TOT = 0;
@@ -868,7 +831,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					}
 				}
 				$scope.J_TOT = J_TOT + '';
-			});
+			}); //CRM 메뉴 조회
 			scmInfoService.scmInfo('CrmMenu', '', $scope.loginData.Admin_Code, $scope.G_Code, aWeekAgo, nowday)
 			.then(function(scmInfo){
 				var C_TOT = 0;
@@ -890,7 +853,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		}
 	}
 	$scope.ScmBaseData();
-	//scm Chart
+	//scm 차트 
 	$scope.load_scm_chart = function(){
 	    AmChart_Service.scm_Chart('scm', 'scm', $scope.loginData.Admin_Code, 3, $scope.userData.G_Code)
 	    .then(function(response){
@@ -961,7 +924,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	    })
 	}
 	$scope.load_scm_chart();   
-})
+}) // 메인화면 컨트롤러 
 .controller('MainCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http){
 	console.log("MainCtrl");
 	
@@ -1104,34 +1067,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		$scope.interestTopicRemoveYN = "N";
 		updated = 0;
 	}
-
-	// //test 용 OT201304100001
-	// $scope.csRegist2 = function() {
- // 	 	console.log($scope.csData);
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Master', 'Select_ILNo', 'Ip201512030001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Master', 'Select_Date', '2015-11-01', '2015-12-03')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Detail', '', 'Ip201512020001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_GerName', '', 'g')
-	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_Place')
-	//     // TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Place_CName', 'Select_CName', '001')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_GoodsName', 'ra')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Meaip_Select_Goods', 'Select_G_OnCode', 'erpia:SFSELFAA0000036')
-	// 	// TestService.testInfo('onz','yyk0628', 'ERPia_Sale_Select_Goods', 'Select_G_Code', '9806200718567')
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'select')
-	// 	// TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'update', '102','002','5','1','2','N','2','N')
-	// 	TestService.testInfo('pikachu','pikachu', 'ERPia_Config', 'update_subul_before', 'C', 'B')
-
-	// 	//되는거
-	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>02474</GuMeaCom_Code><Meaip_Amt>2200000</Meaip_Amt><Sale_Place>001</Sale_Place><Remk> <![CDATA[띄어쓰기 테스트 입니다 /?!]]> </Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9808316000018</G_Code><G_name> <![CDATA[띄어쓰기 테스트 상품 ㅁ ㅁ ㅁ]]> </G_name><G_stand> <![CDATA[]]> </G_stand><G_Price>1004</G_Price><G_Qty>200</G_Qty><G_vat>1800</G_vat></item><item><seq>2</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]> </G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item><item><seq>3</seq><ChangGo_Code>122</ChangGo_Code><subul_kind>224</subul_kind><G_Code>9806200718690</G_Code><G_name> <![CDATA[하이퍼볼]]> </G_name><G_stand> <![CDATA[더잘잡힘]]></G_stand><G_Price>2000</G_Price><G_Qty>15</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
-	// 	//안되는거 
-	// 	// TestService.testInfo('pikachu','khs239', 'ERPia_Meaip_Insert_Goods', '', escape('<root><MeaipM><Admin_Code>pikachu</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>00001</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>'))
-	// 	// erpia.net/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml=<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>2015-12-21</Meaip_Date><GuMeaCom_Code>99921</GuMeaCom_Code><Meaip_Amt>0</Meaip_Amt><Sale_Place>023</Sale_Place><Remk><![CDATA[d d]]></Remk></MeaipM><MeaipT><item><seq>1</seq><ChangGo_Code>101</ChangGo_Code><subul_kind>111</subul_kind><G_Code>9806200720639</G_Code><G_name><![CDATA[ss]]></G_name><G_stand><![CDATA[]]></G_stand><G_Price>0</G_Price><G_Qty>1</G_Qty><G_vat>1800</G_vat></item></MeaipT></root>
-	//     .then(function(testInfo){
-	//     	console.log(testInfo.data);
-	//     },function(){
-	// 		alert('csRegist fail')	
-	// 	});
-	// };
 })
 
 .controller('BoardSelectCtrl', function($rootScope, $scope, $state){
@@ -1175,41 +1110,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		"text" : "업체문의 Q&A"
 	}];
 
-	// $rootScope.urlData = [{
-	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=notice"
-	// }, {
-	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=erpup"
-	// }, {
-	// 	"url" : "http://www.erpia.net/brd/brdMobile.asp?brdKinds=faq"
-	// }, {
-	// 	"url" : "http://www.erpia.net/scm2/brdProc.asp?Admin_Code=" + $rootScope.Admin_Code + "&user_id=" + $rootScope.G_id + "&modeKinds=Mobile&brdKinds=mobile_request"
-	// }];
-	// 
-	// $rootScope.urlData = [{
-	// 	"url" : "#/app/board/Notice"
-	// }, {
-	// 	"url" : "#/app/board/Update"
-	// }, {
-	// 	"url" : "#/app/board/Knowledge"
-	// }, {
-	// 	"url" : "#/app/board/Admin"
-	// }];
-	// 
-	// switch(idx){
-	// 	case 0: $scope.BoardUrl1 = $sce.trustAsResourceUrl($rootScope.urlData[0].url); break;
-	// 	case 1: $scope.BoardUrl2 = $sce.trustAsResourceUrl($rootScope.urlData[1].url); break;
-	// 	case 2: $scope.BoardUrl3 = $sce.trustAsResourceUrl($rootScope.urlData[2].url); break;
-	// 	case 3: $scope.BoardUrl4 = $sce.trustAsResourceUrl($rootScope.urlData[3].url); break;
-	// }
 	switch(idx){
 			case 0: 
 				$scope.BoardUrl1 =	BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_notice')
-										.then(function(data){
-											$scope.items = data.list;
-											console.log(data);
-										}
-									); 
-									break;
+								.then(function(data){
+									$scope.items = data.list;
+									console.log(data);
+								}
+							); 
+							break;
 			case 1: $scope.BoardUrl2 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_erpup').then(function(data){$scope.items = data.list;}); break;
 			case 2: $scope.BoardUrl3 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_FAQ').then(function(data){$scope.items = data.list;}); break;
 			case 3: $scope.BoardUrl4 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_Request').then(function(data){$scope.items = data.list;}); break;
@@ -1222,7 +1131,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			case 3: $scope.BoardUrl4 = BoardService.BoardInfo($scope.loginData.Admin_Code, $scope.loginData.UserId,'board_Request').then(function(data){$scope.items = data.list;}); break;
 		}
 		$rootScope.useBoardCtrl = "N";
-		// console.log('BoardUrl', $rootScope.urlData[$rootScope.boardIndex].url);	
 	};
 })
 
@@ -1270,32 +1178,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	// };
 	$scope.pList = PushSelectService.get($stateParams.Seq)
 })
-	// $scope.data = {
- //    	showDelete: false
- //  	};
-  
-	// $scope.edit = function(item) {
-	// 	alert('Edit Item: ' + item.id);
-	// };
-	
-	// $scope.share = function(item) {
-	// 	alert('Share Item: ' + item.id);
-	// };
-
-	// $scope.moveItem = function(item, fromIndex, toIndex) {
-	// 	$scope.items.splice(fromIndex, 1);
-	// 	$scope.items.splice(toIndex, 0, item);
-	// };
-
-	// $scope.onItemDelete = function(item) {
-	// 	$scope.items.splice($scope.items.indexOf(item), 1);
-	// };
-  
-	// $scope.items = [
- //    	{ id: 0 },
- //    	{ id: 1 },
- //  	];
-// })
 
 .controller('PlaylistsCtrl', function($scope) {
 	console.log("PlaylistsCtrl");
@@ -1327,6 +1209,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		enableFriends : true
 	}
 })
+// ERPia 차트 컨트롤러
 .controller("IndexCtrl", function($rootScope, $scope, $stateParams, $q, $location, $window, $timeout, ERPiaAPI, statisticService, IndexService) {
 	$scope.myStyle = {
 	    "width" : "100%",
@@ -1385,6 +1268,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		rResult =  fl+temp.substr(1);
 		return rResult;
 	}
+	// 차트에서 표시해줄 테이블 생성하는 함수
 	function insertRow(data, kind)
 	{
 		var strHtml = "";
@@ -1588,6 +1472,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 		console.log('strHtml', strHtml);
 		$("table[name=tbGrid]").html(strHtml);
 	}
+	// AmCharts에서 Json 데이터를 불러오는 함수
 	AmCharts.loadJSON = function(url, load_kind) {	
 		// create the request
 		if (window.XMLHttpRequest) {
@@ -1637,12 +1522,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 			}
 		};
 	};
+	// ERPia 차트화면에서 위에 차트 이름을 보여주는 부분. (차트 이름을 변경시켜야 하므로 서버에 저장하고 이를 불러옴.)
 	statisticService.title('myPage_Config_Stat', 'select_Title', $scope.loginData.Admin_Code, $rootScope.loginState, $scope.loginData.UserId)
 	.then(function(data){
 		$scope.tabs = data;
 	})
 	$scope.kind= '', $scope.htmlCode= '';
 
+	// 차트를 슬라이드 할 때마다 차트가 생성되도록 하는 함수. 처음부터 모든 차트를 불러오면 너무 느려서 슬라이드할 때마다 불러오도록 변경함. 
 	$scope.onSlideMove = function(data) {
 		console.log('selectedIdx', $scope.userData.selectedIdx);
 		console.log("You have selected " + data.index + " tab");
@@ -1688,6 +1575,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 					case '16' : $scope.kind = titles[15].title; break;
 					case '17' : $scope.kind = titles[16].title; break;
 				}
+				// 차트를 그리는 부분 (장선임님이 만든 ASP 참조를 참조해서 만들어야함.)
 				if($scope.kind === "meachul_onoff"){
 					$scope.htmlCode = '<input type="hidden" name="gu_hidden">' +
 							'<div class="direct-chat">'+
