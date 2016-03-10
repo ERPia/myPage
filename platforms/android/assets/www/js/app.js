@@ -24,10 +24,11 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)
 		ionic.Platform.fullScreen();
+		console.log('keyboard', window.cordova)
 		if(window.cordova && window.cordova.plugins.Keyboard) {
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 		}
-		
+	});
         if(window.StatusBar) {
 		StatusBar.styleDefault();
 	}
@@ -144,66 +145,68 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 						},
 					]
 				})
-			}else{$ionicHistory.goBack();}
-				$rootScope.backButtonPressedOnceToExit = false;	
-			}else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
-				$rootScope.backButtonPressedOnceToExit = false;
-
-				window.plugins.toast.showShortCenter("메인으로 이동합니다.",function(a){},function(b){});
-				// $state.go('app.meaip_page', {}, {location:'replace'});
-				$ionicHistory.clearCache();
-				$ionicHistory.clearHistory();
-				$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
-				location.href = '#/app/main';
-
-				$rootScope.backButtonPressedOnceToExit = true;
-				// setTimeout(function(){
-
-				//    $rootScope.backButtonPressedOnceToExit = true;
-
-				// },500);
+			}else{
+				$ionicHistory.goBack();
 			}
-			e.preventDefault();
-			return false;
-		},101);
-		// Identify your user with the Ionic User Service
-		$ionicUser.identify(user).then(function(){
-		//$scope.identified = true;
-			console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
-		});
+		$rootScope.backButtonPressedOnceToExit = false;	
+		}else { // 현재페이지가 메인이 아니면서 더이상 뒤로갈 곳이 없을 때
+			$rootScope.backButtonPressedOnceToExit = false;
+
+			window.plugins.toast.showShortCenter("메인으로 이동합니다.",function(a){},function(b){});
+			// $state.go('app.meaip_page', {}, {location:'replace'});
+			$ionicHistory.clearCache();
+			$ionicHistory.clearHistory();
+			$ionicHistory.nextViewOptions({disableBack:true, historyRoot:true});
+			location.href = '#/app/main';
+
+			$rootScope.backButtonPressedOnceToExit = true;
+			// setTimeout(function(){
+
+			//    $rootScope.backButtonPressedOnceToExit = true;
+
+			// },500);
+		}
+		e.preventDefault();
+		return false;
+	},101);
+	// Identify your user with the Ionic User Service
+	$ionicUser.identify(user).then(function(){
+	//$scope.identified = true;
+		console.log('Identified user ' + user.name + '\n ID ' + user.user_id);
+	});		
 
 
-		// Register with the Ionic Push service.  All parameters are optional.
-		$ionicPush.register({
-			canShowAlert: true, //Can pushes show an alert on your screen?
-			canSetBadge: true, //Can pushes update app icon badges?
-			canPlaySound: true, //Can notifications play a sound?
-			canRunActionsOnWake: true, //Can run actions outside the app,
+	// Register with the Ionic Push service.  All parameters are optional.
+	// $ionicPush.register({
+	// 	canShowAlert: true, //Can pushes show an alert on your screen?
+	// 	canSetBadge: true, //Can pushes update app icon badges?
+	// 	canPlaySound: true, //Can notifications play a sound?
+	// 	canRunActionsOnWake: true, //Can run actions outside the app,
 
-			onNotification: function(notification) {
-				// Handle new push notifications here
-				console.log(notification);
-				//notification.message;  푸시 알람 내용
-				if(notification.payload){	
-					//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
-					if(notification.payload.payload.$state === "app.erpia_board-Main"){
-					// alert("tab.chats");
-					//$rootScope.boardIndex = $rootScope.BoardParam
-					//$state.go("app.erpia_board-Main")
-						if(notification.payload.payload.$BoardParam === "0"){
-							$rootScope.boardIndex = notification.payload.payload.$BoardParam
-						}else if(notification.payload.payload.$BoardParam === "1"){
-							$rootScope.boardIndex = notification.payload.payload.$BoardParam
-						}else if(notification.payload.payload.$BoardParam === "2"){
-							$rootScope.boardIndex = notification.payload.payload.$BoardParam
-						}else if(notification.payload.payload.$BoardParam === "4"){
-							$rootScope.boardIndex = notification.payload.payload.$BoardParam
-						}							
-					}
-				}
-			}
-		});
-	});
+	// 	onNotification: function(notification) {
+	// 		// Handle new push notifications here
+	// 		console.log(notification);
+	// 		//notification.message;  푸시 알람 내용
+	// 		if(notification.payload){	
+	// 			//notification.payload.payload.$state 푸시에서 명시한 로드될 화면
+	// 			if(notification.payload.payload.$state === "app.erpia_board-Main"){
+	// 			// alert("tab.chats");
+	// 			//$rootScope.boardIndex = $rootScope.BoardParam
+	// 			//$state.go("app.erpia_board-Main")
+	// 				if(notification.payload.payload.$BoardParam === "0"){
+	// 					$rootScope.boardIndex = notification.payload.payload.$BoardParam
+	// 				}else if(notification.payload.payload.$BoardParam === "1"){
+	// 					$rootScope.boardIndex = notification.payload.payload.$BoardParam
+	// 				}else if(notification.payload.payload.$BoardParam === "2"){
+	// 					$rootScope.boardIndex = notification.payload.payload.$BoardParam
+	// 				}else if(notification.payload.payload.$BoardParam === "4"){
+	// 					$rootScope.boardIndex = notification.payload.payload.$BoardParam
+	// 				}							
+	// 			}
+	// 		}
+	// 	}
+	// });
+
 	$rootScope.goHome = function(userType){
 		$ionicHistory.clearCache();
 		$ionicHistory.clearHistory();
@@ -235,11 +238,8 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 		//location.href = '#app/config';
 	};
 	$rootScope.rndNum = 0;	
+	// if none of the above states are matched, use this as the fallback
 })
-
-// 	// if none of the above states are matched, use this as the fallback
-// 	$urlRouterProvider.otherwise('/app/slidingtab');
-// });
 // device token(iPhone6 plus) : 1d1070d82459a34181921255227fca4d55d87692f68e498e6e0d1e5d953a8abb
 
 .config(['$ionicAppProvider', function($ionicAppProvider) {
@@ -258,9 +258,9 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 // })
 
 .config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) { // input에 숫자입력시 천자리마다 콤마를 찍어주는 플러그인 기본옵션부분
-  fcsaNumberConfigProvider.setDefaultOptions({
-    min: 0
-  });
+	fcsaNumberConfigProvider.setDefaultOptions({
+		min: 0
+	});
 }])
 
 
@@ -511,158 +511,75 @@ angular.module('starter', ['ionic','ionic.service.core','ionic.service.push', 's
 				templateUrl : 'tab/tabs.html'				 
 			}
 		}
-	})
- // 	.state('app.tab.dash', {
-	// 	url : '/dash',
-	// 	views : {
-	// 		'tab-dash' : {
-	// 			templateUrl : 'tab/tab-dash.html'
-				
-	// 		}
-	// 	}
-	// })
-
- //  	.state('app.tab.chats', {
-	// 	url : '/chats',
-	// 	views : {
-	// 		'tab-chats' : {
-	// 			templateUrl : 'tab/tab-chats.html',
-	// 			controller : 'ChatsCtrl'
-	// 		}
-	// 	}
-	// })
-
-	// .state('app.tab.chat-detail', {
-	// 	url : '/chats/:chatId',
-	// 	views : {
-	// 		'tab-chats' : {
-	// 			templateUrl : 'tab/chat-detail.html',
-	// 			controller : 'ChatDetailCtrl'
-	// 		}
-	// 	}
-	// })
-
-	// .state('app.tab.account', {
-	// 	url : '/account',
-	// 	views : {
-	// 		'tab-account' : {
-	// 			templateUrl : 'tab/tab-account.html',
-	// 			controller : 'AccountCtrl'
-	// 		}
-	// 	}
-	// })
-
-  ////////////////////////////////side///////////////////////////////////
- //    .state('app.browse', {
-	// 	url : '/browse',
-	// 	views : {
-	// 		'menuContent' : {
-	// 			templateUrl : 'side/browse.html'
-	// 		}
-	// 	}
-	// })
-
- //    .state('app.search', {
-	// 	url : '/search',
-	// 	views : {
-	// 		'menuContent' : {
-	// 			templateUrl : 'side/search.html'
-	// 		}
-	// 	}
-	// })
-
-	// .state('app.playlists', {
-	// 	url : '/playlists',
-	// 	views : {
-	// 		'menuContent' : {
-	// 			templateUrl : 'side/playlists.html',
-	// 			controller : 'PlaylistsCtrl'
-	// 		}
-	// 	}
-	// })
-
-	// .state('app.single', {
-	// 	url : '/playlists/:playlistId',
-	// 	views : {
-	// 		'menuContent' : {
-	// 			templateUrl : 'side/playlist.html',
-	// 			controller : 'PlaylistCtrl'
-	// 		}
-	// 	}
-	// });
-
-	// if none of the above states are matched, use this as the fallback
-
-
-
-
+	})	
 	/////////////////////////////////////////////////////////////매입&매출 통합 다시//////////////////////////////////////////////////////////
 		///////////////////////////// 매출등록/수정페이지  /////////////////////////////////////
 	
-.state('app.m_Setup', { // 매입&매출 환경설정
-	url : '/meaipchul/m_Setup',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/m_Setup.html',
-			controller : 'MconfigCtrl'
+	.state('app.m_Setup', { // 매입&매출 환경설정
+		url : '/meaipchul/m_Setup',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/m_Setup.html',
+				controller : 'MconfigCtrl'
+			}
 		}
-	}
-})
-.state('app.meaip_page', { // 매입전표조회
-	url : '/meaip_page',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meaip_page.html',
-			controller : 'MLookupCtrl'
+	})
+	.state('app.meaip_page', { // 매입전표조회
+		url : '/meaip_page',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meaip_page.html',
+				controller : 'MLookupCtrl'
+			}
 		}
-	}
-})
-.state('app.meachul_page', { //매출전표조회
-	url : '/meachul_page',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meachul_page.html',
-			controller : 'MLookupCtrl'
+	})
+	.state('app.meachul_page', { //매출전표조회
+		url : '/meachul_page',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meachul_page.html',
+				controller : 'MLookupCtrl'
+			}
 		}
-	}
-})
-.state('app.meaip_depage', { //매입전표상세조회
-	url : '/meaip_depage',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meaip_depage.html',
-			controller : 'MLookup_DeCtrl'
+	})
+	.state('app.meaip_depage', { //매입전표상세조회
+		url : '/meaip_depage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meaip_depage.html',
+				controller : 'MLookup_DeCtrl'
+			}
 		}
-	}
-})
-.state('app.meachul_depage', { //매출전표상세조회
-	url : '/meachul_depage',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meachul_depage.html',
-			controller : 'MLookup_DeCtrl'
+	})
+	.state('app.meachul_depage', { //매출전표상세조회
+		url : '/meachul_depage',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meachul_depage.html',
+				controller : 'MLookup_DeCtrl'
+			}
 		}
-	}
-})
-.state('app.meaip_IU', { //매입등록
-	url : '/meaip_IU',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meaip_IU.html',
-			controller : 'MiuCtrl'
+	})
+	.state('app.meaip_IU', { //매입등록
+		url : '/meaip_IU',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meaip_IU.html',
+				controller : 'MiuCtrl'
+			}
 		}
-	}
-})
-.state('app.meachul_IU', { //매출등록
-	url : '/meachul_IU',
-	views : {
-		'menuContent' : {
-			templateUrl : 'meaipchul/meachul_IU.html',
-			controller : 'MiuCtrl'
+	})
+	.state('app.meachul_IU', { //매출등록
+		url : '/meachul_IU',
+		views : {
+			'menuContent' : {
+				templateUrl : 'meaipchul/meachul_IU.html',
+				controller : 'MiuCtrl'
+			}
 		}
-	}
-});
+	});
 
+	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/main');
 });
 

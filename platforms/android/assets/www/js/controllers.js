@@ -1,23 +1,3 @@
-var g_playlists = [{
-	title : 'Reggaehiphop',
-	id : 1
-}, {
-	title : 'Chill',
-	id : 2
-}, {
-	title : 'Dubstep',
-	id : 3
-}, {
-	title : 'Indie',
-	id : 4
-}, {
-	title : 'Rap',
-	id : 5
-}, {
-	title : 'Cowbell',
-	id : 6
-}];
-
 angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova', 'ionic.service.core', 'ionic.service.push', 'tabSlideBox', 'pickadate', 'fcsa-number'])
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $http, $state, $ionicHistory, $cordovaToast, $ionicLoading, $cordovaDevice, $location
 	, loginService, CertifyService, pushInfoService, uuidService, tradeDetailService, ERPiaAPI){
@@ -483,6 +463,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'ngCordova',
 	}
 	// 단말기로 접속시 UUID의 정보를 불러와서 자동로그인 여부를 체크한 후 자동 로그인 시켜준다. 
 	document.addEventListener("deviceready", function () {
+		console.log('deviceInfo', $cordovaDevice.getDevice());
 		$rootScope.deviceInfo.device = $cordovaDevice.getDevice();
 		$rootScope.deviceInfo.cordova = $cordovaDevice.getCordova();
 		$rootScope.deviceInfo.model = $cordovaDevice.getModel();
